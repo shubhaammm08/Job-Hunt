@@ -1,0 +1,634 @@
+{
+  "greenhouse:figma:5552549004": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Figma",
+    "title": "Software Engineer - Distributed Systems",
+    "location": "San Francisco, CA • New York, NY • United States",
+    "url": "https://boards.greenhouse.io/figma/jobs/5552549004?gh_jid=5552549004",
+    "score": 2.0,
+    "reason": "This is a senior distributed systems role requiring extensive infrastructure experience, mismatching candidate's junior profile.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:rubrik:8161018": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Rubrik",
+    "title": "Database Reliability Engineer/Database Engineer (Rubrik Security Cloud Platform)",
+    "location": "Bengaluru",
+    "url": "https://www.rubrik.com/company/careers/departments/job.8161018?gh_jid=8161018",
+    "score": 2.0,
+    "reason": "This is an experienced Database Reliability Engineer role, requiring deep systems engineering and database internals expertise.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:rubrik:8122613": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Rubrik",
+    "title": "Software Engineer, Atlas Distributed Systems",
+    "location": "Palo Alto, CA",
+    "url": "https://www.rubrik.com/company/careers/departments/job.8122613?gh_jid=8122613",
+    "score": 2.0,
+    "reason": "This role requires an experienced distributed systems engineer to work on core storage filesystems, far exceeding junior experience.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:rubrik:8327940": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Rubrik",
+    "title": "Software Engineer - Cloud Native Protection",
+    "location": "Bangalore",
+    "url": "https://www.rubrik.com/company/careers/departments/job.8327940?gh_jid=8327940",
+    "score": 3.0,
+    "reason": "This is a software engineering position focused on cloud native distributed systems requiring experienced cloud engineering.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:rubrik:8166537": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Rubrik",
+    "title": "Software Engineer (CPD) - Winter Intern",
+    "location": "Bangalore",
+    "url": "https://www.rubrik.com/company/careers/departments/job.8166537?gh_jid=8166537",
+    "score": 3.0,
+    "reason": "The internship requires a 2027 graduate from circuital branches with a CGPA of 8+, which does not align with candidate details.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:rubrik:7956918": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Rubrik",
+    "title": "Software Engineer - IAM",
+    "location": "Pune",
+    "url": "https://www.rubrik.com/company/careers/departments/job.7956918?gh_jid=7956918",
+    "score": 2.0,
+    "reason": "This position requires a skilled Golang developer with deep experience in identity protocols and applied cryptography.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:rubrik:8377184": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Rubrik",
+    "title": "Software Engineer - UI Test",
+    "location": "Bangalore, India",
+    "url": "https://www.rubrik.com/company/careers/departments/job.8377184?gh_jid=8377184",
+    "score": 4.0,
+    "reason": "This UI testing role requires more software test automation and engineering background than the candidate's data and AI focus.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:coinbase:7985187": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Coinbase",
+    "title": "Machine Learning Engineer",
+    "location": "Remote - India",
+    "url": "https://www.coinbase.com/careers/positions/7985187?gh_jid=7985187",
+    "score": 4.0,
+    "reason": "This is an IC4 Machine Learning Engineer role requiring mid-to-senior level production ML and multi-agent platform experience.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:coinbase:8031260": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Coinbase",
+    "title": "Machine Learning Engineer, CX Intelligence",
+    "location": "Remote - Brazil",
+    "url": "https://www.coinbase.com/careers/positions/8031260?gh_jid=8031260",
+    "score": 4.0,
+    "reason": "The role requires advanced multi-agent system architecture experience that exceeds the candidate's junior 1-year background.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:coinbase:8278991": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Coinbase",
+    "title": "Software Engineer-1, Money Movement",
+    "location": "Remote - USA",
+    "url": "https://www.coinbase.com/careers/positions/8278991?gh_jid=8278991",
+    "score": 3.0,
+    "reason": "This is a US-based software engineering role requiring end-to-end backend ownership and stack experience beyond the candidate's level.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:coinbase:8105437": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Coinbase",
+    "title": "Software Engineer, Blockchain Platform Nodes",
+    "location": "Remote - USA",
+    "url": "https://www.coinbase.com/careers/positions/8105437?gh_jid=8105437",
+    "score": 2.0,
+    "reason": "The role focuses on complex blockchain node performance optimization and distributed systems infrastructure unsuited for a junior profile.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:coinbase:8164730": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Coinbase",
+    "title": "Software Engineer, CDP - Payment Acceptance",
+    "location": "Remote - USA",
+    "url": "https://www.coinbase.com/careers/positions/8164730?gh_jid=8164730",
+    "score": 3.0,
+    "reason": "Requires full-stack production delivery using Go and React/Next.js for payment rails, which mismatches the candidate's data/AI focus.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:coinbase:8304038": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Coinbase",
+    "title": "Software Engineer - Crypto Data Foundations",
+    "location": "Remote - USA",
+    "url": "https://www.coinbase.com/careers/positions/8304038?gh_jid=8304038",
+    "score": 2.0,
+    "reason": "This position requires building low-latency distributed systems for blockchain data indexing, far above junior seniority.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:coinbase:8279479": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Coinbase",
+    "title": "Software Engineer, Enterprise Apps",
+    "location": "Remote - Brazil",
+    "url": "https://www.coinbase.com/careers/positions/8279479?gh_jid=8279479",
+    "score": 3.0,
+    "reason": "The role requires full-stack development with Golang and TypeScript for enterprise apps, which does not match the candidate's stack.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:coinbase:8165441": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Coinbase",
+    "title": "Software Engineer, Security Platform",
+    "location": "Remote - India",
+    "url": "https://www.coinbase.com/careers/positions/8165441?gh_jid=8165441",
+    "score": 2.0,
+    "reason": "Security Platform Engineering requires deep architectural experience in secrets, IAM, and infrastructure security beyond a junior level.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:coinbase:8139750": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Coinbase",
+    "title": "Software Engineer, Wallets, Liquidity and Bridging Team",
+    "location": "Remote - USA",
+    "url": "https://www.coinbase.com/careers/positions/8139750?gh_jid=8139750",
+    "score": 2.0,
+    "reason": "This role demands scaling distributed backend systems for high-throughput blockchains, exceeding the candidate's 1 year of experience.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:coinbase:8177619": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Coinbase",
+    "title": "Threat Intelligence Platform Engineer",
+    "location": "Remote - USA",
+    "url": "https://www.coinbase.com/careers/positions/8177619?gh_jid=8177619",
+    "score": 2.0,
+    "reason": "This is a security operations and threat intelligence engineering role, which does not match the candidate's data and AI profile.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:stripe:6042172": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Stripe",
+    "title": "Backend Engineer, Core Technology",
+    "location": "US-Remote, Chicago, Seattle, San Francisco",
+    "url": "https://stripe.com/jobs/search?gh_jid=6042172",
+    "score": 3.0,
+    "reason": "This is a mid-to-senior level core infrastructure backend engineering role, exceeding the junior candidate's current experience level.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:stripe:7292520": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Stripe",
+    "title": "Backend Engineer, Developer & End-user Experience Platform",
+    "location": "Toronto Canada, San Francisco, Remote in US, Remote in Canada",
+    "url": "https://stripe.com/jobs/search?gh_jid=7292520",
+    "score": 3.0,
+    "reason": "This backend engineering role requires broader production experience than a junior developer with one year of experience possesses.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:stripe:8364868": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Stripe",
+    "title": "Finance and Strategy Data Analyst",
+    "location": "Bengaluru",
+    "url": "https://stripe.com/jobs/search?gh_jid=8364868",
+    "score": 4.0,
+    "reason": "The role is based in Bengaluru, while the candidate is located in Mumbai, presenting a location and senior finance strategy mismatch.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:stripe:7618977": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Stripe",
+    "title": "Software Engineer, Core Technology",
+    "location": "Bangalore",
+    "url": "https://stripe.com/jobs/search?gh_jid=7618977",
+    "score": 3.0,
+    "reason": "This core technology software engineering position requires advanced infrastructure experience that a junior candidate lacks.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:stripe:7543868": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Stripe",
+    "title": "Software Engineer, Financial Business Insights",
+    "location": "Bengaluru, India",
+    "url": "https://stripe.com/jobs/search?gh_jid=7543868",
+    "score": 4.0,
+    "reason": "This software engineering role is geared towards experienced engineers building complex enterprise systems, exceeding junior scope.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:stripe:8031833": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Stripe",
+    "title": "Software Engineer, Intern",
+    "location": "Bengaluru",
+    "url": "https://stripe.com/jobs/search?gh_jid=8031833",
+    "score": 7.0,
+    "reason": "This software engineering intern role is a plausible match for a junior graduate, though location may require relocation.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:stripe:8231439": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Stripe",
+    "title": "Software Engineer, Metronome Infrastructure",
+    "location": "Toronto, Vancouver, Canada-Remote",
+    "url": "https://stripe.com/jobs/search?gh_jid=8231439",
+    "score": 1.0,
+    "reason": "The role requires Canadian remote work eligibility, which the candidate does not have.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:stripe:8185012": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Stripe",
+    "title": "Software Engineer, Payin",
+    "location": "Bengaluru",
+    "url": "https://stripe.com/jobs/search?gh_jid=8185012",
+    "score": 3.0,
+    "reason": "The role requires backend software engineering experience in a payments stack, which mismatches candidate's junior data profile.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:stripe:8127182": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Stripe",
+    "title": "Software Engineer, Revenue and Financial Automation",
+    "location": "San Francisco, New York City, Seattle, Chicago, US-Remote",
+    "url": "https://stripe.com/jobs/search?gh_jid=8127182",
+    "score": 2.0,
+    "reason": "This is a general software engineering role requiring broader production experience than a junior data developer possesses.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:stripe:8209970": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Stripe",
+    "title": "Software Engineer, Stripe Data Pipeline",
+    "location": "Bangalore",
+    "url": "https://stripe.com/jobs/search?gh_jid=8209970",
+    "score": 3.0,
+    "reason": "The position demands distributed systems and data infrastructure expertise operating petabyte-scale pipelines under strict SLAs.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:reddit:8282760": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Reddit",
+    "title": "Analytics Engineer",
+    "location": "Remote - United States",
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/8282760",
+    "score": 5.0,
+    "reason": "While data-focused, the analytics engineering role typically requires more than one year of professional experience.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:reddit:8147559": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Reddit",
+    "title": "Front End Software Engineer, Consumer Engineering",
+    "location": "Remote - United States",
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/8147559",
+    "score": 2.0,
+    "reason": "This is a general front-end and full-stack software engineering position that misaligns with the candidate's data and AI profile.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:reddit:8198102": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Reddit",
+    "title": "Front End Software Engineer, Media Player",
+    "location": "Remote - United States",
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/8198102",
+    "score": 2.0,
+    "reason": "Requires full-stack web development with React and Go, failing to match the candidate's core data and AI skill set.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:reddit:8299781": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Reddit",
+    "title": "Machine Learning Engineer, Answers Relevance",
+    "location": "Remote - United States",
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/8299781",
+    "score": 1.0,
+    "reason": "Explicitly seeks Senior and Staff Machine Learning Engineers, far exceeding the candidate's junior seniority level.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:reddit:6512458": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Reddit",
+    "title": "Software Engineer, Ads",
+    "location": "Remote - Ontario, Canada",
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/6512458",
+    "score": 2.0,
+    "reason": "The role requires scalable machine learning infrastructure experience and location constraints in Canada.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:reddit:6469397": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Reddit",
+    "title": "Software Engineer, Ads",
+    "location": "Remote - United States",
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/6469397",
+    "score": 3.0,
+    "reason": "This is a mid-level backend engineering position, but the candidate is a junior with one year of experience.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:reddit:8319655": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Reddit",
+    "title": "Software Engineer, Ad Signals",
+    "location": "Remote - United States",
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/8319655",
+    "score": 1.0,
+    "reason": "This is a senior backend software engineer role requiring extensive experience the junior candidate lacks.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:reddit:8172457": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Reddit",
+    "title": "Software Engineer, Consumer Engineering",
+    "location": "Remote - United States",
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/8172457",
+    "score": 3.0,
+    "reason": "This is a general product backend engineering role requiring mid-to-senior level software engineering experience.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:reddit:8139781": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Reddit",
+    "title": "Software Engineer, Content Platform",
+    "location": "Remote - United States",
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/8139781",
+    "score": 3.0,
+    "reason": "This role involves working on core monolith systems and Tier-0 infrastructure services, unsuited for a junior.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:reddit:8337444": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Reddit",
+    "title": "Software Engineer, Infrastructure Engineering",
+    "location": "Remote - United States",
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/8337444",
+    "score": 3.0,
+    "reason": "This is a core infrastructure engineering position requiring higher-level distributed systems experience.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "ashby:ramp:939892e5-5273-4bfc-8c41-a6c51cabb228": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Ramp",
+    "title": "Software Engineer, Backend, Comms Platform",
+    "location": "Remote (US)",
+    "url": "https://jobs.ashbyhq.com/ramp/939892e5-5273-4bfc-8c41-a6c51cabb228",
+    "score": 3.0,
+    "reason": "This backend role at Ramp requires mid-level or senior software engineering experience beyond a junior level.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:cloudflare:8187404": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Cloudflare",
+    "title": "Systems Engineer, Network Protocols & Distributed Systems",
+    "location": "Hybrid",
+    "url": "https://boards.greenhouse.io/cloudflare/jobs/8187404?gh_jid=8187404",
+    "score": 2.0,
+    "reason": "This is a systems engineer role focused on network protocols and distributed systems, requiring advanced expertise.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:databricks:8878946002": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Databricks",
+    "title": "Evergreen - AI Engineer, AI FDE",
+    "location": "Bengaluru, India",
+    "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8878946002",
+    "score": 4.0,
+    "reason": "Though focused on AI and ML pipelines, this customer-facing forward-deployed engineering role typically expects more experience.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:databricks:8012691002": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Databricks",
+    "title": "Software Engineer - Distributed Data Systems",
+    "location": "Belgrade, Serbia",
+    "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8012691002",
+    "score": 2.0,
+    "reason": "Senior distributed systems engineering role requiring deep infrastructure and query engine experience, entirely wrong seniority and stack.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:databricks:8829029002": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Databricks",
+    "title": "Software Engineer, Infrastructure",
+    "location": "Bengaluru, India",
+    "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8829029002",
+    "score": 2.0,
+    "reason": "Infrastructure and SRE engineering role requiring Kubernetes, Terraform, and AWS production management beyond candidate's junior data/AI profile.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:databricks:6865704002": {
+    "first_seen": "2026-11-14T04:39:06+00:00",
+    "company": "Databricks",
+    "title": "Software Engineer - New Grad, Distributed Data Systems (2027 Start)",
+    "location": "Bellevue, Washington; Mountain View, California",
+    "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=6865704002",
+    "score": 3.0,
+    "reason": "Distributed systems new grad role focusing on low-level query engines and storage systems, mismatched with candidate's data analysis and ML profile.",
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:acme-edge:5501001": {
+    "first_seen": "2026-11-14T05:02:09+00:00",
+    "company": "Acme Edge",
+    "title": "Software Engineer II, Distributed Systems",
+    "location": "Bangalore, India",
+    "url": "https://boards.greenhouse.io/acme-edge/jobs/5501001",
+    "score": 0.0,
+    "reason": "[keyword stub] no skill overlap",
+    "canonical_source": "greenhouse",
+    "sources": [
+      "greenhouse"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Engineer"
+    ],
+    "fit_score": 0.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:novapay:7702001": {
+    "first_seen": "2026-11-14T05:02:09+00:00",
+    "company": "Novapay",
+    "title": "Software Development Engineer, Core Infra",
+    "location": "Bengaluru, India",
+    "url": "https://boards.greenhouse.io/novapay/jobs/7702001",
+    "score": 0.0,
+    "reason": "[keyword stub] no skill overlap",
+    "canonical_source": "greenhouse",
+    "sources": [
+      "greenhouse"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Development Engineer"
+    ],
+    "fit_score": 0.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "lever:quantstack:a1b2c3d4-1111-4aaa-9999-000000000001": {
+    "first_seen": "2026-11-14T05:02:09+00:00",
+    "company": "Quantstack",
+    "title": "Backend Engineer (Go)",
+    "location": "Bangalore",
+    "url": "https://jobs.lever.co/quantstack/a1b2c3d4-1111-4aaa-9999-000000000001",
+    "score": 0.0,
+    "reason": "[keyword stub] no skill overlap",
+    "canonical_source": "lever",
+    "sources": [
+      "lever"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Backend Engineer"
+    ],
+    "fit_score": 0.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "lever:quantstack:a1b2c3d4-1111-4aaa-9999-000000000003": {
+    "first_seen": "2026-11-14T05:02:09+00:00",
+    "company": "Quantstack",
+    "title": "Site Reliability Engineer",
+    "location": "Remote (India)",
+    "url": "https://jobs.lever.co/quantstack/a1b2c3d4-1111-4aaa-9999-000000000003",
+    "score": 0.0,
+    "reason": "[keyword stub] no skill overlap",
+    "canonical_source": "lever",
+    "sources": [
+      "lever"
+    ],
+    "role_families": [
+      "CLOUD_DEVOPS"
+    ],
+    "matched_roles": [
+      "Site Reliability Engineer",
+      "Reliability Engineer"
+    ],
+    "fit_score": 0.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "ashby:helioscale:9f8e7d6c-2222-4bbb-8888-000000000001": {
+    "first_seen": "2026-11-14T05:02:09+00:00",
+    "company": "Helioscale",
+    "title": "Software Engineer, Networking",
+    "location": "Bengaluru, India",
+    "url": "https://jobs.ashbyhq.com/helioscale/9f8e7d6c-2222-4bbb-8888-000000000001",
+    "score": 0.0,
+    "reason": "[keyword stub] no skill overlap",
+    "canonical_source": "ashby",
+    "sources": [
+      "ashby"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Engineer"
+    ],
+    "fit_score": 0.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  }
+}
