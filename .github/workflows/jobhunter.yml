@@ -76,42 +76,38 @@ jobs:
             exit 1
           fi
 
+      - name: "Verify Secrets Configured"
+        run: |
+          echo "=== Verifying GitHub Secrets ==="
+          MISSING=""
+          [ -z "${{ secrets.GEMINI_API_KEY }}" ] && MISSING="$MISSING GEMINI_API_KEY"
+          [ -z "${{ secrets.GMAIL_EMAIL || secrets.SMTP_USER }}" ] && MISSING="$MISSING GMAIL_EMAIL"
+          [ -z "${{ secrets.GMAIL_APP_PASSWORD || secrets.SMTP_PASS }}" ] && MISSING="$MISSING GMAIL_APP_PASSWORD"
+          if [ -n "$MISSING" ]; then
+            echo "::error::Missing required GitHub Secrets: $MISSING"
+            echo "Please configure the missing secrets in Settings -> Secrets and variables -> Actions"
+            exit 1
+          fi
+          echo "All required secrets are present."
+
       - name: "Restore State from state/jobhunter branch"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mkdir -p out
           echo "=== Fetching persistent state from state/jobhunter branch ==="
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           
-          if git ls-remote --heads origin state/jobhunter | grep -q state/jobhunter; then
-            echo "Branch 'state/jobhunter' found on remote. Fetching state..."
-            git fetch origin state/jobhunter --depth=1
+          if git fetch origin state/jobhunter:refs/remotes/origin/state/jobhunter --depth=1 2>/dev/null; then
+            echo "Branch 'state/jobhunter' fetched successfully."
             
-            # Extract and validate seen.json
+            # Extract seen.json
             if git show origin/state/jobhunter:seen.json > seen.json.tmp 2>/dev/null && [ -s seen.json.tmp ]; then
-              # Defensive encoding normalization (handles cp1252 to utf-8 conversion if needed)
-              python -c "
-              import json
-              try:
-                  content = open('seen.json.tmp', 'r', encoding='utf-8').read()
-                  d = json.loads(content)
-              except UnicodeDecodeError:
-                  content = open('seen.json.tmp', 'r', encoding='cp1252', errors='replace').read()
-                  d = json.loads(content)
-                  with open('seen.json.tmp', 'w', encoding='utf-8') as f:
-                      json.dump(d, f, indent=2, ensure_ascii=False)
-              assert isinstance(d, dict)
-              " 2>/dev/null
-              
-              if [ $? -eq 0 ]; then
+              if python -c "import json; d=json.load(open('seen.json.tmp', encoding='utf-8')); assert isinstance(d, dict)" 2>/dev/null; then
                 mv seen.json.tmp seen.json
                 SEEN_COUNT=$(python -c "import json; print(len(json.load(open('seen.json', encoding='utf-8'))))")
                 echo "Successfully restored seen.json with $SEEN_COUNT previously seen postings."
                 echo "PRE_RUN_COUNT=$SEEN_COUNT" >> "$GITHUB_ENV"
               else
-                echo "::warning::seen.json on state/jobhunter is corrupted. Initializing clean dedupe table."
                 rm -f seen.json.tmp
                 echo "{}" > seen.json
                 echo "PRE_RUN_COUNT=0" >> "$GITHUB_ENV"
@@ -122,10 +118,10 @@ jobs:
               echo "PRE_RUN_COUNT=0" >> "$GITHUB_ENV"
             fi
             
-            # Extract out/tracker.csv
+            # Extract tracker.csv
             if git show origin/state/jobhunter:tracker.csv > out/tracker.csv.tmp 2>/dev/null && [ -s out/tracker.csv.tmp ]; then
               mv out/tracker.csv.tmp out/tracker.csv
-              echo "Successfully restored out/tracker.csv ($(wc -l < out/tracker.csv) rows)."
+              echo "Successfully restored out/tracker.csv."
             else
               rm -f out/tracker.csv.tmp
             fi
@@ -140,8 +136,8 @@ jobs:
           LLM_PROVIDER: ${{ vars.LLM_PROVIDER || 'gemini' }}
           SCREEN_PROVIDER: ${{ vars.SCREEN_PROVIDER }}
           DRAFT_PROVIDER: ${{ vars.DRAFT_PROVIDER }}
-          SCREEN_MODEL: ${{ vars.SCREEN_MODEL || 'gemini-2.5-flash-lite' }}
-          DRAFT_MODEL: ${{ vars.DRAFT_MODEL || 'gemini-2.5-flash' }}
+          SCREEN_MODEL: ${{ vars.SCREEN_MODEL || 'gemini-flash-lite-latest' }}
+          DRAFT_MODEL: ${{ vars.DRAFT_MODEL || 'gemini-flash-lite-latest' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
@@ -174,7 +170,7 @@ jobs:
           eval $CMD
 
       - name: "Commit & Push State to state/jobhunter"
-        if: always()
+        if: success()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |

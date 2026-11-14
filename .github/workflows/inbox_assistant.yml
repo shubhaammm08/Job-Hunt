@@ -46,27 +46,37 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: "Verify Secrets Configured"
+        run: |
+          echo "=== Verifying GitHub Secrets ==="
+          MISSING=""
+          [ -z "${{ secrets.GEMINI_API_KEY }}" ] && MISSING="$MISSING GEMINI_API_KEY"
+          [ -z "${{ secrets.GMAIL_EMAIL || secrets.SMTP_USER }}" ] && MISSING="$MISSING GMAIL_EMAIL"
+          [ -z "${{ secrets.GMAIL_APP_PASSWORD || secrets.SMTP_PASS }}" ] && MISSING="$MISSING GMAIL_APP_PASSWORD"
+          if [ -n "$MISSING" ]; then
+            echo "::error::Missing required GitHub Secrets: $MISSING"
+            echo "Please configure the missing secrets in Settings -> Secrets and variables -> Actions"
+            exit 1
+          fi
+          echo "All required secrets are present."
+
       - name: "Restore State from state/inbox branch"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mkdir -p out
           echo "=== Fetching persistent state from state/inbox branch ==="
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           
-          if git ls-remote --heads origin state/inbox | grep -q state/inbox; then
-            echo "Branch 'state/inbox' found on remote. Fetching state..."
-            git fetch origin state/inbox --depth=1
+          if git fetch origin state/inbox:refs/remotes/origin/state/inbox --depth=1 2>/dev/null; then
+            echo "Branch 'state/inbox' fetched successfully."
             
             if git show origin/state/inbox:summary_seen.json > out/summary_seen.json.tmp 2>/dev/null && [ -s out/summary_seen.json.tmp ]; then
-              if python -c "import json; d=json.load(open('out/summary_seen.json.tmp', encoding='utf-8')); assert isinstance(d, dict) and 'last_seen_id' in d"; then
+              if python -c "import json; d=json.load(open('out/summary_seen.json.tmp', encoding='utf-8')); assert isinstance(d, dict) and 'last_seen_id' in d" 2>/dev/null; then
                 mv out/summary_seen.json.tmp out/summary_seen.json
                 LAST_ID=$(python -c "import json; print(json.load(open('out/summary_seen.json', encoding='utf-8')).get('last_seen_id', 0))")
                 echo "Successfully restored out/summary_seen.json (last_seen_id: $LAST_ID)."
                 echo "PRE_SEEN_ID=$LAST_ID" >> "$GITHUB_ENV"
               else
-                echo "::warning::Corrupted summary_seen.json found on branch. Discarding."
                 rm -f out/summary_seen.json.tmp
                 echo "PRE_SEEN_ID=0" >> "$GITHUB_ENV"
               fi
@@ -83,6 +93,8 @@ jobs:
         env:
           SMTP_HOST: ${{ vars.SMTP_HOST || 'smtp.gmail.com' }}
           SMTP_PORT: ${{ vars.SMTP_PORT || '587' }}
+          GMAIL_EMAIL: ${{ secrets.GMAIL_EMAIL || secrets.SMTP_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD || secrets.SMTP_PASS }}
           SMTP_USER: ${{ secrets.GMAIL_EMAIL || secrets.SMTP_USER }}
           SMTP_PASS: ${{ secrets.GMAIL_APP_PASSWORD || secrets.SMTP_PASS }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -98,7 +110,7 @@ jobs:
           eval $CMD
 
       - name: "Commit & Push State to state/inbox"
-        if: always()
+        if: success()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
