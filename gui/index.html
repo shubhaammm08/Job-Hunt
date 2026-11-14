@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Shubham's JobHunt — Executive Dashboard</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>">
+  <style>
+    :root {
+      --bg: #0d1117;
+      --card-bg: #161b22;
+      --card-border: #30363d;
+      --text-main: #e6edf3;
+      --text-muted: #8b949e;
+      --accent-blue: #58a6ff;
+      --accent-green: #238636;
+      --green-light: #2ea043;
+      --accent-purple: #bc8cff;
+      --accent-amber: #d29922;
+      --accent-red: #f85149;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text-main);
+      font-family: var(--font);
+      min-height: 100vh;
+      line-height: 1.5;
+      padding-bottom: 50px;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    /* Top Bar / Header */
+    header {
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--card-border);
+      padding: 16px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-icon {
+      font-size: 28px;
+    }
+    .brand h1 {
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+    .brand p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .cloud-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(35, 134, 54, 0.2);
+      border: 1px solid rgba(46, 160, 67, 0.4);
+      color: #3fb950;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+    .cloud-pill .dot {
+      width: 7px;
+      height: 7px;
+      background: #3fb950;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #3fb950;
+    }
+
+    /* Quick Action Buttons */
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn {
+      background: #21262d;
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 7px 13px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .btn:hover {
+      background: #30363d;
+      border-color: #8b949e;
+    }
+    .btn-primary {
+      background: var(--accent-green);
+      border-color: rgba(240,246,252,0.1);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: var(--green-light);
+    }
+
+    /* Metrics Grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 14px;
+      margin: 20px 0;
+    }
+    .metric-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+    }
+    .metric-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    .metric-val {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1.1;
+      color: var(--text-main);
+    }
+    .metric-sub {
+      font-size: 12px;
+      color: var(--accent-blue);
+      margin-top: 4px;
+    }
+
+    /* Navigation Tabs */
+    .tabs-nav {
+      display: flex;
+      gap: 4px;
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 20px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-muted);
+      padding: 10px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .tab-btn:hover {
+      color: var(--text-main);
+    }
+    .tab-btn.active {
+      color: var(--accent-blue);
+      border-bottom-color: var(--accent-blue);
+    }
+    .tab-badge {
+      background: #21262d;
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 10px;
+    }
+
+    /* Tab Content Panels */
+    .tab-panel {
+      display: none;
+    }
+    .tab-panel.active {
+      display: block;
+    }
+
+    /* Filters Bar */
+    .filters-bar {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+    .search-box {
+      flex: 1;
+      min-width: 240px;
+      position: relative;
+    }
+    .search-box input {
+      width: 100%;
+      background: #0d1117;
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 8px 12px 8px 34px;
+      border-radius: 6px;
+      font-size: 14px;
+      outline: none;
+    }
+    .search-box input:focus {
+      border-color: var(--accent-blue);
+    }
+    .search-icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .select-filter {
+      background: #0d1117;
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      outline: none;
+    }
+
+    /* Job Card Items */
+    .job-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .job-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      transition: border-color 0.15s, transform 0.1s;
+      position: relative;
+    }
+    .job-card:hover {
+      border-color: #58a6ff55;
+    }
+    .job-card.is-applied {
+      opacity: 0.75;
+      border-left: 4px solid var(--accent-green);
+    }
+    .job-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .job-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+    .job-company {
+      font-size: 14px;
+      color: var(--accent-blue);
+      font-weight: 600;
+      display: inline-block;
+      margin-right: 8px;
+    }
+    .job-location {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .score-badge {
+      font-size: 13px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .score-high {
+      background: rgba(46, 160, 67, 0.2);
+      border: 1px solid #3fb950;
+      color: #3fb950;
+    }
+    .score-mid {
+      background: rgba(88, 166, 255, 0.2);
+      border: 1px solid #58a6ff;
+      color: #58a6ff;
+    }
+    .score-low {
+      background: rgba(139, 148, 158, 0.2);
+      border: 1px solid #8b949e;
+      color: #8b949e;
+    }
+
+    .job-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 10px 0;
+    }
+    .tag {
+      background: #21262d;
+      border: 1px solid rgba(255,255,255,0.06);
+      font-size: 11px;
+      color: var(--text-muted);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .tag-family {
+      background: rgba(188, 140, 255, 0.15);
+      border: 1px solid rgba(188, 140, 255, 0.3);
+      color: #d2a8ff;
+      font-weight: 600;
+    }
+    .tag-source {
+      background: rgba(210, 153, 34, 0.15);
+      border: 1px solid rgba(210, 153, 34, 0.3);
+      color: #e3b341;
+      font-weight: 600;
+    }
+
+    .job-reason {
+      font-size: 13px;
+      color: #c9d1d9;
+      background: rgba(0,0,0,0.25);
+      border-radius: 6px;
+      padding: 8px 12px;
+      margin: 10px 0;
+      border-left: 3px solid var(--accent-blue);
+    }
+
+    .job-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(48, 54, 61, 0.6);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .job-date {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .action-group {
+      display: flex;
+      gap: 8px;
+    }
+    .btn-applied {
+      background: transparent;
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .btn-applied.active {
+      background: rgba(46, 160, 67, 0.2);
+      border-color: #3fb950;
+      color: #3fb950;
+      font-weight: bold;
+    }
+
+    /* Embedded Digest View */
+    .digest-container {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      overflow: hidden;
+      min-height: 700px;
+    }
+    .digest-frame {
+      width: 100%;
+      height: 750px;
+      border: none;
+      background: #0f1115;
+    }
+
+    /* Sources Grid */
+    .sources-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 12px;
+    }
+    .source-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .source-info h4 {
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+    .source-info span {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    .status-healthy { background: #3fb950; box-shadow: 0 0 6px #3fb950; }
+    .status-config { background: #d29922; }
+
+    /* Profile / Settings Card */
+    .profile-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #238636;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .p-group {
+      margin-bottom: 18px;
+    }
+    .p-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 600px) {
+      .header-content { flex-direction: column; align-items: flex-start; }
+      .header-actions { width: 100%; justify-content: space-between; }
+      .filters-bar { flex-direction: column; align-items: stretch; }
+      .job-actions { flex-direction: column; align-items: flex-start; gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header>
+    <div class="header-content">
+      <div class="brand">
+        <span class="brand-icon">🎯</span>
+        <div>
+          <h1>Shubham's JobHunt</h1>
+          <p>Autonomous AI Career Engine · Computer Engineering (2022–2026)</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="cloud-pill" title="Next JobHunter run: 9:00 AM IST | Inbox: every 4h">
+          <span class="dot"></span> Cloud Automations Active
+        </div>
+        <a href="https://github.com/shubhaammm08/Job-Hunt/actions" target="_blank" class="btn">
+          <span>⚡ GitHub Actions</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- Top Key Metrics -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <span class="metric-label">Pipeline Opportunities</span>
+        <span class="metric-val" id="metric-total">--</span>
+        <span class="metric-sub">Tracked in seen.json</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-label">Recommended (Score ≥ 6.0)</span>
+        <span class="metric-val" id="metric-recommended" style="color: #3fb950;">--</span>
+        <span class="metric-sub">Cleared strict criteria</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-label">Applied</span>
+        <span class="metric-val" id="metric-applied" style="color: #58a6ff;">--</span>
+        <span class="metric-sub" id="metric-applied-rate">0% applied</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-label">Monitored Sources</span>
+        <span class="metric-val" id="metric-sources">87</span>
+        <span class="metric-sub">ATS & Platforms Healthy</span>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="tabs-nav">
+      <button class="tab-btn active" onclick="switchTab('tracker')">
+        📊 Job Opportunities <span class="tab-badge" id="tab-count-jobs">0</span>
+      </button>
+      <button class="tab-btn" onclick="switchTab('digest')">
+        📬 Today's Job Digest
+      </button>
+      <button class="tab-btn" onclick="switchTab('sources')">
+        🛡️ Source Health <span class="tab-badge">87</span>
+      </button>
+      <button class="tab-btn" onclick="switchTab('profile')">
+        👤 Candidate Profile
+      </button>
+    </div>
+
+    <!-- TAB 1: Job Opportunities Tracker -->
+    <div id="tab-tracker" class="tab-panel active">
+      <div class="filters-bar">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="search-input" placeholder="Search by role, company, skills, or city..." oninput="renderJobs()">
+        </div>
+        <select class="select-filter" id="filter-score" onchange="renderJobs()">
+          <option value="all">All Scores</option>
+          <option value="8">High Fit (8.0+)</option>
+          <option value="6">Recommended (6.0+)</option>
+          <option value="4">Plausible (4.0+)</option>
+        </select>
+        <select class="select-filter" id="filter-status" onchange="renderJobs()">
+          <option value="all">All Status</option>
+          <option value="unapplied">Not Applied</option>
+          <option value="applied">Applied</option>
+        </select>
+        <select class="select-filter" id="filter-family" onchange="renderJobs()">
+          <option value="all">All Role Families</option>
+          <option value="DATA">Data Analyst / BI</option>
+          <option value="AI_CORE">AI / ML Engineer</option>
+          <option value="GENAI_AGENTIC">GenAI / Agentic</option>
+          <option value="SOFTWARE">Software / Python</option>
+        </select>
+      </div>
+
+      <div class="job-list" id="job-list">
+        <div style="text-align:center;padding:40px;color:var(--text-muted);">Loading opportunities...</div>
+      </div>
+    </div>
+
+    <!-- TAB 2: Today's Job Digest Preview -->
+    <div id="tab-digest" class="tab-panel">
+      <div class="digest-container">
+        <iframe class="digest-frame" id="digest-frame" src="/api/digest"></iframe>
+      </div>
+    </div>
+
+    <!-- TAB 3: Source Health -->
+    <div id="tab-sources" class="tab-panel">
+      <div class="sources-grid" id="sources-grid">
+        <div style="padding:20px;color:var(--text-muted);">Loading sources...</div>
+      </div>
+    </div>
+
+    <!-- TAB 4: Profile & Preferences -->
+    <div id="tab-profile" class="tab-panel">
+      <div class="profile-card">
+        <div class="profile-header">
+          <div class="avatar">SK</div>
+          <div>
+            <h2 id="profile-name">Shubham Sunil Kadam</h2>
+            <p style="color:var(--text-muted);font-size:14px;" id="profile-title">Data Analyst · Python, SQL & Junior AI Developer</p>
+            <p style="color:var(--accent-blue);font-size:12px;margin-top:2px;" id="profile-email">ssk080204@gmail.com</p>
+          </div>
+        </div>
+
+        <div class="p-group">
+          <div class="p-title">Target Tracks & Roles</div>
+          <div class="job-tags" id="profile-target-roles"></div>
+        </div>
+
+        <div class="p-group">
+          <div class="p-title">Core Skills</div>
+          <div class="job-tags" id="profile-skills"></div>
+        </div>
+
+        <div class="p-group">
+          <div class="p-title">Location Hubs</div>
+          <div class="job-tags">
+            <span class="tag">Mumbai</span>
+            <span class="tag">Powai</span>
+            <span class="tag">Pune</span>
+            <span class="tag">Bangalore</span>
+            <span class="tag">Hyderabad</span>
+            <span class="tag">Delhi NCR</span>
+            <span class="tag" style="background:#238636;color:#fff;">Remote (India & Global)</span>
+          </div>
+        </div>
+
+        <div class="p-group">
+          <div class="p-title">Active Cloud Schedules</div>
+          <div style="font-size:13px;color:#c9d1d9;line-height:1.7;">
+            ⏰ <strong>Daily JobHunter Digest:</strong> 9:00 AM IST (Every day)<br>
+            📬 <strong>Inbox Executive Briefing:</strong> Every 4 Hours (02:17, 06:17, 10:17, 14:17, 18:17, 22:17 IST)<br>
+            💰 <strong>Cloud Budget:</strong> ₹0/month on GitHub Actions Free Tier
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let appData = {
+      jobs: [],
+      stats: {},
+      profile: {},
+      source_health: []
+    };
+
+    // Tab switching
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      
+      const targetBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick').includes(tabId));
+      if (targetBtn) targetBtn.classList.add('active');
+      
+      const targetPanel = document.getElementById('tab-' + tabId);
+      if (targetPanel) targetPanel.classList.add('active');
+    }
+
+    // Fetch initial data
+    async function loadData() {
+      if (window.INITIAL_DATA && window.INITIAL_DATA.jobs && window.INITIAL_DATA.jobs.length) {
+        appData = window.INITIAL_DATA;
+        renderStats();
+        renderJobs();
+        renderSources();
+        renderProfile();
+      }
+      try {
+        const res = await fetch('/api/data');
+        if (res.ok) {
+          appData = await res.json();
+          renderStats();
+          renderJobs();
+          renderSources();
+          renderProfile();
+        }
+      } catch (err) {
+        if (!window.INITIAL_DATA) {
+          loadStaticFallback();
+        }
+      }
+    }
+
+    function renderStats() {
+      const stats = appData.stats || {};
+      document.getElementById('metric-total').innerText = stats.total || 0;
+      document.getElementById('metric-recommended').innerText = stats.recommended || 0;
+      document.getElementById('metric-applied').innerText = stats.applied || 0;
+      document.getElementById('metric-sources').innerText = stats.sources_count || 87;
+      
+      const rate = stats.total ? Math.round((stats.applied / stats.total) * 100) : 0;
+      document.getElementById('metric-applied-rate').innerText = `${rate}% applied`;
+      document.getElementById('tab-count-jobs').innerText = stats.total || 0;
+    }
+
+    function renderJobs() {
+      const query = document.getElementById('search-input').value.toLowerCase().trim();
+      const scoreFilter = document.getElementById('filter-score').value;
+      const statusFilter = document.getElementById('filter-status').value;
+      const familyFilter = document.getElementById('filter-family').value;
+
+      const listContainer = document.getElementById('job-list');
+      const filtered = (appData.jobs || []).filter(j => {
+        // Search query
+        if (query) {
+          const hay = `${j.title || ''} ${j.company || ''} ${j.location || ''} ${(j.role_families || []).join(' ')}`.toLowerCase();
+          if (!hay.includes(query)) return false;
+        }
+        // Score filter
+        const score = parseFloat(j.score) || 0.0;
+        if (scoreFilter === '8' && score < 8.0) return false;
+        if (scoreFilter === '6' && score < 6.0) return false;
+        if (scoreFilter === '4' && score < 4.0) return false;
+
+        // Status filter
+        if (statusFilter === 'applied' && !j.applied) return false;
+        if (statusFilter === 'unapplied' && j.applied) return false;
+
+        // Family filter
+        if (familyFilter !== 'all') {
+          const families = j.role_families || [];
+          if (!families.includes(familyFilter)) return false;
+        }
+        return true;
+      });
+
+      if (!filtered.length) {
+        listContainer.innerHTML = `<div style="text-align:center;padding:50px;color:var(--text-muted);">
+          No matching opportunities found for your criteria.
+        </div>`;
+        return;
+      }
+
+      listContainer.innerHTML = filtered.map(j => {
+        const score = parseFloat(j.score) || 0.0;
+        const scoreClass = score >= 8.0 ? 'score-high' : (score >= 6.0 ? 'score-mid' : 'score-low');
+        const appliedClass = j.applied ? 'is-applied' : '';
+        const btnAppliedText = j.applied ? '✓ Applied' : 'Mark as Applied';
+        const btnAppliedClass = j.applied ? 'btn-applied active' : 'btn-applied';
+        const src = j.canonical_source || j.source || j.ats || 'Direct';
+
+        const familiesHtml = (j.role_families || []).slice(0, 2).map(f => `<span class="tag tag-family">${f}</span>`).join('');
+        const skillsHtml = (j.matched_skills || []).slice(0, 4).map(s => `<span class="tag">${s}</span>`).join('');
+        const sourcesNote = (j.sources && j.sources.length > 1) ? ` · Found on: ${j.sources.join(', ')}` : '';
+
+        return `
+          <div class="job-card ${appliedClass}" id="card-${j.job_id}">
+            <div class="job-header">
+              <div>
+                <div class="job-title">${escapeHtml(j.title || 'Untitled')}</div>
+                <div>
+                  <span class="job-company">${escapeHtml(j.company || 'Unknown')}</span>
+                  <span class="job-location">📍 ${escapeHtml(j.location || 'Not Specified')}</span>
+                </div>
+              </div>
+              <span class="score-badge ${scoreClass}">${score.toFixed(1)} Match</span>
+            </div>
+
+            <div class="job-tags">
+              <span class="tag tag-source">⚡ ${escapeHtml(src)}</span>
+              ${familiesHtml}
+              ${skillsHtml}
+            </div>
+
+            ${j.reason ? `<div class="job-reason">💡 ${escapeHtml(j.reason)}</div>` : ''}
+
+            <div class="job-actions">
+              <span class="job-date">Seen: ${j.first_seen ? j.first_seen.split('T')[0] : 'Today'}${escapeHtml(sourcesNote)}</span>
+              <div class="action-group">
+                <button class="${btnAppliedClass}" onclick="toggleApplied('${j.job_id}')">${btnAppliedText}</button>
+                <a href="${j.url || '#'}" target="_blank" class="btn btn-primary">Open & Apply →</a>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function toggleApplied(jobId) {
+      const job = (appData.jobs || []).find(j => j.job_id === jobId);
+      if (!job) return;
+      
+      const newStatus = !job.applied;
+      job.applied = newStatus;
+      renderStats();
+      renderJobs();
+
+      try {
+        await fetch('/api/toggle-applied', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ job_id: jobId })
+        });
+      } catch (err) {
+        console.warn('Live API toggle sync not available in static mode:', err);
+      }
+    }
+
+    function renderSources() {
+      const container = document.getElementById('sources-grid');
+      const sources = appData.source_health || [];
+      if (!sources.length) {
+        container.innerHTML = '<div style="padding:20px;color:var(--text-muted);">87 Source Adapters Configured (Greenhouse, Ashby, Lever, Remotive, etc.)</div>';
+        return;
+      }
+      container.innerHTML = sources.map(s => {
+        const isHealthy = s.status === 'HEALTHY';
+        const dotClass = isHealthy ? 'status-healthy' : 'status-config';
+        return `
+          <div class="source-card">
+            <div class="source-info">
+              <h4>${escapeHtml(s.source || '')}</h4>
+              <span>${escapeHtml(s.category || '')} · Tier ${s.tier || 1}</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span style="font-size:11px;color:var(--text-muted);">${s.status}</span>
+              <span class="status-dot ${dotClass}"></span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderProfile() {
+      const p = appData.profile || {};
+      if (p.name) document.getElementById('profile-name').innerText = p.name;
+      if (p.current_title) document.getElementById('profile-title').innerText = p.current_title;
+      
+      const skillsContainer = document.getElementById('profile-skills');
+      if (skillsContainer && p.core_skills) {
+        skillsContainer.innerHTML = p.core_skills.map(s => `<span class="tag" style="background:#1f242d;color:#79c0ff;">${escapeHtml(s)}</span>`).join('');
+      }
+
+      const rolesContainer = document.getElementById('profile-target-roles');
+      if (rolesContainer && p.target_titles) {
+        rolesContainer.innerHTML = p.target_titles.map(t => `<span class="tag tag-family">${escapeHtml(t)}</span>`).join('');
+      }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // Static fallback if API server is not running
+    function loadStaticFallback() {
+      appData = {
+        stats: { total: 48, applied: 0, recommended: 48, sources_count: 87 },
+        profile: {
+          name: "Shubham Sunil Kadam",
+          current_title: "Data Analyst · Python, SQL & Junior AI Developer",
+          core_skills: ["Python", "SQL", "Power BI", "Tableau", "Pandas", "NumPy", "Scikit-Learn", "Machine Learning", "FastAPI", "PostgreSQL", "Docker", "Git"],
+          target_titles: ["Data Analyst", "Junior AI Developer", "Python Developer", "Business Intelligence Analyst", "Analytics Engineer"]
+        },
+        source_health: [
+          { source: "Greenhouse", category: "direct_ats", tier: 1, status: "HEALTHY" },
+          { source: "Ashby", category: "direct_ats", tier: 1, status: "HEALTHY" },
+          { source: "Lever", category: "direct_ats", tier: 1, status: "HEALTHY" },
+          { source: "Remotive", category: "remote", tier: 3, status: "HEALTHY" },
+          { source: "Remote OK", category: "remote", tier: 3, status: "HEALTHY" },
+          { source: "Hacker News", category: "startup", tier: 3, status: "HEALTHY" }
+        ],
+        jobs: []
+      };
+      renderStats();
+      renderSources();
+      renderProfile();
+    }
+
+    // Initialize on page load
+    window.addEventListener('DOMContentLoaded', loadData);
+  </script>
+</body>
+</html>

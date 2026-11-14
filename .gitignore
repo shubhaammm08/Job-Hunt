@@ -18,6 +18,8 @@ profile.json
 # generated output
 out/
 *.html
+!index.html
+!gui/*.html
 !jobhunt/templates/*.html
 
 # Your dedupe index and application tracker. Personal, and it must never ship
