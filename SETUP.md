@@ -229,8 +229,8 @@ filters:
     - bengaluru
   allow_remote: true
   max_age_days: 30
-score_threshold: 7.0  # below this, no draft and no digest slot
-max_per_digest: 5
+score_threshold: 6.0  # below this, no draft and no digest slot
+max_per_digest: 0     # 0 delivers all qualifying fresh opportunities (min 10 when available)
 ```
 
 Two traps worth knowing:

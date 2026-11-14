@@ -1,5 +1,14 @@
 # secrets
 .env
+.env.*
+!.env.example
+*.pem
+*.key
+*.cert
+credentials.json
+client_secret*.json
+*.log
+logs/
 
 # your actual resume and the profile derived from it
 resume.*
@@ -16,6 +25,8 @@ out/
 # user's first run finds nothing. GitHub Actions persists it via actions/cache
 # instead of committing it.
 seen.json
+summary_seen.json
+out/summary_seen.json
 
 # python
 __pycache__/

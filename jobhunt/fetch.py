@@ -5,6 +5,7 @@ import html
 import re
 import time
 from dataclasses import dataclass, asdict, field
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any, Iterable
 
 import requests
@@ -44,6 +45,39 @@ class Job:
     score: float | None = None
     reason: str | None = None
     draft: dict[str, Any] = field(default_factory=dict)
+
+    # Normalized fields (Part 13)
+    source: str = ""
+    source_tier: int = 1
+    country: str = ""
+    remote: bool = False
+    employment_type: str = ""
+    experience_required: str = ""
+    updated_at: str | None = None
+    apply_url: str = ""
+    role_families: list[str] = field(default_factory=list)
+    matched_roles: list[str] = field(default_factory=list)
+    matched_skills: list[str] = field(default_factory=list)
+    role_confidence: float = 0.0
+    fit_score: float = 0.0
+    sources: list[str] = field(default_factory=list)
+    canonical_source: str = ""
+
+    def __post_init__(self) -> None:
+        if not self.source:
+            self.source = self.ats
+        if not self.canonical_source:
+            self.canonical_source = self.source
+        if self.source and not self.sources:
+            self.sources = [self.source]
+        elif self.source and self.source not in self.sources:
+            self.sources.append(self.source)
+        if not self.apply_url:
+            self.apply_url = self.url
+        if self.score is not None and self.fit_score == 0.0:
+            self.fit_score = self.score
+        elif self.fit_score != 0.0 and self.score is None:
+            self.score = self.fit_score
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -148,13 +182,23 @@ def fetch_board(ats: str, slug: str, company: str | None = None,
         return []
 
 
-def fetch_all(companies: Iterable[dict], sleep: float = 0.25) -> list[Job]:
+def fetch_all(companies: Iterable[dict], max_workers: int = 8,
+              sleep: float = 0.0) -> list[Job]:
+    """Fetch boards concurrently with ThreadPoolExecutor for 5-10x speedup."""
+    companies_list = list(companies)
     jobs: list[Job] = []
-    session = requests.Session()
-    for c in companies:
-        got = fetch_board(c["ats"], c["slug"], c.get("name"), session=session)
-        if got:
-            print(f"  {c.get('name') or c['slug']:<28} {len(got):>4} jobs  ({c['ats']})")
-        jobs.extend(got)
-        time.sleep(sleep)
+
+    def _fetch_one(c: dict) -> tuple[dict, list[Job]]:
+        got = fetch_board(c["ats"], c["slug"], c.get("name"))
+        return c, got
+
+    workers = min(max_workers, max(1, len(companies_list)))
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        futures = [pool.submit(_fetch_one, c) for c in companies_list]
+        for f in as_completed(futures):
+            c, got = f.result()
+            if got:
+                print(f"  {c.get('name') or c['slug']:<28} {len(got):>4} jobs  ({c['ats']})")
+            jobs.extend(got)
+
     return jobs

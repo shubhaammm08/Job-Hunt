@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import csv
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -15,9 +16,14 @@ class Store:
         self.data: dict[str, dict] = {}
         if self.path.exists():
             try:
-                self.data = json.loads(self.path.read_text())
+                try:
+                    content = self.path.read_text(encoding="utf-8")
+                except UnicodeDecodeError:
+                    content = self.path.read_text(encoding="cp1252", errors="replace")
+                self.data = json.loads(content)
             except json.JSONDecodeError:
                 print(f"  ! {self.path} corrupt, starting fresh")
+                self.data = {}
 
     def unseen(self, jobs: list[Job]) -> list[Job]:
         return [j for j in jobs if j.job_id not in self.data]
@@ -33,6 +39,11 @@ class Store:
                 "url": j.url,
                 "score": j.score,
                 "reason": j.reason,
+                "canonical_source": j.canonical_source or j.source or j.ats,
+                "sources": j.sources or [j.source or j.ats],
+                "role_families": j.role_families,
+                "matched_roles": j.matched_roles,
+                "fit_score": j.fit_score or j.score,
                 "emailed": emailed,
                 "applied": False,
                 "applied_on": None,
@@ -57,8 +68,8 @@ class Store:
     def export_csv(self, path: str | Path = "out/tracker.csv") -> Path:
         path = Path(path)
         path.parent.mkdir(parents=True, exist_ok=True)
-        cols = ["first_seen", "company", "title", "location", "score",
-                "reason", "applied", "applied_on", "url"]
+        cols = ["first_seen", "company", "title", "location", "canonical_source",
+                "sources", "role_families", "score", "reason", "applied", "applied_on", "url"]
         with path.open("w", newline="", encoding="utf-8") as fh:
             w = csv.DictWriter(fh, fieldnames=["job_id"] + cols, extrasaction="ignore")
             w.writeheader()
@@ -68,4 +79,9 @@ class Store:
         return path
 
     def save(self) -> None:
-        self.path.write_text(json.dumps(self.data, indent=2, ensure_ascii=False))
+        tmp_path = self.path.with_suffix(f"{self.path.suffix}.tmp.{os.getpid()}")
+        with open(tmp_path, "w", encoding="utf-8") as f:
+            json.dump(self.data, f, indent=2, ensure_ascii=False)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp_path, self.path)

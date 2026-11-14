@@ -7,9 +7,12 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import sys
 from pathlib import Path
+
+from typing import Any
 
 import yaml
 
@@ -85,6 +88,82 @@ def cmd_profile(args) -> int:
     return 0
 
 
+def _clean_score(val: Any) -> float | None:
+    if val is None or isinstance(val, bool):
+        return None
+    try:
+        s = float(val)
+        if math.isnan(s) or math.isinf(s):
+            return None
+        return s
+    except (ValueError, TypeError, OverflowError):
+        return None
+
+
+def _get_job_score(j: Any) -> float | None:
+    try:
+        if isinstance(j, dict):
+            return _clean_score(j.get("score"))
+        return _clean_score(getattr(j, "score", None))
+    except Exception:
+        return None
+
+
+def _parse_threshold(cfg: dict | None) -> float:
+    if not isinstance(cfg, dict):
+        return 6.0
+    raw = cfg.get("score_threshold")
+    if raw is None or isinstance(raw, bool):
+        return 6.0
+    try:
+        val = float(raw)
+        if math.isnan(val) or math.isinf(val):
+            return 6.0
+        return val
+    except (ValueError, TypeError, OverflowError):
+        return 6.0
+
+
+def select_shortlist(jobs: Any, cfg: dict | None) -> list:
+    """Select qualifying opportunities for the digest according to score and max_per_digest config.
+    Delivers all fresh opportunities meeting criteria (min 10 when available) without artificial truncation.
+    """
+    if not jobs or isinstance(jobs, (str, bytes)):
+        return []
+    try:
+        job_iter = iter(jobs)
+    except TypeError:
+        return []
+
+    if not isinstance(cfg, dict):
+        cfg = {}
+
+    threshold = _parse_threshold(cfg)
+    qualifying = []
+    for j in job_iter:
+        score = _get_job_score(j)
+        if score is not None and score >= threshold:
+            qualifying.append(j)
+
+    qualifying.sort(key=lambda j: _get_job_score(j) or 0.0, reverse=True)
+
+    raw_max = cfg.get("max_per_digest")
+    if raw_max is None or isinstance(raw_max, bool):
+        return qualifying
+    try:
+        val = float(str(raw_max).strip())
+        if math.isnan(val) or math.isinf(val):
+            top_n = 0
+        else:
+            top_n = int(val)
+    except (ValueError, TypeError, OverflowError):
+        top_n = 0
+    if top_n <= 0:
+        return qualifying
+    top_n = max(top_n, 10)
+    return qualifying[:top_n]
+
+
 # ---------------------------------------------------------------------- run --
 def cmd_run(args) -> int:
     cfg = _cfg(args.config)
@@ -92,36 +171,41 @@ def cmd_run(args) -> int:
     if profile is None:
         return 1
     store = Store(cfg.get("seen_file", "seen.json"))
+    candidate_name = (profile or {}).get("name", "Shubham")
     filters = cfg.get("filters", {}) or {}
 
     # ---- 1. fetch
-    print("\n[1/5] fetching boards")
+    print("\n[1/5] fetching boards & registered sources")
     if args.mock:
         jobs = fetch_all_mock()
     else:
         companies = _cfg(cfg.get("companies_file", "companies.yaml")).get("companies") or []
-        if not companies:
-            print("companies.yaml has no entries")
-            return 1
-        jobs = fetch_all(companies)
+        jobs = fetch_all(companies) if companies else []
+        from .sources import REGISTRY
+        source_jobs = REGISTRY.fetch_all_sources(cfg)
+        jobs.extend(source_jobs)
     scanned = len(jobs)
     if not scanned:
-        print("no postings fetched — check the slugs in companies.yaml")
+        print("no postings fetched — check the slugs in companies.yaml or network connectivity")
         return 1
 
     # ---- 2. prefilter + dedupe (deterministic, free, no LLM)
-    print("\n[2/5] filtering")
+    print("\n[2/5] deduplicating & filtering")
+    from .dedupe import deduplicate_jobs
+    jobs, dupe_count = deduplicate_jobs(jobs)
+    if dupe_count > 0:
+        print(f"  canonical deduplication: consolidated {dupe_count} duplicate listings across sources")
     jobs = prefilter(jobs, filters)
     passed_filters = len(jobs)
     jobs = store.unseen(jobs)
     print(f"  new since last run: {len(jobs)}")
     candidates = len(jobs)
-    if args.limit:
+    if args.limit and args.limit > 0:
         jobs = jobs[:args.limit]
         print(f"  --limit {args.limit} applied")
 
     if not jobs:
-        subject, doc = digest_mod.build([], scanned, 0, store.stats())
+        subject, doc = digest_mod.build([], scanned, 0, store.stats(), name=candidate_name)
         path = digest_mod.write(doc, cfg.get("digest_file", "out/digest.html"))
         print(f"\nnothing new today. preview: {path}")
         return 0
@@ -151,10 +235,8 @@ def cmd_run(args) -> int:
               "  Check the warnings above (bad key, rate limit, wrong model id).")
         return 1
 
-    threshold = float(cfg.get("score_threshold", 7.0))
-    top_n = int(cfg.get("max_per_digest", 5))
-    shortlist = sorted([j for j in jobs if (j.score or 0) >= threshold],
-                       key=lambda j: j.score or 0, reverse=True)[:top_n]
+    threshold = _parse_threshold(cfg)
+    shortlist = select_shortlist(jobs, cfg)
     print(f"  {len(shortlist)} scored >= {threshold}")
 
     # ---- 4. draft
@@ -175,7 +257,7 @@ def cmd_run(args) -> int:
 
     # ---- 5. digest
     print("\n[5/5] digest")
-    subject, doc = digest_mod.build(shortlist, scanned, candidates, store.stats())
+    subject, doc = digest_mod.build(shortlist, scanned, candidates, store.stats(), name=candidate_name)
     path = digest_mod.write(doc, cfg.get("digest_file", "out/digest.html"))
     print(f"  wrote {path}")
 
@@ -192,10 +274,16 @@ def cmd_run(args) -> int:
     store.record(jobs, emailed=sent)
     csv_path = store.export_csv(cfg.get("tracker_csv", "out/tracker.csv"))
 
+    # Export source health report
+    from .sources import REGISTRY
+    health_file = cfg.get("source_health_file", "out/source_health.json")
+    health_path = REGISTRY.export_health(health_file)
+
     print(f"\nfunnel: {scanned} scanned -> {passed_filters} passed filters "
           f"-> {candidates} new -> {len(shortlist)} in digest")
     print(f"subject: {subject}")
     print(f"tracker: {store.stats()}  ({csv_path})")
+    print(f"source health: {health_path}")
     return 0
 
 
@@ -212,6 +300,17 @@ def cmd_stats(args) -> int:
     store = Store(cfg.get("seen_file", "seen.json"))
     print(json.dumps(store.stats(), indent=2))
     print(f"csv: {store.export_csv(cfg.get('tracker_csv', 'out/tracker.csv'))}")
+    return 0
+
+
+def cmd_sources(args) -> int:
+    cfg = _cfg(args.config)
+    from .sources import REGISTRY
+    out_file = getattr(args, "out", None) or cfg.get("source_health_file", "out/source_health.json")
+    path = REGISTRY.export_health(out_file)
+    print(f"Exported source health report to {path}")
+    for name, adapter in REGISTRY.adapters.items():
+        print(f"  {name:<32} {adapter.category:<18} Tier {adapter.tier} -> {adapter.health.status}")
     return 0
 
 
@@ -244,6 +343,10 @@ def main(argv=None) -> int:
 
     ss = sub.add_parser("stats", help="tracker summary + CSV export")
     ss.set_defaults(func=cmd_stats)
+
+    ssrc = sub.add_parser("sources", help="inspect source registry and health report")
+    ssrc.add_argument("--out", default="out/source_health.json")
+    ssrc.set_defaults(func=cmd_sources)
 
     args = p.parse_args(argv)
     return args.func(args)

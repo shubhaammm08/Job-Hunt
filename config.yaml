@@ -1,17 +1,290 @@
-# jobhunt configuration. Everything tunable lives here — no editing Python.
-#
-# Tune `filters` first. It is deterministic, free, and it is what keeps the
-# LLM bill small: roughly 2000 raw postings -> 40 candidates before a single
-# token is spent.
+# jobhunt configuration customized for Shubham Sunil Kadam
+# Data Analyst | Python • SQL • Power BI • Machine Learning | Computer Engineering
+
+target_roles:
+  AI_CORE:
+    - AI Engineer
+    - Applied AI Engineer
+    - AI/ML Engineer
+    - ML Engineer
+    - Machine Learning Engineer
+    - Applied Machine Learning Engineer
+    - AI Research Engineer
+    - AI Research Scientist
+    - AI Scientist
+    - Machine Learning Scientist
+    - AI Software Engineer
+    - AI Product Engineer
+    - AI Systems Engineer
+    - AI Developer
+    - Machine Learning Developer
+    - ML Developer
+    - Artificial Intelligence Engineer
+    - Artificial Intelligence Developer
+
+  GENAI_AGENTIC:
+    - GenAI Engineer
+    - Generative AI Engineer
+    - Generative AI Developer
+    - GenAI Developer
+    - LLM Engineer
+    - Large Language Model Engineer
+    - LLM Developer
+    - LLM Application Engineer
+    - LLM Application Developer
+    - Agentic AI Engineer
+    - Agentic AI Developer
+    - AI Agent Engineer
+    - AI Agent Developer
+    - Agent Engineer
+    - Agent Developer
+    - AI Agents Engineer
+    - AI Workflow Engineer
+    - Agentic Workflow Engineer
+    - RAG Engineer
+    - RAG Developer
+    - Retrieval Engineer
+    - MCP Engineer
+    - MCP Developer
+    - Model Context Protocol Engineer
+    - AI Automation Engineer
+    - AI Automation Developer
+    - Intelligent Automation Engineer
+    - AI Application Engineer
+    - GenAI Application Engineer
+    - Conversational AI Engineer
+    - Conversational AI Developer
+    - Prompt Engineer
+    - AI Evaluation Engineer
+    - LLM Evaluation Engineer
+    - AI Quality Engineer
+    - AI Safety Engineer
+
+  DEPLOYMENT:
+    - Forward Deployed Engineer
+    - FDE
+    - AI FDE
+    - Forward Deployed AI Engineer
+    - Forward Deployed Software Engineer
+    - AI Deployment Engineer
+    - AI Deployment Developer
+    - Deployment Engineer
+    - Strategic Deployment Engineer
+    - Deployment Strategist
+    - AI Deployment Strategist
+    - AI Implementation Engineer
+    - AI Implementation Specialist
+    - AI Deployment Specialist
+    - AI Integration Engineer
+    - AI Integration Specialist
+    - AI Solutions Engineer
+    - AI Solutions Architect
+    - Applied AI Architect
+    - AI Implementation Consultant
+    - AI Technical Consultant
+    - Technical Solutions Engineer
+    - Solutions Engineer
+    - Solutions Architect
+    - Customer AI Engineer
+    - Customer Solutions Engineer
+    - AI Customer Engineer
+    - Technical Implementation Engineer
+
+  DATA:
+    - Data Engineer
+    - Data Engineering
+    - Junior Data Engineer
+    - Associate Data Engineer
+    - Analytics Engineer
+    - Data Analytics Engineer
+    - Analytics Developer
+    - Data Analyst
+    - Junior Data Analyst
+    - Associate Data Analyst
+    - Business Intelligence Analyst
+    - BI Analyst
+    - BI Developer
+    - Business Intelligence Developer
+    - Data Scientist
+    - Junior Data Scientist
+    - Associate Data Scientist
+    - Applied Data Scientist
+    - Machine Learning Data Scientist
+    - Product Analyst
+    - Product Data Analyst
+    - Business Analyst
+    - Data Business Analyst
+    - Decision Scientist
+    - Decision Analyst
+    - Data Visualization Analyst
+    - Reporting Analyst
+    - Quantitative Analyst
+    - Analytics Consultant
+    - Data Consultant
+
+  SOFTWARE:
+    - Software Engineer
+    - Software Developer
+    - Software Development Engineer
+    - SDE
+    - SDE I
+    - SDE 1
+    - Junior Software Engineer
+    - Associate Software Engineer
+    - Graduate Software Engineer
+    - Entry Level Software Engineer
+    - Backend Engineer
+    - Backend Developer
+    - Backend Software Engineer
+    - Python Developer
+    - Python Engineer
+    - Python Backend Developer
+    - Python Backend Engineer
+    - AI Backend Engineer
+    - AI Backend Developer
+    - AI Software Engineer
+    - Application Engineer
+    - Application Developer
+    - Software Application Engineer
+    - Full Stack Developer
+    - Full Stack Engineer
+    - Web Application Engineer
+    - API Engineer
+    - API Developer
+    - Integration Engineer
+    - Integration Developer
+    - Platform Software Engineer
+
+  PLATFORM:
+    - AI Platform Engineer
+    - AI Platform Developer
+    - AI Systems Engineer
+    - AI Infrastructure Engineer
+    - AI Infrastructure Developer
+    - Machine Learning Platform Engineer
+    - ML Platform Engineer
+    - ML Infrastructure Engineer
+    - ML Infrastructure Developer
+    - MLOps Engineer
+    - MLOps Developer
+    - Machine Learning Operations Engineer
+    - Platform Engineer
+    - Platform Developer
+    - Infrastructure Engineer
+    - Infrastructure Developer
+    - Cloud Engineer
+    - Cloud Developer
+    - Cloud Infrastructure Engineer
+
+  CLOUD_DEVOPS:
+    - DevOps Engineer
+    - DevOps Developer
+    - Junior DevOps Engineer
+    - Associate DevOps Engineer
+    - Cloud Engineer
+    - Cloud Infrastructure Engineer
+    - Cloud Developer
+    - Cloud Platform Engineer
+    - DevSecOps Engineer
+    - DevSecOps Developer
+    - Site Reliability Engineer
+    - SRE
+    - Junior SRE
+    - Reliability Engineer
+    - Infrastructure Engineer
+    - Infrastructure Software Engineer
+
+  AUTOMATION:
+    - Automation Engineer
+    - Automation Developer
+    - AI Automation Engineer
+    - AI Automation Developer
+    - Intelligent Automation Engineer
+    - Intelligent Automation Developer
+    - Process Automation Engineer
+    - Process Automation Developer
+    - Workflow Automation Engineer
+    - AI Workflow Automation Engineer
+    - RPA Developer
+    - RPA Engineer
+    - Robotic Process Automation Engineer
+
+  SECURITY:
+    - Cybersecurity Analyst
+    - Security Analyst
+    - Junior Security Analyst
+    - Security Engineer
+    - Cybersecurity Engineer
+    - AI Security Engineer
+    - AI Security Analyst
+    - Application Security Engineer
+    - Application Security Analyst
+    - Cloud Security Engineer
+    - Cloud Security Analyst
+    - DevSecOps Engineer
+
+  QA_TESTING:
+    - QA Engineer
+    - QA Analyst
+    - QA Automation Engineer
+    - QA Automation Developer
+    - Test Automation Engineer
+    - Test Automation Developer
+    - Software Test Engineer
+    - Software Test Analyst
+    - SDET
+    - Software Development Engineer in Test
+    - AI Testing Engineer
+    - AI Quality Engineer
+    - Automation Test Engineer
+
+  PRODUCT_TECH:
+    - AI Product Engineer
+    - Product Engineer
+    - Technical Product Engineer
+    - Technical Solutions Engineer
+    - Solutions Engineer
+    - Solutions Architect
+    - Technical Architect
+    - Technical Consultant
+    - Technology Consultant
+    - Implementation Engineer
+    - Implementation Specialist
+    - Integration Engineer
+    - Technical Integration Engineer
+
+  OTHER_TECH:
+    - Technical Support Engineer
+    - Application Support Engineer
+    - Production Support Engineer
+    - Systems Engineer
+    - Systems Developer
+    - Computer Systems Engineer
+    - Technical Operations Engineer
 
 filters:
-  # Title regexes, matched case-insensitively against the job title only.
-  # A title must match at least one include AND zero excludes.
-  #
-  # Gotcha: "sde" as a bare regex does NOT match "Software Development
-  # Engineer" — different words entirely. Use \bsde\b for the acronym and
-  # list the spelled-out variants separately, as below.
   include_titles:
+    # --- Data Analytics & Business Intelligence track ---
+    - '\bdata\s+analyst\b'
+    - '\bbusiness\s+intelligence\b'
+    - '\bbi\s+analyst\b'
+    - '\b(data|business|reporting|bi)\s+analytics\b'
+    - '\bproduct\s+analyst\b'
+    - '\banalytics\s+engineer\b'
+    - '\bquantitative\s+analyst\b'
+
+    # --- AI, Machine Learning & Python track ---
+    - '\b(ai|ml|machine\s+learning)\s+engineer\b'
+    - '\b(ai|ml|machine\s+learning)\s+developer\b'
+    - '\bpython\s+(developer|engineer)\b'
+    - '\bprompt\s+engineer\b'
+    - '\bai\s+specialist\b'
+
+    # --- Data Engineering & ETL track ---
+    - '\bdata\s+engineer\b'
+    - '\betl\s+(developer|engineer)\b'
+
+    # --- Software & Systems Engineering track ---
     - '\b(software|backend|back-end|server|platform|infrastructure|infra|systems|distributed|cloud)\b.*\bengineer\b'
     - '\bengineer\b.*\b(backend|back-end|platform|infrastructure|infra|systems|distributed)\b'
     - '\bsde\b'
@@ -21,8 +294,6 @@ filters:
     - 'site reliability engineer'
     - '\bsre\b'
     - 'member of technical staff'
-    # systems / networking track — matches your DPDK, packet-processing and
-    # kernel background. Drop these if you widen away from low-level work.
     - '\bnetwork(ing)?\s+(software\s+)?engineer\b'
     - '\b(kernel|embedded|firmware|driver|packet|dataplane|data plane)\b.*\bengineer\b'
     - '\bengineer\b.*\b(kernel|packet|dataplane|networking|performance)\b'
@@ -30,41 +301,40 @@ filters:
     - '\bsystems engineer\b'
     - '\bc\+\+\b.*\bengineer\b'
     - '\bengineer\b.*\bc\+\+\b'
+    - '\bassociate\s+software\s+engineer\b'
+    - '\bgraduate\s+engineer\b'
+    - '\bjunior\s+(software|data|python|ai)\b'
 
-  # Anything matching these is dropped even if an include matched.
   exclude_titles:
-    - '\b(staff|principal|distinguished|fellow|architect)\b'      # too senior for now
-    # "Senior" at 2.5 years is a consistent 3-4 from the screener — dropping it
-    # here is free, dropping it after an LLM call is not. Delete this line once
-    # you are ~4 years in, or if you want to stretch-apply anyway.
-    - '\bsenior\b'
+    - '\b(staff|principal|distinguished|fellow|architect)\b'
+    - '\b(sr\.?|senior)\b'
+    - '\b(team\s+lead|lead|tech\s+lead)\b'
     - '\b(director|vp|vice president|head of|chief|cto)\b'
     - '\b(manager|management)\b'
-    - '\b(intern|internship|apprentice|trainee)\b'                # too junior
     - '\b(sales|account executive|marketing|recruit|support|success)\b'
-    - '\b(frontend|front-end|ios|android|mobile|game|designer)\b' # wrong discipline
-    - '\b(data scientist|machine learning scientist|research scientist)\b'
+    - '\b(frontend|front-end|ios|android|mobile|game|designer)\b'
 
-  # Substrings matched against "<location> <title>", case-insensitive.
-  # Leave empty to accept every location.
   locations:
+    - mumbai
+    - powai
+    - pune
     - bangalore
     - bengaluru
+    - hyderabad
+    - gurgaon
+    - noida
+    - delhi
     - india
 
-  # If true, anything reading as remote passes the location gate.
   allow_remote: true
-
-  # Drop postings older than this. Set to null to disable.
-  # Boards often re-stamp `updated_at`, so this is a soft signal, not a promise.
   max_age_days: 30
 
 # --- LLM stages -------------------------------------------------------------
-screen_batch_size: 8      # jobs per screening call. Higher = cheaper, sloppier.
+screen_batch_size: 8      # jobs per screening call
 screen_jd_chars: 1400     # JD truncation for screening
 draft_jd_chars: 6000      # JD truncation for drafting
-score_threshold: 7.0      # below this, no draft and no digest slot
-max_per_digest: 5         # hard cap on expensive draft calls per run
+score_threshold: 6.0      # minimum match score (0-10) to draft and digest
+max_per_digest: 0         # maximum jobs drafted and presented in digest (0 for all qualifying fresh opportunities; minimum 10 when available)
 
 # --- paths ------------------------------------------------------------------
 companies_file: companies.yaml
@@ -72,3 +342,164 @@ profile_file: profile.json
 seen_file: seen.json
 digest_file: out/digest.html
 tracker_csv: out/tracker.csv
+source_health_file: out/source_health.json
+
+# --- sources configuration --------------------------------------------------
+sources:
+  enabled_categories:
+    - direct_ats
+    - remote_sources
+    - startup_sources
+    - india_job_boards
+    - global_job_boards
+    - fresher_sources
+    - ai_sources
+
+  priority_tiers:
+    tier_1: direct_ats
+    tier_2: specialized_tech
+    tier_3: aggregators
+    tier_4: generic_boards
+
+  rate_limits:
+    direct_ats: 0.2
+    aggregators: 0.5
+    boards: 1.0
+
+# --- high value company watchlist -------------------------------------------
+company_watchlist:
+  frontier_ai:
+    - Anthropic
+    - OpenAI
+    - Google DeepMind
+    - Meta AI
+    - Apple AI
+    - Microsoft AI
+    - Mistral AI
+    - Cohere
+    - Perplexity
+    - Together AI
+    - Fireworks AI
+    - Groq
+    - Cerebras
+
+  ai_platforms_and_data:
+    - Snowflake
+    - Databricks
+    - Palantir
+    - Scale AI
+    - Hugging Face
+    - Cursor
+    - LangChain
+    - LlamaIndex
+    - Weights & Biases
+    - Pinecone
+    - Qdrant
+    - Weaviate
+    - Modal
+    - Replicate
+    - CoreWeave
+    - Lambda Labs
+    - RunPod
+    - Braintrust
+    - ElevenLabs
+    - Runway
+    - Jasper
+    - Glean
+
+  modern_dev_tools:
+    - Vercel
+    - Supabase
+    - Retool
+    - Linear
+    - Notion
+    - Figma
+    - Canva
+    - Zapier
+    - Postman
+    - BrowserStack
+    - Hasura
+
+  indian_tech_giants:
+    - Swiggy
+    - Zomato
+    - Zepto
+    - Flipkart
+    - Razorpay
+    - CRED
+    - PhonePe
+    - Meesho
+    - Ola
+    - Urban Company
+    - Groww
+    - Zerodha
+    - Upstox
+    - Angel One
+    - CoinDCX
+    - slice
+    - Jupiter
+    - Fi Money
+    - Navi
+    - InMobi
+    - Freshworks
+    - Zoho
+    - Chargebee
+    - Kissflow
+    - Icertis
+    - Druva
+    - Mindtickle
+    - Sprinklr
+    - Gupshup
+    - Exotel
+    - PhysicsWallah
+    - Unacademy
+    - Eruditus
+    - LeadSquared
+    - Darwinbox
+    - CleverTap
+    - MoEngage
+
+  analytics_and_ai_consultancies:
+    - Fractal Analytics
+    - Mu Sigma
+    - Tiger Analytics
+    - LatentView Analytics
+    - Sigmoid
+    - Course5i
+    - Tredence
+    - Quantiphi
+    - Searce
+
+  enterprise_and_gcc:
+    - Persistent Systems
+    - LTI Mindtree
+    - Coforge
+    - Mphasis
+    - Hexaware
+    - Cyient
+    - Happiest Minds
+    - Tata Elxsi
+    - KPIT Technologies
+    - Infosys
+    - TCS
+    - Wipro
+    - HCLTech
+    - Tech Mahindra
+    - Cognizant
+    - Capgemini
+    - Accenture
+    - IBM
+    - Oracle
+    - SAP
+    - Cisco
+    - Dell
+    - Intel
+    - Qualcomm
+    - Broadcom
+    - Texas Instruments
+    - Micron
+    - Applied Materials
+    - Synopsys
+    - Cadence
+    - ARM
+

@@ -9,8 +9,10 @@ from email.message import EmailMessage
 def send(subject: str, html_body: str) -> None:
     host = os.getenv("SMTP_HOST", "smtp.gmail.com")
     port = int(os.getenv("SMTP_PORT", "587"))
-    user = os.environ["SMTP_USER"]
-    password = os.environ["SMTP_PASS"]
+    user = os.environ.get("GMAIL_EMAIL") or os.environ.get("SMTP_USER")
+    password = os.environ.get("GMAIL_APP_PASSWORD") or os.environ.get("SMTP_PASS")
+    if not user or not password:
+        raise RuntimeError("Missing SMTP credentials: set GMAIL_EMAIL/SMTP_USER and GMAIL_APP_PASSWORD/SMTP_PASS")
     to_addr = os.getenv("MAIL_TO", user)
 
     msg = EmailMessage()

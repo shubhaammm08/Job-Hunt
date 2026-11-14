@@ -162,6 +162,11 @@ def screen(jobs: list[Job], profile: dict, batch_size: int = 8, jd_chars: int = 
             "company": j.company,
             "title": j.title,
             "location": j.location,
+            "role_families": j.role_families,
+            "matched_roles": j.matched_roles,
+            "matched_skills": j.matched_skills,
+            "experience_required": j.experience_required,
+            "canonical_source": j.canonical_source,
             "description": j.description[:jd_chars],
         } for j in batch]
 
@@ -191,6 +196,7 @@ def screen(jobs: list[Job], profile: dict, batch_size: int = 8, jd_chars: int = 
             except (TypeError, ValueError):
                 j.score = 0.0
             j.reason = str(r.get("reason", "")).strip()
+            j.fit_score = j.score
 
         print(f"  screened {min(start + batch_size, len(jobs))}/{len(jobs)}")
 
@@ -273,6 +279,7 @@ def keyword_screen(jobs: list[Job], profile: dict, **_) -> list[Job]:
         overlap = len(hits) / max(len(skills), 1)
         title_bonus = 2.5 if any(t in j.title.lower() for t in titles) else 0.0
         j.score = round(min(10.0, overlap * 12 + title_bonus), 1)
+        j.fit_score = j.score
         j.reason = ("[keyword stub] matched: " + ", ".join(hits[:5])) if hits \
             else "[keyword stub] no skill overlap"
     return jobs

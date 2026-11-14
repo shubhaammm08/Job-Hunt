@@ -90,8 +90,8 @@ filters:
   locations: [bangalore, bengaluru, india]
   allow_remote: true
   max_age_days: 30
-score_threshold: 7.0
-max_per_digest: 5
+score_threshold: 6.0
+max_per_digest: 0
 ```
 
 > **`sde` does not match "Software Development Engineer".** They share no

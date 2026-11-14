@@ -41,7 +41,15 @@ def _section(label: str, body: str) -> str:
 
 def _card(j: Job) -> str:
     d = j.draft or {}
-    meta = " · ".join(x for x in [j.company, j.location or "—", j.ats] if x)
+    src_label = j.canonical_source or j.source or j.ats
+    meta_parts = [j.company, j.location or "—", src_label]
+    if j.role_families:
+        meta_parts.append("/".join(j.role_families[:2]))
+    meta = " · ".join(x for x in meta_parts if x)
+    
+    sources_note = ""
+    if len(j.sources) > 1:
+        sources_note = f'<div style="color:{MUTED};font-size:11px;margin-top:3px;">Found on: {html.escape(", ".join(j.sources))}</div>'
 
     para = lambda t: (f'<p style="margin:8px 0 0 0;color:{TEXT};font-size:14px;'
                       f'line-height:1.6;">{html.escape(t)}</p>') if t else ""
@@ -61,6 +69,7 @@ def _card(j: Job) -> str:
     <div style="padding-left:12px;">{_badge(j.score)}</div>
   </div>
   <div style="color:{MUTED};font-size:13px;margin-top:5px;">{html.escape(meta)}</div>
+  {sources_note}
   {para(j.reason or "")}
   {_section("Why it fits", para(d.get("fit_summary", "")))}
   {_section("Resume bullets for this role", _bullets(d.get("tailored_bullets", [])))}
@@ -76,10 +85,12 @@ def _card(j: Job) -> str:
 </div>"""
 
 
-def build(jobs: list[Job], scanned: int, candidates: int, stats: dict) -> tuple[str, str]:
+def build(jobs: list[Job], scanned: int, candidates: int, stats: dict,
+          name: str = "Shubham", target_track: str = "Data Analyst · BI · Python & AI Developer") -> tuple[str, str]:
     today = datetime.now().strftime("%d %b %Y")
-    subject = (f"{len(jobs)} job{'s' if len(jobs) != 1 else ''} worth your time — {today}"
-               if jobs else f"No new matches today — {today}")
+    first_name = name.split()[0] if name else "Shubham"
+    subject = (f"{first_name}, {len(jobs)} curated job{'s' if len(jobs) != 1 else ''} for you — {today}"
+               if jobs else f"{first_name}, no new matches today — {today}")
 
     if jobs:
         body = "".join(_card(j) for j in jobs)
@@ -91,17 +102,20 @@ def build(jobs: list[Job], scanned: int, candidates: int, stats: dict) -> tuple[
     html_doc = f"""<!doctype html><html><body style="margin:0;padding:20px;background:{BG};
 font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
 <div style="max-width:640px;margin:0 auto;">
-  <div style="color:{TEXT};font-size:22px;font-weight:800;">Your job digest</div>
-  <div style="color:{MUTED};font-size:13px;margin:6px 0 20px 0;">
-    {today} · scanned {scanned} postings · {candidates} passed filters ·
-    {len(jobs)} made the cut<br>
-    tracker: {stats.get('tracked', 0)} seen · {stats.get('applied', 0)} applied
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+    <div style="color:{TEXT};font-size:22px;font-weight:800;">{first_name}'s Job Digest 🎯</div>
+    <span style="background:#238636;color:#ffffff;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;">PERSONALIZED</span>
+  </div>
+  <div style="color:{ACCENT};font-size:13px;font-weight:600;margin-bottom:6px;">Targeting: {target_track}</div>
+  <div style="color:{MUTED};font-size:13px;margin:6px 0 20px 0;line-height:1.5;">
+    {today} · Scanned <strong>{scanned}</strong> postings · <strong>{candidates}</strong> passed criteria ·
+    <strong>{len(jobs)}</strong> recommended<br>
+    Tracker: {stats.get('tracked', 0)} seen · {stats.get('applied', 0)} applied
   </div>
   {body}
   <div style="color:{MUTED};font-size:11px;line-height:1.6;margin-top:18px;
        border-top:1px solid {LINE};padding-top:14px;">
-    Drafts are starting points, not send-ready. Read the JD, edit the note,
-    then submit it yourself.
+    Curated specifically for Shubham Sunil Kadam. Drafts are starting points: review the JD, customize your cover note, and apply directly.
   </div>
 </div></body></html>"""
     return subject, html_doc

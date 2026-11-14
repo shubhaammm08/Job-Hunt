@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import base64
 import os
+import time
 from typing import Any
 
 import requests
@@ -125,13 +126,18 @@ class GeminiProvider(Provider):
     BASE = "https://generativelanguage.googleapis.com/v1beta/models"
 
     def _post(self, model: str, body: dict) -> str:
-        r = requests.post(
-            f"{self.BASE}/{model}:generateContent",
-            params={"key": self._env("GEMINI_API_KEY")},
-            json=body,
-            timeout=TIMEOUT,
-        )
-        if r.status_code != 200:
+        for attempt in range(1, 4):
+            r = requests.post(
+                f"{self.BASE}/{model}:generateContent",
+                headers={"x-goog-api-key": self._env("GEMINI_API_KEY")},
+                json=body,
+                timeout=TIMEOUT,
+            )
+            if r.status_code == 200:
+                break
+            if r.status_code in (429, 503) and attempt < 3:
+                time.sleep(2 * attempt)
+                continue
             raise LLMError(f"gemini HTTP {r.status_code}: {r.text[:300]}")
         try:
             candidate = r.json()["candidates"][0]
@@ -257,7 +263,7 @@ PROVIDERS = {
 # after setting nothing but a key.
 DEFAULT_MODELS = {
     "anthropic": {"screen": "claude-haiku-4-5-20251001", "draft": "claude-sonnet-5"},
-    "gemini": {"screen": "gemini-2.0-flash", "draft": "gemini-2.0-flash"},
+    "gemini": {"screen": "gemini-flash-lite-latest", "draft": "gemini-flash-lite-latest"},
     "groq": {"screen": "llama-3.3-70b-versatile", "draft": "llama-3.3-70b-versatile"},
     "openai-compatible": {"screen": "gpt-4o-mini", "draft": "gpt-4o"},
     "ollama": {"screen": "llama3.1", "draft": "llama3.1"},
