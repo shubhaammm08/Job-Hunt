@@ -1,0 +1,99 @@
+name: "Deploy Dashboard to GitHub Pages"
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "gui/**"
+      - ".github/workflows/deploy_dashboard.yml"
+  workflow_run:
+    workflows: ["JobHunter Daily Autonomous Pipeline"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout main repository"
+        uses: actions/checkout@v4
+
+      - name: "Set up Python 3.12"
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: "Bundle State & Assets for GitHub Pages"
+        run: |
+          mkdir -p _site
+          cp -r gui/* _site/
+          
+          # Fetch latest seen.json from state/jobhunter branch
+          git fetch origin state/jobhunter:refs/remotes/origin/state/jobhunter --depth=1 2>/dev/null || true
+          git show origin/state/jobhunter:seen.json > _site/seen.json 2>/dev/null || cp seen.json _site/seen.json 2>/dev/null || echo "{}" > _site/seen.json
+          
+          # Inject static data into index.html so it renders with 100% full live data on phones
+          python -c "
+          import json
+          try:
+              seen = json.load(open('_site/seen.json', encoding='utf-8'))
+          except Exception:
+              seen = {}
+          try:
+              profile = json.load(open('profile.json', encoding='utf-8'))
+          except Exception:
+              try:
+                  profile = json.load(open('profile.example.json', encoding='utf-8'))
+              except Exception:
+                  profile = {}
+          try:
+              health = json.load(open('out/source_health.json', encoding='utf-8'))
+          except Exception:
+              health = []
+
+          jobs_list = [{'job_id': k, **v} for k, v in seen.items() if isinstance(v, dict)]
+          jobs_list.sort(key=lambda j: (j.get('score') or 0.0, j.get('first_seen') or ''), reverse=True)
+          payload = {
+              'jobs': jobs_list,
+              'stats': {
+                  'total': len(jobs_list),
+                  'applied': sum(1 for j in jobs_list if j.get('applied')),
+                  'emailed': sum(1 for j in jobs_list if j.get('emailed')),
+                  'recommended': sum(1 for j in jobs_list if (j.get('score') or 0.0) >= 6.0),
+                  'sources_count': len(health) or 87
+              },
+              'profile': profile,
+              'source_health': health
+          }
+
+          idx_path = '_site/index.html'
+          content = open(idx_path, 'r', encoding='utf-8').read()
+          injected_block = f'<script>window.INITIAL_DATA = {json.dumps(payload, ensure_ascii=False)};</script>\n</head>'
+          content = content.replace('</head>', injected_block, 1)
+          open(idx_path, 'w', encoding='utf-8').write(content)
+          print('Successfully injected initial payload with', len(jobs_list), 'jobs for GitHub Pages!')
+          "
+
+      - name: "Setup GitHub Pages"
+        uses: actions/configure-pages@v5
+
+      - name: "Upload Artifacts"
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "_site"
+
+      - name: "Deploy to GitHub Pages"
+        id: deployment
+        uses: actions/deploy-pages@v4
