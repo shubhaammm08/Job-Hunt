@@ -630,5 +630,213 @@
     "emailed": false,
     "applied": false,
     "applied_on": null
+  },
+  "greenhouse:inmobi:6898755": {
+    "first_seen": "2026-11-14T08:30:27+00:00",
+    "company": "InMobi",
+    "title": "Machine Learning Engineer II - Backend",
+    "location": "Bengaluru",
+    "url": "https://job-boards.greenhouse.io/inmobi/jobs/6898755",
+    "score": 3.0,
+    "reason": "This is a Machine Learning Engineer role requiring deep ML frameworks and modeling skills the candidate lacks.",
+    "canonical_source": "greenhouse",
+    "sources": [
+      "greenhouse"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "Machine Learning Engineer"
+    ],
+    "fit_score": 3.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:inmobi:8073988": {
+    "first_seen": "2026-11-14T08:30:27+00:00",
+    "company": "InMobi",
+    "title": "SDE II - AI",
+    "location": "Bangalore",
+    "url": "https://job-boards.greenhouse.io/inmobi/jobs/8073988",
+    "score": 4.0,
+    "reason": "The role requires specific AI, LLM, and RAG application development experience which is outside the candidate's core backend focus.",
+    "canonical_source": "greenhouse",
+    "sources": [
+      "greenhouse"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "SDE"
+    ],
+    "fit_score": 4.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:inmobi:7393433": {
+    "first_seen": "2026-11-14T08:30:27+00:00",
+    "company": "InMobi",
+    "title": "SDE III - Devops",
+    "location": "Bangalore",
+    "url": "https://job-boards.greenhouse.io/inmobi/jobs/7393433",
+    "score": 7.0,
+    "reason": "Good match for a DevOps and infrastructure engineer with solid Kubernetes and container experience.",
+    "canonical_source": "greenhouse",
+    "sources": [
+      "greenhouse"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "SDE"
+    ],
+    "fit_score": 7.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "wwr:rss:ngineer-ai-coding-tasks-contract": {
+    "first_seen": "2026-11-14T08:30:27+00:00",
+    "company": "Askable",
+    "title": "Software Engineer, AI Coding Tasks (Contract)",
+    "location": "Remote",
+    "url": "https://weworkremotely.com/remote-jobs/askable-software-engineer-ai-coding-tasks-contract",
+    "score": 8.0,
+    "reason": "Strong match for a mid-level software engineer with solid coding experience to build AI testing tasks.",
+    "canonical_source": "weworkremotely",
+    "sources": [
+      "weworkremotely"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Engineer"
+    ],
+    "fit_score": 8.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "remoteok:global:1137793": {
+    "first_seen": "2026-11-14T08:30:27+00:00",
+    "company": "Supabase",
+    "title": "Software Engineer AI Tooling",
+    "location": "Remote",
+    "url": "https://remoteOK.com/remote-jobs/remote-software-engineer-ai-tooling-supabase-1137793",
+    "score": 6.0,
+    "reason": "Plausible fit involving backend developer tools and agentic tooling, though leaning heavily into AI agent frameworks.",
+    "canonical_source": "remoteok",
+    "sources": [
+      "remoteok"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Engineer"
+    ],
+    "fit_score": 6.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "remoteok:global:1137714": {
+    "first_seen": "2026-11-14T08:30:27+00:00",
+    "company": "Addepto",
+    "title": "Data Engineer",
+    "location": "Remote",
+    "url": "https://remoteOK.com/remote-jobs/remote-data-engineer-addepto-1137714",
+    "score": 3.0,
+    "reason": "Wrong stack and role family, focusing on data engineering, Snowflake, and dbt rather than backend services.",
+    "canonical_source": "remoteok",
+    "sources": [
+      "remoteok"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Engineer",
+      "Data Engineering"
+    ],
+    "fit_score": 3.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "remoteok:global:1137701": {
+    "first_seen": "2026-11-14T08:30:27+00:00",
+    "company": "Salvo Software",
+    "title": "AI Developer",
+    "location": "Remote",
+    "url": "https://remoteOK.com/remote-jobs/remote-ai-developer-salvo-software-1137701",
+    "score": 5.0,
+    "reason": "Plausible backend role with DevOps components, though the heavy focus on LLM serving and RAG pipelines is a gap.",
+    "canonical_source": "remoteok",
+    "sources": [
+      "remoteok"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "AI Developer"
+    ],
+    "fit_score": 5.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "remoteok:global:1137691": {
+    "first_seen": "2026-11-14T08:30:27+00:00",
+    "company": "Silver.dev",
+    "title": "Feltsense AI Engineer",
+    "location": "Remote",
+    "url": "https://remoteOK.com/remote-jobs/remote-feltsense-ai-engineer-silver-dev-1137691",
+    "score": 3.0,
+    "reason": "This is a technical leadership and architecture role for an autonomous agent platform requiring senior experience the candidate lacks.",
+    "canonical_source": "remoteok",
+    "sources": [
+      "remoteok"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "AI Engineer"
+    ],
+    "fit_score": 3.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "remoteok:global:1137685": {
+    "first_seen": "2026-11-14T08:30:27+00:00",
+    "company": "Claims",
+    "title": "Software Engineer",
+    "location": "Remote",
+    "url": "https://remoteOK.com/remote-jobs/remote-software-engineer-claims-1137685",
+    "score": 4.0,
+    "reason": "Role heavily emphasizes machine learning and LLM agents, which are outside the candidate's core backend and infrastructure stack.",
+    "canonical_source": "remoteok",
+    "sources": [
+      "remoteok"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Engineer"
+    ],
+    "fit_score": 4.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
   }
 }
