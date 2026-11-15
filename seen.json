@@ -838,5 +838,29 @@
     "emailed": true,
     "applied": false,
     "applied_on": null
+  },
+  "remoteok:global:1137619": {
+    "first_seen": "2026-11-15T11:25:21+00:00",
+    "company": "Docusketch",
+    "title": "AI ML Engineer",
+    "location": "Remote",
+    "url": "https://remoteOK.com/remote-jobs/remote-ai-ml-engineer-docusketch-1137619",
+    "score": 2.0,
+    "reason": "Wrong stack and role; candidate is a backend engineer, not an AI/ML engineer.",
+    "canonical_source": "remoteok",
+    "sources": [
+      "remoteok"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "AI/ML Engineer",
+      "ML Engineer"
+    ],
+    "fit_score": 2.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
   }
 }
