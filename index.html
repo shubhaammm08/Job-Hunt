@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#0d1117">
   <title>Shubham's JobHunt — Executive Dashboard</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%2358a6ff%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><circle cx=%2212%22 cy=%2212%22 r=%2210%22/><circle cx=%2212%22 cy=%2212%22 r=%226%22/><circle cx=%2212%22 cy=%2212%22 r=%222%22/></svg>">
   <style>
     :root {
       --bg: #0d1117;
@@ -43,6 +43,18 @@
       padding-bottom: calc(50px + env(safe-area-inset-bottom, 0px));
     }
 
+    /* SVG Icon Helpers */
+    .icon {
+      width: 14px;
+      height: 14px;
+      vertical-align: -2px;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .icon-sm { width: 12px; height: 12px; vertical-align: -1px; }
+    .icon-md { width: 16px; height: 16px; vertical-align: -3px; }
+    .icon-lg { width: 24px; height: 24px; }
+
     /* Top Sticky Header */
     header {
       background: rgba(22, 27, 34, 0.95);
@@ -72,6 +84,8 @@
     .brand-icon {
       font-size: 26px;
       flex-shrink: 0;
+      display: flex;
+      align-items: center;
     }
     .brand-text {
       min-width: 0;
@@ -98,38 +112,41 @@
       flex-shrink: 0;
     }
     .cloud-pill {
-      display: inline-flex;
+      background: rgba(56, 139, 253, 0.15);
+      border: 1px solid rgba(56, 139, 253, 0.4);
+      color: var(--accent-blue);
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      display: flex;
       align-items: center;
       gap: 5px;
-      background: rgba(35, 134, 54, 0.18);
-      border: 1px solid rgba(46, 160, 67, 0.45);
-      color: #3fb950;
-      font-size: 11px;
       font-weight: 600;
-      padding: 4px 9px;
-      border-radius: 999px;
       white-space: nowrap;
     }
     .cloud-pill .dot {
       width: 6px;
       height: 6px;
-      background: #3fb950;
       border-radius: 50%;
+      background: #3fb950;
       box-shadow: 0 0 6px #3fb950;
     }
     .btn-actions {
       background: #21262d;
       border: 1px solid var(--card-border);
       color: var(--text-main);
+      font-size: 11.5px;
       padding: 5px 10px;
       border-radius: 6px;
-      font-size: 12px;
-      font-weight: 600;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      white-space: nowrap;
+      font-weight: 600;
+      transition: background 0.15s;
+    }
+    .btn-actions:hover {
+      background: #30363d;
     }
 
     /* Key Metrics Grid */
@@ -137,7 +154,7 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 12px;
-      margin: 14px 0 16px 0;
+      margin: 16px 0 20px 0;
     }
     .metric-card {
       background: var(--card-bg);
@@ -146,27 +163,26 @@
       padding: 12px 14px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      transition: transform 0.1s ease;
+      position: relative;
+      overflow: hidden;
     }
     .metric-label {
       font-size: 11px;
       color: var(--text-muted);
       text-transform: uppercase;
       font-weight: 700;
-      letter-spacing: 0.4px;
-      margin-bottom: 3px;
+      letter-spacing: 0.5px;
     }
     .metric-val {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: 800;
-      line-height: 1.15;
       color: var(--text-main);
+      margin: 3px 0 1px 0;
+      line-height: 1.1;
     }
     .metric-sub {
       font-size: 11px;
-      color: var(--accent-blue);
-      margin-top: 2px;
+      color: var(--text-muted);
     }
 
     /* Modern Navigation Tabs */
@@ -218,8 +234,7 @@
 
     /* Tab Panels */
     .tab-panel { display: none; }
-    .tab-panel.active { display: block; animation: fadeIn 0.2s ease-in-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
+    .tab-panel.active { display: block; }
 
     /* Filters Section */
     .filters-section {
@@ -232,10 +247,12 @@
       flex-direction: column;
       gap: 10px;
     }
+
+    /* Search Box */
     .search-row {
       display: flex;
       gap: 8px;
-      align-items: center;
+      width: 100%;
     }
     .search-box {
       flex: 1;
@@ -246,7 +263,7 @@
       background: #0d1117;
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      padding: 10px 12px 10px 36px;
+      padding: 9px 12px 9px 34px;
       border-radius: 8px;
       font-size: 14px;
       outline: none;
@@ -264,42 +281,52 @@
       font-size: 14px;
       color: var(--text-muted);
       pointer-events: none;
+      display: flex;
+      align-items: center;
     }
 
     /* Quick Filter Chips (1-touch on Mobile) */
     .chips-scroll {
       display: flex;
-      gap: 6px;
+      gap: 8px;
       overflow-x: auto;
       scrollbar-width: none;
       -webkit-overflow-scrolling: touch;
-      padding-bottom: 2px;
+      padding: 4px 2px 8px 2px;
     }
     .chips-scroll::-webkit-scrollbar { display: none; }
     .filter-chip {
       background: #21262d;
       border: 1px solid var(--card-border);
       color: var(--text-muted);
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 600;
-      padding: 6px 12px;
+      padding: 9px 15px;
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
       border-radius: 999px;
       cursor: pointer;
       white-space: nowrap;
-      transition: all 0.15s;
+      transition: all 0.15s ease;
       touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
     }
     .filter-chip:hover { color: var(--text-main); }
     .filter-chip.active {
       background: rgba(88, 166, 255, 0.2);
       border-color: var(--accent-blue);
       color: #fff;
+      box-shadow: 0 0 0 1px var(--accent-blue);
     }
 
     /* Detailed Dropdown Filters */
     .filter-selects {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 8px;
     }
     .select-filter {
@@ -307,9 +334,10 @@
       background: #0d1117;
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      padding: 8px 10px;
-      border-radius: 6px;
-      font-size: 12.5px;
+      padding: 9px 12px;
+      min-height: 42px;
+      border-radius: 7px;
+      font-size: 13px;
       outline: none;
       cursor: pointer;
     }
@@ -336,8 +364,13 @@
       border: 1px solid var(--card-border);
       border-radius: 12px;
       padding: 16px;
-      transition: border-color 0.15s, transform 0.1s;
+      transition: border-color 0.15s, transform 0.1s, box-shadow 0.15s;
       position: relative;
+      cursor: pointer;
+    }
+    .job-card:hover {
+      border-color: var(--accent-blue);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
     }
     .job-card:active {
       transform: scale(0.995);
@@ -379,36 +412,39 @@
     .job-location {
       font-size: 12px;
       color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
     }
     .score-badge {
-      font-size: 12px;
-      font-weight: 800;
-      padding: 3px 9px;
-      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
       white-space: nowrap;
       flex-shrink: 0;
-      align-self: flex-start;
     }
     .score-high {
       background: rgba(46, 160, 67, 0.2);
-      border: 1px solid #3fb950;
+      border: 1px solid rgba(46, 160, 67, 0.4);
       color: #3fb950;
     }
     .score-mid {
-      background: rgba(88, 166, 255, 0.2);
-      border: 1px solid #58a6ff;
-      color: #58a6ff;
+      background: rgba(210, 153, 34, 0.2);
+      border: 1px solid rgba(210, 153, 34, 0.4);
+      color: #d29922;
     }
     .score-low {
-      background: rgba(139, 148, 158, 0.2);
-      border: 1px solid #8b949e;
-      color: #8b949e;
+      background: rgba(139, 148, 158, 0.15);
+      border: 1px solid rgba(139, 148, 158, 0.3);
+      color: var(--text-muted);
     }
 
+    /* Tags & Reasoning */
     .job-tags {
       display: flex;
       flex-wrap: wrap;
-      gap: 5px;
+      gap: 6px;
       margin: 10px 0 8px 0;
     }
     .tag {
@@ -419,6 +455,9 @@
       padding: 3px 8px;
       border-radius: 5px;
       white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
     }
     .tag-family {
       background: rgba(188, 140, 255, 0.15);
@@ -433,6 +472,31 @@
       font-weight: 600;
     }
 
+    /* Workplace Tag Styles */
+    .tag-workplace {
+      font-weight: 600;
+    }
+    .tag-wp-remote {
+      background: rgba(46, 160, 67, 0.15);
+      border: 1px solid rgba(46, 160, 67, 0.4);
+      color: #3fb950;
+    }
+    .tag-wp-hybrid {
+      background: rgba(188, 140, 255, 0.15);
+      border: 1px solid rgba(188, 140, 255, 0.4);
+      color: #d2a8ff;
+    }
+    .tag-wp-onsite {
+      background: rgba(88, 166, 255, 0.15);
+      border: 1px solid rgba(88, 166, 255, 0.4);
+      color: #79c0ff;
+    }
+    .tag-wp-other {
+      background: rgba(139, 148, 158, 0.15);
+      border: 1px solid rgba(139, 148, 158, 0.4);
+      color: #8b949e;
+    }
+
     .job-reason {
       font-size: 12.5px;
       color: #c9d1d9;
@@ -442,6 +506,9 @@
       margin: 9px 0;
       border-left: 3px solid var(--accent-blue);
       line-height: 1.45;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
     }
 
     /* Actions Bottom Bar */
@@ -477,6 +544,9 @@
       font-weight: 600;
       transition: all 0.15s;
       touch-action: manipulation;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
     }
     .btn-applied.active {
       background: rgba(46, 160, 67, 0.22);
@@ -522,42 +592,54 @@
     /* Sources Grid */
     .sources-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
       gap: 10px;
     }
     .source-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 8px;
-      padding: 10px 14px;
+      padding: 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    .source-info h4 { font-size: 13px; margin-bottom: 2px; }
-    .source-info span { font-size: 11px; color: var(--text-muted); }
-    .status-dot { width: 7px; height: 7px; border-radius: 50%; }
-    .status-healthy { background: #3fb950; box-shadow: 0 0 5px #3fb950; }
+    .source-info h4 {
+      font-size: 13.5px;
+      margin-bottom: 2px;
+    }
+    .source-info span {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    .status-healthy { background: #3fb950; box-shadow: 0 0 6px rgba(63, 185, 80, 0.4); }
     .status-config { background: #d29922; }
 
-    /* Profile Card */
+    /* Profile Panel */
     .profile-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      padding: 18px;
+      padding: 20px;
     }
     .profile-header {
       display: flex;
       align-items: center;
       gap: 14px;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--card-border);
     }
     .avatar {
       width: 52px;
       height: 52px;
       border-radius: 50%;
-      background: #238636;
+      background: linear-gradient(135deg, #1f6feb, #238636);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -566,26 +648,22 @@
       color: #fff;
       flex-shrink: 0;
     }
-    .p-group { margin-bottom: 16px; }
+    .p-group {
+      margin-bottom: 18px;
+    }
     .p-title {
       font-size: 11px;
+      color: var(--text-muted);
       text-transform: uppercase;
       font-weight: 700;
-      color: var(--text-muted);
-      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
     }
 
-    /* ==========================================================
-       RESPONSIVE MOBILE VIEW OPTIMIZATIONS (Smartphones / iPhone)
-       ========================================================== */
+    /* Mobile Responsive Breakpoints */
     @media (max-width: 600px) {
-      .container {
-        padding: 10px 10px;
-      }
-      header {
-        padding: max(8px, env(safe-area-inset-top, 8px)) 12px 8px 12px;
-      }
-      .brand-icon { font-size: 22px; }
+      .container { padding: 10px; }
+      header { padding: max(8px, env(safe-area-inset-top, 8px)) 12px 8px 12px; }
       .brand h1 { font-size: 15px; }
       .brand p { font-size: 10px; }
       .btn-actions span { display: none; }
@@ -611,11 +689,17 @@
       }
       .filter-selects {
         grid-template-columns: 1fr;
-        gap: 6px;
+        gap: 8px;
       }
       .select-filter {
-        padding: 7px 8px;
-        font-size: 12px;
+        padding: 10px 12px;
+        font-size: 14px;
+        min-height: 44px;
+      }
+      .filter-chip {
+        padding: 10px 14px;
+        font-size: 13px;
+        min-height: 44px;
       }
 
       /* Job Card Actions on Mobile: 2 full-width touch buttons side-by-side */
@@ -633,8 +717,11 @@
         flex: 1;
         justify-content: center;
         text-align: center;
-        padding: 9px 8px;
-        font-size: 12.5px;
+        padding: 10px 14px;
+        font-size: 13px;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
       }
       .job-date {
         text-align: center;
@@ -652,7 +739,7 @@
       }
     }
   </style>
-<script>window.INITIAL_DATA = {"jobs": [{"job_id": "greenhouse:stripe:8031833", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Stripe", "title": "Software Engineer, Intern", "location": "Bengaluru", "url": "https://stripe.com/jobs/search?gh_jid=8031833", "score": 7.0, "reason": "This software engineering intern role is a plausible match for a junior graduate, though location may require relocation.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:reddit:8282760", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Reddit", "title": "Analytics Engineer", "location": "Remote - United States", "url": "https://job-boards.greenhouse.io/reddit/jobs/8282760", "score": 5.0, "reason": "While data-focused, the analytics engineering role typically requires more than one year of professional experience.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:rubrik:8377184", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Rubrik", "title": "Software Engineer - UI Test", "location": "Bangalore, India", "url": "https://www.rubrik.com/company/careers/departments/job.8377184?gh_jid=8377184", "score": 4.0, "reason": "This UI testing role requires more software test automation and engineering background than the candidate's data and AI focus.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:coinbase:7985187", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Coinbase", "title": "Machine Learning Engineer", "location": "Remote - India", "url": "https://www.coinbase.com/careers/positions/7985187?gh_jid=7985187", "score": 4.0, "reason": "This is an IC4 Machine Learning Engineer role requiring mid-to-senior level production ML and multi-agent platform experience.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:coinbase:8031260", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Coinbase", "title": "Machine Learning Engineer, CX Intelligence", "location": "Remote - Brazil", "url": "https://www.coinbase.com/careers/positions/8031260?gh_jid=8031260", "score": 4.0, "reason": "The role requires advanced multi-agent system architecture experience that exceeds the candidate's junior 1-year background.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:stripe:8364868", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Stripe", "title": "Finance and Strategy Data Analyst", "location": "Bengaluru", "url": "https://stripe.com/jobs/search?gh_jid=8364868", "score": 4.0, "reason": "The role is based in Bengaluru, while the candidate is located in Mumbai, presenting a location and senior finance strategy mismatch.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:stripe:7543868", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Stripe", "title": "Software Engineer, Financial Business Insights", "location": "Bengaluru, India", "url": "https://stripe.com/jobs/search?gh_jid=7543868", "score": 4.0, "reason": "This software engineering role is geared towards experienced engineers building complex enterprise systems, exceeding junior scope.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:databricks:8878946002", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Databricks", "title": "Evergreen - AI Engineer, AI FDE", "location": "Bengaluru, India", "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8878946002", "score": 4.0, "reason": "Though focused on AI and ML pipelines, this customer-facing forward-deployed engineering role typically expects more experience.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:rubrik:8327940", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Rubrik", "title": "Software Engineer - Cloud Native Protection", "location": "Bangalore", "url": "https://www.rubrik.com/company/careers/departments/job.8327940?gh_jid=8327940", "score": 3.0, "reason": "This is a software engineering position focused on cloud native distributed systems requiring experienced cloud engineering.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:rubrik:8166537", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Rubrik", "title": "Software Engineer (CPD) - Winter Intern", "location": "Bangalore", "url": "https://www.rubrik.com/company/careers/departments/job.8166537?gh_jid=8166537", "score": 3.0, "reason": "The internship requires a 2027 graduate from circuital branches with a CGPA of 8+, which does not align with candidate details.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:coinbase:8278991", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Coinbase", "title": "Software Engineer-1, Money Movement", "location": "Remote - USA", "url": "https://www.coinbase.com/careers/positions/8278991?gh_jid=8278991", "score": 3.0, "reason": "This is a US-based software engineering role requiring end-to-end backend ownership and stack experience beyond the candidate's level.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:coinbase:8164730", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Coinbase", "title": "Software Engineer, CDP - Payment Acceptance", "location": "Remote - USA", "url": "https://www.coinbase.com/careers/positions/8164730?gh_jid=8164730", "score": 3.0, "reason": "Requires full-stack production delivery using Go and React/Next.js for payment rails, which mismatches the candidate's data/AI focus.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:coinbase:8279479", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Coinbase", "title": "Software Engineer, Enterprise Apps", "location": "Remote - Brazil", "url": "https://www.coinbase.com/careers/positions/8279479?gh_jid=8279479", "score": 3.0, "reason": "The role requires full-stack development with Golang and TypeScript for enterprise apps, which does not match the candidate's stack.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:stripe:6042172", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Stripe", "title": "Backend Engineer, Core Technology", "location": "US-Remote, Chicago, Seattle, San Francisco", "url": "https://stripe.com/jobs/search?gh_jid=6042172", "score": 3.0, "reason": "This is a mid-to-senior level core infrastructure backend engineering role, exceeding the junior candidate's current experience level.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:stripe:7292520", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Stripe", "title": "Backend Engineer, Developer & End-user Experience Platform", "location": "Toronto Canada, San Francisco, Remote in US, Remote in Canada", "url": "https://stripe.com/jobs/search?gh_jid=7292520", "score": 3.0, "reason": "This backend engineering role requires broader production experience than a junior developer with one year of experience possesses.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:stripe:7618977", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Stripe", "title": "Software Engineer, Core Technology", "location": "Bangalore", "url": "https://stripe.com/jobs/search?gh_jid=7618977", "score": 3.0, "reason": "This core technology software engineering position requires advanced infrastructure experience that a junior candidate lacks.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:stripe:8185012", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Stripe", "title": "Software Engineer, Payin", "location": "Bengaluru", "url": "https://stripe.com/jobs/search?gh_jid=8185012", "score": 3.0, "reason": "The role requires backend software engineering experience in a payments stack, which mismatches candidate's junior data profile.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:stripe:8209970", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Stripe", "title": "Software Engineer, Stripe Data Pipeline", "location": "Bangalore", "url": "https://stripe.com/jobs/search?gh_jid=8209970", "score": 3.0, "reason": "The position demands distributed systems and data infrastructure expertise operating petabyte-scale pipelines under strict SLAs.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:reddit:6469397", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Reddit", "title": "Software Engineer, Ads", "location": "Remote - United States", "url": "https://job-boards.greenhouse.io/reddit/jobs/6469397", "score": 3.0, "reason": "This is a mid-level backend engineering position, but the candidate is a junior with one year of experience.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:reddit:8172457", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Reddit", "title": "Software Engineer, Consumer Engineering", "location": "Remote - United States", "url": "https://job-boards.greenhouse.io/reddit/jobs/8172457", "score": 3.0, "reason": "This is a general product backend engineering role requiring mid-to-senior level software engineering experience.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:reddit:8139781", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Reddit", "title": "Software Engineer, Content Platform", "location": "Remote - United States", "url": "https://job-boards.greenhouse.io/reddit/jobs/8139781", "score": 3.0, "reason": "This role involves working on core monolith systems and Tier-0 infrastructure services, unsuited for a junior.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:reddit:8337444", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Reddit", "title": "Software Engineer, Infrastructure Engineering", "location": "Remote - United States", "url": "https://job-boards.greenhouse.io/reddit/jobs/8337444", "score": 3.0, "reason": "This is a core infrastructure engineering position requiring higher-level distributed systems experience.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "ashby:ramp:939892e5-5273-4bfc-8c41-a6c51cabb228", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Ramp", "title": "Software Engineer, Backend, Comms Platform", "location": "Remote (US)", "url": "https://jobs.ashbyhq.com/ramp/939892e5-5273-4bfc-8c41-a6c51cabb228", "score": 3.0, "reason": "This backend role at Ramp requires mid-level or senior software engineering experience beyond a junior level.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:databricks:6865704002", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Databricks", "title": "Software Engineer - New Grad, Distributed Data Systems (2027 Start)", "location": "Bellevue, Washington; Mountain View, California", "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=6865704002", "score": 3.0, "reason": "Distributed systems new grad role focusing on low-level query engines and storage systems, mismatched with candidate's data analysis and ML profile.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:figma:5552549004", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Figma", "title": "Software Engineer - Distributed Systems", "location": "San Francisco, CA • New York, NY • United States", "url": "https://boards.greenhouse.io/figma/jobs/5552549004?gh_jid=5552549004", "score": 2.0, "reason": "This is a senior distributed systems role requiring extensive infrastructure experience, mismatching candidate's junior profile.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:rubrik:8161018", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Rubrik", "title": "Database Reliability Engineer/Database Engineer (Rubrik Security Cloud Platform)", "location": "Bengaluru", "url": "https://www.rubrik.com/company/careers/departments/job.8161018?gh_jid=8161018", "score": 2.0, "reason": "This is an experienced Database Reliability Engineer role, requiring deep systems engineering and database internals expertise.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:rubrik:8122613", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Rubrik", "title": "Software Engineer, Atlas Distributed Systems", "location": "Palo Alto, CA", "url": "https://www.rubrik.com/company/careers/departments/job.8122613?gh_jid=8122613", "score": 2.0, "reason": "This role requires an experienced distributed systems engineer to work on core storage filesystems, far exceeding junior experience.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:rubrik:7956918", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Rubrik", "title": "Software Engineer - IAM", "location": "Pune", "url": "https://www.rubrik.com/company/careers/departments/job.7956918?gh_jid=7956918", "score": 2.0, "reason": "This position requires a skilled Golang developer with deep experience in identity protocols and applied cryptography.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:coinbase:8105437", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Coinbase", "title": "Software Engineer, Blockchain Platform Nodes", "location": "Remote - USA", "url": "https://www.coinbase.com/careers/positions/8105437?gh_jid=8105437", "score": 2.0, "reason": "The role focuses on complex blockchain node performance optimization and distributed systems infrastructure unsuited for a junior profile.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:coinbase:8304038", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Coinbase", "title": "Software Engineer - Crypto Data Foundations", "location": "Remote - USA", "url": "https://www.coinbase.com/careers/positions/8304038?gh_jid=8304038", "score": 2.0, "reason": "This position requires building low-latency distributed systems for blockchain data indexing, far above junior seniority.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:coinbase:8165441", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Coinbase", "title": "Software Engineer, Security Platform", "location": "Remote - India", "url": "https://www.coinbase.com/careers/positions/8165441?gh_jid=8165441", "score": 2.0, "reason": "Security Platform Engineering requires deep architectural experience in secrets, IAM, and infrastructure security beyond a junior level.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:coinbase:8139750", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Coinbase", "title": "Software Engineer, Wallets, Liquidity and Bridging Team", "location": "Remote - USA", "url": "https://www.coinbase.com/careers/positions/8139750?gh_jid=8139750", "score": 2.0, "reason": "This role demands scaling distributed backend systems for high-throughput blockchains, exceeding the candidate's 1 year of experience.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:coinbase:8177619", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Coinbase", "title": "Threat Intelligence Platform Engineer", "location": "Remote - USA", "url": "https://www.coinbase.com/careers/positions/8177619?gh_jid=8177619", "score": 2.0, "reason": "This is a security operations and threat intelligence engineering role, which does not match the candidate's data and AI profile.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:stripe:8127182", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Stripe", "title": "Software Engineer, Revenue and Financial Automation", "location": "San Francisco, New York City, Seattle, Chicago, US-Remote", "url": "https://stripe.com/jobs/search?gh_jid=8127182", "score": 2.0, "reason": "This is a general software engineering role requiring broader production experience than a junior data developer possesses.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:reddit:8147559", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Reddit", "title": "Front End Software Engineer, Consumer Engineering", "location": "Remote - United States", "url": "https://job-boards.greenhouse.io/reddit/jobs/8147559", "score": 2.0, "reason": "This is a general front-end and full-stack software engineering position that misaligns with the candidate's data and AI profile.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:reddit:8198102", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Reddit", "title": "Front End Software Engineer, Media Player", "location": "Remote - United States", "url": "https://job-boards.greenhouse.io/reddit/jobs/8198102", "score": 2.0, "reason": "Requires full-stack web development with React and Go, failing to match the candidate's core data and AI skill set.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:reddit:6512458", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Reddit", "title": "Software Engineer, Ads", "location": "Remote - Ontario, Canada", "url": "https://job-boards.greenhouse.io/reddit/jobs/6512458", "score": 2.0, "reason": "The role requires scalable machine learning infrastructure experience and location constraints in Canada.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:cloudflare:8187404", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Cloudflare", "title": "Systems Engineer, Network Protocols & Distributed Systems", "location": "Hybrid", "url": "https://boards.greenhouse.io/cloudflare/jobs/8187404?gh_jid=8187404", "score": 2.0, "reason": "This is a systems engineer role focused on network protocols and distributed systems, requiring advanced expertise.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:databricks:8012691002", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Databricks", "title": "Software Engineer - Distributed Data Systems", "location": "Belgrade, Serbia", "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8012691002", "score": 2.0, "reason": "Senior distributed systems engineering role requiring deep infrastructure and query engine experience, entirely wrong seniority and stack.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:databricks:8829029002", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Databricks", "title": "Software Engineer, Infrastructure", "location": "Bengaluru, India", "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8829029002", "score": 2.0, "reason": "Infrastructure and SRE engineering role requiring Kubernetes, Terraform, and AWS production management beyond candidate's junior data/AI profile.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:stripe:8231439", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Stripe", "title": "Software Engineer, Metronome Infrastructure", "location": "Toronto, Vancouver, Canada-Remote", "url": "https://stripe.com/jobs/search?gh_jid=8231439", "score": 1.0, "reason": "The role requires Canadian remote work eligibility, which the candidate does not have.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:reddit:8299781", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Reddit", "title": "Machine Learning Engineer, Answers Relevance", "location": "Remote - United States", "url": "https://job-boards.greenhouse.io/reddit/jobs/8299781", "score": 1.0, "reason": "Explicitly seeks Senior and Staff Machine Learning Engineers, far exceeding the candidate's junior seniority level.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:reddit:8319655", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Reddit", "title": "Software Engineer, Ad Signals", "location": "Remote - United States", "url": "https://job-boards.greenhouse.io/reddit/jobs/8319655", "score": 1.0, "reason": "This is a senior backend software engineer role requiring extensive experience the junior candidate lacks.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:acme-edge:5501001", "first_seen": "2026-11-14T05:02:09+00:00", "company": "Acme Edge", "title": "Software Engineer II, Distributed Systems", "location": "Bangalore, India", "url": "https://boards.greenhouse.io/acme-edge/jobs/5501001", "score": 0.0, "reason": "[keyword stub] no skill overlap", "canonical_source": "greenhouse", "sources": ["greenhouse"], "role_families": ["SOFTWARE"], "matched_roles": ["Software Engineer"], "fit_score": 0.0, "emailed": false, "applied": false, "applied_on": null}, {"job_id": "greenhouse:novapay:7702001", "first_seen": "2026-11-14T05:02:09+00:00", "company": "Novapay", "title": "Software Development Engineer, Core Infra", "location": "Bengaluru, India", "url": "https://boards.greenhouse.io/novapay/jobs/7702001", "score": 0.0, "reason": "[keyword stub] no skill overlap", "canonical_source": "greenhouse", "sources": ["greenhouse"], "role_families": ["SOFTWARE"], "matched_roles": ["Software Development Engineer"], "fit_score": 0.0, "emailed": false, "applied": false, "applied_on": null}, {"job_id": "lever:quantstack:a1b2c3d4-1111-4aaa-9999-000000000001", "first_seen": "2026-11-14T05:02:09+00:00", "company": "Quantstack", "title": "Backend Engineer (Go)", "location": "Bangalore", "url": "https://jobs.lever.co/quantstack/a1b2c3d4-1111-4aaa-9999-000000000001", "score": 0.0, "reason": "[keyword stub] no skill overlap", "canonical_source": "lever", "sources": ["lever"], "role_families": ["SOFTWARE"], "matched_roles": ["Backend Engineer"], "fit_score": 0.0, "emailed": false, "applied": false, "applied_on": null}, {"job_id": "lever:quantstack:a1b2c3d4-1111-4aaa-9999-000000000003", "first_seen": "2026-11-14T05:02:09+00:00", "company": "Quantstack", "title": "Site Reliability Engineer", "location": "Remote (India)", "url": "https://jobs.lever.co/quantstack/a1b2c3d4-1111-4aaa-9999-000000000003", "score": 0.0, "reason": "[keyword stub] no skill overlap", "canonical_source": "lever", "sources": ["lever"], "role_families": ["CLOUD_DEVOPS"], "matched_roles": ["Site Reliability Engineer", "Reliability Engineer"], "fit_score": 0.0, "emailed": false, "applied": false, "applied_on": null}, {"job_id": "ashby:helioscale:9f8e7d6c-2222-4bbb-8888-000000000001", "first_seen": "2026-11-14T05:02:09+00:00", "company": "Helioscale", "title": "Software Engineer, Networking", "location": "Bengaluru, India", "url": "https://jobs.ashbyhq.com/helioscale/9f8e7d6c-2222-4bbb-8888-000000000001", "score": 0.0, "reason": "[keyword stub] no skill overlap", "canonical_source": "ashby", "sources": ["ashby"], "role_families": ["SOFTWARE"], "matched_roles": ["Software Engineer"], "fit_score": 0.0, "emailed": false, "applied": false, "applied_on": null}], "stats": {"total": 48, "applied": 0, "emailed": 43, "recommended": 1, "sources_count": 87}, "profile": {"name": "Shubham Sunil Kadam", "current_title": "Junior AI Developer", "years_experience": 1, "core_skills": ["Python", "SQL", "Power BI", "Tableau", "Pandas", "NumPy", "Scikit-learn", "Data Cleaning & Preprocessing", "Exploratory Data Analysis (EDA)", "Data Visualization", "ETL & Data Pipeline Integration", "MySQL", "PostgreSQL", "MongoDB", "Excel (Pivot Tables, VLOOKUP)", "Machine Learning", "Streamlit", "AI Agent Workflows & n8n Automation", "REST API Integration", "Git & GitHub"], "domains": ["data analysis and business intelligence", "data preprocessing and exploratory data analysis", "ETL pipelines and reporting dashboards", "machine learning and predictive analytics", "AI workflow orchestration and process automation"], "notable_projects": ["Built an AI-driven ETL pipeline and Power BI dashboard for Honda motorcycle sales analysis, automating workflows and reducing manual effort by 80%", "Developed an audio-based speech emotion recognition system using MFCC feature extraction and CNN/MLP/SVM classification", "Built a real-time collaborative coding platform using React, Node.js, MongoDB, and Socket.io with secure code execution engine (<3s latency)", "Implemented box-level inventory location tracking and automated unstructured WhatsApp message processing into machine-readable data at Newtech"], "education": "Bachelor of Engineering (B.E.) in Computer Engineering, Vidyavardhini College of Engineering, Mumbai (2022-2026)", "target_titles": ["Data Analyst", "Junior Data Analyst", "Business Intelligence Analyst", "BI Analyst", "Data Analytics Associate", "Junior Data Engineer", "Junior AI Developer", "Junior Machine Learning Engineer", "Python Developer", "Associate Software Engineer"], "seniority": "junior"}, "source_health": [{"source": "Greenhouse", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197130+00:00"}, {"source": "Ashby", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197153+00:00"}, {"source": "Lever", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197161+00:00"}, {"source": "SmartRecruiters", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197167+00:00"}, {"source": "Workable", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197174+00:00"}, {"source": "Recruitee", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197178+00:00"}, {"source": "Personio", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197183+00:00"}, {"source": "Breezy HR", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197189+00:00"}, {"source": "BambooHR", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197194+00:00"}, {"source": "Workday", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197200+00:00"}, {"source": "Teamtailor", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197207+00:00"}, {"source": "Rippling", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197213+00:00"}, {"source": "Gem", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197217+00:00"}, {"source": "Paylocity", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197221+00:00"}, {"source": "JazzHR", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197225+00:00"}, {"source": "Manatal", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197228+00:00"}, {"source": "Jobvite", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197231+00:00"}, {"source": "Phenom", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197235+00:00"}, {"source": "Homerun", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197238+00:00"}, {"source": "HireHive", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197242+00:00"}, {"source": "JobScore", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197245+00:00"}, {"source": "Flatchr", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197249+00:00"}, {"source": "Talentadore", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197254+00:00"}, {"source": "Jobsoid", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197257+00:00"}, {"source": "PyjamaHR", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197260+00:00"}, {"source": "Gupy", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197264+00:00"}, {"source": "Oracle Recruiting", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197268+00:00"}, {"source": "SAP SuccessFactors", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197271+00:00"}, {"source": "iCIMS", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197275+00:00"}, {"source": "Pinpoint", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197278+00:00"}, {"source": "Remotive", "category": "remote", "tier": 3, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197284+00:00"}, {"source": "Remote OK", "category": "remote", "tier": 3, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197289+00:00"}, {"source": "We Work Remotely", "category": "remote", "tier": 3, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197297+00:00"}, {"source": "Himalayas", "category": "remote", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197303+00:00"}, {"source": "FlexJobs", "category": "remote", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197310+00:00"}, {"source": "Remote.co", "category": "remote", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197315+00:00"}, {"source": "Jobspresso", "category": "remote", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197324+00:00"}, {"source": "Working Nomads", "category": "remote", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197328+00:00"}, {"source": "Dynamite Jobs", "category": "remote", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197332+00:00"}, {"source": "JustRemote", "category": "remote", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197336+00:00"}, {"source": "NoDesk", "category": "remote", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197340+00:00"}, {"source": "Hacker News Who Is Hiring", "category": "startup", "tier": 3, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197345+00:00"}, {"source": "Wellfound", "category": "startup", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197351+00:00"}, {"source": "Y Combinator Jobs", "category": "startup", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197357+00:00"}, {"source": "Y Combinator Work at a Startup", "category": "startup", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197362+00:00"}, {"source": "Cutshort", "category": "startup", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197366+00:00"}, {"source": "Instahyre", "category": "startup", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197370+00:00"}, {"source": "Product Hunt Jobs", "category": "startup", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197374+00:00"}, {"source": "Naukri", "category": "india_job_board", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197381+00:00"}, {"source": "Naukri Campus", "category": "india_job_board", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197385+00:00"}, {"source": "LinkedIn Jobs India", "category": "india_job_board", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197390+00:00"}, {"source": "Indeed India", "category": "india_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197394+00:00"}, {"source": "Foundit", "category": "india_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197398+00:00"}, {"source": "Hirist", "category": "india_job_board", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197403+00:00"}, {"source": "Shine", "category": "india_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197410+00:00"}, {"source": "TimesJobs", "category": "india_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197416+00:00"}, {"source": "Apna", "category": "india_job_board", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197422+00:00"}, {"source": "Internshala", "category": "india_job_board", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197428+00:00"}, {"source": "Unstop", "category": "india_job_board", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197433+00:00"}, {"source": "iimjobs", "category": "india_job_board", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197439+00:00"}, {"source": "Indeed", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197449+00:00"}, {"source": "LinkedIn Jobs", "category": "global_job_board", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197455+00:00"}, {"source": "Glassdoor", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197462+00:00"}, {"source": "Monster", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197467+00:00"}, {"source": "ZipRecruiter", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197471+00:00"}, {"source": "CareerBuilder", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197475+00:00"}, {"source": "Dice", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197479+00:00"}, {"source": "SimplyHired", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197483+00:00"}, {"source": "Jooble", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197487+00:00"}, {"source": "Adzuna", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197491+00:00"}, {"source": "Jobrapido", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197495+00:00"}, {"source": "Freshersworld", "category": "fresher", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197499+00:00"}, {"source": "Superset", "category": "fresher", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197506+00:00"}, {"source": "FirstNaukri", "category": "fresher", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197513+00:00"}, {"source": "Prosple", "category": "fresher", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197518+00:00"}, {"source": "Handshake", "category": "fresher", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197522+00:00"}, {"source": "AI Jobs", "category": "ai_specific", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197526+00:00"}, {"source": "TopAIJobs", "category": "ai_specific", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197530+00:00"}, {"source": "AI-Jobs.net", "category": "ai_specific", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197534+00:00"}, {"source": "Hugging Face Jobs", "category": "ai_specific", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197538+00:00"}, {"source": "MLOps.community Jobs", "category": "ai_specific", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197542+00:00"}, {"source": "Data Science Jobs", "category": "ai_specific", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197546+00:00"}, {"source": "Kaggle Jobs", "category": "ai_specific", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197550+00:00"}, {"source": "NVIDIA Careers", "category": "ai_specific", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197554+00:00"}, {"source": "OpenAI Careers", "category": "ai_specific", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197558+00:00"}, {"source": "Anthropic Careers", "category": "ai_specific", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197562+00:00"}, {"source": "Google DeepMind Careers", "category": "ai_specific", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-14T09:02:26.197572+00:00"}], "digest_html": "<!doctype html><html><body style=\"margin:0;padding:20px;background:#0f1115;\nfont-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;\">\n<div style=\"max-width:640px;margin:0 auto;\">\n  <div style=\"display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;\">\n    <div style=\"color:#e6e8ec;font-size:22px;font-weight:800;\">Shubham's Job Digest 🎯</div>\n    <span style=\"background:#238636;color:#ffffff;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;\">PERSONALIZED</span>\n  </div>\n  <div style=\"color:#7c9cff;font-size:13px;font-weight:600;margin-bottom:6px;\">Targeting: Data Analyst · BI · Python & AI Developer</div>\n  <div style=\"color:#8b93a3;font-size:13px;margin:6px 0 20px 0;line-height:1.5;\">\n    14 Nov 2026 · Scanned <strong>12</strong> postings · <strong>0</strong> passed criteria ·\n    <strong>0</strong> recommended<br>\n    Tracker: 48 seen · 0 applied\n  </div>\n  <div style=\"background:#171a21;border:1px solid #262b36;border-radius:12px;padding:24px;color:#8b93a3;font-size:14px;\">Scanned 12 postings, nothing cleared the bar today. Boards are quiet on weekends.</div>\n  <div style=\"color:#8b93a3;font-size:11px;line-height:1.6;margin-top:18px;\n       border-top:1px solid #262b36;padding-top:14px;\">\n    Curated specifically for Shubham Sunil Kadam. Drafts are starting points: review the JD, customize your cover note, and apply directly.\n  </div>\n</div></body></html>"};</script>
+<script>window.INITIAL_DATA = {"jobs": [{"job_id": "greenhouse:stripe:8031833", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Stripe", "title": "Software Engineer, Intern", "location": "Bengaluru", "url": "https://stripe.com/jobs/search?gh_jid=8031833", "score": 7.0, "reason": "This software engineering intern role is a plausible match for a junior graduate, though location may require relocation.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "remoteok:global:1137685", "first_seen": "2026-11-16T04:51:44+00:00", "company": "Claims", "title": "Software Engineer", "location": "Remote", "url": "https://remoteOK.com/remote-jobs/remote-software-engineer-claims-1137685", "score": 5.0, "reason": "Plausible technical overlap in Python and ML, but lacks the necessary mid-to-senior software engineering background.", "canonical_source": "remoteok", "sources": ["remoteok"], "role_families": ["SOFTWARE"], "matched_roles": ["Software Engineer"], "fit_score": 5.0, "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:reddit:8282760", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Reddit", "title": "Analytics Engineer", "location": "Remote - United States", "url": "https://job-boards.greenhouse.io/reddit/jobs/8282760", "score": 5.0, "reason": "While data-focused, the analytics engineering role typically requires more than one year of professional experience.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "remoteok:global:1137793", "first_seen": "2026-11-16T04:51:44+00:00", "company": "Supabase", "title": "Software Engineer AI Tooling", "location": "Remote", "url": "https://remoteOK.com/remote-jobs/remote-software-engineer-ai-tooling-supabase-1137793", "score": 4.0, "reason": "This position demands core developer infrastructure experience and tooling ownership typical of mid/senior levels.", "canonical_source": "remoteok", "sources": ["remoteok"], "role_families": ["SOFTWARE"], "matched_roles": ["Software Engineer"], "fit_score": 4.0, "emailed": true, "applied": false, "applied_on": null}, {"job_id": "remoteok:global:1137619", "first_seen": "2026-11-16T04:51:44+00:00", "company": "Docusketch", "title": "AI ML Engineer", "location": "Remote", "url": "https://remoteOK.com/remote-jobs/remote-ai-ml-engineer-docusketch-1137619", "score": 4.0, "reason": "The role requires complex 3D geometry and computer vision research experience beyond current junior capabilities.", "canonical_source": "remoteok", "sources": ["remoteok"], "role_families": ["AI_CORE"], "matched_roles": ["AI/ML Engineer", "ML Engineer"], "fit_score": 4.0, "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:rubrik:8377184", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Rubrik", "title": "Software Engineer - UI Test", "location": "Bangalore, India", "url": "https://www.rubrik.com/company/careers/departments/job.8377184?gh_jid=8377184", "score": 4.0, "reason": "This UI testing role requires more software test automation and engineering background than the candidate's data and AI focus.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:coinbase:7985187", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Coinbase", "title": "Machine Learning Engineer", "location": "Remote - India", "url": "https://www.coinbase.com/careers/positions/7985187?gh_jid=7985187", "score": 4.0, "reason": "This is an IC4 Machine Learning Engineer role requiring mid-to-senior level production ML and multi-agent platform experience.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:coinbase:8031260", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Coinbase", "title": "Machine Learning Engineer, CX Intelligence", "location": "Remote - Brazil", "url": "https://www.coinbase.com/careers/positions/8031260?gh_jid=8031260", "score": 4.0, "reason": "The role requires advanced multi-agent system architecture experience that exceeds the candidate's junior 1-year background.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:stripe:8364868", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Stripe", "title": "Finance and Strategy Data Analyst", "location": "Bengaluru", "url": "https://stripe.com/jobs/search?gh_jid=8364868", "score": 4.0, "reason": "The role is based in Bengaluru, while the candidate is located in Mumbai, presenting a location and senior finance strategy mismatch.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:stripe:7543868", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Stripe", "title": "Software Engineer, Financial Business Insights", "location": "Bengaluru, India", "url": "https://stripe.com/jobs/search?gh_jid=7543868", "score": 4.0, "reason": "This software engineering role is geared towards experienced engineers building complex enterprise systems, exceeding junior scope.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:databricks:8878946002", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Databricks", "title": "Evergreen - AI Engineer, AI FDE", "location": "Bengaluru, India", "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8878946002", "score": 4.0, "reason": "Though focused on AI and ML pipelines, this customer-facing forward-deployed engineering role typically expects more experience.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:inmobi:6898755", "first_seen": "2026-11-16T04:51:44+00:00", "company": "InMobi", "title": "Machine Learning Engineer II - Backend", "location": "Bengaluru", "url": "https://job-boards.greenhouse.io/inmobi/jobs/6898755", "score": 3.0, "reason": "This is a mid-to-senior level backend machine learning role requiring extensive experience beyond a junior developer.", "canonical_source": "greenhouse", "sources": ["greenhouse"], "role_families": ["AI_CORE"], "matched_roles": ["Machine Learning Engineer"], "fit_score": 3.0, "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:inmobi:8073988", "first_seen": "2026-11-16T04:51:44+00:00", "company": "InMobi", "title": "SDE II - AI", "location": "Bangalore", "url": "https://job-boards.greenhouse.io/inmobi/jobs/8073988", "score": 3.0, "reason": "This role is titled SDE II, requiring mid-level engineering experience that exceeds the candidate's 1 year.", "canonical_source": "greenhouse", "sources": ["greenhouse"], "role_families": ["SOFTWARE"], "matched_roles": ["SDE"], "fit_score": 3.0, "emailed": true, "applied": false, "applied_on": null}, {"job_id": "remoteok:global:1137714", "first_seen": "2026-11-16T04:51:44+00:00", "company": "Addepto", "title": "Data Engineer", "location": "Remote", "url": "https://remoteOK.com/remote-jobs/remote-data-engineer-addepto-1137714", "score": 3.0, "reason": "The posting specifically calls for an experienced Data Engineer with advanced enterprise tooling like Snowflake and dbt.", "canonical_source": "remoteok", "sources": ["remoteok"], "role_families": ["DATA"], "matched_roles": ["Data Engineer", "Data Engineering"], "fit_score": 3.0, "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:rubrik:8327940", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Rubrik", "title": "Software Engineer - Cloud Native Protection", "location": "Bangalore", "url": "https://www.rubrik.com/company/careers/departments/job.8327940?gh_jid=8327940", "score": 3.0, "reason": "This is a software engineering position focused on cloud native distributed systems requiring experienced cloud engineering.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:rubrik:8166537", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Rubrik", "title": "Software Engineer (CPD) - Winter Intern", "location": "Bangalore", "url": "https://www.rubrik.com/company/careers/departments/job.8166537?gh_jid=8166537", "score": 3.0, "reason": "The internship requires a 2027 graduate from circuital branches with a CGPA of 8+, which does not align with candidate details.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:coinbase:8278991", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Coinbase", "title": "Software Engineer-1, Money Movement", "location": "Remote - USA", "url": "https://www.coinbase.com/careers/positions/8278991?gh_jid=8278991", "score": 3.0, "reason": "This is a US-based software engineering role requiring end-to-end backend ownership and stack experience beyond the candidate's level.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:coinbase:8164730", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Coinbase", "title": "Software Engineer, CDP - Payment Acceptance", "location": "Remote - USA", "url": "https://www.coinbase.com/careers/positions/8164730?gh_jid=8164730", "score": 3.0, "reason": "Requires full-stack production delivery using Go and React/Next.js for payment rails, which mismatches the candidate's data/AI focus.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:coinbase:8279479", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Coinbase", "title": "Software Engineer, Enterprise Apps", "location": "Remote - Brazil", "url": "https://www.coinbase.com/careers/positions/8279479?gh_jid=8279479", "score": 3.0, "reason": "The role requires full-stack development with Golang and TypeScript for enterprise apps, which does not match the candidate's stack.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:stripe:6042172", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Stripe", "title": "Backend Engineer, Core Technology", "location": "US-Remote, Chicago, Seattle, San Francisco", "url": "https://stripe.com/jobs/search?gh_jid=6042172", "score": 3.0, "reason": "This is a mid-to-senior level core infrastructure backend engineering role, exceeding the junior candidate's current experience level.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:stripe:7292520", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Stripe", "title": "Backend Engineer, Developer & End-user Experience Platform", "location": "Toronto Canada, San Francisco, Remote in US, Remote in Canada", "url": "https://stripe.com/jobs/search?gh_jid=7292520", "score": 3.0, "reason": "This backend engineering role requires broader production experience than a junior developer with one year of experience possesses.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:stripe:7618977", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Stripe", "title": "Software Engineer, Core Technology", "location": "Bangalore", "url": "https://stripe.com/jobs/search?gh_jid=7618977", "score": 3.0, "reason": "This core technology software engineering position requires advanced infrastructure experience that a junior candidate lacks.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:stripe:8185012", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Stripe", "title": "Software Engineer, Payin", "location": "Bengaluru", "url": "https://stripe.com/jobs/search?gh_jid=8185012", "score": 3.0, "reason": "The role requires backend software engineering experience in a payments stack, which mismatches candidate's junior data profile.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:stripe:8209970", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Stripe", "title": "Software Engineer, Stripe Data Pipeline", "location": "Bangalore", "url": "https://stripe.com/jobs/search?gh_jid=8209970", "score": 3.0, "reason": "The position demands distributed systems and data infrastructure expertise operating petabyte-scale pipelines under strict SLAs.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:reddit:6469397", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Reddit", "title": "Software Engineer, Ads", "location": "Remote - United States", "url": "https://job-boards.greenhouse.io/reddit/jobs/6469397", "score": 3.0, "reason": "This is a mid-level backend engineering position, but the candidate is a junior with one year of experience.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:reddit:8172457", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Reddit", "title": "Software Engineer, Consumer Engineering", "location": "Remote - United States", "url": "https://job-boards.greenhouse.io/reddit/jobs/8172457", "score": 3.0, "reason": "This is a general product backend engineering role requiring mid-to-senior level software engineering experience.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:reddit:8139781", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Reddit", "title": "Software Engineer, Content Platform", "location": "Remote - United States", "url": "https://job-boards.greenhouse.io/reddit/jobs/8139781", "score": 3.0, "reason": "This role involves working on core monolith systems and Tier-0 infrastructure services, unsuited for a junior.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:reddit:8337444", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Reddit", "title": "Software Engineer, Infrastructure Engineering", "location": "Remote - United States", "url": "https://job-boards.greenhouse.io/reddit/jobs/8337444", "score": 3.0, "reason": "This is a core infrastructure engineering position requiring higher-level distributed systems experience.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "ashby:ramp:939892e5-5273-4bfc-8c41-a6c51cabb228", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Ramp", "title": "Software Engineer, Backend, Comms Platform", "location": "Remote (US)", "url": "https://jobs.ashbyhq.com/ramp/939892e5-5273-4bfc-8c41-a6c51cabb228", "score": 3.0, "reason": "This backend role at Ramp requires mid-level or senior software engineering experience beyond a junior level.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:databricks:6865704002", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Databricks", "title": "Software Engineer - New Grad, Distributed Data Systems (2027 Start)", "location": "Bellevue, Washington; Mountain View, California", "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=6865704002", "score": 3.0, "reason": "Distributed systems new grad role focusing on low-level query engines and storage systems, mismatched with candidate's data analysis and ML profile.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "remoteok:global:1137691", "first_seen": "2026-11-16T04:51:44+00:00", "company": "Silver.dev", "title": "Feltsense AI Engineer", "location": "Remote", "url": "https://remoteOK.com/remote-jobs/remote-feltsense-ai-engineer-silver-dev-1137691", "score": 2.0, "reason": "This is a high-level technical leadership and autonomous agent architecture role unsuited for a junior.", "canonical_source": "remoteok", "sources": ["remoteok"], "role_families": ["AI_CORE"], "matched_roles": ["AI Engineer"], "fit_score": 2.0, "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:figma:5552549004", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Figma", "title": "Software Engineer - Distributed Systems", "location": "San Francisco, CA • New York, NY • United States", "url": "https://boards.greenhouse.io/figma/jobs/5552549004?gh_jid=5552549004", "score": 2.0, "reason": "This is a senior distributed systems role requiring extensive infrastructure experience, mismatching candidate's junior profile.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:rubrik:8161018", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Rubrik", "title": "Database Reliability Engineer/Database Engineer (Rubrik Security Cloud Platform)", "location": "Bengaluru", "url": "https://www.rubrik.com/company/careers/departments/job.8161018?gh_jid=8161018", "score": 2.0, "reason": "This is an experienced Database Reliability Engineer role, requiring deep systems engineering and database internals expertise.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:rubrik:8122613", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Rubrik", "title": "Software Engineer, Atlas Distributed Systems", "location": "Palo Alto, CA", "url": "https://www.rubrik.com/company/careers/departments/job.8122613?gh_jid=8122613", "score": 2.0, "reason": "This role requires an experienced distributed systems engineer to work on core storage filesystems, far exceeding junior experience.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:rubrik:7956918", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Rubrik", "title": "Software Engineer - IAM", "location": "Pune", "url": "https://www.rubrik.com/company/careers/departments/job.7956918?gh_jid=7956918", "score": 2.0, "reason": "This position requires a skilled Golang developer with deep experience in identity protocols and applied cryptography.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:coinbase:8105437", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Coinbase", "title": "Software Engineer, Blockchain Platform Nodes", "location": "Remote - USA", "url": "https://www.coinbase.com/careers/positions/8105437?gh_jid=8105437", "score": 2.0, "reason": "The role focuses on complex blockchain node performance optimization and distributed systems infrastructure unsuited for a junior profile.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:coinbase:8304038", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Coinbase", "title": "Software Engineer - Crypto Data Foundations", "location": "Remote - USA", "url": "https://www.coinbase.com/careers/positions/8304038?gh_jid=8304038", "score": 2.0, "reason": "This position requires building low-latency distributed systems for blockchain data indexing, far above junior seniority.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:coinbase:8165441", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Coinbase", "title": "Software Engineer, Security Platform", "location": "Remote - India", "url": "https://www.coinbase.com/careers/positions/8165441?gh_jid=8165441", "score": 2.0, "reason": "Security Platform Engineering requires deep architectural experience in secrets, IAM, and infrastructure security beyond a junior level.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:coinbase:8139750", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Coinbase", "title": "Software Engineer, Wallets, Liquidity and Bridging Team", "location": "Remote - USA", "url": "https://www.coinbase.com/careers/positions/8139750?gh_jid=8139750", "score": 2.0, "reason": "This role demands scaling distributed backend systems for high-throughput blockchains, exceeding the candidate's 1 year of experience.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:coinbase:8177619", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Coinbase", "title": "Threat Intelligence Platform Engineer", "location": "Remote - USA", "url": "https://www.coinbase.com/careers/positions/8177619?gh_jid=8177619", "score": 2.0, "reason": "This is a security operations and threat intelligence engineering role, which does not match the candidate's data and AI profile.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:stripe:8127182", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Stripe", "title": "Software Engineer, Revenue and Financial Automation", "location": "San Francisco, New York City, Seattle, Chicago, US-Remote", "url": "https://stripe.com/jobs/search?gh_jid=8127182", "score": 2.0, "reason": "This is a general software engineering role requiring broader production experience than a junior data developer possesses.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:reddit:8147559", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Reddit", "title": "Front End Software Engineer, Consumer Engineering", "location": "Remote - United States", "url": "https://job-boards.greenhouse.io/reddit/jobs/8147559", "score": 2.0, "reason": "This is a general front-end and full-stack software engineering position that misaligns with the candidate's data and AI profile.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:reddit:8198102", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Reddit", "title": "Front End Software Engineer, Media Player", "location": "Remote - United States", "url": "https://job-boards.greenhouse.io/reddit/jobs/8198102", "score": 2.0, "reason": "Requires full-stack web development with React and Go, failing to match the candidate's core data and AI skill set.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:reddit:6512458", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Reddit", "title": "Software Engineer, Ads", "location": "Remote - Ontario, Canada", "url": "https://job-boards.greenhouse.io/reddit/jobs/6512458", "score": 2.0, "reason": "The role requires scalable machine learning infrastructure experience and location constraints in Canada.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:cloudflare:8187404", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Cloudflare", "title": "Systems Engineer, Network Protocols & Distributed Systems", "location": "Hybrid", "url": "https://boards.greenhouse.io/cloudflare/jobs/8187404?gh_jid=8187404", "score": 2.0, "reason": "This is a systems engineer role focused on network protocols and distributed systems, requiring advanced expertise.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:databricks:8012691002", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Databricks", "title": "Software Engineer - Distributed Data Systems", "location": "Belgrade, Serbia", "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8012691002", "score": 2.0, "reason": "Senior distributed systems engineering role requiring deep infrastructure and query engine experience, entirely wrong seniority and stack.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:databricks:8829029002", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Databricks", "title": "Software Engineer, Infrastructure", "location": "Bengaluru, India", "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8829029002", "score": 2.0, "reason": "Infrastructure and SRE engineering role requiring Kubernetes, Terraform, and AWS production management beyond candidate's junior data/AI profile.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:inmobi:7393433", "first_seen": "2026-11-16T04:51:44+00:00", "company": "InMobi", "title": "SDE III - Devops", "location": "Bangalore", "url": "https://job-boards.greenhouse.io/inmobi/jobs/7393433", "score": 1.0, "reason": "This is a senior-level DevOps role (SDE III), completely misaligned with the candidate's junior profile.", "canonical_source": "greenhouse", "sources": ["greenhouse"], "role_families": ["SOFTWARE"], "matched_roles": ["SDE"], "fit_score": 1.0, "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:stripe:8231439", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Stripe", "title": "Software Engineer, Metronome Infrastructure", "location": "Toronto, Vancouver, Canada-Remote", "url": "https://stripe.com/jobs/search?gh_jid=8231439", "score": 1.0, "reason": "The role requires Canadian remote work eligibility, which the candidate does not have.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:reddit:8299781", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Reddit", "title": "Machine Learning Engineer, Answers Relevance", "location": "Remote - United States", "url": "https://job-boards.greenhouse.io/reddit/jobs/8299781", "score": 1.0, "reason": "Explicitly seeks Senior and Staff Machine Learning Engineers, far exceeding the candidate's junior seniority level.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:reddit:8319655", "first_seen": "2026-11-14T04:39:06+00:00", "company": "Reddit", "title": "Software Engineer, Ad Signals", "location": "Remote - United States", "url": "https://job-boards.greenhouse.io/reddit/jobs/8319655", "score": 1.0, "reason": "This is a senior backend software engineer role requiring extensive experience the junior candidate lacks.", "emailed": true, "applied": false, "applied_on": null}, {"job_id": "greenhouse:acme-edge:5501001", "first_seen": "2026-11-14T05:02:09+00:00", "company": "Acme Edge", "title": "Software Engineer II, Distributed Systems", "location": "Bangalore, India", "url": "https://boards.greenhouse.io/acme-edge/jobs/5501001", "score": 0.0, "reason": "[keyword stub] no skill overlap", "canonical_source": "greenhouse", "sources": ["greenhouse"], "role_families": ["SOFTWARE"], "matched_roles": ["Software Engineer"], "fit_score": 0.0, "emailed": false, "applied": false, "applied_on": null}, {"job_id": "greenhouse:novapay:7702001", "first_seen": "2026-11-14T05:02:09+00:00", "company": "Novapay", "title": "Software Development Engineer, Core Infra", "location": "Bengaluru, India", "url": "https://boards.greenhouse.io/novapay/jobs/7702001", "score": 0.0, "reason": "[keyword stub] no skill overlap", "canonical_source": "greenhouse", "sources": ["greenhouse"], "role_families": ["SOFTWARE"], "matched_roles": ["Software Development Engineer"], "fit_score": 0.0, "emailed": false, "applied": false, "applied_on": null}, {"job_id": "lever:quantstack:a1b2c3d4-1111-4aaa-9999-000000000001", "first_seen": "2026-11-14T05:02:09+00:00", "company": "Quantstack", "title": "Backend Engineer (Go)", "location": "Bangalore", "url": "https://jobs.lever.co/quantstack/a1b2c3d4-1111-4aaa-9999-000000000001", "score": 0.0, "reason": "[keyword stub] no skill overlap", "canonical_source": "lever", "sources": ["lever"], "role_families": ["SOFTWARE"], "matched_roles": ["Backend Engineer"], "fit_score": 0.0, "emailed": false, "applied": false, "applied_on": null}, {"job_id": "lever:quantstack:a1b2c3d4-1111-4aaa-9999-000000000003", "first_seen": "2026-11-14T05:02:09+00:00", "company": "Quantstack", "title": "Site Reliability Engineer", "location": "Remote (India)", "url": "https://jobs.lever.co/quantstack/a1b2c3d4-1111-4aaa-9999-000000000003", "score": 0.0, "reason": "[keyword stub] no skill overlap", "canonical_source": "lever", "sources": ["lever"], "role_families": ["CLOUD_DEVOPS"], "matched_roles": ["Site Reliability Engineer", "Reliability Engineer"], "fit_score": 0.0, "emailed": false, "applied": false, "applied_on": null}, {"job_id": "ashby:helioscale:9f8e7d6c-2222-4bbb-8888-000000000001", "first_seen": "2026-11-14T05:02:09+00:00", "company": "Helioscale", "title": "Software Engineer, Networking", "location": "Bengaluru, India", "url": "https://jobs.ashbyhq.com/helioscale/9f8e7d6c-2222-4bbb-8888-000000000001", "score": 0.0, "reason": "[keyword stub] no skill overlap", "canonical_source": "ashby", "sources": ["ashby"], "role_families": ["SOFTWARE"], "matched_roles": ["Software Engineer"], "fit_score": 0.0, "emailed": false, "applied": false, "applied_on": null}], "stats": {"total": 56, "applied": 0, "emailed": 51, "recommended": 1, "sources_count": 87}, "profile": {"name": "Shubham Sunil Kadam", "current_title": "Junior AI Developer", "years_experience": 1, "core_skills": ["Python", "SQL", "Power BI", "Tableau", "Pandas", "NumPy", "Scikit-learn", "Data Cleaning & Preprocessing", "Exploratory Data Analysis (EDA)", "Data Visualization", "ETL & Data Pipeline Integration", "MySQL", "PostgreSQL", "MongoDB", "Excel (Pivot Tables, VLOOKUP)", "Machine Learning", "Streamlit", "AI Agent Workflows & n8n Automation", "REST API Integration", "Git & GitHub"], "domains": ["data analysis and business intelligence", "data preprocessing and exploratory data analysis", "ETL pipelines and reporting dashboards", "machine learning and predictive analytics", "AI workflow orchestration and process automation"], "notable_projects": ["Built an AI-driven ETL pipeline and Power BI dashboard for Honda motorcycle sales analysis, automating workflows and reducing manual effort by 80%", "Developed an audio-based speech emotion recognition system using MFCC feature extraction and CNN/MLP/SVM classification", "Built a real-time collaborative coding platform using React, Node.js, MongoDB, and Socket.io with secure code execution engine (<3s latency)", "Implemented box-level inventory location tracking and automated unstructured WhatsApp message processing into machine-readable data at Newtech"], "education": "Bachelor of Engineering (B.E.) in Computer Engineering, Vidyavardhini College of Engineering, Mumbai (2022-2026)", "target_titles": ["Data Analyst", "Junior Data Analyst", "Business Intelligence Analyst", "BI Analyst", "Data Analytics Associate", "Junior Data Engineer", "Junior AI Developer", "Junior Machine Learning Engineer", "Python Developer", "Associate Software Engineer"], "seniority": "junior"}, "source_health": [{"source": "Greenhouse", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.842674+00:00"}, {"source": "Ashby", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.842770+00:00"}, {"source": "Lever", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.842806+00:00"}, {"source": "SmartRecruiters", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.842831+00:00"}, {"source": "Workable", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.842856+00:00"}, {"source": "Recruitee", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.842877+00:00"}, {"source": "Personio", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.842899+00:00"}, {"source": "Breezy HR", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.842921+00:00"}, {"source": "BambooHR", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.842943+00:00"}, {"source": "Workday", "category": "direct_ats", "tier": 1, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.842970+00:00"}, {"source": "Teamtailor", "category": "direct_ats", "tier": 1, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.842999+00:00"}, {"source": "Rippling", "category": "direct_ats", "tier": 1, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843025+00:00"}, {"source": "Gem", "category": "direct_ats", "tier": 1, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843045+00:00"}, {"source": "Paylocity", "category": "direct_ats", "tier": 1, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843062+00:00"}, {"source": "JazzHR", "category": "direct_ats", "tier": 1, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843079+00:00"}, {"source": "Manatal", "category": "direct_ats", "tier": 1, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843096+00:00"}, {"source": "Jobvite", "category": "direct_ats", "tier": 1, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843113+00:00"}, {"source": "Phenom", "category": "direct_ats", "tier": 1, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843129+00:00"}, {"source": "Homerun", "category": "direct_ats", "tier": 1, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843146+00:00"}, {"source": "HireHive", "category": "direct_ats", "tier": 1, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843162+00:00"}, {"source": "JobScore", "category": "direct_ats", "tier": 1, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843177+00:00"}, {"source": "Flatchr", "category": "direct_ats", "tier": 1, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843194+00:00"}, {"source": "Talentadore", "category": "direct_ats", "tier": 1, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843213+00:00"}, {"source": "Jobsoid", "category": "direct_ats", "tier": 1, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843229+00:00"}, {"source": "PyjamaHR", "category": "direct_ats", "tier": 1, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843245+00:00"}, {"source": "Gupy", "category": "direct_ats", "tier": 1, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843262+00:00"}, {"source": "Oracle Recruiting", "category": "direct_ats", "tier": 1, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843281+00:00"}, {"source": "SAP SuccessFactors", "category": "direct_ats", "tier": 1, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843300+00:00"}, {"source": "iCIMS", "category": "direct_ats", "tier": 1, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843318+00:00"}, {"source": "Pinpoint", "category": "direct_ats", "tier": 1, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843335+00:00"}, {"source": "Remotive", "category": "remote", "tier": 3, "status": "HEALTHY", "jobs_found": 16, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843356+00:00"}, {"source": "Remote OK", "category": "remote", "tier": 3, "status": "HEALTHY", "jobs_found": 34, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843379+00:00"}, {"source": "We Work Remotely", "category": "remote", "tier": 3, "status": "HEALTHY", "jobs_found": 25, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843402+00:00"}, {"source": "Himalayas", "category": "remote", "tier": 3, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843430+00:00"}, {"source": "FlexJobs", "category": "remote", "tier": 3, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843456+00:00"}, {"source": "Remote.co", "category": "remote", "tier": 3, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843479+00:00"}, {"source": "Jobspresso", "category": "remote", "tier": 3, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843499+00:00"}, {"source": "Working Nomads", "category": "remote", "tier": 3, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843519+00:00"}, {"source": "Dynamite Jobs", "category": "remote", "tier": 3, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843539+00:00"}, {"source": "JustRemote", "category": "remote", "tier": 3, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843560+00:00"}, {"source": "NoDesk", "category": "remote", "tier": 3, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843578+00:00"}, {"source": "Hacker News Who Is Hiring", "category": "startup", "tier": 3, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843600+00:00"}, {"source": "Wellfound", "category": "startup", "tier": 2, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843623+00:00"}, {"source": "Y Combinator Jobs", "category": "startup", "tier": 3, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843648+00:00"}, {"source": "Y Combinator Work at a Startup", "category": "startup", "tier": 3, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843670+00:00"}, {"source": "Cutshort", "category": "startup", "tier": 3, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843691+00:00"}, {"source": "Instahyre", "category": "startup", "tier": 3, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843711+00:00"}, {"source": "Product Hunt Jobs", "category": "startup", "tier": 3, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843731+00:00"}, {"source": "Naukri", "category": "india_job_board", "tier": 2, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843752+00:00"}, {"source": "Naukri Campus", "category": "india_job_board", "tier": 3, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843772+00:00"}, {"source": "LinkedIn Jobs India", "category": "india_job_board", "tier": 2, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843792+00:00"}, {"source": "Indeed India", "category": "india_job_board", "tier": 4, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843812+00:00"}, {"source": "Foundit", "category": "india_job_board", "tier": 4, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843830+00:00"}, {"source": "Hirist", "category": "india_job_board", "tier": 3, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843848+00:00"}, {"source": "Shine", "category": "india_job_board", "tier": 4, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843866+00:00"}, {"source": "TimesJobs", "category": "india_job_board", "tier": 4, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843886+00:00"}, {"source": "Apna", "category": "india_job_board", "tier": 3, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843903+00:00"}, {"source": "Internshala", "category": "india_job_board", "tier": 3, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843922+00:00"}, {"source": "Unstop", "category": "india_job_board", "tier": 3, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843941+00:00"}, {"source": "iimjobs", "category": "india_job_board", "tier": 3, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843960+00:00"}, {"source": "Indeed", "category": "global_job_board", "tier": 4, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.843980+00:00"}, {"source": "LinkedIn Jobs", "category": "global_job_board", "tier": 2, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.844001+00:00"}, {"source": "Glassdoor", "category": "global_job_board", "tier": 4, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.844020+00:00"}, {"source": "Monster", "category": "global_job_board", "tier": 4, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.844038+00:00"}, {"source": "ZipRecruiter", "category": "global_job_board", "tier": 4, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.844057+00:00"}, {"source": "CareerBuilder", "category": "global_job_board", "tier": 4, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.844075+00:00"}, {"source": "Dice", "category": "global_job_board", "tier": 4, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.844094+00:00"}, {"source": "SimplyHired", "category": "global_job_board", "tier": 4, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.844112+00:00"}, {"source": "Jooble", "category": "global_job_board", "tier": 4, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.844130+00:00"}, {"source": "Adzuna", "category": "global_job_board", "tier": 4, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.844148+00:00"}, {"source": "Jobrapido", "category": "global_job_board", "tier": 4, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.844165+00:00"}, {"source": "Freshersworld", "category": "fresher", "tier": 3, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.844185+00:00"}, {"source": "Superset", "category": "fresher", "tier": 3, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.844203+00:00"}, {"source": "FirstNaukri", "category": "fresher", "tier": 3, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.844222+00:00"}, {"source": "Prosple", "category": "fresher", "tier": 3, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.844239+00:00"}, {"source": "Handshake", "category": "fresher", "tier": 3, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.844257+00:00"}, {"source": "AI Jobs", "category": "ai_specific", "tier": 2, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.844279+00:00"}, {"source": "TopAIJobs", "category": "ai_specific", "tier": 2, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.844300+00:00"}, {"source": "AI-Jobs.net", "category": "ai_specific", "tier": 2, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.844319+00:00"}, {"source": "Hugging Face Jobs", "category": "ai_specific", "tier": 2, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.844338+00:00"}, {"source": "MLOps.community Jobs", "category": "ai_specific", "tier": 2, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.844356+00:00"}, {"source": "Data Science Jobs", "category": "ai_specific", "tier": 2, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.844373+00:00"}, {"source": "Kaggle Jobs", "category": "ai_specific", "tier": 2, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.844394+00:00"}, {"source": "NVIDIA Careers", "category": "ai_specific", "tier": 1, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.844415+00:00"}, {"source": "OpenAI Careers", "category": "ai_specific", "tier": 1, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.844434+00:00"}, {"source": "Anthropic Careers", "category": "ai_specific", "tier": 1, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.844451+00:00"}, {"source": "Google DeepMind Careers", "category": "ai_specific", "tier": 1, "status": "NOT_CONFIGURED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-16T04:48:14.844475+00:00"}], "digest_html": "<!doctype html><html><body style=\"margin:0;padding:20px;background:#0f1115;\nfont-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;\">\n<div style=\"max-width:640px;margin:0 auto;\">\n  <div style=\"display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;\">\n    <div style=\"color:#e6e8ec;font-size:22px;font-weight:800;\">Shubham's Job Digest </div>\n    <span style=\"background:#238636;color:#ffffff;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;\">PERSONALIZED</span>\n  </div>\n  <div style=\"color:#7c9cff;font-size:13px;font-weight:600;margin-bottom:6px;\">Targeting: Data Analyst · BI · Python & AI Developer</div>\n  <div style=\"color:#8b93a3;font-size:13px;margin:6px 0 20px 0;line-height:1.5;\">\n    16 Nov 2026 · Scanned <strong>12</strong> postings · <strong>0</strong> passed criteria ·\n    <strong>0</strong> recommended<br>\n    Tracker: 56 seen · 0 applied\n  </div>\n  <div style=\"background:#171a21;border:1px solid #262b36;border-radius:12px;padding:24px;color:#8b93a3;font-size:14px;\">Scanned 12 postings, nothing cleared the bar today. Boards are quiet on weekends.</div>\n  <div style=\"color:#8b93a3;font-size:11px;line-height:1.6;margin-top:18px;\n       border-top:1px solid #262b36;padding-top:14px;\">\n    Curated specifically for Shubham Sunil Kadam. Drafts are starting points: review the JD, customize your cover note, and apply directly.\n  </div>\n</div></body></html>"};</script>
 </head>
 <body>
 
@@ -660,18 +747,25 @@
   <header>
     <div class="header-content">
       <div class="brand">
-        <span class="brand-icon">🎯</span>
+        <span class="brand-icon">
+          <svg class="icon icon-lg" viewBox="0 0 24 24" fill="none" stroke="#58a6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+          </svg>
+        </span>
         <div class="brand-text">
           <h1>Shubham's JobHunt</h1>
-          <p>Autonomous AI Career Engine · Computer Engineering</p>
+          <p>Opportunity Pipeline &amp; Application Tracker · Computer Engineering</p>
         </div>
       </div>
       <div class="header-actions">
-        <div class="cloud-pill" title="Automations: 9:00 AM IST & Every 4h">
-          <span class="dot"></span> Cloud Active
+        <div class="cloud-pill" title="Scheduled Runs: 09:00 IST &amp; Every 4h">
+          <span class="dot"></span> Pipeline Active
         </div>
         <a href="https://github.com/shubhaammm08/Job-Hunt/actions" target="_blank" class="btn-actions" title="Open GitHub Actions Runs">
-          <span>⚡ Actions</span>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+          <span>Actions</span>
         </a>
       </div>
     </div>
@@ -706,16 +800,24 @@
     <!-- Navigation Tabs -->
     <div class="tabs-nav">
       <button class="tab-btn active" onclick="switchTab('tracker')">
-        📊 Opportunities <span class="tab-badge" id="tab-count-jobs">0</span>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+        </svg> Opportunities <span class="tab-badge" id="tab-count-jobs">0</span>
       </button>
       <button class="tab-btn" onclick="switchTab('digest')">
-        📬 Daily Digest
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+        </svg> Daily Digest
       </button>
       <button class="tab-btn" onclick="switchTab('sources')">
-        🛡️ Sources <span class="tab-badge">87</span>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg> Sources <span class="tab-badge">87</span>
       </button>
       <button class="tab-btn" onclick="switchTab('profile')">
-        👤 Profile
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg> Profile
       </button>
     </div>
 
@@ -726,41 +828,94 @@
         <!-- Search input -->
         <div class="search-row">
           <div class="search-box">
-            <span class="search-icon">🔍</span>
+            <span class="search-icon">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+            </span>
             <input type="text" id="search-input" placeholder="Search title, company, skill, city..." oninput="renderJobs()">
           </div>
         </div>
 
         <!-- 1-Touch Quick Filter Chips for Mobile Thumbs -->
-        <div class="chips-scroll">
+        <div class="chips-scroll" role="region" aria-label="Quick filters">
           <button class="filter-chip active" id="chip-all" onclick="setQuickChip('all')">All Jobs</button>
-          <button class="filter-chip" id="chip-high" onclick="setQuickChip('high')">🔥 High Fit (8+)</button>
-          <button class="filter-chip" id="chip-rec" onclick="setQuickChip('rec')">⭐ Recommended (6+)</button>
-          <button class="filter-chip" id="chip-data" onclick="setQuickChip('data')">📊 Data Analyst</button>
-          <button class="filter-chip" id="chip-ai" onclick="setQuickChip('ai')">🤖 AI / ML</button>
-          <button class="filter-chip" id="chip-python" onclick="setQuickChip('python')">🐍 Python Dev</button>
-          <button class="filter-chip" id="chip-unapplied" onclick="setQuickChip('unapplied')">⏳ Unapplied</button>
+          <button class="filter-chip" id="chip-high" onclick="setQuickChip('high')">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg> High Fit (8+)
+          </button>
+          <button class="filter-chip" id="chip-rec" onclick="setQuickChip('rec')">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Recommended (6+)
+          </button>
+          <button class="filter-chip" id="chip-unapplied" onclick="setQuickChip('unapplied')">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Unapplied
+          </button>
+
+          <!-- Workplace Types -->
+          <button class="filter-chip" id="chip-remote" onclick="setQuickChip('remote')">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Remote
+          </button>
+          <button class="filter-chip" id="chip-hybrid" onclick="setQuickChip('hybrid')">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg> Hybrid
+          </button>
+          <button class="filter-chip" id="chip-onsite" onclick="setQuickChip('onsite')">
+            <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Onsite
+          </button>
+
+          <!-- ATS / Platform Sources -->
+          <button class="filter-chip" id="chip-greenhouse" onclick="setQuickChip('greenhouse')">Greenhouse</button>
+          <button class="filter-chip" id="chip-ashby" onclick="setQuickChip('ashby')">Ashby</button>
+          <button class="filter-chip" id="chip-lever" onclick="setQuickChip('lever')">Lever</button>
+          <button class="filter-chip" id="chip-remotive" onclick="setQuickChip('remotive')">Remotive</button>
+          <button class="filter-chip" id="chip-hackernews" onclick="setQuickChip('hackernews')">Hacker News</button>
+          <button class="filter-chip" id="chip-other-plat" onclick="setQuickChip('other_plat')">Other Sources</button>
+
+          <!-- Career Tracks -->
+          <button class="filter-chip" id="chip-data" onclick="setQuickChip('data')">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Data Analyst
+          </button>
+          <button class="filter-chip" id="chip-ai" onclick="setQuickChip('ai')">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg> AI / ML
+          </button>
+          <button class="filter-chip" id="chip-python" onclick="setQuickChip('python')">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> Python Dev
+          </button>
         </div>
 
-        <!-- Dropdowns for fine tuning -->
+        <!-- Detailed Dropdowns for Fine-Tuned Multi-Filtering -->
         <div class="filter-selects">
-          <select class="select-filter" id="filter-score" onchange="syncChipAndRender()">
+          <select class="select-filter" id="filter-score" onchange="syncChipAndRender()" aria-label="Filter by compatibility score">
             <option value="all">Score: Any</option>
             <option value="8">High Fit (8.0+)</option>
             <option value="6">Recommended (6.0+)</option>
             <option value="4">Plausible (4.0+)</option>
           </select>
-          <select class="select-filter" id="filter-status" onchange="syncChipAndRender()">
+          <select class="select-filter" id="filter-status" onchange="syncChipAndRender()" aria-label="Filter by application status">
             <option value="all">Status: All</option>
             <option value="unapplied">Not Applied</option>
             <option value="applied">Applied</option>
           </select>
-          <select class="select-filter" id="filter-family" onchange="syncChipAndRender()">
+          <select class="select-filter" id="filter-family" onchange="syncChipAndRender()" aria-label="Filter by role family">
             <option value="all">Family: All</option>
             <option value="DATA">Data Analyst / BI</option>
             <option value="AI_CORE">AI / ML Engineer</option>
             <option value="GENAI_AGENTIC">GenAI / Agentic</option>
             <option value="SOFTWARE">Software / Python</option>
+          </select>
+          <select class="select-filter" id="filter-workplace" onchange="syncChipAndRender()" aria-label="Filter by workplace type">
+            <option value="all">Workplace: All</option>
+            <option value="remote">Remote</option>
+            <option value="hybrid">Hybrid</option>
+            <option value="onsite">Onsite</option>
+            <option value="other">Other / Unspecified</option>
+          </select>
+          <select class="select-filter" id="filter-platform" onchange="syncChipAndRender()" aria-label="Filter by platform source">
+            <option value="all">Platform: All</option>
+            <option value="greenhouse">Greenhouse</option>
+            <option value="ashby">Ashby</option>
+            <option value="lever">Lever</option>
+            <option value="remotive">Remotive</option>
+            <option value="hackernews">Hacker News</option>
+            <option value="other">Other / Unspecified</option>
           </select>
         </div>
       </div>
@@ -825,11 +980,26 @@
         </div>
 
         <div class="p-group">
-          <div class="p-title">Autonomous Cloud Schedules</div>
-          <div style="font-size:12.5px;color:#c9d1d9;line-height:1.7;">
-            ⏰ <strong>Daily JobHunter Digest:</strong> 9:00 AM IST (Daily)<br>
-            📬 <strong>Inbox Executive Briefing:</strong> Every 4 Hours (02:17, 06:17, 10:17, 14:17, 18:17, 22:17 IST)<br>
-            💰 <strong>Cost:</strong> ₹0/month on GitHub Actions Free Tier
+          <div class="p-title">Pipeline Automation Schedules</div>
+          <div style="font-size:12.5px;color:#c9d1d9;line-height:1.8;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+              </svg>
+              <span><strong>Daily Digest:</strong> 09:00 IST (Daily)</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+              </svg>
+              <span><strong>Notification Dispatch:</strong> Every 4 Hours (02:17, 06:17, 10:17, 14:17, 18:17, 22:17 IST)</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/>
+              </svg>
+              <span><strong>Infrastructure:</strong> GitHub Actions (Free Tier)</span>
+            </div>
           </div>
         </div>
       </div>
@@ -848,33 +1018,171 @@
 
     let activeChip = 'all';
 
-    function setQuickChip(chipType) {
-      activeChip = chipType;
-      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-      const activeEl = document.getElementById('chip-' + chipType);
-      if (activeEl) activeEl.classList.add('active');
+    const ICONS = {
+      mapPin: `<svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`,
+      source: `<svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
+      info: `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`,
+      check: `<svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+      external: `<svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`,
+      searchEmpty: `<svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`
+    };
 
+    /**
+     * Infers workplace arrangement (remote, hybrid, onsite, other).
+     */
+    function inferWorkplaceType(job) {
+      if (job.workplace_type) {
+        const val = String(job.workplace_type).toLowerCase();
+        if (val.includes('remote') || val.includes('wfh')) return 'remote';
+        if (val.includes('hybrid') || val.includes('flex')) return 'hybrid';
+        if (val.includes('onsite') || val.includes('office')) return 'onsite';
+        return 'other';
+      }
+
+      const loc = (job.location || '').trim();
+      const title = (job.title || '').trim();
+      const reason = (job.reason || '').trim();
+      const combined = `${loc} ${title} ${reason}`.toLowerCase();
+
+      if (/\b(hybrid|flexible)\b/i.test(combined)) {
+        return 'hybrid';
+      }
+
+      if (/\b(remote|work from home|wfh|anywhere|telecommute)\b/i.test(combined)) {
+        return 'remote';
+      }
+
+      if (loc && loc !== 'Not Specified' && loc !== 'Unspecified') {
+        return 'onsite';
+      }
+
+      return 'other';
+    }
+
+    function getWorkplaceLabel(wpType) {
+      switch (wpType) {
+        case 'remote': return 'Remote';
+        case 'hybrid': return 'Hybrid';
+        case 'onsite': return 'Onsite';
+        default: return 'Other / Unspecified';
+      }
+    }
+
+    /**
+     * Infers platform/ATS source (greenhouse, ashby, lever, remotive, hackernews, other).
+     */
+    function inferPlatformSource(job) {
+      if (job.platform) {
+        const p = String(job.platform).toLowerCase();
+        if (p.includes('greenhouse')) return 'greenhouse';
+        if (p.includes('ashby')) return 'ashby';
+        if (p.includes('lever')) return 'lever';
+        if (p.includes('remotive')) return 'remotive';
+        if (p.includes('hacker') || p.includes('hn') || p.includes('ycombinator')) return 'hackernews';
+        return 'other';
+      }
+
+      const url = (job.url || '').trim();
+      const jid = (job.job_id || '').toLowerCase();
+      const canSrc = (job.canonical_source || '').toLowerCase();
+      const sources = Array.isArray(job.sources) ? job.sources.join(' ').toLowerCase() : '';
+      const text = `${url} ${jid} ${canSrc} ${sources} ${job.title || ''} ${job.reason || ''}`.toLowerCase();
+
+      let domain = '';
+      let search = '';
+      try {
+        const parsed = new URL(url.startsWith('http') ? url : `https://${url}`);
+        domain = parsed.hostname.toLowerCase();
+        search = parsed.search.toLowerCase();
+      } catch (e) {
+        domain = url.toLowerCase();
+      }
+
+      if (domain.includes('greenhouse.io') || search.includes('gh_jid') || jid.startsWith('greenhouse:') || canSrc === 'greenhouse' || sources.includes('greenhouse') || text.includes('greenhouse')) {
+        return 'greenhouse';
+      }
+
+      if (domain.includes('ashbyhq.com') || jid.startsWith('ashby:') || canSrc === 'ashby' || sources.includes('ashby') || text.includes('ashby')) {
+        return 'ashby';
+      }
+
+      if (domain.includes('lever.co') || jid.startsWith('lever:') || canSrc === 'lever' || sources.includes('lever') || text.includes('lever')) {
+        return 'lever';
+      }
+
+      if (domain.includes('remotive.com') || domain.includes('remotive.io') || jid.startsWith('remotive:') || canSrc === 'remotive' || sources.includes('remotive') || text.includes('remotive')) {
+        return 'remotive';
+      }
+
+      if (domain.includes('news.ycombinator.com') || domain.includes('ycombinator.com') || jid.startsWith('hn:') || jid.startsWith('hackernews:') || text.includes('hacker news') || text.includes('ycombinator')) {
+        return 'hackernews';
+      }
+
+      return 'other';
+    }
+
+    function getPlatformLabel(platformKey) {
+      switch (platformKey) {
+        case 'greenhouse': return 'Greenhouse';
+        case 'ashby': return 'Ashby';
+        case 'lever': return 'Lever';
+        case 'remotive': return 'Remotive';
+        case 'hackernews': return 'Hacker News';
+        default: return 'Other / Unspecified';
+      }
+    }
+
+    function setQuickChip(chipType) {
       const scoreSel = document.getElementById('filter-score');
       const statusSel = document.getElementById('filter-status');
       const familySel = document.getElementById('filter-family');
+      const workplaceSel = document.getElementById('filter-workplace');
+      const platformSel = document.getElementById('filter-platform');
 
-      // Reset dropdowns
+      // Toggle back to 'all' if tapping already active chip
+      if (activeChip === chipType && chipType !== 'all') {
+        chipType = 'all';
+      }
+      activeChip = chipType;
+
+      // Reset all dropdowns
       scoreSel.value = 'all';
       statusSel.value = 'all';
       familySel.value = 'all';
+      workplaceSel.value = 'all';
+      platformSel.value = 'all';
 
-      if (chipType === 'high') scoreSel.value = '8';
-      else if (chipType === 'rec') scoreSel.value = '6';
-      else if (chipType === 'data') familySel.value = 'DATA';
-      else if (chipType === 'ai') familySel.value = 'AI_CORE';
-      else if (chipType === 'python') familySel.value = 'SOFTWARE';
-      else if (chipType === 'unapplied') statusSel.value = 'unapplied';
+      switch (chipType) {
+        case 'high': scoreSel.value = '8'; break;
+        case 'rec': scoreSel.value = '6'; break;
+        case 'unapplied': statusSel.value = 'unapplied'; break;
+        case 'data': familySel.value = 'DATA'; break;
+        case 'ai': familySel.value = 'AI_CORE'; break;
+        case 'python': familySel.value = 'SOFTWARE'; break;
+        case 'remote': workplaceSel.value = 'remote'; break;
+        case 'hybrid': workplaceSel.value = 'hybrid'; break;
+        case 'onsite': workplaceSel.value = 'onsite'; break;
+        case 'greenhouse': platformSel.value = 'greenhouse'; break;
+        case 'ashby': platformSel.value = 'ashby'; break;
+        case 'lever': platformSel.value = 'lever'; break;
+        case 'remotive': platformSel.value = 'remotive'; break;
+        case 'hackernews': platformSel.value = 'hackernews'; break;
+        case 'other_plat': platformSel.value = 'other'; break;
+        case 'all':
+        default:
+          break;
+      }
+
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      const activeEl = document.getElementById('chip-' + chipType);
+      if (activeEl) activeEl.classList.add('active');
 
       renderJobs();
     }
 
     function syncChipAndRender() {
       document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      activeChip = 'custom';
       renderJobs();
     }
 
@@ -931,10 +1239,12 @@
     }
 
     function renderJobs() {
-      const query = document.getElementById('search-input').value.toLowerCase().trim();
+      const query = (document.getElementById('search-input').value || '').toLowerCase().trim();
       const scoreFilter = document.getElementById('filter-score').value;
       const statusFilter = document.getElementById('filter-status').value;
       const familyFilter = document.getElementById('filter-family').value;
+      const workplaceFilter = document.getElementById('filter-workplace').value;
+      const platformFilter = document.getElementById('filter-platform').value;
 
       const listContainer = document.getElementById('job-list');
       const filtered = (appData.jobs || []).filter(j => {
@@ -954,17 +1264,30 @@
           const families = j.role_families || [];
           if (!families.includes(familyFilter)) return false;
         }
+
+        if (workplaceFilter !== 'all') {
+          const wp = inferWorkplaceType(j);
+          if (wp !== workplaceFilter) return false;
+        }
+
+        if (platformFilter !== 'all') {
+          const plat = inferPlatformSource(j);
+          if (plat !== platformFilter) return false;
+        }
+
         return true;
       });
 
-      document.getElementById('results-count').innerText = `Showing ${filtered.length} of ${appData.jobs.length} opportunities`;
+      document.getElementById('results-count').innerText = `Showing ${filtered.length} of ${(appData.jobs || []).length} opportunities`;
 
       if (!filtered.length) {
-        listContainer.innerHTML = `<div style="text-align:center;padding:50px 20px;color:var(--text-muted);background:var(--card-bg);border:1px dashed var(--card-border);border-radius:12px;">
-          <div style="font-size:28px;margin-bottom:8px;">🔍</div>
-          <div style="font-weight:600;color:var(--text-main);">No matching opportunities found</div>
-          <div style="font-size:12px;margin-top:4px;">Try clearing your filters or searching for another keyword.</div>
-        </div>`;
+        listContainer.innerHTML = `
+          <div style="text-align:center;padding:50px 20px;color:var(--text-muted);background:var(--card-bg);border:1px dashed var(--card-border);border-radius:12px;">
+            <div style="display:flex;justify-content:center;margin-bottom:8px;">${ICONS.searchEmpty}</div>
+            <div style="font-weight:600;color:var(--text-main);">No matching opportunities found</div>
+            <div style="font-size:12px;margin-top:4px;">Try adjusting your filters or search keywords.</div>
+          </div>
+        `;
         return;
       }
 
@@ -972,40 +1295,61 @@
         const score = parseFloat(j.score) || 0.0;
         const scoreClass = score >= 8.0 ? 'score-high' : (score >= 6.0 ? 'score-mid' : 'score-low');
         const appliedClass = j.applied ? 'is-applied' : '';
-        const btnAppliedText = j.applied ? '✓ Applied' : 'Mark Applied';
+        const btnAppliedHtml = j.applied ? `${ICONS.check} Applied` : 'Mark Applied';
         const btnAppliedClass = j.applied ? 'btn-applied active' : 'btn-applied';
-        const src = j.canonical_source || j.source || j.ats || 'Direct';
+
+        const inferredPlat = inferPlatformSource(j);
+        const platformLabel = getPlatformLabel(inferredPlat);
+        const inferredWp = inferWorkplaceType(j);
+        const workplaceLabel = getWorkplaceLabel(inferredWp);
+
+        const targetUrl = j.url || '#';
 
         const familiesHtml = (j.role_families || []).slice(0, 2).map(f => `<span class="tag tag-family">${escapeHtml(f)}</span>`).join('');
         const skillsHtml = (j.matched_skills || []).slice(0, 3).map(s => `<span class="tag">${escapeHtml(s)}</span>`).join('');
         const sourcesNote = (j.sources && j.sources.length > 1) ? ` · Found on: ${j.sources.join(', ')}` : '';
 
         return `
-          <div class="job-card ${appliedClass}" id="card-${j.job_id}">
+          <div class="job-card ${appliedClass}" 
+               id="card-${j.job_id}" 
+               role="link" 
+               tabindex="0" 
+               onclick="handleCardClick(event, '${escapeHtml(targetUrl)}')"
+               onkeydown="if(event.key==='Enter'||event.key===' '){if(!event.target.closest('button,a')){event.preventDefault();handleCardClick(event, '${escapeHtml(targetUrl)}');}}">
             <div class="job-header">
               <div class="job-title-area">
                 <div class="job-title">${escapeHtml(j.title || 'Untitled')}</div>
                 <div class="job-meta-line">
                   <span class="job-company">${escapeHtml(j.company || 'Unknown')}</span>
-                  <span class="job-location">📍 ${escapeHtml(j.location || 'Not Specified')}</span>
+                  <span class="job-location">${ICONS.mapPin} ${escapeHtml(j.location || 'Not Specified')}</span>
                 </div>
               </div>
               <span class="score-badge ${scoreClass}">${score.toFixed(1)} Match</span>
             </div>
 
             <div class="job-tags">
-              <span class="tag tag-source">⚡ ${escapeHtml(src)}</span>
+              <span class="tag tag-source">${ICONS.source} ${escapeHtml(platformLabel)}</span>
+              <span class="tag tag-workplace tag-wp-${inferredWp}">${escapeHtml(workplaceLabel)}</span>
               ${familiesHtml}
               ${skillsHtml}
             </div>
 
-            ${j.reason ? `<div class="job-reason">💡 <strong>AI Fit:</strong> ${escapeHtml(j.reason)}</div>` : ''}
+            ${j.reason ? `<div class="job-reason">${ICONS.info} <span><strong>Match Rationale:</strong> ${escapeHtml(j.reason)}</span></div>` : ''}
 
             <div class="job-actions">
               <span class="job-date">Seen: ${j.first_seen ? j.first_seen.split('T')[0] : 'Today'}${escapeHtml(sourcesNote)}</span>
               <div class="action-group">
-                <button class="${btnAppliedClass}" onclick="toggleApplied('${j.job_id}')">${btnAppliedText}</button>
-                <a href="${j.url || '#'}" target="_blank" rel="noopener noreferrer" class="btn-apply-link">Apply →</a>
+                <button class="${btnAppliedClass}" 
+                        onclick="event.stopPropagation(); toggleApplied('${j.job_id}', event);">
+                  ${btnAppliedHtml}
+                </button>
+                <a href="${escapeHtml(targetUrl)}" 
+                   target="_blank" 
+                   rel="noopener noreferrer" 
+                   class="btn-apply-link" 
+                   onclick="event.stopPropagation();">
+                  Apply ${ICONS.external}
+                </a>
               </div>
             </div>
           </div>
@@ -1013,7 +1357,20 @@
       }).join('');
     }
 
-    async function toggleApplied(jobId) {
+    function handleCardClick(event, url) {
+      if (event.target.closest('button, a')) {
+        return;
+      }
+      if (url && url !== '#') {
+        window.open(url, '_blank', 'noopener,noreferrer');
+      }
+    }
+
+    async function toggleApplied(jobId, event) {
+      if (event) {
+        event.stopPropagation();
+        if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+      }
       const job = (appData.jobs || []).find(j => j.job_id === jobId);
       if (!job) return;
       

@@ -1,7 +1,7 @@
 import os
 import json
 
-HTML_TEMPLATE = """<!DOCTYPE html>
+HTML_TEMPLATE = r"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -10,7 +10,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#0d1117">
   <title>Shubham's JobHunt — Executive Dashboard</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%2358a6ff%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><circle cx=%2212%22 cy=%2212%22 r=%2210%22/><circle cx=%2212%22 cy=%2212%22 r=%226%22/><circle cx=%2212%22 cy=%2212%22 r=%222%22/></svg>">
   <style>
     :root {
       --bg: #0d1117;
@@ -46,6 +46,18 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       padding-bottom: calc(50px + env(safe-area-inset-bottom, 0px));
     }
 
+    /* SVG Icon Helpers */
+    .icon {
+      width: 14px;
+      height: 14px;
+      vertical-align: -2px;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .icon-sm { width: 12px; height: 12px; vertical-align: -1px; }
+    .icon-md { width: 16px; height: 16px; vertical-align: -3px; }
+    .icon-lg { width: 24px; height: 24px; }
+
     /* Top Sticky Header */
     header {
       background: rgba(22, 27, 34, 0.95);
@@ -75,6 +87,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     .brand-icon {
       font-size: 26px;
       flex-shrink: 0;
+      display: flex;
+      align-items: center;
     }
     .brand-text {
       min-width: 0;
@@ -101,38 +115,41 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       flex-shrink: 0;
     }
     .cloud-pill {
-      display: inline-flex;
+      background: rgba(56, 139, 253, 0.15);
+      border: 1px solid rgba(56, 139, 253, 0.4);
+      color: var(--accent-blue);
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      display: flex;
       align-items: center;
       gap: 5px;
-      background: rgba(35, 134, 54, 0.18);
-      border: 1px solid rgba(46, 160, 67, 0.45);
-      color: #3fb950;
-      font-size: 11px;
       font-weight: 600;
-      padding: 4px 9px;
-      border-radius: 999px;
       white-space: nowrap;
     }
     .cloud-pill .dot {
       width: 6px;
       height: 6px;
-      background: #3fb950;
       border-radius: 50%;
+      background: #3fb950;
       box-shadow: 0 0 6px #3fb950;
     }
     .btn-actions {
       background: #21262d;
       border: 1px solid var(--card-border);
       color: var(--text-main);
+      font-size: 11.5px;
       padding: 5px 10px;
       border-radius: 6px;
-      font-size: 12px;
-      font-weight: 600;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      white-space: nowrap;
+      font-weight: 600;
+      transition: background 0.15s;
+    }
+    .btn-actions:hover {
+      background: #30363d;
     }
 
     /* Key Metrics Grid */
@@ -140,7 +157,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 12px;
-      margin: 14px 0 16px 0;
+      margin: 16px 0 20px 0;
     }
     .metric-card {
       background: var(--card-bg);
@@ -149,27 +166,26 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       padding: 12px 14px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      transition: transform 0.1s ease;
+      position: relative;
+      overflow: hidden;
     }
     .metric-label {
       font-size: 11px;
       color: var(--text-muted);
       text-transform: uppercase;
       font-weight: 700;
-      letter-spacing: 0.4px;
-      margin-bottom: 3px;
+      letter-spacing: 0.5px;
     }
     .metric-val {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: 800;
-      line-height: 1.15;
       color: var(--text-main);
+      margin: 3px 0 1px 0;
+      line-height: 1.1;
     }
     .metric-sub {
       font-size: 11px;
-      color: var(--accent-blue);
-      margin-top: 2px;
+      color: var(--text-muted);
     }
 
     /* Modern Navigation Tabs */
@@ -221,8 +237,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
     /* Tab Panels */
     .tab-panel { display: none; }
-    .tab-panel.active { display: block; animation: fadeIn 0.2s ease-in-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
+    .tab-panel.active { display: block; }
 
     /* Filters Section */
     .filters-section {
@@ -235,10 +250,12 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       flex-direction: column;
       gap: 10px;
     }
+
+    /* Search Box */
     .search-row {
       display: flex;
       gap: 8px;
-      align-items: center;
+      width: 100%;
     }
     .search-box {
       flex: 1;
@@ -249,7 +266,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       background: #0d1117;
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      padding: 10px 12px 10px 36px;
+      padding: 9px 12px 9px 34px;
       border-radius: 8px;
       font-size: 14px;
       outline: none;
@@ -267,42 +284,52 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       font-size: 14px;
       color: var(--text-muted);
       pointer-events: none;
+      display: flex;
+      align-items: center;
     }
 
     /* Quick Filter Chips (1-touch on Mobile) */
     .chips-scroll {
       display: flex;
-      gap: 6px;
+      gap: 8px;
       overflow-x: auto;
       scrollbar-width: none;
       -webkit-overflow-scrolling: touch;
-      padding-bottom: 2px;
+      padding: 4px 2px 8px 2px;
     }
     .chips-scroll::-webkit-scrollbar { display: none; }
     .filter-chip {
       background: #21262d;
       border: 1px solid var(--card-border);
       color: var(--text-muted);
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 600;
-      padding: 6px 12px;
+      padding: 9px 15px;
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
       border-radius: 999px;
       cursor: pointer;
       white-space: nowrap;
-      transition: all 0.15s;
+      transition: all 0.15s ease;
       touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
     }
     .filter-chip:hover { color: var(--text-main); }
     .filter-chip.active {
       background: rgba(88, 166, 255, 0.2);
       border-color: var(--accent-blue);
       color: #fff;
+      box-shadow: 0 0 0 1px var(--accent-blue);
     }
 
     /* Detailed Dropdown Filters */
     .filter-selects {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 8px;
     }
     .select-filter {
@@ -310,9 +337,10 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       background: #0d1117;
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      padding: 8px 10px;
-      border-radius: 6px;
-      font-size: 12.5px;
+      padding: 9px 12px;
+      min-height: 42px;
+      border-radius: 7px;
+      font-size: 13px;
       outline: none;
       cursor: pointer;
     }
@@ -339,8 +367,13 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       border: 1px solid var(--card-border);
       border-radius: 12px;
       padding: 16px;
-      transition: border-color 0.15s, transform 0.1s;
+      transition: border-color 0.15s, transform 0.1s, box-shadow 0.15s;
       position: relative;
+      cursor: pointer;
+    }
+    .job-card:hover {
+      border-color: var(--accent-blue);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
     }
     .job-card:active {
       transform: scale(0.995);
@@ -382,36 +415,39 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     .job-location {
       font-size: 12px;
       color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
     }
     .score-badge {
-      font-size: 12px;
-      font-weight: 800;
-      padding: 3px 9px;
-      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
       white-space: nowrap;
       flex-shrink: 0;
-      align-self: flex-start;
     }
     .score-high {
       background: rgba(46, 160, 67, 0.2);
-      border: 1px solid #3fb950;
+      border: 1px solid rgba(46, 160, 67, 0.4);
       color: #3fb950;
     }
     .score-mid {
-      background: rgba(88, 166, 255, 0.2);
-      border: 1px solid #58a6ff;
-      color: #58a6ff;
+      background: rgba(210, 153, 34, 0.2);
+      border: 1px solid rgba(210, 153, 34, 0.4);
+      color: #d29922;
     }
     .score-low {
-      background: rgba(139, 148, 158, 0.2);
-      border: 1px solid #8b949e;
-      color: #8b949e;
+      background: rgba(139, 148, 158, 0.15);
+      border: 1px solid rgba(139, 148, 158, 0.3);
+      color: var(--text-muted);
     }
 
+    /* Tags & Reasoning */
     .job-tags {
       display: flex;
       flex-wrap: wrap;
-      gap: 5px;
+      gap: 6px;
       margin: 10px 0 8px 0;
     }
     .tag {
@@ -422,6 +458,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       padding: 3px 8px;
       border-radius: 5px;
       white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
     }
     .tag-family {
       background: rgba(188, 140, 255, 0.15);
@@ -436,6 +475,31 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       font-weight: 600;
     }
 
+    /* Workplace Tag Styles */
+    .tag-workplace {
+      font-weight: 600;
+    }
+    .tag-wp-remote {
+      background: rgba(46, 160, 67, 0.15);
+      border: 1px solid rgba(46, 160, 67, 0.4);
+      color: #3fb950;
+    }
+    .tag-wp-hybrid {
+      background: rgba(188, 140, 255, 0.15);
+      border: 1px solid rgba(188, 140, 255, 0.4);
+      color: #d2a8ff;
+    }
+    .tag-wp-onsite {
+      background: rgba(88, 166, 255, 0.15);
+      border: 1px solid rgba(88, 166, 255, 0.4);
+      color: #79c0ff;
+    }
+    .tag-wp-other {
+      background: rgba(139, 148, 158, 0.15);
+      border: 1px solid rgba(139, 148, 158, 0.4);
+      color: #8b949e;
+    }
+
     .job-reason {
       font-size: 12.5px;
       color: #c9d1d9;
@@ -445,6 +509,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       margin: 9px 0;
       border-left: 3px solid var(--accent-blue);
       line-height: 1.45;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
     }
 
     /* Actions Bottom Bar */
@@ -480,6 +547,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       font-weight: 600;
       transition: all 0.15s;
       touch-action: manipulation;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
     }
     .btn-applied.active {
       background: rgba(46, 160, 67, 0.22);
@@ -525,42 +595,54 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     /* Sources Grid */
     .sources-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
       gap: 10px;
     }
     .source-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 8px;
-      padding: 10px 14px;
+      padding: 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    .source-info h4 { font-size: 13px; margin-bottom: 2px; }
-    .source-info span { font-size: 11px; color: var(--text-muted); }
-    .status-dot { width: 7px; height: 7px; border-radius: 50%; }
-    .status-healthy { background: #3fb950; box-shadow: 0 0 5px #3fb950; }
+    .source-info h4 {
+      font-size: 13.5px;
+      margin-bottom: 2px;
+    }
+    .source-info span {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    .status-healthy { background: #3fb950; box-shadow: 0 0 6px rgba(63, 185, 80, 0.4); }
     .status-config { background: #d29922; }
 
-    /* Profile Card */
+    /* Profile Panel */
     .profile-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      padding: 18px;
+      padding: 20px;
     }
     .profile-header {
       display: flex;
       align-items: center;
       gap: 14px;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--card-border);
     }
     .avatar {
       width: 52px;
       height: 52px;
       border-radius: 50%;
-      background: #238636;
+      background: linear-gradient(135deg, #1f6feb, #238636);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -569,26 +651,22 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       color: #fff;
       flex-shrink: 0;
     }
-    .p-group { margin-bottom: 16px; }
+    .p-group {
+      margin-bottom: 18px;
+    }
     .p-title {
       font-size: 11px;
+      color: var(--text-muted);
       text-transform: uppercase;
       font-weight: 700;
-      color: var(--text-muted);
-      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
     }
 
-    /* ==========================================================
-       RESPONSIVE MOBILE VIEW OPTIMIZATIONS (Smartphones / iPhone)
-       ========================================================== */
+    /* Mobile Responsive Breakpoints */
     @media (max-width: 600px) {
-      .container {
-        padding: 10px 10px;
-      }
-      header {
-        padding: max(8px, env(safe-area-inset-top, 8px)) 12px 8px 12px;
-      }
-      .brand-icon { font-size: 22px; }
+      .container { padding: 10px; }
+      header { padding: max(8px, env(safe-area-inset-top, 8px)) 12px 8px 12px; }
       .brand h1 { font-size: 15px; }
       .brand p { font-size: 10px; }
       .btn-actions span { display: none; }
@@ -614,11 +692,17 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       }
       .filter-selects {
         grid-template-columns: 1fr;
-        gap: 6px;
+        gap: 8px;
       }
       .select-filter {
-        padding: 7px 8px;
-        font-size: 12px;
+        padding: 10px 12px;
+        font-size: 14px;
+        min-height: 44px;
+      }
+      .filter-chip {
+        padding: 10px 14px;
+        font-size: 13px;
+        min-height: 44px;
       }
 
       /* Job Card Actions on Mobile: 2 full-width touch buttons side-by-side */
@@ -636,8 +720,11 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         flex: 1;
         justify-content: center;
         text-align: center;
-        padding: 9px 8px;
-        font-size: 12.5px;
+        padding: 10px 14px;
+        font-size: 13px;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
       }
       .job-date {
         text-align: center;
@@ -662,18 +749,25 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   <header>
     <div class="header-content">
       <div class="brand">
-        <span class="brand-icon">🎯</span>
+        <span class="brand-icon">
+          <svg class="icon icon-lg" viewBox="0 0 24 24" fill="none" stroke="#58a6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+          </svg>
+        </span>
         <div class="brand-text">
           <h1>Shubham's JobHunt</h1>
-          <p>Autonomous AI Career Engine · Computer Engineering</p>
+          <p>Opportunity Pipeline &amp; Application Tracker · Computer Engineering</p>
         </div>
       </div>
       <div class="header-actions">
-        <div class="cloud-pill" title="Automations: 9:00 AM IST & Every 4h">
-          <span class="dot"></span> Cloud Active
+        <div class="cloud-pill" title="Scheduled Runs: 09:00 IST &amp; Every 4h">
+          <span class="dot"></span> Pipeline Active
         </div>
         <a href="https://github.com/shubhaammm08/Job-Hunt/actions" target="_blank" class="btn-actions" title="Open GitHub Actions Runs">
-          <span>⚡ Actions</span>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+          <span>Actions</span>
         </a>
       </div>
     </div>
@@ -708,16 +802,24 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     <!-- Navigation Tabs -->
     <div class="tabs-nav">
       <button class="tab-btn active" onclick="switchTab('tracker')">
-        📊 Opportunities <span class="tab-badge" id="tab-count-jobs">0</span>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+        </svg> Opportunities <span class="tab-badge" id="tab-count-jobs">0</span>
       </button>
       <button class="tab-btn" onclick="switchTab('digest')">
-        📬 Daily Digest
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+        </svg> Daily Digest
       </button>
       <button class="tab-btn" onclick="switchTab('sources')">
-        🛡️ Sources <span class="tab-badge">87</span>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg> Sources <span class="tab-badge">87</span>
       </button>
       <button class="tab-btn" onclick="switchTab('profile')">
-        👤 Profile
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg> Profile
       </button>
     </div>
 
@@ -728,41 +830,94 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         <!-- Search input -->
         <div class="search-row">
           <div class="search-box">
-            <span class="search-icon">🔍</span>
+            <span class="search-icon">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+            </span>
             <input type="text" id="search-input" placeholder="Search title, company, skill, city..." oninput="renderJobs()">
           </div>
         </div>
 
         <!-- 1-Touch Quick Filter Chips for Mobile Thumbs -->
-        <div class="chips-scroll">
+        <div class="chips-scroll" role="region" aria-label="Quick filters">
           <button class="filter-chip active" id="chip-all" onclick="setQuickChip('all')">All Jobs</button>
-          <button class="filter-chip" id="chip-high" onclick="setQuickChip('high')">🔥 High Fit (8+)</button>
-          <button class="filter-chip" id="chip-rec" onclick="setQuickChip('rec')">⭐ Recommended (6+)</button>
-          <button class="filter-chip" id="chip-data" onclick="setQuickChip('data')">📊 Data Analyst</button>
-          <button class="filter-chip" id="chip-ai" onclick="setQuickChip('ai')">🤖 AI / ML</button>
-          <button class="filter-chip" id="chip-python" onclick="setQuickChip('python')">🐍 Python Dev</button>
-          <button class="filter-chip" id="chip-unapplied" onclick="setQuickChip('unapplied')">⏳ Unapplied</button>
+          <button class="filter-chip" id="chip-high" onclick="setQuickChip('high')">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg> High Fit (8+)
+          </button>
+          <button class="filter-chip" id="chip-rec" onclick="setQuickChip('rec')">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Recommended (6+)
+          </button>
+          <button class="filter-chip" id="chip-unapplied" onclick="setQuickChip('unapplied')">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Unapplied
+          </button>
+
+          <!-- Workplace Types -->
+          <button class="filter-chip" id="chip-remote" onclick="setQuickChip('remote')">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Remote
+          </button>
+          <button class="filter-chip" id="chip-hybrid" onclick="setQuickChip('hybrid')">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg> Hybrid
+          </button>
+          <button class="filter-chip" id="chip-onsite" onclick="setQuickChip('onsite')">
+            <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Onsite
+          </button>
+
+          <!-- ATS / Platform Sources -->
+          <button class="filter-chip" id="chip-greenhouse" onclick="setQuickChip('greenhouse')">Greenhouse</button>
+          <button class="filter-chip" id="chip-ashby" onclick="setQuickChip('ashby')">Ashby</button>
+          <button class="filter-chip" id="chip-lever" onclick="setQuickChip('lever')">Lever</button>
+          <button class="filter-chip" id="chip-remotive" onclick="setQuickChip('remotive')">Remotive</button>
+          <button class="filter-chip" id="chip-hackernews" onclick="setQuickChip('hackernews')">Hacker News</button>
+          <button class="filter-chip" id="chip-other-plat" onclick="setQuickChip('other_plat')">Other Sources</button>
+
+          <!-- Career Tracks -->
+          <button class="filter-chip" id="chip-data" onclick="setQuickChip('data')">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Data Analyst
+          </button>
+          <button class="filter-chip" id="chip-ai" onclick="setQuickChip('ai')">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg> AI / ML
+          </button>
+          <button class="filter-chip" id="chip-python" onclick="setQuickChip('python')">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> Python Dev
+          </button>
         </div>
 
-        <!-- Dropdowns for fine tuning -->
+        <!-- Detailed Dropdowns for Fine-Tuned Multi-Filtering -->
         <div class="filter-selects">
-          <select class="select-filter" id="filter-score" onchange="syncChipAndRender()">
+          <select class="select-filter" id="filter-score" onchange="syncChipAndRender()" aria-label="Filter by compatibility score">
             <option value="all">Score: Any</option>
             <option value="8">High Fit (8.0+)</option>
             <option value="6">Recommended (6.0+)</option>
             <option value="4">Plausible (4.0+)</option>
           </select>
-          <select class="select-filter" id="filter-status" onchange="syncChipAndRender()">
+          <select class="select-filter" id="filter-status" onchange="syncChipAndRender()" aria-label="Filter by application status">
             <option value="all">Status: All</option>
             <option value="unapplied">Not Applied</option>
             <option value="applied">Applied</option>
           </select>
-          <select class="select-filter" id="filter-family" onchange="syncChipAndRender()">
+          <select class="select-filter" id="filter-family" onchange="syncChipAndRender()" aria-label="Filter by role family">
             <option value="all">Family: All</option>
             <option value="DATA">Data Analyst / BI</option>
             <option value="AI_CORE">AI / ML Engineer</option>
             <option value="GENAI_AGENTIC">GenAI / Agentic</option>
             <option value="SOFTWARE">Software / Python</option>
+          </select>
+          <select class="select-filter" id="filter-workplace" onchange="syncChipAndRender()" aria-label="Filter by workplace type">
+            <option value="all">Workplace: All</option>
+            <option value="remote">Remote</option>
+            <option value="hybrid">Hybrid</option>
+            <option value="onsite">Onsite</option>
+            <option value="other">Other / Unspecified</option>
+          </select>
+          <select class="select-filter" id="filter-platform" onchange="syncChipAndRender()" aria-label="Filter by platform source">
+            <option value="all">Platform: All</option>
+            <option value="greenhouse">Greenhouse</option>
+            <option value="ashby">Ashby</option>
+            <option value="lever">Lever</option>
+            <option value="remotive">Remotive</option>
+            <option value="hackernews">Hacker News</option>
+            <option value="other">Other / Unspecified</option>
           </select>
         </div>
       </div>
@@ -827,11 +982,26 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         </div>
 
         <div class="p-group">
-          <div class="p-title">Autonomous Cloud Schedules</div>
-          <div style="font-size:12.5px;color:#c9d1d9;line-height:1.7;">
-            ⏰ <strong>Daily JobHunter Digest:</strong> 9:00 AM IST (Daily)<br>
-            📬 <strong>Inbox Executive Briefing:</strong> Every 4 Hours (02:17, 06:17, 10:17, 14:17, 18:17, 22:17 IST)<br>
-            💰 <strong>Cost:</strong> ₹0/month on GitHub Actions Free Tier
+          <div class="p-title">Pipeline Automation Schedules</div>
+          <div style="font-size:12.5px;color:#c9d1d9;line-height:1.8;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+              </svg>
+              <span><strong>Daily Digest:</strong> 09:00 IST (Daily)</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+              </svg>
+              <span><strong>Notification Dispatch:</strong> Every 4 Hours (02:17, 06:17, 10:17, 14:17, 18:17, 22:17 IST)</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/>
+              </svg>
+              <span><strong>Infrastructure:</strong> GitHub Actions (Free Tier)</span>
+            </div>
           </div>
         </div>
       </div>
@@ -850,33 +1020,171 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
     let activeChip = 'all';
 
-    function setQuickChip(chipType) {
-      activeChip = chipType;
-      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-      const activeEl = document.getElementById('chip-' + chipType);
-      if (activeEl) activeEl.classList.add('active');
+    const ICONS = {
+      mapPin: `<svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`,
+      source: `<svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
+      info: `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`,
+      check: `<svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+      external: `<svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`,
+      searchEmpty: `<svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`
+    };
 
+    /**
+     * Infers workplace arrangement (remote, hybrid, onsite, other).
+     */
+    function inferWorkplaceType(job) {
+      if (job.workplace_type) {
+        const val = String(job.workplace_type).toLowerCase();
+        if (val.includes('remote') || val.includes('wfh')) return 'remote';
+        if (val.includes('hybrid') || val.includes('flex')) return 'hybrid';
+        if (val.includes('onsite') || val.includes('office')) return 'onsite';
+        return 'other';
+      }
+
+      const loc = (job.location || '').trim();
+      const title = (job.title || '').trim();
+      const reason = (job.reason || '').trim();
+      const combined = `${loc} ${title} ${reason}`.toLowerCase();
+
+      if (/\b(hybrid|flexible)\b/i.test(combined)) {
+        return 'hybrid';
+      }
+
+      if (/\b(remote|work from home|wfh|anywhere|telecommute)\b/i.test(combined)) {
+        return 'remote';
+      }
+
+      if (loc && loc !== 'Not Specified' && loc !== 'Unspecified') {
+        return 'onsite';
+      }
+
+      return 'other';
+    }
+
+    function getWorkplaceLabel(wpType) {
+      switch (wpType) {
+        case 'remote': return 'Remote';
+        case 'hybrid': return 'Hybrid';
+        case 'onsite': return 'Onsite';
+        default: return 'Other / Unspecified';
+      }
+    }
+
+    /**
+     * Infers platform/ATS source (greenhouse, ashby, lever, remotive, hackernews, other).
+     */
+    function inferPlatformSource(job) {
+      if (job.platform) {
+        const p = String(job.platform).toLowerCase();
+        if (p.includes('greenhouse')) return 'greenhouse';
+        if (p.includes('ashby')) return 'ashby';
+        if (p.includes('lever')) return 'lever';
+        if (p.includes('remotive')) return 'remotive';
+        if (p.includes('hacker') || p.includes('hn') || p.includes('ycombinator')) return 'hackernews';
+        return 'other';
+      }
+
+      const url = (job.url || '').trim();
+      const jid = (job.job_id || '').toLowerCase();
+      const canSrc = (job.canonical_source || '').toLowerCase();
+      const sources = Array.isArray(job.sources) ? job.sources.join(' ').toLowerCase() : '';
+      const text = `${url} ${jid} ${canSrc} ${sources} ${job.title || ''} ${job.reason || ''}`.toLowerCase();
+
+      let domain = '';
+      let search = '';
+      try {
+        const parsed = new URL(url.startsWith('http') ? url : `https://${url}`);
+        domain = parsed.hostname.toLowerCase();
+        search = parsed.search.toLowerCase();
+      } catch (e) {
+        domain = url.toLowerCase();
+      }
+
+      if (domain.includes('greenhouse.io') || search.includes('gh_jid') || jid.startsWith('greenhouse:') || canSrc === 'greenhouse' || sources.includes('greenhouse') || text.includes('greenhouse')) {
+        return 'greenhouse';
+      }
+
+      if (domain.includes('ashbyhq.com') || jid.startsWith('ashby:') || canSrc === 'ashby' || sources.includes('ashby') || text.includes('ashby')) {
+        return 'ashby';
+      }
+
+      if (domain.includes('lever.co') || jid.startsWith('lever:') || canSrc === 'lever' || sources.includes('lever') || text.includes('lever')) {
+        return 'lever';
+      }
+
+      if (domain.includes('remotive.com') || domain.includes('remotive.io') || jid.startsWith('remotive:') || canSrc === 'remotive' || sources.includes('remotive') || text.includes('remotive')) {
+        return 'remotive';
+      }
+
+      if (domain.includes('news.ycombinator.com') || domain.includes('ycombinator.com') || jid.startsWith('hn:') || jid.startsWith('hackernews:') || text.includes('hacker news') || text.includes('ycombinator')) {
+        return 'hackernews';
+      }
+
+      return 'other';
+    }
+
+    function getPlatformLabel(platformKey) {
+      switch (platformKey) {
+        case 'greenhouse': return 'Greenhouse';
+        case 'ashby': return 'Ashby';
+        case 'lever': return 'Lever';
+        case 'remotive': return 'Remotive';
+        case 'hackernews': return 'Hacker News';
+        default: return 'Other / Unspecified';
+      }
+    }
+
+    function setQuickChip(chipType) {
       const scoreSel = document.getElementById('filter-score');
       const statusSel = document.getElementById('filter-status');
       const familySel = document.getElementById('filter-family');
+      const workplaceSel = document.getElementById('filter-workplace');
+      const platformSel = document.getElementById('filter-platform');
 
-      // Reset dropdowns
+      // Toggle back to 'all' if tapping already active chip
+      if (activeChip === chipType && chipType !== 'all') {
+        chipType = 'all';
+      }
+      activeChip = chipType;
+
+      // Reset all dropdowns
       scoreSel.value = 'all';
       statusSel.value = 'all';
       familySel.value = 'all';
+      workplaceSel.value = 'all';
+      platformSel.value = 'all';
 
-      if (chipType === 'high') scoreSel.value = '8';
-      else if (chipType === 'rec') scoreSel.value = '6';
-      else if (chipType === 'data') familySel.value = 'DATA';
-      else if (chipType === 'ai') familySel.value = 'AI_CORE';
-      else if (chipType === 'python') familySel.value = 'SOFTWARE';
-      else if (chipType === 'unapplied') statusSel.value = 'unapplied';
+      switch (chipType) {
+        case 'high': scoreSel.value = '8'; break;
+        case 'rec': scoreSel.value = '6'; break;
+        case 'unapplied': statusSel.value = 'unapplied'; break;
+        case 'data': familySel.value = 'DATA'; break;
+        case 'ai': familySel.value = 'AI_CORE'; break;
+        case 'python': familySel.value = 'SOFTWARE'; break;
+        case 'remote': workplaceSel.value = 'remote'; break;
+        case 'hybrid': workplaceSel.value = 'hybrid'; break;
+        case 'onsite': workplaceSel.value = 'onsite'; break;
+        case 'greenhouse': platformSel.value = 'greenhouse'; break;
+        case 'ashby': platformSel.value = 'ashby'; break;
+        case 'lever': platformSel.value = 'lever'; break;
+        case 'remotive': platformSel.value = 'remotive'; break;
+        case 'hackernews': platformSel.value = 'hackernews'; break;
+        case 'other_plat': platformSel.value = 'other'; break;
+        case 'all':
+        default:
+          break;
+      }
+
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      const activeEl = document.getElementById('chip-' + chipType);
+      if (activeEl) activeEl.classList.add('active');
 
       renderJobs();
     }
 
     function syncChipAndRender() {
       document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      activeChip = 'custom';
       renderJobs();
     }
 
@@ -933,10 +1241,12 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     }
 
     function renderJobs() {
-      const query = document.getElementById('search-input').value.toLowerCase().trim();
+      const query = (document.getElementById('search-input').value || '').toLowerCase().trim();
       const scoreFilter = document.getElementById('filter-score').value;
       const statusFilter = document.getElementById('filter-status').value;
       const familyFilter = document.getElementById('filter-family').value;
+      const workplaceFilter = document.getElementById('filter-workplace').value;
+      const platformFilter = document.getElementById('filter-platform').value;
 
       const listContainer = document.getElementById('job-list');
       const filtered = (appData.jobs || []).filter(j => {
@@ -956,17 +1266,30 @@ HTML_TEMPLATE = """<!DOCTYPE html>
           const families = j.role_families || [];
           if (!families.includes(familyFilter)) return false;
         }
+
+        if (workplaceFilter !== 'all') {
+          const wp = inferWorkplaceType(j);
+          if (wp !== workplaceFilter) return false;
+        }
+
+        if (platformFilter !== 'all') {
+          const plat = inferPlatformSource(j);
+          if (plat !== platformFilter) return false;
+        }
+
         return true;
       });
 
-      document.getElementById('results-count').innerText = `Showing ${filtered.length} of ${appData.jobs.length} opportunities`;
+      document.getElementById('results-count').innerText = `Showing ${filtered.length} of ${(appData.jobs || []).length} opportunities`;
 
       if (!filtered.length) {
-        listContainer.innerHTML = `<div style="text-align:center;padding:50px 20px;color:var(--text-muted);background:var(--card-bg);border:1px dashed var(--card-border);border-radius:12px;">
-          <div style="font-size:28px;margin-bottom:8px;">🔍</div>
-          <div style="font-weight:600;color:var(--text-main);">No matching opportunities found</div>
-          <div style="font-size:12px;margin-top:4px;">Try clearing your filters or searching for another keyword.</div>
-        </div>`;
+        listContainer.innerHTML = `
+          <div style="text-align:center;padding:50px 20px;color:var(--text-muted);background:var(--card-bg);border:1px dashed var(--card-border);border-radius:12px;">
+            <div style="display:flex;justify-content:center;margin-bottom:8px;">${ICONS.searchEmpty}</div>
+            <div style="font-weight:600;color:var(--text-main);">No matching opportunities found</div>
+            <div style="font-size:12px;margin-top:4px;">Try adjusting your filters or search keywords.</div>
+          </div>
+        `;
         return;
       }
 
@@ -974,40 +1297,61 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         const score = parseFloat(j.score) || 0.0;
         const scoreClass = score >= 8.0 ? 'score-high' : (score >= 6.0 ? 'score-mid' : 'score-low');
         const appliedClass = j.applied ? 'is-applied' : '';
-        const btnAppliedText = j.applied ? '✓ Applied' : 'Mark Applied';
+        const btnAppliedHtml = j.applied ? `${ICONS.check} Applied` : 'Mark Applied';
         const btnAppliedClass = j.applied ? 'btn-applied active' : 'btn-applied';
-        const src = j.canonical_source || j.source || j.ats || 'Direct';
+
+        const inferredPlat = inferPlatformSource(j);
+        const platformLabel = getPlatformLabel(inferredPlat);
+        const inferredWp = inferWorkplaceType(j);
+        const workplaceLabel = getWorkplaceLabel(inferredWp);
+
+        const targetUrl = j.url || '#';
 
         const familiesHtml = (j.role_families || []).slice(0, 2).map(f => `<span class="tag tag-family">${escapeHtml(f)}</span>`).join('');
         const skillsHtml = (j.matched_skills || []).slice(0, 3).map(s => `<span class="tag">${escapeHtml(s)}</span>`).join('');
         const sourcesNote = (j.sources && j.sources.length > 1) ? ` · Found on: ${j.sources.join(', ')}` : '';
 
         return `
-          <div class="job-card ${appliedClass}" id="card-${j.job_id}">
+          <div class="job-card ${appliedClass}" 
+               id="card-${j.job_id}" 
+               role="link" 
+               tabindex="0" 
+               onclick="handleCardClick(event, '${escapeHtml(targetUrl)}')"
+               onkeydown="if(event.key==='Enter'||event.key===' '){if(!event.target.closest('button,a')){event.preventDefault();handleCardClick(event, '${escapeHtml(targetUrl)}');}}">
             <div class="job-header">
               <div class="job-title-area">
                 <div class="job-title">${escapeHtml(j.title || 'Untitled')}</div>
                 <div class="job-meta-line">
                   <span class="job-company">${escapeHtml(j.company || 'Unknown')}</span>
-                  <span class="job-location">📍 ${escapeHtml(j.location || 'Not Specified')}</span>
+                  <span class="job-location">${ICONS.mapPin} ${escapeHtml(j.location || 'Not Specified')}</span>
                 </div>
               </div>
               <span class="score-badge ${scoreClass}">${score.toFixed(1)} Match</span>
             </div>
 
             <div class="job-tags">
-              <span class="tag tag-source">⚡ ${escapeHtml(src)}</span>
+              <span class="tag tag-source">${ICONS.source} ${escapeHtml(platformLabel)}</span>
+              <span class="tag tag-workplace tag-wp-${inferredWp}">${escapeHtml(workplaceLabel)}</span>
               ${familiesHtml}
               ${skillsHtml}
             </div>
 
-            ${j.reason ? `<div class="job-reason">💡 <strong>AI Fit:</strong> ${escapeHtml(j.reason)}</div>` : ''}
+            ${j.reason ? `<div class="job-reason">${ICONS.info} <span><strong>Match Rationale:</strong> ${escapeHtml(j.reason)}</span></div>` : ''}
 
             <div class="job-actions">
               <span class="job-date">Seen: ${j.first_seen ? j.first_seen.split('T')[0] : 'Today'}${escapeHtml(sourcesNote)}</span>
               <div class="action-group">
-                <button class="${btnAppliedClass}" onclick="toggleApplied('${j.job_id}')">${btnAppliedText}</button>
-                <a href="${j.url || '#'}" target="_blank" rel="noopener noreferrer" class="btn-apply-link">Apply →</a>
+                <button class="${btnAppliedClass}" 
+                        onclick="event.stopPropagation(); toggleApplied('${j.job_id}', event);">
+                  ${btnAppliedHtml}
+                </button>
+                <a href="${escapeHtml(targetUrl)}" 
+                   target="_blank" 
+                   rel="noopener noreferrer" 
+                   class="btn-apply-link" 
+                   onclick="event.stopPropagation();">
+                  Apply ${ICONS.external}
+                </a>
               </div>
             </div>
           </div>
@@ -1015,7 +1359,20 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       }).join('');
     }
 
-    async function toggleApplied(jobId) {
+    function handleCardClick(event, url) {
+      if (event.target.closest('button, a')) {
+        return;
+      }
+      if (url && url !== '#') {
+        window.open(url, '_blank', 'noopener,noreferrer');
+      }
+    }
+
+    async function toggleApplied(jobId, event) {
+      if (event) {
+        event.stopPropagation();
+        if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+      }
       const job = (appData.jobs || []).find(j => j.job_id === jobId);
       if (!job) return;
       
@@ -1126,13 +1483,16 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 """
 
 def main():
-    root = r"C:\Users\admin\Desktop\Hunt\PWP_jobhunt"
+    root = os.path.dirname(os.path.abspath(__file__))
     gui_index = os.path.join(root, "gui", "index.html")
-    with open(gui_index, "w", encoding="utf-8") as f:
-        f.write(HTML_TEMPLATE)
-    print("Updated gui/index.html with mobile-optimized responsive template.")
+    if os.path.exists(gui_index):
+        with open(gui_index, "r", encoding="utf-8") as f:
+            template = f.read()
+    else:
+        template = HTML_TEMPLATE
+    print("Loaded gui/index.html responsive template.")
 
-    # Now bundle live data into root index.html
+    # Bundle live data into root index.html
     seen_path = os.path.join(root, "seen.json")
     seen_data = {}
     if os.path.exists(seen_path):
@@ -1156,6 +1516,7 @@ def main():
     if os.path.exists(digest_path):
         with open(digest_path, "r", encoding="utf-8") as f:
             digest_html = f.read()
+        digest_html = digest_html.replace("🎯", "")
 
     jobs_list = [{"job_id": k, **v} for k, v in seen_data.items() if isinstance(v, dict)]
     jobs_list.sort(key=lambda j: (j.get("score") or 0.0, j.get("first_seen") or ""), reverse=True)
@@ -1175,7 +1536,7 @@ def main():
     }
 
     injected_data = f"<script>window.INITIAL_DATA = {json.dumps(payload, ensure_ascii=False)};</script>\n</head>"
-    root_html_content = HTML_TEMPLATE.replace("</head>", injected_data, 1)
+    root_html_content = template.replace("</head>", injected_data, 1)
 
     root_index = os.path.join(root, "index.html")
     with open(root_index, "w", encoding="utf-8") as f:
