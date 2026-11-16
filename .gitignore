@@ -19,6 +19,7 @@ profile.json
 out/
 *.html
 !index.html
+!digest.html
 !gui/*.html
 !jobhunt/templates/*.html
 

@@ -1506,17 +1506,42 @@ def main():
         profile_data = json.load(f)
 
     health_path = os.path.join(root, "out", "source_health.json")
+    catalog_path = os.path.join(root, "jobhunt", "sources_catalog.json")
     health_data = []
     if os.path.exists(health_path):
-        with open(health_path, "r", encoding="utf-8") as f:
-            health_data = json.load(f)
+        try:
+            with open(health_path, "r", encoding="utf-8") as f:
+                health_data = json.load(f)
+        except Exception:
+            health_data = []
+    if not health_data and os.path.exists(catalog_path):
+        try:
+            with open(catalog_path, "r", encoding="utf-8") as f:
+                health_data = json.load(f)
+        except Exception:
+            health_data = []
 
-    digest_path = os.path.join(root, "out", "digest.html")
     digest_html = ""
-    if os.path.exists(digest_path):
-        with open(digest_path, "r", encoding="utf-8") as f:
-            digest_html = f.read()
+    for dp in [
+        os.path.join(root, "out", "digest.html"),
+        os.path.join(root, "digest.html"),
+        os.path.join(root, "gui", "digest.html")
+    ]:
+        if os.path.exists(dp):
+            try:
+                with open(dp, "r", encoding="utf-8") as f:
+                    content = f.read().strip()
+                if content:
+                    digest_html = content
+                    break
+            except Exception:
+                pass
+
+    if digest_html:
         digest_html = digest_html.replace("🎯", "")
+        for target_file in [os.path.join(root, "digest.html"), os.path.join(root, "gui", "digest.html")]:
+            with open(target_file, "w", encoding="utf-8") as f:
+                f.write(digest_html)
 
     jobs_list = [{"job_id": k, **v} for k, v in seen_data.items() if isinstance(v, dict)]
     jobs_list.sort(key=lambda j: (j.get("score") or 0.0, j.get("first_seen") or ""), reverse=True)
@@ -1538,6 +1563,12 @@ def main():
     injected_data = f"<script>window.INITIAL_DATA = {json.dumps(payload, ensure_ascii=False)};</script>\n</head>"
     root_html_content = template.replace("</head>", injected_data, 1)
 
+    if digest_html:
+        escaped_srcdoc = digest_html.replace("&", "&amp;").replace('"', "&quot;")
+        root_html_content = root_html_content.replace(
+            '<iframe class="digest-frame" id="digest-frame" src="digest.html"></iframe>',
+            f'<iframe class="digest-frame" id="digest-frame" src="digest.html" srcdoc="{escaped_srcdoc}"></iframe>'
+        )
     root_index = os.path.join(root, "index.html")
     with open(root_index, "w", encoding="utf-8") as f:
         f.write(root_html_content)

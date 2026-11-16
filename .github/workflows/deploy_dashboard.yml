@@ -39,6 +39,7 @@ jobs:
         run: |
           mkdir -p _site
           cp -r gui/* _site/
+          cp digest.html _site/ 2>/dev/null || cp gui/digest.html _site/ 2>/dev/null || true
           
           # Fetch latest seen.json from state/jobhunter branch
           git fetch origin state/jobhunter:refs/remotes/origin/state/jobhunter --depth=1 2>/dev/null || true
@@ -46,7 +47,7 @@ jobs:
           
           # Inject static data into index.html so it renders with 100% full live data on phones
           python -c "
-          import json
+          import json, os
           try:
               seen = json.load(open('_site/seen.json', encoding='utf-8'))
           except Exception:
@@ -58,10 +59,22 @@ jobs:
                   profile = json.load(open('profile.example.json', encoding='utf-8'))
               except Exception:
                   profile = {}
-          try:
-              health = json.load(open('out/source_health.json', encoding='utf-8'))
-          except Exception:
-              health = []
+          health = []
+          for hp in ['out/source_health.json', 'jobhunt/sources_catalog.json']:
+              if os.path.exists(hp):
+                  try:
+                      health = json.load(open(hp, encoding='utf-8'))
+                      if health: break
+                  except Exception:
+                      pass
+          digest_html = ''
+          for dp in ['out/digest.html', '_site/digest.html', 'digest.html', 'gui/digest.html']:
+              if os.path.exists(dp):
+                  try:
+                      digest_html = open(dp, encoding='utf-8').read().strip()
+                      if digest_html: break
+                  except Exception:
+                      pass
 
           jobs_list = [{'job_id': k, **v} for k, v in seen.items() if isinstance(v, dict)]
           jobs_list.sort(key=lambda j: (j.get('score') or 0.0, j.get('first_seen') or ''), reverse=True)
@@ -75,15 +88,22 @@ jobs:
                   'sources_count': len(health) or 87
               },
               'profile': profile,
-              'source_health': health
+              'source_health': health,
+              'digest_html': digest_html
           }
 
           idx_path = '_site/index.html'
           content = open(idx_path, 'r', encoding='utf-8').read()
           injected_block = f'<script>window.INITIAL_DATA = {json.dumps(payload, ensure_ascii=False)};</script>\n</head>'
           content = content.replace('</head>', injected_block, 1)
+          if digest_html:
+              escaped_srcdoc = digest_html.replace('&', '&amp;').replace('\"', '&quot;')
+              content = content.replace(
+                  '<iframe class=\"digest-frame\" id=\"digest-frame\" src=\"digest.html\"></iframe>',
+                  f'<iframe class=\"digest-frame\" id=\"digest-frame\" src=\"digest.html\" srcdoc=\"{escaped_srcdoc}\"></iframe>'
+              )
           open(idx_path, 'w', encoding='utf-8').write(content)
-          print('Successfully injected initial payload with', len(jobs_list), 'jobs for GitHub Pages!')
+          print('Successfully injected initial payload with', len(jobs_list), 'jobs,', len(health), 'sources for GitHub Pages!')
           "
 
       - name: "Setup GitHub Pages"
