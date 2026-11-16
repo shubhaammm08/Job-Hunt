@@ -12,6 +12,8 @@ companies:
   - {ats: greenhouse, slug: cloudflare,  name: Cloudflare}
   - {ats: greenhouse, slug: rubrik,      name: Rubrik}
   - {ats: greenhouse, slug: okta,        name: Okta}
+  - {ats: greenhouse, slug: airbnb,      name: Airbnb}
+  - {ats: greenhouse, slug: groww,       name: Groww}
 
   # Product, Fintech & Consumer (Greenhouse)
   - {ats: greenhouse, slug: figma,       name: Figma}
@@ -30,8 +32,14 @@ companies:
   - {ats: ashby,      slug: linear,      name: Linear}
   - {ats: ashby,      slug: vanta,       name: Vanta}
   - {ats: ashby,      slug: deel,        name: Deel}
+  - {ats: ashby,      slug: elevenlabs,  name: ElevenLabs}
+  - {ats: ashby,      slug: modal,       name: Modal Labs}
+  - {ats: ashby,      slug: cognition,   name: Cognition AI}
+  - {ats: ashby,      slug: runway,      name: Runway AI}
 
-  # AI Platforms & Modern Infrastructure (Greenhouse)
+  # AI Platforms & Modern Infrastructure (Greenhouse & Lever)
   - {ats: greenhouse, slug: scaleai,     name: Scale AI}
   - {ats: greenhouse, slug: vercel,      name: Vercel}
   - {ats: greenhouse, slug: inmobi,      name: InMobi}
+  - {ats: lever,      slug: spotify,     name: Spotify}
+  - {ats: lever,      slug: palantir,    name: Palantir}

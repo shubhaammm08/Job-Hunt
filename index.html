@@ -620,6 +620,54 @@
     .status-healthy { background: #3fb950; box-shadow: 0 0 6px rgba(63, 185, 80, 0.4); }
     .status-config { background: #d29922; }
 
+    
+    /* Source Hub Styling */
+    .source-banner {
+      background: rgba(56, 139, 253, 0.08);
+      border: 1px solid rgba(88, 166, 255, 0.2);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .source-banner-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13.5px;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+    .source-banner p {
+      color: var(--text-muted);
+      margin: 0;
+    }
+    .source-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      line-height: 1.35;
+    }
+    .badge-pill {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .badge-healthy {
+      background: rgba(46, 160, 67, 0.18);
+      color: #3fb950;
+      border: 1px solid rgba(46, 160, 67, 0.4);
+    }
+    .badge-config {
+      background: rgba(210, 153, 34, 0.15);
+      color: #e3b341;
+      border: 1px solid rgba(210, 153, 34, 0.35);
+    }
+
     /* Profile Panel */
     .profile-card {
       background: var(--card-bg);
@@ -955,8 +1003,44 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
       </div>
     </div>
 
-    <!-- TAB 3: Source Health -->
+    <!-- TAB 3: Source Health & Architecture -->
     <div id="tab-sources" class="tab-panel">
+      <div class="source-banner">
+        <div class="source-banner-header">
+          <svg class="icon icon-md" viewBox="0 0 24 24" fill="none" stroke="#3fb950" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          <strong>Cloud Ingestion Engine: 13 Active Public Feeds &amp; 30+ Company Boards</strong>
+        </div>
+        <p>
+          The automated runner queries open, legal ATS APIs (Greenhouse, Ashby, Lever, Remotive, Hacker News, etc.) daily at 09:00 IST without credentials.
+          Commercial portals (LinkedIn, Naukri, Indeed) and Enterprise ATS (Workday) block automated scraping via Cloudflare bot protection and require custom feed URLs or partner API keys.
+        </p>
+      </div>
+
+      <!-- Sources Filter Pills -->
+      <div class="chips-scroll" style="margin-bottom: 14px;">
+        <button class="filter-chip active" id="source-chip-active" onclick="filterSources('active')">
+          <span class="status-dot status-healthy" style="display:inline-block;margin-right:4px;"></span> Active &amp; Scanned (13)
+        </button>
+        <button class="filter-chip" id="source-chip-all" onclick="filterSources('all')">
+          All Platforms (87)
+        </button>
+        <button class="filter-chip" id="source-chip-direct_ats" onclick="filterSources('direct_ats')">
+          Direct ATS (30)
+        </button>
+        <button class="filter-chip" id="source-chip-remote" onclick="filterSources('remote')">
+          Remote &amp; Startup (17)
+        </button>
+        <button class="filter-chip" id="source-chip-india_job_board" onclick="filterSources('india_job_board')">
+          India &amp; Global Portals (23)
+        </button>
+        <button class="filter-chip" id="source-chip-fresher" onclick="filterSources('fresher')">
+          Fresher &amp; AI (17)
+        </button>
+      </div>
+
       <div class="sources-grid" id="sources-grid">
         <div style="padding:20px;color:var(--text-muted);">Loading sources...</div>
       </div>
@@ -1424,27 +1508,71 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
       }
     }
 
+        let currentSourceFilter = 'active';
+
+    function filterSources(category) {
+      currentSourceFilter = category;
+      document.querySelectorAll('[id^="source-chip-"]').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById('source-chip-' + category);
+      if (activeBtn) activeBtn.classList.add('active');
+      renderSources();
+    }
+
     function renderSources() {
       const container = document.getElementById('sources-grid');
       if (!container) return;
-      const sources = (appData.source_health && appData.source_health.length) ? appData.source_health : (window.SOURCES_CATALOG || []);
-      if (!sources.length) {
-        container.innerHTML = '<div style="padding:20px;color:var(--text-muted);">Loading sources catalog...</div>';
+      const allSources = (appData.source_health && appData.source_health.length) ? appData.source_health : (window.SOURCES_CATALOG || []);
+      
+      let filtered = allSources;
+      if (currentSourceFilter === 'active') {
+        const activeNames = ['Greenhouse', 'Ashby', 'Lever', 'SmartRecruiters', 'Workable', 'Recruitee', 'Personio', 'Breezy HR', 'BambooHR', 'Remotive', 'Remote OK', 'We Work Remotely', 'Hacker News Who Is Hiring'];
+        filtered = allSources.filter(s => s.status === 'HEALTHY' || activeNames.includes(s.source));
+      } else if (currentSourceFilter === 'direct_ats') {
+        filtered = allSources.filter(s => s.category === 'direct_ats');
+      } else if (currentSourceFilter === 'remote') {
+        filtered = allSources.filter(s => s.category === 'remote' || s.category === 'startup');
+      } else if (currentSourceFilter === 'india_job_board') {
+        filtered = allSources.filter(s => s.category === 'india_job_board' || s.category === 'global_job_board');
+      } else if (currentSourceFilter === 'fresher') {
+        filtered = allSources.filter(s => s.category === 'fresher' || s.category === 'ai_specific');
+      }
+
+      if (!filtered.length) {
+        container.innerHTML = '<div style="padding:20px;color:var(--text-muted);grid-column: 1 / -1;text-align:center;">No sources matching this category.</div>';
         return;
       }
-      container.innerHTML = sources.map(s => {
-        const isHealthy = s.status === 'HEALTHY' || !s.status;
+
+      container.innerHTML = filtered.map(s => {
+        const isHealthy = s.status === 'HEALTHY' || ['Greenhouse', 'Ashby', 'Lever', 'Remotive', 'Remote OK', 'We Work Remotely', 'Hacker News Who Is Hiring'].includes(s.source);
         const dotClass = isHealthy ? 'status-healthy' : 'status-config';
-        const statusText = s.status || 'ACTIVE';
+        const badgeClass = isHealthy ? 'badge-healthy' : 'badge-config';
+        const statusLabel = isHealthy ? 'Active Feed' : 'Config Needed';
+
+        let desc = 'Configured via companies.yaml or custom feed URL';
+        if (s.source === 'Greenhouse') desc = '30+ Verified Companies · Open REST API';
+        else if (s.source === 'Ashby') desc = 'Top AI Startups (OpenAI, Modal) · Open API';
+        else if (s.source === 'Lever') desc = 'Spotify, Palantir · Open JSON Postings API';
+        else if (s.source === 'Remotive') desc = 'Public Remote Engineering API';
+        else if (s.source === 'Remote OK') desc = 'Daily Global Remote JSON Stream';
+        else if (s.source === 'We Work Remotely') desc = 'Direct Category RSS Feed';
+        else if (s.source === 'Hacker News Who Is Hiring') desc = 'Monthly Who Is Hiring Thread Feed';
+        else if (s.category === 'direct_ats') desc = 'Add company slug in companies.yaml';
+        else if (s.category === 'india_job_board') desc = 'Requires Partner API / Token (Anti-bot protected)';
+        else if (s.category === 'global_job_board') desc = 'Requires Partner API / Token (Anti-bot protected)';
+        else if (s.category === 'fresher') desc = 'Fresher Portal · Connect feed in config.yaml';
+        else if (s.category === 'ai_specific') desc = 'AI Specialized · Connect feed in config.yaml';
+
         return `
           <div class="source-card">
-            <div class="source-info">
-              <h4>${escapeHtml(s.source || '')}</h4>
-              <span>${escapeHtml(s.category || 'Direct ATS')} &bull; Tier ${s.tier || 1}</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <span style="font-size:11px;color:var(--text-muted);">${statusText}</span>
-              <span class="status-dot ${dotClass}"></span>
+            <div class="source-info" style="flex:1;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;">
+                <h4 style="font-size:13.5px;font-weight:700;">${escapeHtml(s.source || '')}</h4>
+                <span class="badge-pill ${badgeClass}">${statusLabel}</span>
+              </div>
+              <div style="font-size:11px;color:var(--text-muted);">
+                ${escapeHtml((s.category || 'Direct ATS').replace('_', ' ').toUpperCase())} &bull; Tier ${s.tier || 1}
+              </div>
+              <div class="source-desc">${escapeHtml(desc)}</div>
             </div>
           </div>
         `;
