@@ -336,6 +336,14 @@ draft_jd_chars: 6000      # JD truncation for drafting
 score_threshold: 6.0      # minimum match score (0-10) to draft and digest
 max_per_digest: 0         # maximum jobs drafted and presented in digest (0 for all qualifying fresh opportunities; minimum 10 when available)
 
+# --- notifications ----------------------------------------------------------
+notifications:
+  whatsapp:
+    enabled: true
+    min_score: 6.0          # Only alert jobs matching or exceeding this score
+    max_jobs_per_alert: 5   # Top N best matches to prevent WhatsApp message bloat
+    provider: callmebot     # callmebot (free, recommended), twilio, or webhook
+
 # --- paths ------------------------------------------------------------------
 companies_file: companies.yaml
 profile_file: profile.json

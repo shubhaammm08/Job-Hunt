@@ -271,6 +271,25 @@ def cmd_run(args) -> int:
     else:
         print("  --send not passed, email skipped")
 
+    # WhatsApp digest / high-match dispatch
+    wa_sent = False
+    send_wa = getattr(args, "whatsapp", False) or (args.send and bool(os.getenv("WHATSAPP_APIKEY")))
+    if send_wa:
+        try:
+            from .whatsapp import send_whatsapp_digest
+            wa_sent = send_whatsapp_digest(
+                jobs=jobs,
+                scanned=scanned,
+                candidates=candidates,
+                stats=store.stats(),
+                cfg=cfg,
+                profile=profile,
+            )
+        except Exception as e:
+            print(f"  ! whatsapp delivery error ({type(e).__name__}: {e})")
+    elif getattr(args, "whatsapp", False):
+        print("  --whatsapp passed but credentials missing in environment")
+
     store.record(jobs, emailed=sent)
     csv_path = store.export_csv(cfg.get("tracker_csv", "out/tracker.csv"))
 
@@ -314,6 +333,47 @@ def cmd_sources(args) -> int:
     return 0
 
 
+def cmd_whatsapp(args) -> int:
+    cfg = _cfg(args.config)
+    profile = _load_profile(cfg, allow_sample=True) or {}
+    from .whatsapp import send_whatsapp, clean_phone_number
+
+    phone = os.environ.get("WHATSAPP_PHONE") or os.environ.get("CALLMEBOT_PHONE")
+    apikey = os.environ.get("WHATSAPP_APIKEY") or os.environ.get("CALLMEBOT_APIKEY")
+
+    if not phone or not apikey:
+        print("\n[WhatsApp Alert Setup - 60 Second Setup (100% Free)]")
+        print("1. Open WhatsApp on your phone.")
+        print("2. Send this exact message:")
+        print("   'I allow callmebot to send me messages'")
+        print("   to phone number: +34 941 86 00 24 (CallMeBot gateway)")
+        print("3. CallMeBot will reply in ~5 seconds with your API key:")
+        print("   e.g. 'API Activated. Your API Key is: 123456'")
+        print("4. Add to your .env file or GitHub Secrets:")
+        print("   WHATSAPP_PHONE=+91XXXXXXXXXX")
+        print("   WHATSAPP_APIKEY=123456")
+        print("\nThen run 'python -m jobhunt whatsapp --test' to verify!")
+        return 1
+
+    msg = getattr(args, "message", None)
+    if not msg or getattr(args, "test", False):
+        name = profile.get("name", "Shubham")
+        msg = (
+            f"✅ *JobHunt WhatsApp Connected!*\n\n"
+            f"Hello {name}, your automated job pipeline is connected to WhatsApp.\n"
+            f"You will receive daily curated digests and instant alerts for high-fit roles.\n\n"
+            f"🌐 Executive Dashboard:\nhttps://shubhaammm08.github.io/Job-Hunt/"
+        )
+
+    try:
+        send_whatsapp(msg)
+        print("WhatsApp alert successfully sent!")
+        return 0
+    except Exception as e:
+        print(f"Failed to send WhatsApp message: {e}")
+        return 1
+
+
 def main(argv=None) -> int:
     _load_env()
     p = argparse.ArgumentParser(
@@ -334,6 +394,7 @@ def main(argv=None) -> int:
                          "alias for 'llm', kept for older docs)")
     sr.add_argument("--no-draft", action="store_true", help="skip the expensive stage")
     sr.add_argument("--send", action="store_true", help="actually email the digest")
+    sr.add_argument("--whatsapp", action="store_true", help="send digest/high-match alerts to WhatsApp")
     sr.add_argument("--limit", type=int, help="cap jobs sent to the LLM (cost guard)")
     sr.set_defaults(func=cmd_run)
 
@@ -347,6 +408,11 @@ def main(argv=None) -> int:
     ssrc = sub.add_parser("sources", help="inspect source registry and health report")
     ssrc.add_argument("--out", default="out/source_health.json")
     ssrc.set_defaults(func=cmd_sources)
+
+    swa = sub.add_parser("whatsapp", help="test or send WhatsApp alert")
+    swa.add_argument("--test", action="store_true", help="send a test WhatsApp alert")
+    swa.add_argument("--message", help="custom message text to send")
+    swa.set_defaults(func=cmd_whatsapp)
 
     args = p.parse_args(argv)
     return args.func(args)

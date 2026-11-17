@@ -146,6 +146,9 @@ jobs:
           SMTP_USER: ${{ secrets.GMAIL_EMAIL || secrets.SMTP_USER }}
           SMTP_PASS: ${{ secrets.GMAIL_APP_PASSWORD || secrets.SMTP_PASS }}
           MAIL_TO: ${{ secrets.MAIL_TO || secrets.GMAIL_EMAIL || secrets.SMTP_USER }}
+          WHATSAPP_PHONE: ${{ secrets.WHATSAPP_PHONE }}
+          WHATSAPP_APIKEY: ${{ secrets.WHATSAPP_APIKEY }}
+          WHATSAPP_PROVIDER: ${{ vars.WHATSAPP_PROVIDER || 'callmebot' }}
         run: |
           CMD="python -m jobhunt run"
           
@@ -153,7 +156,7 @@ jobs:
           if [ "${{ inputs.dry_run }}" != "true" ]; then
             CMD="$CMD --send"
           else
-            echo "Dry run enabled: Email delivery will be skipped."
+            echo "Dry run enabled: Email and WhatsApp delivery will be skipped."
           fi
           
           # Handle candidate limit input
@@ -164,6 +167,11 @@ jobs:
           # Handle scorer choice input
           if [ "${{ inputs.scorer }}" = "keyword" ]; then
             CMD="$CMD --scorer keyword"
+          fi
+
+          # Enable WhatsApp alerts if secrets are configured
+          if [ -n "${{ secrets.WHATSAPP_APIKEY }}" ] && [ "${{ inputs.dry_run }}" != "true" ]; then
+            CMD="$CMD --whatsapp"
           fi
           
           echo "Executing pipeline: $CMD"
@@ -302,4 +310,9 @@ jobs:
           if [ -f out/tracker.csv ]; then
             LINES=$(wc -l < out/tracker.csv 2>/dev/null || echo "0")
             echo "- **Application Tracker**: \`$LINES\` entries on record" >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -n "${{ secrets.WHATSAPP_APIKEY }}" ]; then
+            echo "- **WhatsApp Alerts**: Configured (alerts dispatched to phone)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- **WhatsApp Alerts**: Not configured (add \`WHATSAPP_PHONE\` & \`WHATSAPP_APIKEY\` in Secrets)" >> $GITHUB_STEP_SUMMARY
           fi
