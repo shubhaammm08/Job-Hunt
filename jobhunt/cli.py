@@ -290,6 +290,22 @@ def cmd_run(args) -> int:
     elif getattr(args, "whatsapp", False):
         print("  --whatsapp passed but credentials missing in environment")
 
+    # Telegram digest / high-match dispatch
+    send_tg = getattr(args, "telegram", False) or (args.send and bool(os.getenv("TELEGRAM_BOT_TOKEN")))
+    if send_tg:
+        try:
+            from .telegram import send_telegram_digest
+            send_telegram_digest(
+                jobs=jobs,
+                scanned=scanned,
+                candidates=candidates,
+                stats=store.stats(),
+                cfg=cfg,
+                profile=profile,
+            )
+        except Exception as e:
+            print(f"  ! telegram delivery error ({type(e).__name__}: {e})")
+
     store.record(jobs, emailed=sent)
     csv_path = store.export_csv(cfg.get("tracker_csv", "out/tracker.csv"))
 
@@ -374,6 +390,48 @@ def cmd_whatsapp(args) -> int:
         return 1
 
 
+def cmd_telegram(args) -> int:
+    cfg = _cfg(args.config)
+    profile = _load_profile(cfg, allow_sample=True) or {}
+    from .telegram import send_telegram
+
+    token = os.environ.get("TELEGRAM_BOT_TOKEN")
+    chat_id = os.environ.get("TELEGRAM_CHAT_ID")
+
+    if not token or not chat_id:
+        print("\n[Telegram Phone Alert Setup - 30 Second Instant Setup (100% Free)]")
+        print("1. Open Telegram on your phone or PC.")
+        print("2. Search for '@BotFather' and click Start.")
+        print("3. Send '/newbot', give your bot a name (e.g. 'ShubhamJobHuntBot').")
+        print("4. Copy the HTTP API token provided by BotFather.")
+        print("5. Search for your new bot in Telegram, click Start.")
+        print("6. To get your chat_id, visit: https://api.telegram.org/bot<YOUR_TOKEN>/getUpdates")
+        print("   (Look for 'id': 123456789 under 'chat')")
+        print("7. Add to your .env or GitHub Secrets:")
+        print("   TELEGRAM_BOT_TOKEN=your-bot-token")
+        print("   TELEGRAM_CHAT_ID=your-chat-id")
+        print("\nThen run 'python -m jobhunt telegram --test' to verify!")
+        return 1
+
+    msg = getattr(args, "message", None)
+    if not msg or getattr(args, "test", False):
+        name = profile.get("name", "Shubham")
+        msg = (
+            f"✅ *JobHunt Telegram Connected!*\n\n"
+            f"Hello {name}, your automated pipeline is connected to Telegram.\n"
+            f"Instant alerts and daily morning digests will arrive here.\n\n"
+            f"🌐 [Executive Dashboard](https://shubhaammm08.github.io/Job-Hunt/)"
+        )
+
+    try:
+        send_telegram(msg)
+        print("Telegram alert successfully sent!")
+        return 0
+    except Exception as e:
+        print(f"Failed to send Telegram message: {e}")
+        return 1
+
+
 def main(argv=None) -> int:
     _load_env()
     p = argparse.ArgumentParser(
@@ -395,6 +453,7 @@ def main(argv=None) -> int:
     sr.add_argument("--no-draft", action="store_true", help="skip the expensive stage")
     sr.add_argument("--send", action="store_true", help="actually email the digest")
     sr.add_argument("--whatsapp", action="store_true", help="send digest/high-match alerts to WhatsApp")
+    sr.add_argument("--telegram", action="store_true", help="send digest/high-match alerts to Telegram")
     sr.add_argument("--limit", type=int, help="cap jobs sent to the LLM (cost guard)")
     sr.set_defaults(func=cmd_run)
 
@@ -413,6 +472,11 @@ def main(argv=None) -> int:
     swa.add_argument("--test", action="store_true", help="send a test WhatsApp alert")
     swa.add_argument("--message", help="custom message text to send")
     swa.set_defaults(func=cmd_whatsapp)
+
+    stg = sub.add_parser("telegram", help="test or send Telegram alert")
+    stg.add_argument("--test", action="store_true", help="send a test Telegram alert")
+    stg.add_argument("--message", help="custom message text to send")
+    stg.set_defaults(func=cmd_telegram)
 
     args = p.parse_args(argv)
     return args.func(args)
