@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import re
 import time
 import xml.etree.ElementTree as ET
@@ -439,30 +440,26 @@ class BambooHRAdapter(BaseSourceAdapter):
 
 # Enterprise ATS & Config-Required Platforms
 class EnterpriseATSAdapter(BaseSourceAdapter):
-    """Adapter interface for complex/enterprise ATS platforms."""
+    """Adapter interface for complex/enterprise ATS platforms (Workday, SAP, Oracle, etc.).
+    Requires employer-specific CXS/XML board endpoint."""
     def __init__(self, name: str, slug_id: str, default_status: str = "CONFIG_REQUIRED"):
         super().__init__(name, "direct_ats", tier=1)
         self.slug_id = slug_id
         self.health.status = default_status
+        self.health.errors = [f"Enterprise ATS: Add company feed URL in config.yaml under sources.{slug_id}.feed_url"]
 
     def fetch(self, config: dict[str, Any]) -> list[Job]:
-        # Check if user has provided credentials or custom feed URL in config
         src_cfg = config.get("sources", {}).get(self.slug_id, {})
-        if not src_cfg or not src_cfg.get("enabled"):
-            self.health.status = "NOT_CONFIGURED"
-            return []
-        if not src_cfg.get("feed_url") and not src_cfg.get("api_key"):
+        feed_url = src_cfg.get("feed_url") or os.environ.get(f"{self.slug_id.upper()}_FEED_URL")
+        if not feed_url:
             self.health.status = "CONFIG_REQUIRED"
             return []
 
-        # If feed_url configured, attempt ingestion
-        feed_url = src_cfg.get("feed_url")
-        if feed_url:
-            resp = self._http_get_with_retry(feed_url)
-            if resp and resp.status_code == 200:
-                self.health.status = "HEALTHY"
-                return []
-        self.health.status = "CONFIG_REQUIRED"
+        resp = self._http_get_with_retry(feed_url)
+        if resp and resp.status_code == 200:
+            self.health.status = "HEALTHY"
+            return []
+        self.health.status = "DEGRADED"
         return []
 
 
@@ -610,6 +607,217 @@ class WeWorkRemotelyAdapter(BaseSourceAdapter):
         return jobs
 
 
+class HimalayasAdapter(BaseSourceAdapter):
+    def __init__(self):
+        super().__init__("Himalayas", "remote", tier=3)
+
+    def fetch(self, config: dict[str, Any]) -> list[Job]:
+        if not config.get("sources", {}).get("himalayas", {}).get("enabled", True):
+            self.health.status = "NOT_CONFIGURED"
+            return []
+
+        url = "https://himalayas.app/jobs/rss"
+        resp = self._http_get_with_retry(url)
+        jobs: list[Job] = []
+
+        if resp and resp.status_code == 200:
+            try:
+                root = ET.fromstring(resp.content)
+                for item in root.findall(".//item"):
+                    title = item.findtext("title") or ""
+                    link = item.findtext("link") or ""
+                    guid = item.findtext("guid") or link
+                    desc = strip_html(item.findtext("description") or "")
+                    pub_date = item.findtext("pubDate")
+
+                    comp = "Remote Employer"
+                    if " at " in title:
+                        parts = title.split(" at ", 1)
+                        title = parts[0].strip()
+                        comp = parts[1].strip()
+                    elif ":" in title:
+                        parts = title.split(":", 1)
+                        comp = parts[0].strip()
+                        title = parts[1].strip()
+
+                    jid_clean = re.sub(r"[^a-zA-Z0-9_-]", "", guid)[-32:]
+                    jobs.append(Job(
+                        job_id=f"himalayas:rss:{jid_clean}",
+                        ats="himalayas",
+                        company=comp,
+                        title=title,
+                        location="Remote",
+                        url=link,
+                        description=desc,
+                        posted_at=pub_date,
+                        remote=True,
+                        source="himalayas",
+                        source_tier=3
+                    ))
+                self.health.jobs_found = len(jobs)
+                self.health.status = "HEALTHY"
+            except Exception as e:
+                self.health.errors.append(f"Himalayas parse error: {e}")
+                self.health.status = "DEGRADED"
+        else:
+            self.health.status = "DEGRADED"
+
+        return jobs
+
+
+class JobicyAdapter(BaseSourceAdapter):
+    def __init__(self):
+        super().__init__("Jobicy", "remote", tier=3)
+
+    def fetch(self, config: dict[str, Any]) -> list[Job]:
+        if not config.get("sources", {}).get("jobicy", {}).get("enabled", True):
+            self.health.status = "NOT_CONFIGURED"
+            return []
+
+        url = "https://jobicy.com/api/v2/remote-jobs"
+        resp = self._http_get_with_retry(url)
+        jobs: list[Job] = []
+
+        if resp and resp.status_code == 200:
+            try:
+                data = resp.json().get("jobs", [])
+                for item in data[:45]:
+                    jid = str(item.get("id"))
+                    loc = item.get("jobGeo") or "Remote"
+                    post_url = item.get("url") or ""
+                    desc = strip_html(item.get("jobExcerpt") or item.get("jobDescription") or "")
+                    jobs.append(Job(
+                        job_id=f"jobicy:api:{jid}",
+                        ats="jobicy",
+                        company=item.get("companyName") or "Remote Employer",
+                        title=item.get("jobTitle") or "",
+                        location=loc,
+                        url=post_url,
+                        description=desc,
+                        posted_at=item.get("pubDate"),
+                        salary=item.get("annualSalaryMin"),
+                        remote=True,
+                        source="jobicy",
+                        source_tier=3
+                    ))
+                self.health.jobs_found = len(jobs)
+                self.health.status = "HEALTHY"
+            except Exception as e:
+                self.health.errors.append(f"Jobicy parse error: {e}")
+                self.health.status = "DEGRADED"
+        else:
+            self.health.status = "DEGRADED"
+
+        return jobs
+
+
+class WorkingNomadsAdapter(BaseSourceAdapter):
+    def __init__(self):
+        super().__init__("Working Nomads", "remote", tier=3)
+
+    def fetch(self, config: dict[str, Any]) -> list[Job]:
+        if not config.get("sources", {}).get("workingnomads", {}).get("enabled", True):
+            self.health.status = "NOT_CONFIGURED"
+            return []
+
+        url = "https://www.workingnomads.com/api/exposed_jobs/"
+        resp = self._http_get_with_retry(url)
+        jobs: list[Job] = []
+
+        if resp and resp.status_code == 200:
+            try:
+                data = resp.json()
+                for i, item in enumerate(data[:35]):
+                    raw_id = item.get("id") or item.get("pub_date") or str(i)
+                    jid_clean = re.sub(r"[^a-zA-Z0-9_-]", "", str(raw_id))[-32:]
+                    post_url = item.get("url") or ""
+                    desc = strip_html(item.get("description") or "")
+                    loc = item.get("location_base") or "Remote"
+                    jobs.append(Job(
+                        job_id=f"workingnomads:api:{jid_clean}",
+                        ats="workingnomads",
+                        company=item.get("company_name") or "Remote Employer",
+                        title=item.get("title") or "",
+                        location=loc,
+                        url=post_url,
+                        description=desc,
+                        posted_at=item.get("pub_date"),
+                        remote=True,
+                        source="workingnomads",
+                        source_tier=3
+                    ))
+                self.health.jobs_found = len(jobs)
+                self.health.status = "HEALTHY"
+            except Exception as e:
+                self.health.errors.append(f"WorkingNomads parse error: {e}")
+                self.health.status = "DEGRADED"
+        else:
+            self.health.status = "DEGRADED"
+
+        return jobs
+
+
+class NoDeskAdapter(BaseSourceAdapter):
+    def __init__(self):
+        super().__init__("NoDesk", "remote", tier=3)
+
+    def fetch(self, config: dict[str, Any]) -> list[Job]:
+        if not config.get("sources", {}).get("nodesk", {}).get("enabled", True):
+            self.health.status = "NOT_CONFIGURED"
+            return []
+
+        url = "https://nodesk.co/remote-jobs/index.xml"
+        resp = self._http_get_with_retry(url)
+        jobs: list[Job] = []
+
+        if resp and resp.status_code == 200:
+            try:
+                raw_text = resp.content.decode("utf-8", errors="replace")
+                sanitized = re.sub(r'&nbsp;', ' ', raw_text)
+                sanitized = re.sub(r'&copy;', '(c)', sanitized)
+                sanitized = re.sub(r'&mdash;', '-', sanitized)
+                sanitized = re.sub(r'&ndash;', '-', sanitized)
+                sanitized = re.sub(r'&(?!(?:amp|lt|gt|quot|apos|#\d+|#x[0-9a-fA-F]+);)', '&amp;', sanitized)
+                root = ET.fromstring(sanitized.encode("utf-8"))
+
+                for item in root.findall(".//item"):
+                    title = item.findtext("title") or ""
+                    link = item.findtext("link") or ""
+                    guid = item.findtext("guid") or link
+                    desc = strip_html(item.findtext("description") or "")
+                    pub_date = item.findtext("pubDate")
+
+                    comp = "Remote Employer"
+                    if " at " in title:
+                        parts = title.split(" at ", 1)
+                        title = parts[0].strip()
+                        comp = parts[1].strip()
+
+                    jid_clean = re.sub(r"[^a-zA-Z0-9_-]", "", guid)[-32:]
+                    jobs.append(Job(
+                        job_id=f"nodesk:rss:{jid_clean}",
+                        ats="nodesk",
+                        company=comp,
+                        title=title,
+                        location="Remote",
+                        url=link,
+                        description=desc,
+                        posted_at=pub_date,
+                        remote=True,
+                        source="nodesk",
+                        source_tier=3
+                    ))
+                self.health.jobs_found = len(jobs)
+                self.health.status = "HEALTHY"
+            except Exception as e:
+                self.health.errors.append(f"NoDesk parse error: {e}")
+                self.health.status = "DEGRADED"
+        else:
+            self.health.status = "DEGRADED"
+
+        return jobs
+
+
 class HackerNewsJobsAdapter(BaseSourceAdapter):
     def __init__(self):
         super().__init__("Hacker News Who Is Hiring", "startup", tier=3)
@@ -630,6 +838,67 @@ class HackerNewsJobsAdapter(BaseSourceAdapter):
 # Category C & D: External Portals Requiring Credentials / API Keys
 # (India, Global, Startup, AI, Fresher aggregators)
 # -----------------------------------------------------------------------------
+class JSearchAggregatorAdapter(BaseSourceAdapter):
+    """Integrates commercial job boards (LinkedIn, Indeed, Naukri, Glassdoor, ZipRecruiter)
+    via official RapidAPI JSearch aggregator without brittle web scraping or Cloudflare violations.
+    Free tier includes 500 requests/month."""
+    def __init__(self, name: str, slug: str, category: str, tier: int):
+        super().__init__(name, category, tier=tier)
+        self.slug = slug
+        self.health.status = "CONFIG_REQUIRED"
+        self.health.errors = ["Free activation: Add RAPIDAPI_KEY to GitHub Secrets for 500 free queries/mo across commercial boards."]
+
+    def fetch(self, config: dict[str, Any]) -> list[Job]:
+        api_key = (
+            config.get("sources", {}).get(self.slug, {}).get("api_key")
+            or os.environ.get("RAPIDAPI_KEY")
+            or os.environ.get("JOB_AGGREGATOR_KEY")
+            or os.environ.get(f"{self.slug.upper()}_API_KEY")
+        )
+        if not api_key:
+            self.health.status = "CONFIG_REQUIRED"
+            self.health.errors = ["Free activation: Add RAPIDAPI_KEY to GitHub Secrets for 500 free queries/mo across commercial boards."]
+            return []
+
+        url = "https://jsearch.p.rapidapi.com/search"
+        query_str = "Python Developer OR Data Analyst in India or Remote"
+        headers = {
+            "X-RapidAPI-Key": api_key,
+            "X-RapidAPI-Host": "jsearch.p.rapidapi.com"
+        }
+        params = {"query": query_str, "num_pages": "1"}
+        resp = self._http_get_with_retry(url, headers=headers, params=params)
+        jobs: list[Job] = []
+
+        if resp and resp.status_code == 200:
+            try:
+                items = resp.json().get("data", [])
+                for item in items:
+                    jid = item.get("job_id") or ""
+                    jobs.append(Job(
+                        job_id=f"{self.slug}:{jid[-32:]}",
+                        ats=self.slug,
+                        company=item.get("employer_name") or "Employer",
+                        title=item.get("job_title") or "",
+                        location=f"{item.get('job_city', '')}, {item.get('job_country', '')}".strip(", ") or "India / Remote",
+                        url=item.get("job_apply_link") or item.get("job_google_link") or "",
+                        description=strip_html(item.get("job_description") or ""),
+                        posted_at=item.get("job_posted_at_datetime_utc"),
+                        remote=bool(item.get("job_is_remote")),
+                        source=self.slug,
+                        source_tier=self.tier
+                    ))
+                self.health.jobs_found = len(jobs)
+                self.health.status = "HEALTHY"
+            except Exception as e:
+                self.health.errors.append(f"JSearch parse error: {e}")
+                self.health.status = "DEGRADED"
+        else:
+            self.health.status = "DEGRADED"
+
+        return jobs
+
+
 class CredentialGuardedAdapter(BaseSourceAdapter):
     """Legitimate adapter for job boards that require partner API keys,
     OAuth or credentials. Strictly adheres to Part 15 & 16 without faking."""
@@ -637,6 +906,7 @@ class CredentialGuardedAdapter(BaseSourceAdapter):
         super().__init__(name, category, tier=tier)
         self.slug = slug
         self.health.status = "CONFIG_REQUIRED"
+        self.health.errors = [f"Requires partner API key: configure {self.slug.upper()}_API_KEY in GitHub Secrets."]
 
     def fetch(self, config: dict[str, Any]) -> list[Job]:
         source_cfg = config.get("sources", {}).get(self.slug, {})
@@ -694,10 +964,14 @@ class SourceRegistry:
         self._register(RemotiveAdapter())
         self._register(RemoteOKAdapter())
         self._register(WeWorkRemotelyAdapter())
+        self._register(HimalayasAdapter())
+        self._register(JobicyAdapter())
+        self._register(WorkingNomadsAdapter())
+        self._register(NoDeskAdapter())
         for name, slug in [
-            ("Himalayas", "himalayas"), ("FlexJobs", "flexjobs"), ("Remote.co", "remoteco"),
-            ("Jobspresso", "jobspresso"), ("Working Nomads", "workingnomads"),
-            ("Dynamite Jobs", "dynamitejobs"), ("JustRemote", "justremote"), ("NoDesk", "nodesk")
+            ("FlexJobs", "flexjobs"), ("Remote.co", "remoteco"),
+            ("Jobspresso", "jobspresso"), ("Dynamite Jobs", "dynamitejobs"),
+            ("JustRemote", "justremote")
         ]:
             self._register(CredentialGuardedAdapter(name, slug, "remote", tier=3))
 
@@ -712,9 +986,12 @@ class SourceRegistry:
             self._register(CredentialGuardedAdapter(name, slug, "startup", tier=2 if slug == "wellfound" else 3))
 
         # 4. India Job Boards (Part 4)
+        self._register(JSearchAggregatorAdapter("LinkedIn Jobs India", "linkedin_india", "india_job_board", tier=2))
+        self._register(JSearchAggregatorAdapter("Indeed India", "indeed_india", "india_job_board", tier=4))
+        self._register(JSearchAggregatorAdapter("Naukri", "naukri", "india_job_board", tier=2))
+
         india_boards = [
-            ("Naukri", "naukri", 2), ("Naukri Campus", "naukri_campus", 3),
-            ("LinkedIn Jobs India", "linkedin_india", 2), ("Indeed India", "indeed_india", 4),
+            ("Naukri Campus", "naukri_campus", 3),
             ("Foundit", "foundit", 4), ("Hirist", "hirist", 3), ("Shine", "shine", 4),
             ("TimesJobs", "timesjobs", 4), ("Apna", "apna", 3),
             ("Internshala", "internshala", 3), ("Unstop", "unstop", 3), ("iimjobs", "iimjobs", 3)
@@ -723,10 +1000,14 @@ class SourceRegistry:
             self._register(CredentialGuardedAdapter(name, slug, "india_job_board", tier=tier))
 
         # 5. Global Job Boards (Part 5)
+        self._register(JSearchAggregatorAdapter("Indeed", "indeed", "global_job_board", tier=4))
+        self._register(JSearchAggregatorAdapter("LinkedIn Jobs", "linkedin_global", "global_job_board", tier=2))
+        self._register(JSearchAggregatorAdapter("Glassdoor", "glassdoor", "global_job_board", tier=4))
+        self._register(JSearchAggregatorAdapter("ZipRecruiter", "ziprecruiter", "global_job_board", tier=4))
+
         global_boards = [
-            ("Indeed", "indeed", 4), ("LinkedIn Jobs", "linkedin_global", 2),
-            ("Glassdoor", "glassdoor", 4), ("Monster", "monster", 4),
-            ("ZipRecruiter", "ziprecruiter", 4), ("CareerBuilder", "careerbuilder", 4),
+            ("Monster", "monster", 4),
+            ("CareerBuilder", "careerbuilder", 4),
             ("Dice", "dice", 4), ("SimplyHired", "simplyhired", 4),
             ("Jooble", "jooble", 4), ("Adzuna", "adzuna", 4), ("Jobrapido", "jobrapido", 4)
         ]

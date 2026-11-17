@@ -43,3 +43,10 @@ companies:
   - {ats: greenhouse, slug: inmobi,      name: InMobi}
   - {ats: lever,      slug: spotify,     name: Spotify}
   - {ats: lever,      slug: palantir,    name: Palantir}
+
+  # Direct Enterprise & Mid-Market ATS Platforms (SmartRecruiters, Workable, Personio, Breezy)
+  - {ats: smartrecruiters, slug: deliveryhero, name: Delivery Hero}
+  - {ats: smartrecruiters, slug: cern,         name: CERN}
+  - {ats: workable,        slug: skroutz,      name: Skroutz}
+  - {ats: personio,        slug: personio,     name: Personio}
+  - {ats: breezy,          slug: breezy,       name: Breezy HR}

@@ -9,7 +9,7 @@
     "new_jobs": 0,
     "duplicates_removed": 0,
     "errors": [],
-    "last_scan": "2026-11-16T04:48:14.842674+00:00"
+    "last_scan": "2026-11-17T05:39:45.596414+00:00"
   },
   {
     "source": "Ashby",
@@ -21,7 +21,7 @@
     "new_jobs": 0,
     "duplicates_removed": 0,
     "errors": [],
-    "last_scan": "2026-11-16T04:48:14.842770+00:00"
+    "last_scan": "2026-11-17T05:39:45.596439+00:00"
   },
   {
     "source": "Lever",
@@ -33,7 +33,7 @@
     "new_jobs": 0,
     "duplicates_removed": 0,
     "errors": [],
-    "last_scan": "2026-11-16T04:48:14.842806+00:00"
+    "last_scan": "2026-11-17T05:39:45.596445+00:00"
   },
   {
     "source": "SmartRecruiters",
@@ -45,7 +45,7 @@
     "new_jobs": 0,
     "duplicates_removed": 0,
     "errors": [],
-    "last_scan": "2026-11-16T04:48:14.842831+00:00"
+    "last_scan": "2026-11-17T05:39:45.596450+00:00"
   },
   {
     "source": "Workable",
@@ -57,7 +57,7 @@
     "new_jobs": 0,
     "duplicates_removed": 0,
     "errors": [],
-    "last_scan": "2026-11-16T04:48:14.842856+00:00"
+    "last_scan": "2026-11-17T05:39:45.596456+00:00"
   },
   {
     "source": "Recruitee",
@@ -69,7 +69,7 @@
     "new_jobs": 0,
     "duplicates_removed": 0,
     "errors": [],
-    "last_scan": "2026-11-16T04:48:14.842877+00:00"
+    "last_scan": "2026-11-17T05:39:45.596459+00:00"
   },
   {
     "source": "Personio",
@@ -81,7 +81,7 @@
     "new_jobs": 0,
     "duplicates_removed": 0,
     "errors": [],
-    "last_scan": "2026-11-16T04:48:14.842899+00:00"
+    "last_scan": "2026-11-17T05:39:45.596463+00:00"
   },
   {
     "source": "Breezy HR",
@@ -93,7 +93,7 @@
     "new_jobs": 0,
     "duplicates_removed": 0,
     "errors": [],
-    "last_scan": "2026-11-16T04:48:14.842921+00:00"
+    "last_scan": "2026-11-17T05:39:45.596467+00:00"
   },
   {
     "source": "BambooHR",
@@ -105,391 +105,455 @@
     "new_jobs": 0,
     "duplicates_removed": 0,
     "errors": [],
-    "last_scan": "2026-11-16T04:48:14.842943+00:00"
+    "last_scan": "2026-11-17T05:39:45.596470+00:00"
   },
   {
     "source": "Workday",
     "category": "direct_ats",
     "tier": 1,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.842970+00:00"
+    "errors": [
+      "Enterprise ATS: Add company feed URL in config.yaml under sources.workday.feed_url"
+    ],
+    "last_scan": "2026-11-17T05:39:45.596475+00:00"
   },
   {
     "source": "Teamtailor",
     "category": "direct_ats",
     "tier": 1,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.842999+00:00"
+    "errors": [
+      "Enterprise ATS: Add company feed URL in config.yaml under sources.teamtailor.feed_url"
+    ],
+    "last_scan": "2026-11-17T05:39:45.596482+00:00"
   },
   {
     "source": "Rippling",
     "category": "direct_ats",
     "tier": 1,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843025+00:00"
+    "errors": [
+      "Enterprise ATS: Add company feed URL in config.yaml under sources.rippling.feed_url"
+    ],
+    "last_scan": "2026-11-17T05:39:45.596487+00:00"
   },
   {
     "source": "Gem",
     "category": "direct_ats",
     "tier": 1,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843045+00:00"
+    "errors": [
+      "Enterprise ATS: Add company feed URL in config.yaml under sources.gem.feed_url"
+    ],
+    "last_scan": "2026-11-17T05:39:45.596491+00:00"
   },
   {
     "source": "Paylocity",
     "category": "direct_ats",
     "tier": 1,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843062+00:00"
+    "errors": [
+      "Enterprise ATS: Add company feed URL in config.yaml under sources.paylocity.feed_url"
+    ],
+    "last_scan": "2026-11-17T05:39:45.596494+00:00"
   },
   {
     "source": "JazzHR",
     "category": "direct_ats",
     "tier": 1,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843079+00:00"
+    "errors": [
+      "Enterprise ATS: Add company feed URL in config.yaml under sources.jazzhr.feed_url"
+    ],
+    "last_scan": "2026-11-17T05:39:45.596497+00:00"
   },
   {
     "source": "Manatal",
     "category": "direct_ats",
     "tier": 1,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843096+00:00"
+    "errors": [
+      "Enterprise ATS: Add company feed URL in config.yaml under sources.manatal.feed_url"
+    ],
+    "last_scan": "2026-11-17T05:39:45.596500+00:00"
   },
   {
     "source": "Jobvite",
     "category": "direct_ats",
     "tier": 1,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843113+00:00"
+    "errors": [
+      "Enterprise ATS: Add company feed URL in config.yaml under sources.jobvite.feed_url"
+    ],
+    "last_scan": "2026-11-17T05:39:45.596503+00:00"
   },
   {
     "source": "Phenom",
     "category": "direct_ats",
     "tier": 1,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843129+00:00"
+    "errors": [
+      "Enterprise ATS: Add company feed URL in config.yaml under sources.phenom.feed_url"
+    ],
+    "last_scan": "2026-11-17T05:39:45.596509+00:00"
   },
   {
     "source": "Homerun",
     "category": "direct_ats",
     "tier": 1,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843146+00:00"
+    "errors": [
+      "Enterprise ATS: Add company feed URL in config.yaml under sources.homerun.feed_url"
+    ],
+    "last_scan": "2026-11-17T05:39:45.596512+00:00"
   },
   {
     "source": "HireHive",
     "category": "direct_ats",
     "tier": 1,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843162+00:00"
+    "errors": [
+      "Enterprise ATS: Add company feed URL in config.yaml under sources.hirehive.feed_url"
+    ],
+    "last_scan": "2026-11-17T05:39:45.596515+00:00"
   },
   {
     "source": "JobScore",
     "category": "direct_ats",
     "tier": 1,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843177+00:00"
+    "errors": [
+      "Enterprise ATS: Add company feed URL in config.yaml under sources.jobscore.feed_url"
+    ],
+    "last_scan": "2026-11-17T05:39:45.596518+00:00"
   },
   {
     "source": "Flatchr",
     "category": "direct_ats",
     "tier": 1,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843194+00:00"
+    "errors": [
+      "Enterprise ATS: Add company feed URL in config.yaml under sources.flatchr.feed_url"
+    ],
+    "last_scan": "2026-11-17T05:39:45.596521+00:00"
   },
   {
     "source": "Talentadore",
     "category": "direct_ats",
     "tier": 1,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843213+00:00"
+    "errors": [
+      "Enterprise ATS: Add company feed URL in config.yaml under sources.talentadore.feed_url"
+    ],
+    "last_scan": "2026-11-17T05:39:45.596524+00:00"
   },
   {
     "source": "Jobsoid",
     "category": "direct_ats",
     "tier": 1,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843229+00:00"
+    "errors": [
+      "Enterprise ATS: Add company feed URL in config.yaml under sources.jobsoid.feed_url"
+    ],
+    "last_scan": "2026-11-17T05:39:45.596527+00:00"
   },
   {
     "source": "PyjamaHR",
     "category": "direct_ats",
     "tier": 1,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843245+00:00"
+    "errors": [
+      "Enterprise ATS: Add company feed URL in config.yaml under sources.pyjamahr.feed_url"
+    ],
+    "last_scan": "2026-11-17T05:39:45.596531+00:00"
   },
   {
     "source": "Gupy",
     "category": "direct_ats",
     "tier": 1,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843262+00:00"
+    "errors": [
+      "Enterprise ATS: Add company feed URL in config.yaml under sources.gupy.feed_url"
+    ],
+    "last_scan": "2026-11-17T05:39:45.596534+00:00"
   },
   {
     "source": "Oracle Recruiting",
     "category": "direct_ats",
     "tier": 1,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843281+00:00"
+    "errors": [
+      "Enterprise ATS: Add company feed URL in config.yaml under sources.oracle_recruiting.feed_url"
+    ],
+    "last_scan": "2026-11-17T05:39:45.596537+00:00"
   },
   {
     "source": "SAP SuccessFactors",
     "category": "direct_ats",
     "tier": 1,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843300+00:00"
+    "errors": [
+      "Enterprise ATS: Add company feed URL in config.yaml under sources.sap_successfactors.feed_url"
+    ],
+    "last_scan": "2026-11-17T05:39:45.596540+00:00"
   },
   {
     "source": "iCIMS",
     "category": "direct_ats",
     "tier": 1,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843318+00:00"
+    "errors": [
+      "Enterprise ATS: Add company feed URL in config.yaml under sources.icims.feed_url"
+    ],
+    "last_scan": "2026-11-17T05:39:45.596544+00:00"
   },
   {
     "source": "Pinpoint",
     "category": "direct_ats",
     "tier": 1,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843335+00:00"
+    "errors": [
+      "Enterprise ATS: Add company feed URL in config.yaml under sources.pinpoint.feed_url"
+    ],
+    "last_scan": "2026-11-17T05:39:45.596546+00:00"
   },
   {
     "source": "Remotive",
     "category": "remote",
     "tier": 3,
     "status": "HEALTHY",
-    "jobs_found": 16,
+    "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
     "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843356+00:00"
+    "last_scan": "2026-11-17T05:39:45.596550+00:00"
   },
   {
     "source": "Remote OK",
     "category": "remote",
     "tier": 3,
     "status": "HEALTHY",
-    "jobs_found": 34,
+    "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
     "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843379+00:00"
+    "last_scan": "2026-11-17T05:39:45.596554+00:00"
   },
   {
     "source": "We Work Remotely",
     "category": "remote",
     "tier": 3,
     "status": "HEALTHY",
-    "jobs_found": 25,
+    "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
     "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843402+00:00"
+    "last_scan": "2026-11-17T05:39:45.596558+00:00"
   },
   {
     "source": "Himalayas",
     "category": "remote",
     "tier": 3,
-    "status": "NOT_CONFIGURED",
+    "status": "HEALTHY",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
     "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843430+00:00"
+    "last_scan": "2026-11-17T05:39:45.596564+00:00"
   },
   {
-    "source": "FlexJobs",
+    "source": "Jobicy",
     "category": "remote",
     "tier": 3,
-    "status": "NOT_CONFIGURED",
+    "status": "HEALTHY",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
     "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843456+00:00"
-  },
-  {
-    "source": "Remote.co",
-    "category": "remote",
-    "tier": 3,
-    "status": "NOT_CONFIGURED",
-    "jobs_found": 0,
-    "jobs_after_filtering": 0,
-    "new_jobs": 0,
-    "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843479+00:00"
-  },
-  {
-    "source": "Jobspresso",
-    "category": "remote",
-    "tier": 3,
-    "status": "NOT_CONFIGURED",
-    "jobs_found": 0,
-    "jobs_after_filtering": 0,
-    "new_jobs": 0,
-    "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843499+00:00"
+    "last_scan": "2026-11-17T05:39:45.596568+00:00"
   },
   {
     "source": "Working Nomads",
     "category": "remote",
     "tier": 3,
-    "status": "NOT_CONFIGURED",
+    "status": "HEALTHY",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
     "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843519+00:00"
-  },
-  {
-    "source": "Dynamite Jobs",
-    "category": "remote",
-    "tier": 3,
-    "status": "NOT_CONFIGURED",
-    "jobs_found": 0,
-    "jobs_after_filtering": 0,
-    "new_jobs": 0,
-    "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843539+00:00"
-  },
-  {
-    "source": "JustRemote",
-    "category": "remote",
-    "tier": 3,
-    "status": "NOT_CONFIGURED",
-    "jobs_found": 0,
-    "jobs_after_filtering": 0,
-    "new_jobs": 0,
-    "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843560+00:00"
+    "last_scan": "2026-11-17T05:39:45.596571+00:00"
   },
   {
     "source": "NoDesk",
     "category": "remote",
     "tier": 3,
-    "status": "NOT_CONFIGURED",
+    "status": "HEALTHY",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
     "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843578+00:00"
+    "last_scan": "2026-11-17T05:39:45.596575+00:00"
+  },
+  {
+    "source": "FlexJobs",
+    "category": "remote",
+    "tier": 3,
+    "status": "CONFIG_REQUIRED",
+    "jobs_found": 0,
+    "jobs_after_filtering": 0,
+    "new_jobs": 0,
+    "duplicates_removed": 0,
+    "errors": [
+      "Requires partner API key: configure FLEXJOBS_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596579+00:00"
+  },
+  {
+    "source": "Remote.co",
+    "category": "remote",
+    "tier": 3,
+    "status": "CONFIG_REQUIRED",
+    "jobs_found": 0,
+    "jobs_after_filtering": 0,
+    "new_jobs": 0,
+    "duplicates_removed": 0,
+    "errors": [
+      "Requires partner API key: configure REMOTECO_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596585+00:00"
+  },
+  {
+    "source": "Jobspresso",
+    "category": "remote",
+    "tier": 3,
+    "status": "CONFIG_REQUIRED",
+    "jobs_found": 0,
+    "jobs_after_filtering": 0,
+    "new_jobs": 0,
+    "duplicates_removed": 0,
+    "errors": [
+      "Requires partner API key: configure JOBSPRESSO_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596590+00:00"
+  },
+  {
+    "source": "Dynamite Jobs",
+    "category": "remote",
+    "tier": 3,
+    "status": "CONFIG_REQUIRED",
+    "jobs_found": 0,
+    "jobs_after_filtering": 0,
+    "new_jobs": 0,
+    "duplicates_removed": 0,
+    "errors": [
+      "Requires partner API key: configure DYNAMITEJOBS_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596594+00:00"
+  },
+  {
+    "source": "JustRemote",
+    "category": "remote",
+    "tier": 3,
+    "status": "CONFIG_REQUIRED",
+    "jobs_found": 0,
+    "jobs_after_filtering": 0,
+    "new_jobs": 0,
+    "duplicates_removed": 0,
+    "errors": [
+      "Requires partner API key: configure JUSTREMOTE_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596598+00:00"
   },
   {
     "source": "Hacker News Who Is Hiring",
@@ -501,546 +565,636 @@
     "new_jobs": 0,
     "duplicates_removed": 0,
     "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843600+00:00"
+    "last_scan": "2026-11-17T05:39:45.596602+00:00"
   },
   {
     "source": "Wellfound",
     "category": "startup",
     "tier": 2,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843623+00:00"
+    "errors": [
+      "Requires partner API key: configure WELLFOUND_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596606+00:00"
   },
   {
     "source": "Y Combinator Jobs",
     "category": "startup",
     "tier": 3,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843648+00:00"
+    "errors": [
+      "Requires partner API key: configure YC_JOBS_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596610+00:00"
   },
   {
     "source": "Y Combinator Work at a Startup",
     "category": "startup",
     "tier": 3,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843670+00:00"
+    "errors": [
+      "Requires partner API key: configure YC_WORKATASTARTUP_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596615+00:00"
   },
   {
     "source": "Cutshort",
     "category": "startup",
     "tier": 3,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843691+00:00"
+    "errors": [
+      "Requires partner API key: configure CUTSHORT_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596619+00:00"
   },
   {
     "source": "Instahyre",
     "category": "startup",
     "tier": 3,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843711+00:00"
+    "errors": [
+      "Requires partner API key: configure INSTAHYRE_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596622+00:00"
   },
   {
     "source": "Product Hunt Jobs",
     "category": "startup",
     "tier": 3,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843731+00:00"
-  },
-  {
-    "source": "Naukri",
-    "category": "india_job_board",
-    "tier": 2,
-    "status": "NOT_CONFIGURED",
-    "jobs_found": 0,
-    "jobs_after_filtering": 0,
-    "new_jobs": 0,
-    "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843752+00:00"
-  },
-  {
-    "source": "Naukri Campus",
-    "category": "india_job_board",
-    "tier": 3,
-    "status": "NOT_CONFIGURED",
-    "jobs_found": 0,
-    "jobs_after_filtering": 0,
-    "new_jobs": 0,
-    "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843772+00:00"
+    "errors": [
+      "Requires partner API key: configure PRODUCTHUNT_JOBS_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596625+00:00"
   },
   {
     "source": "LinkedIn Jobs India",
     "category": "india_job_board",
     "tier": 2,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843792+00:00"
+    "errors": [
+      "Free activation: Add RAPIDAPI_KEY to GitHub Secrets for 500 free queries/mo across commercial boards."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596629+00:00"
   },
   {
     "source": "Indeed India",
     "category": "india_job_board",
     "tier": 4,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843812+00:00"
+    "errors": [
+      "Free activation: Add RAPIDAPI_KEY to GitHub Secrets for 500 free queries/mo across commercial boards."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596634+00:00"
+  },
+  {
+    "source": "Naukri",
+    "category": "india_job_board",
+    "tier": 2,
+    "status": "CONFIG_REQUIRED",
+    "jobs_found": 0,
+    "jobs_after_filtering": 0,
+    "new_jobs": 0,
+    "duplicates_removed": 0,
+    "errors": [
+      "Free activation: Add RAPIDAPI_KEY to GitHub Secrets for 500 free queries/mo across commercial boards."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596638+00:00"
+  },
+  {
+    "source": "Naukri Campus",
+    "category": "india_job_board",
+    "tier": 3,
+    "status": "CONFIG_REQUIRED",
+    "jobs_found": 0,
+    "jobs_after_filtering": 0,
+    "new_jobs": 0,
+    "duplicates_removed": 0,
+    "errors": [
+      "Requires partner API key: configure NAUKRI_CAMPUS_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596642+00:00"
   },
   {
     "source": "Foundit",
     "category": "india_job_board",
     "tier": 4,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843830+00:00"
+    "errors": [
+      "Requires partner API key: configure FOUNDIT_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596646+00:00"
   },
   {
     "source": "Hirist",
     "category": "india_job_board",
     "tier": 3,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843848+00:00"
+    "errors": [
+      "Requires partner API key: configure HIRIST_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596651+00:00"
   },
   {
     "source": "Shine",
     "category": "india_job_board",
     "tier": 4,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843866+00:00"
+    "errors": [
+      "Requires partner API key: configure SHINE_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596654+00:00"
   },
   {
     "source": "TimesJobs",
     "category": "india_job_board",
     "tier": 4,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843886+00:00"
+    "errors": [
+      "Requires partner API key: configure TIMESJOBS_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596657+00:00"
   },
   {
     "source": "Apna",
     "category": "india_job_board",
     "tier": 3,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843903+00:00"
+    "errors": [
+      "Requires partner API key: configure APNA_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596661+00:00"
   },
   {
     "source": "Internshala",
     "category": "india_job_board",
     "tier": 3,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843922+00:00"
+    "errors": [
+      "Requires partner API key: configure INTERNSHALA_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596665+00:00"
   },
   {
     "source": "Unstop",
     "category": "india_job_board",
     "tier": 3,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843941+00:00"
+    "errors": [
+      "Requires partner API key: configure UNSTOP_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596669+00:00"
   },
   {
     "source": "iimjobs",
     "category": "india_job_board",
     "tier": 3,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843960+00:00"
+    "errors": [
+      "Requires partner API key: configure IIMJOBS_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596672+00:00"
   },
   {
     "source": "Indeed",
     "category": "global_job_board",
     "tier": 4,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.843980+00:00"
+    "errors": [
+      "Free activation: Add RAPIDAPI_KEY to GitHub Secrets for 500 free queries/mo across commercial boards."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596676+00:00"
   },
   {
     "source": "LinkedIn Jobs",
     "category": "global_job_board",
     "tier": 2,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.844001+00:00"
+    "errors": [
+      "Free activation: Add RAPIDAPI_KEY to GitHub Secrets for 500 free queries/mo across commercial boards."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596679+00:00"
   },
   {
     "source": "Glassdoor",
     "category": "global_job_board",
     "tier": 4,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.844020+00:00"
-  },
-  {
-    "source": "Monster",
-    "category": "global_job_board",
-    "tier": 4,
-    "status": "NOT_CONFIGURED",
-    "jobs_found": 0,
-    "jobs_after_filtering": 0,
-    "new_jobs": 0,
-    "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.844038+00:00"
+    "errors": [
+      "Free activation: Add RAPIDAPI_KEY to GitHub Secrets for 500 free queries/mo across commercial boards."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596682+00:00"
   },
   {
     "source": "ZipRecruiter",
     "category": "global_job_board",
     "tier": 4,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.844057+00:00"
+    "errors": [
+      "Free activation: Add RAPIDAPI_KEY to GitHub Secrets for 500 free queries/mo across commercial boards."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596685+00:00"
+  },
+  {
+    "source": "Monster",
+    "category": "global_job_board",
+    "tier": 4,
+    "status": "CONFIG_REQUIRED",
+    "jobs_found": 0,
+    "jobs_after_filtering": 0,
+    "new_jobs": 0,
+    "duplicates_removed": 0,
+    "errors": [
+      "Requires partner API key: configure MONSTER_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596689+00:00"
   },
   {
     "source": "CareerBuilder",
     "category": "global_job_board",
     "tier": 4,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.844075+00:00"
+    "errors": [
+      "Requires partner API key: configure CAREERBUILDER_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596692+00:00"
   },
   {
     "source": "Dice",
     "category": "global_job_board",
     "tier": 4,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.844094+00:00"
+    "errors": [
+      "Requires partner API key: configure DICE_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596697+00:00"
   },
   {
     "source": "SimplyHired",
     "category": "global_job_board",
     "tier": 4,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.844112+00:00"
+    "errors": [
+      "Requires partner API key: configure SIMPLYHIRED_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596700+00:00"
   },
   {
     "source": "Jooble",
     "category": "global_job_board",
     "tier": 4,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.844130+00:00"
+    "errors": [
+      "Requires partner API key: configure JOOBLE_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596704+00:00"
   },
   {
     "source": "Adzuna",
     "category": "global_job_board",
     "tier": 4,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.844148+00:00"
+    "errors": [
+      "Requires partner API key: configure ADZUNA_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596707+00:00"
   },
   {
     "source": "Jobrapido",
     "category": "global_job_board",
     "tier": 4,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.844165+00:00"
+    "errors": [
+      "Requires partner API key: configure JOBRAPIDO_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596710+00:00"
   },
   {
     "source": "Freshersworld",
     "category": "fresher",
     "tier": 3,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.844185+00:00"
+    "errors": [
+      "Requires partner API key: configure FRESHERSWORLD_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596714+00:00"
   },
   {
     "source": "Superset",
     "category": "fresher",
     "tier": 3,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.844203+00:00"
+    "errors": [
+      "Requires partner API key: configure SUPERSET_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596717+00:00"
   },
   {
     "source": "FirstNaukri",
     "category": "fresher",
     "tier": 3,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.844222+00:00"
+    "errors": [
+      "Requires partner API key: configure FIRSTNAUKRI_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596720+00:00"
   },
   {
     "source": "Prosple",
     "category": "fresher",
     "tier": 3,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.844239+00:00"
+    "errors": [
+      "Requires partner API key: configure PROSPLE_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596724+00:00"
   },
   {
     "source": "Handshake",
     "category": "fresher",
     "tier": 3,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.844257+00:00"
+    "errors": [
+      "Requires partner API key: configure HANDSHAKE_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596727+00:00"
   },
   {
     "source": "AI Jobs",
     "category": "ai_specific",
     "tier": 2,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.844279+00:00"
+    "errors": [
+      "Requires partner API key: configure AI_JOBS_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596731+00:00"
   },
   {
     "source": "TopAIJobs",
     "category": "ai_specific",
     "tier": 2,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.844300+00:00"
+    "errors": [
+      "Requires partner API key: configure TOP_AI_JOBS_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596735+00:00"
   },
   {
     "source": "AI-Jobs.net",
     "category": "ai_specific",
     "tier": 2,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.844319+00:00"
+    "errors": [
+      "Requires partner API key: configure AI_JOBS_NET_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596738+00:00"
   },
   {
     "source": "Hugging Face Jobs",
     "category": "ai_specific",
     "tier": 2,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.844338+00:00"
+    "errors": [
+      "Requires partner API key: configure HUGGINGFACE_JOBS_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596741+00:00"
   },
   {
     "source": "MLOps.community Jobs",
     "category": "ai_specific",
     "tier": 2,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.844356+00:00"
+    "errors": [
+      "Requires partner API key: configure MLOPS_COMMUNITY_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596745+00:00"
   },
   {
     "source": "Data Science Jobs",
     "category": "ai_specific",
     "tier": 2,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.844373+00:00"
+    "errors": [
+      "Requires partner API key: configure DATA_SCIENCE_JOBS_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596749+00:00"
   },
   {
     "source": "Kaggle Jobs",
     "category": "ai_specific",
     "tier": 2,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.844394+00:00"
+    "errors": [
+      "Requires partner API key: configure KAGGLE_JOBS_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596753+00:00"
   },
   {
     "source": "NVIDIA Careers",
     "category": "ai_specific",
     "tier": 1,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.844415+00:00"
+    "errors": [
+      "Requires partner API key: configure NVIDIA_CAREERS_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596756+00:00"
   },
   {
     "source": "OpenAI Careers",
     "category": "ai_specific",
     "tier": 1,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.844434+00:00"
+    "errors": [
+      "Requires partner API key: configure OPENAI_CAREERS_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596761+00:00"
   },
   {
     "source": "Anthropic Careers",
     "category": "ai_specific",
     "tier": 1,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.844451+00:00"
+    "errors": [
+      "Requires partner API key: configure ANTHROPIC_CAREERS_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596765+00:00"
   },
   {
     "source": "Google DeepMind Careers",
     "category": "ai_specific",
     "tier": 1,
-    "status": "NOT_CONFIGURED",
+    "status": "CONFIG_REQUIRED",
     "jobs_found": 0,
     "jobs_after_filtering": 0,
     "new_jobs": 0,
     "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-16T04:48:14.844475+00:00"
+    "errors": [
+      "Requires partner API key: configure DEEPMIND_CAREERS_API_KEY in GitHub Secrets."
+    ],
+    "last_scan": "2026-11-17T05:39:45.596768+00:00"
   }
 ]

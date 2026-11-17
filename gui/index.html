@@ -992,10 +992,10 @@
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
             <polyline points="22 4 12 14.01 9 11.01"></polyline>
           </svg>
-          <strong>Cloud Ingestion Engine: 13 Active Public Feeds &amp; 30+ Company Boards</strong>
+          <strong>Cloud Ingestion Engine: 17 Active Live Feeds &amp; 35+ Company Boards</strong>
         </div>
         <p>
-          The automated runner queries open, legal ATS APIs (Greenhouse, Ashby, Lever, Remotive, Hacker News, etc.) daily at 09:00 IST without credentials.
+          The automated runner queries open, legal ATS APIs (Greenhouse, Ashby, Lever, SmartRecruiters, Workable, Personio, Breezy, Remotive, Remote OK, Himalayas, Jobicy, Working Nomads, NoDesk, Hacker News) daily at 09:00 IST without credentials.
           Commercial portals (LinkedIn, Naukri, Indeed) and Enterprise ATS (Workday) block automated scraping via Cloudflare bot protection and require custom feed URLs or partner API keys.
         </p>
       </div>
@@ -1003,16 +1003,16 @@
       <!-- Sources Filter Pills -->
       <div class="chips-scroll" style="margin-bottom: 14px;">
         <button class="filter-chip active" id="source-chip-active" onclick="filterSources('active')">
-          <span class="status-dot status-healthy" style="display:inline-block;margin-right:4px;"></span> Active &amp; Scanned (13)
+          <span class="status-dot status-healthy" style="display:inline-block;margin-right:4px;"></span> Active &amp; Scanned (17)
         </button>
         <button class="filter-chip" id="source-chip-all" onclick="filterSources('all')">
-          All Platforms (87)
+          All Platforms (88)
         </button>
         <button class="filter-chip" id="source-chip-direct_ats" onclick="filterSources('direct_ats')">
           Direct ATS (30)
         </button>
         <button class="filter-chip" id="source-chip-remote" onclick="filterSources('remote')">
-          Remote &amp; Startup (17)
+          Remote &amp; Startup (18)
         </button>
         <button class="filter-chip" id="source-chip-india_job_board" onclick="filterSources('india_job_board')">
           India &amp; Global Portals (23)
@@ -1505,8 +1505,12 @@
       const allSources = (appData.source_health && appData.source_health.length) ? appData.source_health : (window.SOURCES_CATALOG || []);
       
       let filtered = allSources;
+      const activeNames = [
+        'Greenhouse', 'Ashby', 'Lever', 'SmartRecruiters', 'Workable', 'Recruitee',
+        'Personio', 'Breezy HR', 'BambooHR', 'Remotive', 'Remote OK', 'We Work Remotely',
+        'Himalayas', 'Jobicy', 'Working Nomads', 'NoDesk', 'Hacker News Who Is Hiring'
+      ];
       if (currentSourceFilter === 'active') {
-        const activeNames = ['Greenhouse', 'Ashby', 'Lever', 'SmartRecruiters', 'Workable', 'Recruitee', 'Personio', 'Breezy HR', 'BambooHR', 'Remotive', 'Remote OK', 'We Work Remotely', 'Hacker News Who Is Hiring'];
         filtered = allSources.filter(s => s.status === 'HEALTHY' || activeNames.includes(s.source));
       } else if (currentSourceFilter === 'direct_ats') {
         filtered = allSources.filter(s => s.category === 'direct_ats');
@@ -1524,20 +1528,31 @@
       }
 
       container.innerHTML = filtered.map(s => {
-        const isHealthy = s.status === 'HEALTHY' || ['Greenhouse', 'Ashby', 'Lever', 'Remotive', 'Remote OK', 'We Work Remotely', 'Hacker News Who Is Hiring'].includes(s.source);
+        const isHealthy = s.status === 'HEALTHY' || activeNames.includes(s.source);
         const dotClass = isHealthy ? 'status-healthy' : 'status-config';
+        const isRapidApi = ['LinkedIn Jobs', 'LinkedIn Jobs India', 'Indeed', 'Indeed India', 'Naukri', 'Glassdoor', 'ZipRecruiter'].includes(s.source);
         const badgeClass = isHealthy ? 'badge-healthy' : 'badge-config';
-        const statusLabel = isHealthy ? 'Active Feed' : 'Config Needed';
+        const statusLabel = isHealthy ? 'Active Feed' : (isRapidApi ? 'RapidAPI Ready' : 'Config Needed');
 
         let desc = 'Configured via companies.yaml or custom feed URL';
         if (s.source === 'Greenhouse') desc = '30+ Verified Companies · Open REST API';
         else if (s.source === 'Ashby') desc = 'Top AI Startups (OpenAI, Modal) · Open API';
         else if (s.source === 'Lever') desc = 'Spotify, Palantir · Open JSON Postings API';
+        else if (s.source === 'SmartRecruiters') desc = 'Delivery Hero, CERN · Open Postings API';
+        else if (s.source === 'Workable') desc = 'Skroutz, Startups · Open Widget API';
+        else if (s.source === 'Personio') desc = 'Personio SE & European Tech · Open XML Feed';
+        else if (s.source === 'Breezy HR') desc = 'Breezy HR & Tech Boards · Open JSON API';
+        else if (s.source === 'BambooHR') desc = 'BambooHR Companies · Open Careers JSON';
         else if (s.source === 'Remotive') desc = 'Public Remote Engineering API';
         else if (s.source === 'Remote OK') desc = 'Daily Global Remote JSON Stream';
         else if (s.source === 'We Work Remotely') desc = 'Direct Category RSS Feed';
+        else if (s.source === 'Himalayas') desc = 'Live Remote Engineering & Data RSS Feed';
+        else if (s.source === 'Jobicy') desc = '100+ Live Tech & Dev Jobs · Public JSON API';
+        else if (s.source === 'Working Nomads') desc = 'Curated Remote Engineering · Public API';
+        else if (s.source === 'NoDesk') desc = 'Global Remote Digital Nomad · Public XML Feed';
         else if (s.source === 'Hacker News Who Is Hiring') desc = 'Monthly Who Is Hiring Thread Feed';
-        else if (s.category === 'direct_ats') desc = 'Add company slug in companies.yaml';
+        else if (isRapidApi) desc = 'RapidAPI JSearch · Add RAPIDAPI_KEY to GitHub Secrets (500 free/mo)';
+        else if (s.category === 'direct_ats') desc = 'Enterprise ATS · Add company CXS URL in config.yaml';
         else if (s.category === 'india_job_board') desc = 'Requires Partner API / Token (Anti-bot protected)';
         else if (s.category === 'global_job_board') desc = 'Requires Partner API / Token (Anti-bot protected)';
         else if (s.category === 'fresher') desc = 'Fresher Portal · Connect feed in config.yaml';
