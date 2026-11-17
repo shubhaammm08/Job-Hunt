@@ -255,7 +255,7 @@ def send_whatsapp(
     raise RuntimeError(
         "Missing WhatsApp credentials: set WHATSAPP_PHONE and WHATSAPP_APIKEY in .env "
         "(or GitHub Secrets). To get your free CallMeBot key in 10s: "
-        "send 'I allow callmebot to send me messages' to +34 941 86 00 24 on WhatsApp."
+        "send 'I allow callmebot to send me messages' to +34 623 78 64 49 on WhatsApp."
     )
 
 

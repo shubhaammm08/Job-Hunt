@@ -346,7 +346,7 @@ def cmd_whatsapp(args) -> int:
         print("1. Open WhatsApp on your phone.")
         print("2. Send this exact message:")
         print("   'I allow callmebot to send me messages'")
-        print("   to phone number: +34 941 86 00 24 (CallMeBot gateway)")
+        print("   to phone number: +34 623 78 64 49 (CallMeBot active gateway)")
         print("3. CallMeBot will reply in ~5 seconds with your API key:")
         print("   e.g. 'API Activated. Your API Key is: 123456'")
         print("4. Add to your .env file or GitHub Secrets:")
