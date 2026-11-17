@@ -554,6 +554,26 @@
       color: #3fb950;
       font-weight: 700;
     }
+    .btn-kit {
+      background: rgba(188, 140, 255, 0.12);
+      border: 1px solid rgba(188, 140, 255, 0.35);
+      color: #d2a8ff;
+      font-size: 12.5px;
+      padding: 7px 11px;
+      border-radius: 7px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.15s;
+      touch-action: manipulation;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+    .btn-kit:hover {
+      background: rgba(188, 140, 255, 0.22);
+      border-color: #d2a8ff;
+    }
     .btn-apply-link {
       background: var(--accent-green);
       border: 1px solid rgba(255,255,255,0.1);
@@ -572,6 +592,189 @@
     }
     .btn-apply-link:hover {
       background: var(--green-light);
+    }
+
+    /* Modal Backdrop & Drawer Styles */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.78);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      max-width: 680px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+    }
+    .modal-close-btn:hover { color: var(--text-main); background: #21262d; }
+    .kit-section {
+      background: rgba(0,0,0,0.28);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      padding: 14px;
+    }
+    .kit-sec-title {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .btn-copy-chip {
+      background: rgba(88, 166, 255, 0.15);
+      border: 1px solid rgba(88, 166, 255, 0.35);
+      color: var(--accent-blue);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 5px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s;
+    }
+    .btn-copy-chip:hover { background: rgba(88, 166, 255, 0.28); }
+    .btn-copy-chip.copied {
+      background: rgba(46, 160, 67, 0.25);
+      border-color: #3fb950;
+      color: #3fb950;
+    }
+    .kit-textarea {
+      width: 100%;
+      background: #0d1117;
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      color: #c9d1d9;
+      font-size: 12.5px;
+      line-height: 1.5;
+      padding: 10px;
+      resize: vertical;
+      font-family: var(--font);
+      box-sizing: border-box;
+    }
+    .screening-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    @media (max-width: 600px) {
+      .screening-grid { grid-template-columns: 1fr; }
+    }
+    .screening-item {
+      background: #0d1117;
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 8px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+    }
+    .screening-val {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: var(--text-main);
+    }
+    .bookmarklet-box {
+      background: rgba(35, 134, 54, 0.12);
+      border: 1px solid rgba(46, 160, 67, 0.35);
+      border-radius: 10px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .bookmarklet-link {
+      background: var(--accent-green);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      width: fit-content;
+      cursor: grab;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    .bookmarklet-link:hover { background: var(--green-light); }
+    .toast-msg {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1f6feb;
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      max-width: 90vw;
+      text-align: center;
+    }
+    .toast-msg.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-6px);
+      pointer-events: auto;
     }
 
     /* Digest Panel */
@@ -805,6 +1008,12 @@
         </div>
       </div>
       <div class="header-actions">
+        <button class="btn-actions" onclick="openBookmarkletGuide()" title="1-Click ATS Auto-Fill Tool" style="cursor:pointer;background:rgba(188,140,255,0.12);border-color:rgba(188,140,255,0.35);color:#d2a8ff;">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+          <span>Auto-Fill Tool</span>
+        </button>
         <div class="cloud-pill" title="Scheduled Runs: 09:00 IST &amp; Every 4h">
           <span class="dot"></span> Pipeline Active
         </div>
@@ -1090,6 +1299,150 @@
 
   </div>
 
+  <!-- Modal 1: Auto-Fill Application Kit Modal -->
+  <div class="modal-backdrop" id="modal-apply-kit" onclick="if(event.target===this)closeApplyKit()">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="kit-modal-title">
+      <div class="modal-header">
+        <div>
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+            <span class="tag tag-source">
+              <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              1-Click Application Kit
+            </span>
+          </div>
+          <h2 id="kit-modal-title" style="font-size:17px;font-weight:800;color:var(--text-main);">Role at Company</h2>
+          <p id="kit-modal-meta" style="font-size:12px;color:var(--text-muted);margin-top:2px;">Location · Match Score</p>
+        </div>
+        <button class="modal-close-btn" onclick="closeApplyKit()" aria-label="Close modal">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <!-- Section A: 1-Click ATS AutoFill Bar -->
+      <div class="bookmarklet-box">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+          <div>
+            <div style="font-weight:700;font-size:13px;color:#3fb950;display:flex;align-items:center;gap:6px;">
+              <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              Universal ATS 1-Click Form AutoFiller
+            </div>
+            <div style="font-size:11.5px;color:var(--text-muted);margin-top:2px;">
+              Drag the button to your browser bookmarks bar to autofill Greenhouse, Lever, Ashby &amp; Workable in 1 click!
+            </div>
+          </div>
+          <button class="btn-copy-chip" onclick="copyBookmarkletCode(this)">Copy Script</button>
+        </div>
+      </div>
+
+      <!-- Section B: Tailored Cover Letter -->
+      <div class="kit-section">
+        <div class="kit-sec-title">
+          <span>Tailored Cover Letter (Pre-Drafted for this Company)</span>
+          <button class="btn-copy-chip" id="btn-copy-cover" onclick="copyFieldValue(document.getElementById('kit-cover-note').value, this)">
+            <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Letter
+          </button>
+        </div>
+        <textarea id="kit-cover-note" class="kit-textarea" rows="6" readonly></textarea>
+      </div>
+
+      <!-- Section C: 2-Sentence Recruiter Hook -->
+      <div class="kit-section">
+        <div class="kit-sec-title">
+          <span>2-Sentence Recruiter Hook (For InMail / Quick Pitch)</span>
+          <button class="btn-copy-chip" id="btn-copy-pitch" onclick="copyFieldValue(document.getElementById('kit-pitch-hook').value, this)">
+            <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Pitch
+          </button>
+        </div>
+        <textarea id="kit-pitch-hook" class="kit-textarea" rows="3" readonly></textarea>
+      </div>
+
+      <!-- Section D: Standard ATS Screening Answers -->
+      <div class="kit-section">
+        <div class="kit-sec-title">Standard Screening Responses</div>
+        <div class="screening-grid">
+          <div class="screening-item">
+            <span class="screening-val"><strong>Notice:</strong> Immediate (0-15d)</span>
+            <button class="btn-copy-chip" onclick="copyFieldValue('Immediate / 0-15 days', this)">Copy</button>
+          </div>
+          <div class="screening-item">
+            <span class="screening-val"><strong>Work Auth:</strong> India (Citizen)</span>
+            <button class="btn-copy-chip" onclick="copyFieldValue('Authorized to work in India (Citizen) / Open to Remote', this)">Copy</button>
+          </div>
+          <div class="screening-item">
+            <span class="screening-val"><strong>Location:</strong> Mumbai, India</span>
+            <button class="btn-copy-chip" onclick="copyFieldValue('Mumbai, Maharashtra, India', this)">Copy</button>
+          </div>
+          <div class="screening-item">
+            <span class="screening-val"><strong>Sponsorship:</strong> Not Needed</span>
+            <button class="btn-copy-chip" onclick="copyFieldValue('No sponsorship required', this)">Copy</button>
+          </div>
+          <div class="screening-item">
+            <span class="screening-val"><strong>LinkedIn:</strong> linkedin.com/in/...</span>
+            <button class="btn-copy-chip" onclick="copyFieldValue('https://www.linkedin.com/in/shubham-kadam', this)">Copy</button>
+          </div>
+          <div class="screening-item">
+            <span class="screening-val"><strong>GitHub:</strong> github.com/shubhaammm08</span>
+            <button class="btn-copy-chip" onclick="copyFieldValue('https://github.com/shubhaammm08', this)">Copy</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Buttons -->
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding-top:10px;border-top:1px solid var(--card-border);">
+        <button class="btn-applied" onclick="closeApplyKit()">Dismiss</button>
+        <button class="btn-apply-link" id="kit-launch-btn" style="padding:10px 18px;font-size:13.5px;cursor:pointer;">
+          Launch Application &amp; Copy Pitch <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: 1-Click ATS AutoFill Bookmarklet Guide Modal -->
+  <div class="modal-backdrop" id="modal-bookmarklet-guide" onclick="if(event.target===this)closeBookmarkletGuide()">
+    <div class="modal-card" style="max-width:560px;" role="dialog" aria-modal="true" aria-labelledby="guide-modal-title">
+      <div class="modal-header">
+        <h2 id="guide-modal-title" style="font-size:17px;font-weight:800;color:var(--text-main);">Universal ATS 1-Click Form AutoFiller</h2>
+        <button class="modal-close-btn" onclick="closeBookmarkletGuide()" aria-label="Close modal">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div style="font-size:13px;color:#c9d1d9;line-height:1.6;display:flex;flex-direction:column;gap:12px;">
+        <p>
+          Apply to any job in <strong>under 5 seconds</strong>. This tool detects form fields on <strong>Greenhouse, Lever, Ashby, Workable, SmartRecruiters, and BambooHR</strong> and populates your name, email, phone, location, LinkedIn, GitHub, portfolio, and standard screening answers instantly.
+        </p>
+
+        <div class="bookmarklet-box" style="align-items:center;text-align:center;padding:16px;">
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px;">Drag this button directly to your browser's Bookmarks Bar:</div>
+          <a class="bookmarklet-link" id="bookmarklet-drag-link" href="#" onclick="event.preventDefault();showToast('Drag this button to your Bookmarks Bar (or click Copy Script below).');">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            AutoFill JobHunt
+          </a>
+          <div style="margin-top:8px;">
+            <button class="btn-copy-chip" onclick="copyBookmarkletCode(this)">Copy Bookmarklet JavaScript</button>
+          </div>
+        </div>
+
+        <div style="font-size:12px;color:var(--text-muted);">
+          <strong>How to use:</strong>
+          <ol style="padding-left:18px;margin-top:6px;line-height:1.7;">
+            <li>Click <strong>Apply</strong> on any opportunity card.</li>
+            <li>When the company's application page opens, click the <strong>AutoFill JobHunt</strong> bookmark on your browser bar.</li>
+            <li>All fields, links, and cover notes are filled automatically.</li>
+            <li>Solve any CAPTCHA if prompted, and click <strong>Submit</strong>!</li>
+          </ol>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;padding-top:10px;border-top:1px solid var(--card-border);">
+        <button class="btn-applied" onclick="closeBookmarkletGuide()">Got it</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Global Floating Toast Notification -->
+  <div id="global-toast" class="toast-msg"></div>
+
   <script>
     let appData = {
       jobs: [],
@@ -1108,6 +1461,9 @@
       info: `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`,
       check: `<svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
       external: `<svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`,
+      bolt: `<svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`,
+      copy: `<svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`,
+      close: `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
       searchEmpty: `<svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`
     };
 
@@ -1429,6 +1785,11 @@
             <div class="job-actions">
               <span class="job-date">Seen: ${j.first_seen ? j.first_seen.split('T')[0] : 'Today'}${escapeHtml(sourcesNote)}</span>
               <div class="action-group">
+                <button class="btn-kit" 
+                        title="Auto-Fill Application Kit" 
+                        onclick="event.stopPropagation(); openApplyKit('${j.job_id}', event);">
+                  ${ICONS.bolt} Kit
+                </button>
                 <button class="${btnAppliedClass}" 
                         onclick="event.stopPropagation(); toggleApplied('${j.job_id}', event);">
                   ${btnAppliedHtml}
@@ -1437,7 +1798,7 @@
                    target="_blank" 
                    rel="noopener noreferrer" 
                    class="btn-apply-link" 
-                   onclick="event.stopPropagation();">
+                   onclick="event.stopPropagation(); handleApplyClick('${j.job_id}', '${escapeHtml(targetUrl)}', event);">
                   Apply ${ICONS.external}
                 </a>
               </div>
@@ -1486,6 +1847,115 @@
           }
           localStorage.setItem('jobhunt_applied', JSON.stringify(appliedIds));
         } catch (e) {}
+      }
+    }
+
+    function handleApplyClick(jobId, url, event) {
+      const job = (appData.jobs || []).find(j => j.job_id === jobId);
+      if (job) {
+        if (!job.applied) {
+          toggleApplied(jobId);
+        }
+        const note = generateCoverNote(job);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(note).then(() => {
+            showToast(`Applied! Tailored Cover Note for ${job.company || 'Role'} copied to clipboard.`);
+          }).catch(() => {
+            showToast(`Applied! Opening application page...`);
+          });
+        }
+      }
+    }
+
+    let currentKitJob = null;
+
+    function openApplyKit(jobId, event) {
+      if (event) {
+        event.stopPropagation();
+        if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+      }
+      const job = (appData.jobs || []).find(j => j.job_id === jobId);
+      if (!job) return;
+      currentKitJob = job;
+
+      document.getElementById('kit-modal-title').innerText = `${job.title || 'Role'} at ${job.company || 'Company'}`;
+      document.getElementById('kit-modal-meta').innerText = `${job.location || 'Location Not Specified'} · Match Score: ${(job.score || 0).toFixed(1)}/10`;
+
+      const coverText = generateCoverNote(job);
+      const hookText = `Hi, I am Shubham Sunil Kadam, a Computer Engineering graduate specializing in Data Analytics, Python, and ETL automation. I built AI-driven data pipelines and interactive BI dashboards for Honda sales analytics, reducing manual reporting effort by 80%. Excited to apply for the ${job.title || 'opening'} at ${job.company || 'your company'}!`;
+
+      document.getElementById('kit-cover-note').value = coverText;
+      document.getElementById('kit-pitch-hook').value = hookText;
+
+      const launchBtn = document.getElementById('kit-launch-btn');
+      launchBtn.onclick = () => {
+        handleApplyClick(job.job_id, job.url || '#');
+        if (job.url && job.url !== '#') {
+          window.open(job.url, '_blank', 'noopener,noreferrer');
+        }
+        closeApplyKit();
+      };
+
+      document.getElementById('modal-apply-kit').classList.add('open');
+    }
+
+    function closeApplyKit() {
+      const modal = document.getElementById('modal-apply-kit');
+      if (modal) modal.classList.remove('open');
+    }
+
+    function openBookmarkletGuide() {
+      const guideModal = document.getElementById('modal-bookmarklet-guide');
+      if (guideModal) guideModal.classList.add('open');
+    }
+
+    function closeBookmarkletGuide() {
+      const guideModal = document.getElementById('modal-bookmarklet-guide');
+      if (guideModal) guideModal.classList.remove('open');
+    }
+
+    function copyFieldValue(text, btn) {
+      if (!navigator.clipboard || !navigator.clipboard.writeText) return;
+      navigator.clipboard.writeText(text).then(() => {
+        const origText = btn.innerHTML;
+        btn.innerHTML = `${ICONS.check} Copied!`;
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.innerHTML = origText;
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('global-toast');
+      if (!toast) return;
+      toast.innerText = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3800);
+    }
+
+    function generateCoverNote(job) {
+      if (job.draft && job.draft.cover_note) {
+        return job.draft.cover_note;
+      }
+      return `Dear Hiring Team at ${job.company || 'the company'},\n\nI am applying for the ${job.title || 'opening'}. As a Computer Engineering graduate from Vidyavardhini College of Engineering specializing in Data Analytics, Python, and SQL, I bring hands-on experience building automated ETL pipelines, analytical dashboards, and AI agent workflows.\n\nIn my previous projects, I built an end-to-end data pipeline and Power BI dashboard for Honda motorcycle sales analytics, automating repetitive processing and reducing manual effort by 80%. I also engineered real-time applications and speech emotion recognition models using Python and Scikit-learn.\n\nI would welcome the opportunity to discuss how my technical skills in Python, SQL, and data automation can add value to ${job.company || 'your team'}.\n\nThank you for your time and consideration.\n\nSincerely,\nShubham Sunil Kadam\nssk080204@gmail.com | Mumbai, India`;
+    }
+
+    const BOOKMARKLET_CODE = `javascript:(function(){const p={f:"Shubham",l:"Kadam",n:"Shubham Sunil Kadam",e:"ssk080204@gmail.com",p:"+91 9876543210",loc:"Mumbai, Maharashtra, India",li:"https://www.linkedin.com/in/shubham-kadam",gh:"https://github.com/shubhaammm08",w:"https://shubhaammm08.github.io/Job-Hunt/",c:"Computer Engineering graduate specializing in Python, SQL, Power BI, ETL pipelines, and AI agent automation. Built automated pipelines for Honda sales analytics reducing manual effort by 80%."};function t(el,v){if(!el||el.disabled||el.readOnly)return;el.focus();el.value=v;el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}));el.dispatchEvent(new Event('blur',{bubbles:true}));}let c=0;document.querySelectorAll('input,textarea,select').forEach(i=>{if(i.type==='hidden'||i.type==='file'||i.type==='submit')return;const k=(i.name+' '+i.id+' '+(i.placeholder||'')+' '+(i.getAttribute('aria-label')||'')+' '+(i.autocomplete||'')).toLowerCase();if(k.includes('first')&&k.includes('name')){t(i,p.f);c++;}else if(k.includes('last')&&k.includes('name')){t(i,p.l);c++;}else if((k.includes('full')&&k.includes('name'))||(k.includes('name')&&!k.includes('user')&&!k.includes('company')&&!k.includes('file'))){t(i,p.n);c++;}else if(k.includes('email')||i.type==='email'){t(i,p.e);c++;}else if(k.includes('phone')||k.includes('mobile')||i.type==='tel'){t(i,p.p);c++;}else if(k.includes('linkedin')){t(i,p.li);c++;}else if(k.includes('github')||k.includes('git')){t(i,p.gh);c++;}else if(k.includes('portfolio')||k.includes('website')||k.includes('url')){t(i,p.w);c++;}else if(k.includes('city')||k.includes('location')||k.includes('address')){t(i,p.loc);c++;}else if(i.tagName==='TEXTAREA'&&(k.includes('cover')||k.includes('pitch')||k.includes('note')||k.includes('summary'))){t(i,p.c);c++;}});document.querySelectorAll('input[type="radio"],input[type="checkbox"]').forEach(b=>{const txt=(b.parentElement?b.parentElement.innerText:'').toLowerCase();if(txt.includes('authorized')&&(txt.includes('yes')||b.value.toLowerCase()==='yes')){b.checked=true;b.dispatchEvent(new Event('change',{bubbles:true}));c++;}if(txt.includes('sponsorship')&&(txt.includes('no')||b.value.toLowerCase()==='no')){b.checked=true;b.dispatchEvent(new Event('change',{bubbles:true}));c++;}});const toast=document.createElement('div');toast.innerText='JobHunt: Auto-filled '+c+' fields!';toast.style.cssText='position:fixed;top:20px;right:20px;background:#1f6feb;color:#fff;padding:12px 18px;border-radius:8px;font-family:sans-serif;font-size:13px;font-weight:600;z-index:999999;box-shadow:0 8px 24px rgba(0,0,0,0.5);';document.body.appendChild(toast);setTimeout(()=>toast.remove(),3500);})();`;
+
+    function copyBookmarkletCode(btn) {
+      if (!navigator.clipboard || !navigator.clipboard.writeText) return;
+      navigator.clipboard.writeText(BOOKMARKLET_CODE).then(() => {
+        copyFieldValue(BOOKMARKLET_CODE, btn);
+        showToast('Bookmarklet code copied to clipboard! Paste as a browser bookmark URL.');
+      });
+    }
+
+    function initBookmarkletLink() {
+      const link = document.getElementById('bookmarklet-drag-link');
+      if (link) {
+        link.href = BOOKMARKLET_CODE;
       }
     }
 
@@ -1636,7 +2106,10 @@
       renderAll();
     }
 
-    window.addEventListener('DOMContentLoaded', loadData);
+    window.addEventListener('DOMContentLoaded', () => {
+      initBookmarkletLink();
+      loadData();
+    });
   </script>
 </body>
 </html>
