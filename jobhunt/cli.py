@@ -432,6 +432,21 @@ def cmd_telegram(args) -> int:
         return 1
 
 
+def cmd_bot(args) -> int:
+    cfg = _cfg(args.config)
+    profile = _load_profile(cfg, allow_sample=True) or {}
+    token = os.environ.get("TELEGRAM_BOT_TOKEN")
+    if not token:
+        print("Missing TELEGRAM_BOT_TOKEN in environment or .env")
+        return 1
+
+    store = Store(cfg.get("seen_file", "seen.json"))
+    from .telegram_bot import poll_updates
+
+    poll_updates(token=token, store=store, profile=profile, once=args.once)
+    return 0
+
+
 def main(argv=None) -> int:
     _load_env()
     p = argparse.ArgumentParser(
@@ -477,6 +492,11 @@ def main(argv=None) -> int:
     stg.add_argument("--test", action="store_true", help="send a test Telegram alert")
     stg.add_argument("--message", help="custom message text to send")
     stg.set_defaults(func=cmd_telegram)
+
+    sbot = sub.add_parser("bot", help="run interactive Telegram Bot listener")
+    sbot.add_argument("--once", action="store_true", help="process pending messages once and exit")
+    sbot.add_argument("--poll", action="store_true", help="continuous long-polling daemon (default)")
+    sbot.set_defaults(func=cmd_bot)
 
     args = p.parse_args(argv)
     return args.func(args)

@@ -1,0 +1,113 @@
+name: "JobHunt Telegram AI Assistant"
+
+on:
+  schedule:
+    # Check pending bot commands & send follow-up reminders every 3 hours
+    - cron: "0 */3 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: telegram-assistant-sync
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  telegram_assistant:
+    name: "Process Telegram Updates & Reminders"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONUTF8: "1"
+
+    steps:
+      - name: "Checkout repository code"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: "Set up Python 3.12"
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: "requirements.txt"
+
+      - name: "Install dependencies"
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: "Restore State from state/jobhunter branch"
+        run: |
+          mkdir -p out
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          if git fetch origin state/jobhunter:refs/remotes/origin/state/jobhunter --depth=1 2>/dev/null; then
+            if git show origin/state/jobhunter:seen.json > seen.json.tmp 2>/dev/null && [ -s seen.json.tmp ]; then
+              mv seen.json.tmp seen.json
+            else
+              rm -f seen.json.tmp
+              echo "{}" > seen.json
+            fi
+            if git show origin/state/jobhunter:tracker.csv > out/tracker.csv.tmp 2>/dev/null && [ -s out/tracker.csv.tmp ]; then
+              mv out/tracker.csv.tmp out/tracker.csv
+            else
+              rm -f out/tracker.csv.tmp
+            fi
+          else
+            echo "{}" > seen.json
+          fi
+
+      - name: "Run Telegram Assistant Single Pass"
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          LLM_PROVIDER: ${{ vars.LLM_PROVIDER || 'gemini' }}
+          DRAFT_PROVIDER: ${{ vars.DRAFT_PROVIDER || 'gemini' }}
+          DRAFT_MODEL: ${{ vars.DRAFT_MODEL || 'gemini-flash-lite-latest' }}
+        run: |
+          if [ -n "$TELEGRAM_BOT_TOKEN" ]; then
+            python -m jobhunt bot --once
+          else
+            echo "TELEGRAM_BOT_TOKEN secret not configured, skipping."
+          fi
+
+      - name: "Persist State Changes to state/jobhunter"
+        if: success()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -f seen.json ] && [ -s seen.json ]; then
+            STATE_DIR=$(mktemp -d)
+            cp seen.json "$STATE_DIR/seen.json"
+            [ -f out/tracker.csv ] && cp out/tracker.csv "$STATE_DIR/tracker.csv"
+            
+            cd "$STATE_DIR"
+            git init
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git"
+            
+            if git fetch origin state/jobhunter --depth=1 2>/dev/null; then
+              git checkout -B state/jobhunter origin/state/jobhunter
+            else
+              git checkout --orphan state/jobhunter
+            fi
+            
+            git add seen.json
+            [ -f tracker.csv ] && git add tracker.csv
+            
+            if git diff --staged --quiet; then
+              echo "No state changes to commit."
+            else
+              git commit -m "Auto-update state via Telegram Assistant [skip ci]"
+              git push origin state/jobhunter || echo "State push completed or merged"
+            fi
+            
+            cd "$GITHUB_WORKSPACE"
+            rm -rf "$STATE_DIR"
+          fi
