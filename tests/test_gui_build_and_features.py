@@ -280,3 +280,145 @@ def test_build_mobile_gui_execution_and_synchronization():
     assert data["stats"]["total"] == expected_job_count
     assert "profile" in data
     assert "source_health" in data
+
+
+def test_telegram_modal_security_no_raw_secrets():
+    """Asserts raw bot tokens and chat IDs are completely absent from both index.html and gui/index.html."""
+    RAW_SECRET_FRAGMENTS = [
+        "9216874158:AAGVxLidzX-OvD-EoYuQxp4qenYTDrTx3aY",
+        "1808500295",
+        "AAGVxLidzX",
+        "9216874158",
+    ]
+    for html_path in [GUI_INDEX, ROOT_INDEX]:
+        assert os.path.exists(html_path), f"File {html_path} must exist"
+        with open(html_path, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        # Modal container must exist
+        assert 'id="modal-whatsapp-guide"' in content, f"Missing modal-whatsapp-guide in {html_path}"
+
+        # Raw secret values must NEVER be present anywhere in the file
+        for secret in RAW_SECRET_FRAGMENTS:
+            assert secret not in content, f"Raw secret fragment '{secret}' found in {html_path}"
+
+        # Uppercase raw token assignment must not appear
+        assert "TELEGRAM_BOT_TOKEN =" not in content, f"Raw token assignment found in {html_path}"
+        assert "TELEGRAM_CHAT_ID =" not in content, f"Raw chat ID assignment found in {html_path}"
+
+        # Generic Telegram bot token regex pattern must not match
+        assert re.search(r"\b\d{9,11}:[A-Za-z0-9_-]{35}\b", content) is None, (
+            f"Telegram bot token regex matched in {html_path}"
+        )
+
+
+def test_telegram_modal_bot_direct_link_and_secrets_instruction():
+    """Asserts modal-whatsapp-guide displays direct link to Telegram bot and GitHub secrets guidance."""
+    for html_path in [GUI_INDEX, ROOT_INDEX]:
+        with open(html_path, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        # Extract modal section
+        start = content.find('id="modal-whatsapp-guide"')
+        assert start != -1, f"Missing modal-whatsapp-guide in {html_path}"
+        end = content.find('<!-- Global Floating Toast Notification -->', start)
+        if end == -1:
+            end = content.find('<!-- Modal', start + 1)
+        modal_html = content[start:end] if end != -1 else content[start:]
+
+        # Direct bot link and handle
+        assert "https://t.me/ShubhamJobHunt_Bot" in modal_html, f"Direct bot link missing in {html_path}"
+        assert "@ShubhamJobHunt_Bot" in modal_html, f"Bot handle missing in {html_path}"
+
+        # Repository secrets guidance referencing variable names
+        assert "TELEGRAM_BOT_TOKEN" in modal_html, f"TELEGRAM_BOT_TOKEN instruction missing in {html_path}"
+        assert "TELEGRAM_CHAT_ID" in modal_html, f"TELEGRAM_CHAT_ID instruction missing in {html_path}"
+        assert "https://github.com/shubhaammm08/Job-Hunt/settings/secrets/actions" in modal_html, (
+            f"GitHub secrets settings link missing in {html_path}"
+        )
+
+        # Inline SVG icon verification (no raw emoji, has SVG)
+        assert "<svg" in modal_html
+        assert EMOJI_PATTERN.findall(modal_html) == [], f"Emojis found in modal-whatsapp-guide in {html_path}"
+
+
+def test_ats_autofill_modal_structure_and_copy_buttons():
+    """Asserts ATS AutoFill modal contains all 12 editable applicant fields with 1-click copy buttons."""
+    APPLICANT_FIELDS = [
+        "autofill-first-name",
+        "autofill-last-name",
+        "autofill-full-name",
+        "autofill-email",
+        "autofill-phone",
+        "autofill-location",
+        "autofill-linkedin",
+        "autofill-github",
+        "autofill-portfolio",
+        "autofill-notice-period",
+        "autofill-work-auth",
+        "autofill-summary",
+    ]
+
+    for html_path in [GUI_INDEX, ROOT_INDEX]:
+        with open(html_path, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        # Modal container must exist
+        assert 'id="modal-bookmarklet-guide"' in content, f"Missing modal-bookmarklet-guide in {html_path}"
+
+        # Draggable bookmarklet link and copy script button
+        assert 'id="bookmarklet-drag-link"' in content, f"Missing bookmarklet-drag-link in {html_path}"
+        assert "copyBookmarkletCode" in content, f"Missing copyBookmarkletCode in {html_path}"
+
+        # Save and Reset buttons
+        assert 'id="btn-autofill-save"' in content, f"Missing btn-autofill-save in {html_path}"
+        assert 'id="btn-autofill-reset"' in content, f"Missing btn-autofill-reset in {html_path}"
+        assert "saveAutofillProfile()" in content, f"Missing saveAutofillProfile() trigger in {html_path}"
+        assert "resetAutofillProfile()" in content, f"Missing resetAutofillProfile() trigger in {html_path}"
+
+        # All 12 fields must have input/textarea element and an adjacent copy button
+        for fid in APPLICANT_FIELDS:
+            assert f'id="{fid}"' in content, f"Missing input element #{fid} in {html_path}"
+            assert f"copyAutofillField('{fid}'" in content, (
+                f"Missing 1-click copy button for #{fid} in {html_path}"
+            )
+
+
+def test_ats_autofill_persistence_and_dynamic_bookmarklet_logic():
+    """Asserts localStorage persistence, default candidate values, and dynamic bookmarklet generation."""
+    REQUIRED_JS_SYMBOLS = [
+        "DEFAULT_APPLICANT_PROFILE",
+        "AUTOFIL_STORAGE_KEY",
+        "jobhunt_autofill_profile",
+        "getApplicantProfile",
+        "saveAutofillProfile",
+        "resetAutofillProfile",
+        "loadAutofillForm",
+        "generateBookmarkletScript",
+        "updateBookmarkletCode",
+        "copyAutofillField",
+        "copyBookmarkletCode",
+        "initBookmarkletLink",
+    ]
+
+    for html_path in [GUI_INDEX, ROOT_INDEX]:
+        with open(html_path, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        for sym in REQUIRED_JS_SYMBOLS:
+            assert sym in content, f"Required JavaScript symbol '{sym}' missing in {html_path}"
+
+        # Verify candidate defaults
+        assert '"Shubham"' in content, f"Default firstName missing in {html_path}"
+        assert '"Kadam"' in content, f"Default lastName missing in {html_path}"
+        assert '"ssk080204@gmail.com"' in content, f"Default email missing in {html_path}"
+        assert 'https://www.linkedin.com/in/shubham-kadam-data/' in content, f"Default LinkedIn missing in {html_path}"
+        assert 'https://github.com/shubhaammm08' in content, f"Default GitHub missing in {html_path}"
+
+        # Verify localStorage usage
+        assert "localStorage.getItem(AUTOFIL_STORAGE_KEY)" in content or "localStorage.getItem('jobhunt_autofill_profile')" in content
+        assert "localStorage.setItem(AUTOFIL_STORAGE_KEY" in content or "localStorage.setItem('jobhunt_autofill_profile'" in content
+
+        # Verify safe JSON serialization in dynamic bookmarklet generator
+        assert "JSON.stringify(p)" in content, f"Safe JSON serialization missing in {html_path}"
+

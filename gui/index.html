@@ -1550,7 +1550,7 @@
 
   <!-- Modal 2: 1-Click ATS AutoFill Bookmarklet Guide Modal -->
   <div class="modal-backdrop" id="modal-bookmarklet-guide" onclick="if(event.target===this)closeBookmarkletGuide()">
-    <div class="modal-card" style="max-width:560px;" role="dialog" aria-modal="true" aria-labelledby="guide-modal-title">
+    <div class="modal-card" style="max-width:680px;" role="dialog" aria-modal="true" aria-labelledby="guide-modal-title">
       <div class="modal-header">
         <h2 id="guide-modal-title" style="font-size:17px;font-weight:800;color:var(--text-main);">Universal ATS 1-Click Form AutoFiller</h2>
         <button class="modal-close-btn" onclick="closeBookmarkletGuide()" aria-label="Close modal">
@@ -1558,11 +1558,12 @@
         </button>
       </div>
 
-      <div style="font-size:13px;color:#c9d1d9;line-height:1.6;display:flex;flex-direction:column;gap:12px;">
+      <div style="font-size:13px;color:#c9d1d9;line-height:1.6;display:flex;flex-direction:column;gap:14px;">
         <p>
           Apply to any job in <strong>under 5 seconds</strong>. This tool detects form fields on <strong>Greenhouse, Lever, Ashby, Workable, SmartRecruiters, and BambooHR</strong> and populates your name, email, phone, location, LinkedIn, GitHub, portfolio, and standard screening answers instantly.
         </p>
 
+        <!-- Drag Link & Bookmarklet Box -->
         <div class="bookmarklet-box" style="align-items:center;text-align:center;padding:16px;">
           <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px;">Drag this button directly to your browser's Bookmarks Bar:</div>
           <a class="bookmarklet-link" id="bookmarklet-drag-link" href="#" onclick="event.preventDefault();showToast('Drag this button to your Bookmarks Bar (or click Copy Script below).');">
@@ -1570,7 +1571,170 @@
             AutoFill JobHunt
           </a>
           <div style="margin-top:8px;">
-            <button class="btn-copy-chip" onclick="copyBookmarkletCode(this)">Copy Bookmarklet JavaScript</button>
+            <button class="btn-copy-chip" onclick="copyBookmarkletCode(this)">
+              <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Copy Bookmarklet JavaScript
+            </button>
+          </div>
+        </div>
+
+        <!-- Inline Editable Candidate Profile Section -->
+        <div class="autofill-profile-section" style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:10px;padding:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+            <div>
+              <div style="font-weight:700;font-size:13.5px;color:var(--text-main);display:flex;align-items:center;gap:6px;">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="#58a6ff" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Applicant Profile &amp; AutoFill Fields
+              </div>
+              <div style="font-size:11.5px;color:var(--text-muted);margin-top:2px;">
+                Customize your details. Changes persist in local storage and dynamically update the bookmarklet.
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <button type="button" class="btn-copy-chip" id="btn-autofill-reset" onclick="resetAutofillProfile()" style="background:rgba(248,81,73,0.12);border-color:rgba(248,81,73,0.35);color:#f85149;" title="Reset all fields to candidate defaults">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                Reset to Defaults
+              </button>
+              <button type="button" class="btn-apply-link" id="btn-autofill-save" onclick="saveAutofillProfile()" style="padding:6px 14px;font-size:12px;cursor:pointer;">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                Save
+              </button>
+            </div>
+          </div>
+
+          <!-- 12 Input Fields in Responsive Grid -->
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:10px;">
+            <!-- First Name -->
+            <div class="autofill-field-group">
+              <label for="autofill-first-name" style="font-size:11.5px;font-weight:600;color:var(--text-muted);margin-bottom:3px;display:block;">First Name</label>
+              <div style="display:flex;gap:6px;">
+                <input type="text" id="autofill-first-name" class="select-filter" style="width:100%;min-height:34px;padding:6px 10px;font-size:12.5px;background:#0d1117;color:#e6edf3;border:1px solid var(--card-border);border-radius:6px;" placeholder="First Name">
+                <button type="button" class="btn-copy-chip" onclick="copyAutofillField('autofill-first-name', this)" title="Copy First Name" aria-label="Copy First Name">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
+                </button>
+              </div>
+            </div>
+
+            <!-- Last Name -->
+            <div class="autofill-field-group">
+              <label for="autofill-last-name" style="font-size:11.5px;font-weight:600;color:var(--text-muted);margin-bottom:3px;display:block;">Last Name</label>
+              <div style="display:flex;gap:6px;">
+                <input type="text" id="autofill-last-name" class="select-filter" style="width:100%;min-height:34px;padding:6px 10px;font-size:12.5px;background:#0d1117;color:#e6edf3;border:1px solid var(--card-border);border-radius:6px;" placeholder="Last Name">
+                <button type="button" class="btn-copy-chip" onclick="copyAutofillField('autofill-last-name', this)" title="Copy Last Name" aria-label="Copy Last Name">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
+                </button>
+              </div>
+            </div>
+
+            <!-- Full Name -->
+            <div class="autofill-field-group">
+              <label for="autofill-full-name" style="font-size:11.5px;font-weight:600;color:var(--text-muted);margin-bottom:3px;display:block;">Full Name</label>
+              <div style="display:flex;gap:6px;">
+                <input type="text" id="autofill-full-name" class="select-filter" style="width:100%;min-height:34px;padding:6px 10px;font-size:12.5px;background:#0d1117;color:#e6edf3;border:1px solid var(--card-border);border-radius:6px;" placeholder="Full Name">
+                <button type="button" class="btn-copy-chip" onclick="copyAutofillField('autofill-full-name', this)" title="Copy Full Name" aria-label="Copy Full Name">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
+                </button>
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="autofill-field-group">
+              <label for="autofill-email" style="font-size:11.5px;font-weight:600;color:var(--text-muted);margin-bottom:3px;display:block;">Email</label>
+              <div style="display:flex;gap:6px;">
+                <input type="email" id="autofill-email" class="select-filter" style="width:100%;min-height:34px;padding:6px 10px;font-size:12.5px;background:#0d1117;color:#e6edf3;border:1px solid var(--card-border);border-radius:6px;" placeholder="Email">
+                <button type="button" class="btn-copy-chip" onclick="copyAutofillField('autofill-email', this)" title="Copy Email" aria-label="Copy Email">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
+                </button>
+              </div>
+            </div>
+
+            <!-- Phone -->
+            <div class="autofill-field-group">
+              <label for="autofill-phone" style="font-size:11.5px;font-weight:600;color:var(--text-muted);margin-bottom:3px;display:block;">Phone</label>
+              <div style="display:flex;gap:6px;">
+                <input type="text" id="autofill-phone" class="select-filter" style="width:100%;min-height:34px;padding:6px 10px;font-size:12.5px;background:#0d1117;color:#e6edf3;border:1px solid var(--card-border);border-radius:6px;" placeholder="Phone">
+                <button type="button" class="btn-copy-chip" onclick="copyAutofillField('autofill-phone', this)" title="Copy Phone" aria-label="Copy Phone">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
+                </button>
+              </div>
+            </div>
+
+            <!-- Location -->
+            <div class="autofill-field-group">
+              <label for="autofill-location" style="font-size:11.5px;font-weight:600;color:var(--text-muted);margin-bottom:3px;display:block;">Location</label>
+              <div style="display:flex;gap:6px;">
+                <input type="text" id="autofill-location" class="select-filter" style="width:100%;min-height:34px;padding:6px 10px;font-size:12.5px;background:#0d1117;color:#e6edf3;border:1px solid var(--card-border);border-radius:6px;" placeholder="City, State, Country">
+                <button type="button" class="btn-copy-chip" onclick="copyAutofillField('autofill-location', this)" title="Copy Location" aria-label="Copy Location">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
+                </button>
+              </div>
+            </div>
+
+            <!-- LinkedIn -->
+            <div class="autofill-field-group">
+              <label for="autofill-linkedin" style="font-size:11.5px;font-weight:600;color:var(--text-muted);margin-bottom:3px;display:block;">LinkedIn</label>
+              <div style="display:flex;gap:6px;">
+                <input type="url" id="autofill-linkedin" class="select-filter" style="width:100%;min-height:34px;padding:6px 10px;font-size:12.5px;background:#0d1117;color:#e6edf3;border:1px solid var(--card-border);border-radius:6px;" placeholder="LinkedIn Profile URL">
+                <button type="button" class="btn-copy-chip" onclick="copyAutofillField('autofill-linkedin', this)" title="Copy LinkedIn" aria-label="Copy LinkedIn">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
+                </button>
+              </div>
+            </div>
+
+            <!-- GitHub -->
+            <div class="autofill-field-group">
+              <label for="autofill-github" style="font-size:11.5px;font-weight:600;color:var(--text-muted);margin-bottom:3px;display:block;">GitHub</label>
+              <div style="display:flex;gap:6px;">
+                <input type="url" id="autofill-github" class="select-filter" style="width:100%;min-height:34px;padding:6px 10px;font-size:12.5px;background:#0d1117;color:#e6edf3;border:1px solid var(--card-border);border-radius:6px;" placeholder="GitHub Profile URL">
+                <button type="button" class="btn-copy-chip" onclick="copyAutofillField('autofill-github', this)" title="Copy GitHub" aria-label="Copy GitHub">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
+                </button>
+              </div>
+            </div>
+
+            <!-- Portfolio URL -->
+            <div class="autofill-field-group">
+              <label for="autofill-portfolio" style="font-size:11.5px;font-weight:600;color:var(--text-muted);margin-bottom:3px;display:block;">Portfolio URL</label>
+              <div style="display:flex;gap:6px;">
+                <input type="url" id="autofill-portfolio" class="select-filter" style="width:100%;min-height:34px;padding:6px 10px;font-size:12.5px;background:#0d1117;color:#e6edf3;border:1px solid var(--card-border);border-radius:6px;" placeholder="Portfolio URL">
+                <button type="button" class="btn-copy-chip" onclick="copyAutofillField('autofill-portfolio', this)" title="Copy Portfolio" aria-label="Copy Portfolio">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
+                </button>
+              </div>
+            </div>
+
+            <!-- Notice Period -->
+            <div class="autofill-field-group">
+              <label for="autofill-notice-period" style="font-size:11.5px;font-weight:600;color:var(--text-muted);margin-bottom:3px;display:block;">Notice Period</label>
+              <div style="display:flex;gap:6px;">
+                <input type="text" id="autofill-notice-period" class="select-filter" style="width:100%;min-height:34px;padding:6px 10px;font-size:12.5px;background:#0d1117;color:#e6edf3;border:1px solid var(--card-border);border-radius:6px;" placeholder="Notice Period">
+                <button type="button" class="btn-copy-chip" onclick="copyAutofillField('autofill-notice-period', this)" title="Copy Notice Period" aria-label="Copy Notice Period">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
+                </button>
+              </div>
+            </div>
+
+            <!-- Work Auth -->
+            <div class="autofill-field-group" style="grid-column: 1 / -1;">
+              <label for="autofill-work-auth" style="font-size:11.5px;font-weight:600;color:var(--text-muted);margin-bottom:3px;display:block;">Work Auth</label>
+              <div style="display:flex;gap:6px;">
+                <input type="text" id="autofill-work-auth" class="select-filter" style="width:100%;min-height:34px;padding:6px 10px;font-size:12.5px;background:#0d1117;color:#e6edf3;border:1px solid var(--card-border);border-radius:6px;" placeholder="Work Authorization (e.g. Yes / Citizen)">
+                <button type="button" class="btn-copy-chip" onclick="copyAutofillField('autofill-work-auth', this)" title="Copy Work Auth" aria-label="Copy Work Auth">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
+                </button>
+              </div>
+            </div>
+
+            <!-- Summary / Pitch -->
+            <div class="autofill-field-group" style="grid-column: 1 / -1;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">
+                <label for="autofill-summary" style="font-size:11.5px;font-weight:600;color:var(--text-muted);display:block;">Summary / Pitch</label>
+                <button type="button" class="btn-copy-chip" onclick="copyAutofillField('autofill-summary', this)" title="Copy Summary/Pitch" aria-label="Copy Summary/Pitch">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
+                </button>
+              </div>
+              <textarea id="autofill-summary" class="kit-textarea" rows="3" style="width:100%;background:#0d1117;color:#e6edf3;border:1px solid var(--card-border);border-radius:6px;padding:8px 10px;font-size:12px;line-height:1.5;resize:vertical;" placeholder="Professional summary or screening pitch"></textarea>
+            </div>
           </div>
         </div>
 
@@ -1607,20 +1771,35 @@
       </div>
 
       <div style="font-size:13px;color:#c9d1d9;line-height:1.6;display:flex;flex-direction:column;gap:12px;">
-        <div style="background:rgba(35,134,54,0.15);border:1px solid #2ea043;border-radius:8px;padding:12px;">
-          <strong style="color:#7ee787;display:block;margin-bottom:4px;">Telegram Bot Connected: @ShubhamJobHunt_Bot</strong>
-          <span>Instant alerts deliver with 1-click apply links and match scores to your phone in &lt;1 second.</span>
+        <div style="background:rgba(35,134,54,0.15);border:1px solid #2ea043;border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:10px;">
+          <div>
+            <strong style="color:#7ee787;display:block;margin-bottom:4px;">Telegram Bot Connected: @ShubhamJobHunt_Bot</strong>
+            <span>Instant alerts deliver with 1-click apply links and match scores to your phone in &lt;1 second.</span>
+          </div>
+          <div>
+            <a href="https://t.me/ShubhamJobHunt_Bot" target="_blank" rel="noopener noreferrer" class="btn-apply-link" style="background:#229ed9;text-decoration:none;display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:6px;font-weight:700;font-size:13px;color:#fff;border:none;">
+              <svg class="icon icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;">
+                <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+              <span>Open @ShubhamJobHunt_Bot on Telegram</span>
+              <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+              </svg>
+            </a>
+          </div>
         </div>
 
         <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:8px;padding:14px;">
-          <strong style="color:var(--text-main);display:block;margin-bottom:8px;">GitHub Actions Cloud Secrets (Add to Repo):</strong>
-          <div style="background:#0d1117;border:1px solid var(--card-border);border-radius:6px;padding:10px;font-family:monospace;font-size:12px;color:#7ee787;line-height:1.7;">
-            TELEGRAM_BOT_TOKEN = 9216874158:AAGVxLidzX-OvD-EoYuQxp4qenYTDrTx3aY<br>
-            TELEGRAM_CHAT_ID = 1808500295
-          </div>
-          <div style="margin-top:8px;">
-            <a href="https://github.com/shubhaammm08/Job-Hunt/settings/secrets/actions" target="_blank" class="btn-copy-chip" style="display:inline-block;padding:6px 14px;font-size:12px;text-decoration:none;">
-              Open GitHub Secrets Settings &rarr;
+          <strong style="color:var(--text-main);display:block;margin-bottom:6px;">GitHub Actions Repository Secrets:</strong>
+          <p style="margin:0 0 10px 0;font-size:12.5px;color:var(--text-muted);line-height:1.5;">
+            To enable automated job alerts, configure your <code>TELEGRAM_BOT_TOKEN</code> and <code>TELEGRAM_CHAT_ID</code> credentials in your repository's GitHub Secrets. Values remain encrypted and are never exposed in client builds or public logs.
+          </p>
+          <div>
+            <a href="https://github.com/shubhaammm08/Job-Hunt/settings/secrets/actions" target="_blank" rel="noopener noreferrer" class="btn-copy-chip" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;font-size:12px;text-decoration:none;">
+              <span>Open GitHub Secrets Settings</span>
+              <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+              </svg>
             </a>
           </div>
         </div>
@@ -2295,7 +2474,12 @@
 
     function openBookmarkletGuide() {
       const guideModal = document.getElementById('modal-bookmarklet-guide');
-      if (guideModal) guideModal.classList.add('open');
+      if (guideModal) {
+        const profile = getApplicantProfile();
+        loadAutofillForm(profile);
+        updateBookmarkletCode(profile);
+        guideModal.classList.add('open');
+      }
     }
 
     function closeBookmarkletGuide() {
@@ -2314,8 +2498,8 @@
     }
 
     function copyFieldValue(text, btn) {
-      if (!navigator.clipboard || !navigator.clipboard.writeText) return;
-      navigator.clipboard.writeText(text).then(() => {
+      const applyCopiedState = () => {
+        if (!btn) return;
         const origText = btn.innerHTML;
         btn.innerHTML = `${ICONS.check} Copied!`;
         btn.classList.add('copied');
@@ -2323,7 +2507,40 @@
           btn.innerHTML = origText;
           btn.classList.remove('copied');
         }, 2000);
-      });
+      };
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(applyCopiedState).catch(() => {
+          fallbackCopy(text, applyCopiedState);
+        });
+      } else {
+        fallbackCopy(text, applyCopiedState);
+      }
+    }
+
+    function fallbackCopy(text, onSuccess) {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        if (onSuccess) onSuccess();
+      } catch (err) {
+        console.error('Fallback copy failed:', err);
+      }
+    }
+
+    function copyAutofillField(inputId, btn) {
+      const el = document.getElementById(inputId);
+      if (!el) return;
+      const val = el.value || '';
+      copyFieldValue(val, btn);
+      showToast('Copied to clipboard!');
     }
 
     function showToast(msg) {
@@ -2341,21 +2558,137 @@
       return `Dear Hiring Team at ${job.company || 'the company'},\n\nI am applying for the ${job.title || 'opening'}. As a Computer Engineering graduate from Vidyavardhini College of Engineering specializing in Data Analytics, Python, and SQL, I bring hands-on experience building automated ETL pipelines, analytical dashboards, and AI agent workflows.\n\nIn my previous projects, I built an end-to-end data pipeline and Power BI dashboard for Honda motorcycle sales analytics, automating repetitive processing and reducing manual effort by 80%. I also engineered real-time applications and speech emotion recognition models using Python and Scikit-learn.\n\nI would welcome the opportunity to discuss how my technical skills in Python, SQL, and data automation can add value to ${job.company || 'your team'}.\n\nThank you for your time and consideration.\n\nSincerely,\nShubham Sunil Kadam\nssk080204@gmail.com | Mumbai, India`;
     }
 
-    const BOOKMARKLET_CODE = `javascript:(function(){const p={f:"Shubham",l:"Kadam",n:"Shubham Sunil Kadam",e:"ssk080204@gmail.com",p:"+91 9324546597",loc:"Mumbai, Maharashtra, India",li:"https://www.linkedin.com/in/shubham-kadam-data/",gh:"https://github.com/shubhaammm08",w:"https://shubhaammm08.github.io/Job-Hunt/",c:"Computer Engineering graduate specializing in Python, SQL, Power BI, ETL pipelines, and AI agent automation. Built automated pipelines for Honda sales analytics reducing manual effort by 80%."};function t(el,v){if(!el||el.disabled||el.readOnly)return;el.focus();el.value=v;el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}));el.dispatchEvent(new Event('blur',{bubbles:true}));}let c=0;document.querySelectorAll('input,textarea,select').forEach(i=>{if(i.type==='hidden'||i.type==='file'||i.type==='submit')return;const k=(i.name+' '+i.id+' '+(i.placeholder||'')+' '+(i.getAttribute('aria-label')||'')+' '+(i.autocomplete||'')).toLowerCase();if(k.includes('first')&&k.includes('name')){t(i,p.f);c++;}else if(k.includes('last')&&k.includes('name')){t(i,p.l);c++;}else if((k.includes('full')&&k.includes('name'))||(k.includes('name')&&!k.includes('user')&&!k.includes('company')&&!k.includes('file'))){t(i,p.n);c++;}else if(k.includes('email')||i.type==='email'){t(i,p.e);c++;}else if(k.includes('phone')||k.includes('mobile')||i.type==='tel'){t(i,p.p);c++;}else if(k.includes('linkedin')){t(i,p.li);c++;}else if(k.includes('github')||k.includes('git')){t(i,p.gh);c++;}else if(k.includes('portfolio')||k.includes('website')||k.includes('url')){t(i,p.w);c++;}else if(k.includes('city')||k.includes('location')||k.includes('address')){t(i,p.loc);c++;}else if(i.tagName==='TEXTAREA'&&(k.includes('cover')||k.includes('pitch')||k.includes('note')||k.includes('summary'))){t(i,p.c);c++;}});document.querySelectorAll('input[type="radio"],input[type="checkbox"]').forEach(b=>{const txt=(b.parentElement?b.parentElement.innerText:'').toLowerCase();if(txt.includes('authorized')&&(txt.includes('yes')||b.value.toLowerCase()==='yes')){b.checked=true;b.dispatchEvent(new Event('change',{bubbles:true}));c++;}if(txt.includes('sponsorship')&&(txt.includes('no')||b.value.toLowerCase()==='no')){b.checked=true;b.dispatchEvent(new Event('change',{bubbles:true}));c++;}});const toast=document.createElement('div');toast.innerText='JobHunt: Auto-filled '+c+' fields!';toast.style.cssText='position:fixed;top:20px;right:20px;background:#1f6feb;color:#fff;padding:12px 18px;border-radius:8px;font-family:sans-serif;font-size:13px;font-weight:600;z-index:999999;box-shadow:0 8px 24px rgba(0,0,0,0.5);';document.body.appendChild(toast);setTimeout(()=>toast.remove(),3500);})();`;
+    const DEFAULT_APPLICANT_PROFILE = {
+      firstName: "Shubham",
+      lastName: "Kadam",
+      fullName: "Shubham Sunil Kadam",
+      email: "ssk080204@gmail.com",
+      phone: "+91 9324546597",
+      location: "Mumbai, Maharashtra, India",
+      linkedin: "https://www.linkedin.com/in/shubham-kadam-data/",
+      github: "https://github.com/shubhaammm08",
+      portfolio: "https://shubhaammm08.github.io/Job-Hunt/",
+      noticePeriod: "Immediate / 0-15 days",
+      workAuth: "Yes",
+      summary: "Computer Engineering graduate specializing in Python, SQL, Power BI, ETL pipelines, and AI agent automation. Built automated pipelines for Honda sales analytics reducing manual effort by 80%."
+    };
 
-    function copyBookmarkletCode(btn) {
-      if (!navigator.clipboard || !navigator.clipboard.writeText) return;
-      navigator.clipboard.writeText(BOOKMARKLET_CODE).then(() => {
-        copyFieldValue(BOOKMARKLET_CODE, btn);
-        showToast('Bookmarklet code copied to clipboard! Paste as a browser bookmark URL.');
-      });
+    const AUTOFIL_STORAGE_KEY = 'jobhunt_autofill_profile';
+    let BOOKMARKLET_CODE = '';
+
+    function getApplicantProfile() {
+      try {
+        const saved = localStorage.getItem(AUTOFIL_STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          return Object.assign({}, DEFAULT_APPLICANT_PROFILE, parsed);
+        }
+      } catch (e) {
+        console.error('Error loading applicant profile from localStorage:', e);
+      }
+      return Object.assign({}, DEFAULT_APPLICANT_PROFILE);
     }
 
-    function initBookmarkletLink() {
+    function generateBookmarkletScript(profile) {
+      const p = {
+        f: profile.firstName || '',
+        l: profile.lastName || '',
+        n: profile.fullName || '',
+        e: profile.email || '',
+        p: profile.phone || '',
+        loc: profile.location || '',
+        li: profile.linkedin || '',
+        gh: profile.github || '',
+        w: profile.portfolio || '',
+        np: profile.noticePeriod || '',
+        wa: profile.workAuth || '',
+        c: profile.summary || ''
+      };
+      const pJson = JSON.stringify(p);
+
+      return `javascript:(function(){const p=${pJson};function t(el,v){if(!el||el.disabled||el.readOnly||!v)return;el.focus();el.value=v;el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}));el.dispatchEvent(new Event('blur',{bubbles:true}));}let c=0;document.querySelectorAll('input,textarea,select').forEach(i=>{if(i.type==='hidden'||i.type==='file'||i.type==='submit')return;const k=(i.name+' '+i.id+' '+(i.placeholder||'')+' '+(i.getAttribute('aria-label')||'')+' '+(i.autocomplete||'')).toLowerCase();if(k.includes('first')&&k.includes('name')){t(i,p.f);c++;}else if(k.includes('last')&&k.includes('name')){t(i,p.l);c++;}else if((k.includes('full')&&k.includes('name'))||(k.includes('name')&&!k.includes('user')&&!k.includes('company')&&!k.includes('file'))){t(i,p.n);c++;}else if(k.includes('email')||i.type==='email'){t(i,p.e);c++;}else if(k.includes('phone')||k.includes('mobile')||i.type==='tel'){t(i,p.p);c++;}else if(k.includes('linkedin')){t(i,p.li);c++;}else if(k.includes('github')||k.includes('git')){t(i,p.gh);c++;}else if(k.includes('portfolio')||k.includes('website')||k.includes('url')){t(i,p.w);c++;}else if(k.includes('city')||k.includes('location')||k.includes('address')){t(i,p.loc);c++;}else if(k.includes('notice')||k.includes('availability')||k.includes('start date')){t(i,p.np);c++;}else if((k.includes('authorized')||k.includes('eligibility')||k.includes('work auth'))&&i.tagName!=='SELECT'){t(i,p.wa);c++;}else if(i.tagName==='TEXTAREA'&&(k.includes('cover')||k.includes('pitch')||k.includes('note')||k.includes('summary'))){t(i,p.c);c++;}});document.querySelectorAll('input[type="radio"],input[type="checkbox"]').forEach(b=>{const txt=(b.parentElement?b.parentElement.innerText:'').toLowerCase();if(txt.includes('authorized')&&(txt.includes('yes')||b.value.toLowerCase()==='yes'||(p.wa&&p.wa.toLowerCase().includes('yes')))){b.checked=true;b.dispatchEvent(new Event('change',{bubbles:true}));c++;}if(txt.includes('sponsorship')&&(txt.includes('no')||b.value.toLowerCase()==='no')){b.checked=true;b.dispatchEvent(new Event('change',{bubbles:true}));c++;}});const toast=document.createElement('div');toast.innerText='JobHunt: Auto-filled '+c+' fields!';toast.style.cssText='position:fixed;top:20px;right:20px;background:#1f6feb;color:#fff;padding:12px 18px;border-radius:8px;font-family:sans-serif;font-size:13px;font-weight:600;z-index:999999;box-shadow:0 8px 24px rgba(0,0,0,0.5);';document.body.appendChild(toast);setTimeout(()=>toast.remove(),3500);})();`;
+    }
+
+    function updateBookmarkletCode(profile) {
+      if (!profile) profile = getApplicantProfile();
+      BOOKMARKLET_CODE = generateBookmarkletScript(profile);
       const link = document.getElementById('bookmarklet-drag-link');
       if (link) {
         link.href = BOOKMARKLET_CODE;
       }
+    }
+
+    function copyBookmarkletCode(btn) {
+      if (!BOOKMARKLET_CODE) {
+        updateBookmarkletCode();
+      }
+      copyFieldValue(BOOKMARKLET_CODE, btn);
+      showToast('Bookmarklet code copied to clipboard! Paste as a browser bookmark URL.');
+    }
+
+    function loadAutofillForm(profile) {
+      if (!profile) profile = getApplicantProfile();
+      const map = {
+        'autofill-first-name': profile.firstName,
+        'autofill-last-name': profile.lastName,
+        'autofill-full-name': profile.fullName,
+        'autofill-email': profile.email,
+        'autofill-phone': profile.phone,
+        'autofill-location': profile.location,
+        'autofill-linkedin': profile.linkedin,
+        'autofill-github': profile.github,
+        'autofill-portfolio': profile.portfolio,
+        'autofill-notice-period': profile.noticePeriod,
+        'autofill-work-auth': profile.workAuth,
+        'autofill-summary': profile.summary
+      };
+      for (const [id, val] of Object.entries(map)) {
+        const el = document.getElementById(id);
+        if (el) el.value = val !== undefined ? val : '';
+      }
+    }
+
+    function saveAutofillProfile() {
+      const profile = {
+        firstName: (document.getElementById('autofill-first-name')?.value || '').trim(),
+        lastName: (document.getElementById('autofill-last-name')?.value || '').trim(),
+        fullName: (document.getElementById('autofill-full-name')?.value || '').trim(),
+        email: (document.getElementById('autofill-email')?.value || '').trim(),
+        phone: (document.getElementById('autofill-phone')?.value || '').trim(),
+        location: (document.getElementById('autofill-location')?.value || '').trim(),
+        linkedin: (document.getElementById('autofill-linkedin')?.value || '').trim(),
+        github: (document.getElementById('autofill-github')?.value || '').trim(),
+        portfolio: (document.getElementById('autofill-portfolio')?.value || '').trim(),
+        noticePeriod: (document.getElementById('autofill-notice-period')?.value || '').trim(),
+        workAuth: (document.getElementById('autofill-work-auth')?.value || '').trim(),
+        summary: (document.getElementById('autofill-summary')?.value || '').trim()
+      };
+
+      try {
+        localStorage.setItem(AUTOFIL_STORAGE_KEY, JSON.stringify(profile));
+      } catch (e) {
+        console.error('Failed to save applicant profile to localStorage:', e);
+      }
+
+      updateBookmarkletCode(profile);
+      showToast('Applicant profile saved! Bookmarklet link updated.');
+    }
+
+    function resetAutofillProfile() {
+      try {
+        localStorage.setItem(AUTOFIL_STORAGE_KEY, JSON.stringify(DEFAULT_APPLICANT_PROFILE));
+      } catch (e) {
+        console.error('Failed to reset applicant profile in localStorage:', e);
+      }
+      loadAutofillForm(DEFAULT_APPLICANT_PROFILE);
+      updateBookmarkletCode(DEFAULT_APPLICANT_PROFILE);
+      showToast('Applicant profile reset to defaults.');
+    }
+
+    function initBookmarkletLink() {
+      const profile = getApplicantProfile();
+      loadAutofillForm(profile);
+      updateBookmarkletCode(profile);
     }
 
         let currentSourceFilter = 'active';
