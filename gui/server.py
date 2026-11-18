@@ -67,7 +67,19 @@ def _launch_external_browser(url: str, browser: str = "edge") -> bool:
 
     if target_exe:
         try:
-            subprocess.Popen([target_exe, "--new-window", url])
+            # Auto-Tile Window Splitter: Snap to the right half of the screen
+            cmd = [target_exe, "--new-window"]
+            try:
+                import ctypes
+                user32 = ctypes.windll.user32
+                sw = user32.GetSystemMetrics(0)
+                sh = user32.GetSystemMetrics(1)
+                half_w = sw // 2
+                cmd.extend([f"--window-position={half_w},0", f"--window-size={half_w},{sh}"])
+            except Exception:
+                pass
+            cmd.append(url)
+            subprocess.Popen(cmd)
             return True
         except Exception as e:
             print("Browser launch error:", e)
