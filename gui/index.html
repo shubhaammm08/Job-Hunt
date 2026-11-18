@@ -10,6 +10,7 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%2358a6ff%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><circle cx=%2212%22 cy=%2212%22 r=%2210%22/><circle cx=%2212%22 cy=%2212%22 r=%226%22/><circle cx=%2212%22 cy=%2212%22 r=%222%22/></svg>">
   <style>
     :root {
+      color-scheme: dark;
       --bg: #0d1117;
       --card-bg: #161b22;
       --card-border: #30363d;
@@ -329,6 +330,16 @@
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 8px;
     }
+    select {
+      color-scheme: dark;
+      background-color: #0d1117;
+      color: var(--text-main);
+    }
+    select option {
+      color-scheme: dark;
+      background-color: #161b22;
+      color: #e6edf3;
+    }
     .select-filter {
       width: 100%;
       background: #0d1117;
@@ -340,6 +351,7 @@
       font-size: 13px;
       outline: none;
       cursor: pointer;
+      color-scheme: dark;
     }
     .select-filter:focus { border-color: var(--accent-blue); }
 
@@ -1432,11 +1444,11 @@
           <label for="kit-browser-select" style="font-size:12px;font-weight:600;color:var(--text-muted);display:flex;align-items:center;gap:4px;">
             Target Browser:
           </label>
-          <select id="kit-browser-select" class="filter-select" style="padding:5px 10px;font-size:12px;border-radius:6px;background:var(--bg-card);color:var(--text-main);border:1px solid var(--card-border);" onchange="savePreferredBrowser(this.value)">
-            <option value="edge">Microsoft Edge (Separate App)</option>
-            <option value="brave">Brave Browser (Local)</option>
-            <option value="window">Side-by-Side Companion Window</option>
-            <option value="tab">Same Browser (New Tab)</option>
+          <select id="kit-browser-select" class="select-filter" style="padding:6px 12px;font-size:12.5px;border-radius:6px;background:#0d1117;color:#e6edf3;border:1px solid var(--card-border);color-scheme:dark;min-height:36px;cursor:pointer;" onchange="savePreferredBrowser(this.value)">
+            <option value="edge" style="background-color:#161b22;color:#e6edf3;">Microsoft Edge (Separate App)</option>
+            <option value="brave" style="background-color:#161b22;color:#e6edf3;">Brave Browser (Local)</option>
+            <option value="window" style="background-color:#161b22;color:#e6edf3;">Side-by-Side Companion Window</option>
+            <option value="tab" style="background-color:#161b22;color:#e6edf3;">Same Browser (New Tab)</option>
           </select>
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
