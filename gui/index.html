@@ -1427,11 +1427,24 @@
       </div>
 
       <!-- Footer Buttons -->
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding-top:10px;border-top:1px solid var(--card-border);">
-        <button class="btn-applied" onclick="closeApplyKit()">Dismiss</button>
-        <button class="btn-apply-link" id="kit-launch-btn" style="padding:10px 18px;font-size:13.5px;cursor:pointer;">
-          Launch Application &amp; Copy Pitch <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        </button>
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding-top:12px;border-top:1px solid var(--card-border);">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <label for="kit-browser-select" style="font-size:12px;font-weight:600;color:var(--text-muted);display:flex;align-items:center;gap:4px;">
+            Target Browser:
+          </label>
+          <select id="kit-browser-select" class="filter-select" style="padding:5px 10px;font-size:12px;border-radius:6px;background:var(--bg-card);color:var(--text-main);border:1px solid var(--card-border);" onchange="savePreferredBrowser(this.value)">
+            <option value="edge">Microsoft Edge (Separate App)</option>
+            <option value="brave">Brave Browser (Local)</option>
+            <option value="window">Side-by-Side Companion Window</option>
+            <option value="tab">Same Browser (New Tab)</option>
+          </select>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <button class="btn-applied" onclick="closeApplyKit()">Close Kit</button>
+          <button class="btn-apply-link" id="kit-launch-btn" style="padding:10px 18px;font-size:13.5px;cursor:pointer;">
+            Launch Job &amp; Keep Kit Open <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -1883,7 +1896,7 @@
                    target="_blank" 
                    rel="noopener noreferrer" 
                    class="btn-apply-link" 
-                   onclick="event.stopPropagation(); handleApplyClick('${j.job_id}', '${escapeHtml(targetUrl)}', event);">
+                   onclick="event.preventDefault(); event.stopPropagation(); handleApplyCardLink('${j.job_id}', '${escapeHtml(targetUrl)}', event);">
                   Apply ${ICONS.external}
                 </a>
               </div>
@@ -1898,8 +1911,52 @@
         return;
       }
       if (url && url !== '#') {
+        launchJobInBrowser(url);
+      }
+    }
+
+    function getPreferredBrowser() {
+      return localStorage.getItem('jobhunt_apply_browser') || 'edge';
+    }
+
+    function savePreferredBrowser(val) {
+      if (!val) return;
+      localStorage.setItem('jobhunt_apply_browser', val);
+      const sel = document.getElementById('kit-browser-select');
+      if (sel) sel.value = val;
+    }
+
+    function launchJobInBrowser(url, browserPref) {
+      if (!url || url === '#') return;
+      const pref = browserPref || getPreferredBrowser();
+
+      // 1. If running locally with Python server, notify backend to launch executable directly
+      try {
+        fetch('/api/launch-browser', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: url, browser: pref })
+        }).catch(() => {});
+      } catch (e) {}
+
+      // 2. Client-side browser handling
+      if (pref === 'edge') {
+        // Windows OS protocol opens Microsoft Edge immediately
+        window.open('microsoft-edge:' + url, '_blank');
+      } else if (pref === 'window' || pref === 'brave') {
+        // Dedicated companion popup window sized to right half of screen
+        const w = Math.min(1080, Math.floor((screen.availWidth || 1920) * 0.55));
+        const h = screen.availHeight || 900;
+        const left = Math.max(0, (screen.availWidth || 1920) - w);
+        window.open(url, 'JobApplyWindow', `width=${w},height=${h},left=${left},top=0,resizable=yes,scrollbars=yes`);
+      } else {
         window.open(url, '_blank', 'noopener,noreferrer');
       }
+    }
+
+    function handleApplyCardLink(jobId, url, event) {
+      handleApplyClick(jobId, url, event);
+      launchJobInBrowser(url);
     }
 
     async function toggleApplied(jobId, event) {
@@ -1972,13 +2029,24 @@
       document.getElementById('kit-cover-note').value = coverText;
       document.getElementById('kit-pitch-hook').value = hookText;
 
+      const browserSelect = document.getElementById('kit-browser-select');
+      if (browserSelect) {
+        browserSelect.value = getPreferredBrowser();
+      }
+
       const launchBtn = document.getElementById('kit-launch-btn');
       launchBtn.onclick = () => {
+        const pref = document.getElementById('kit-browser-select') ? document.getElementById('kit-browser-select').value : getPreferredBrowser();
+        savePreferredBrowser(pref);
         handleApplyClick(job.job_id, job.url || '#');
         if (job.url && job.url !== '#') {
-          window.open(job.url, '_blank', 'noopener,noreferrer');
+          launchJobInBrowser(job.url, pref);
         }
-        closeApplyKit();
+
+        // Keep the kit open for copy-pasting into the separate browser window!
+        const bName = pref === 'edge' ? 'Microsoft Edge' : pref === 'brave' ? 'Brave' : pref === 'window' ? 'Companion Window' : 'New Tab';
+        document.getElementById('kit-modal-meta').innerHTML = `<span style="color:#3fb950;font-weight:700;">Active in ${bName}</span> · Kit remains open! Tap chips below to copy-paste.`;
+        showToast(`Job opened in ${bName}! Cover note copied to clipboard.`);
       };
 
       document.getElementById('modal-apply-kit').classList.add('open');

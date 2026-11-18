@@ -32,6 +32,58 @@ def load_json_safe(path: Path) -> dict | list:
             return {}
 
 
+def _launch_external_browser(url: str, browser: str = "edge") -> bool:
+    """Launch a URL in a separate browser software (Edge, Brave, Chrome)."""
+    browser = (browser or "edge").lower()
+    edge_paths = [
+        r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+        r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
+    ]
+    brave_paths = [
+        r"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe",
+        os.path.expanduser("~") + r"\AppData\Local\BraveSoftware\Brave-Browser\Application\brave.exe",
+    ]
+    chrome_paths = [
+        r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+        r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
+    ]
+
+    target_exe = None
+    if browser in ("edge", "msedge"):
+        for p in edge_paths:
+            if os.path.exists(p):
+                target_exe = p
+                break
+    elif browser == "brave":
+        for p in brave_paths:
+            if os.path.exists(p):
+                target_exe = p
+                break
+    elif browser == "chrome":
+        for p in chrome_paths:
+            if os.path.exists(p):
+                target_exe = p
+                break
+
+    if target_exe:
+        try:
+            subprocess.Popen([target_exe, "--new-window", url])
+            return True
+        except Exception as e:
+            print("Browser launch error:", e)
+
+    # Windows native protocol fallback for Edge
+    if browser in ("edge", "msedge"):
+        try:
+            webbrowser.open(f"microsoft-edge:{url}")
+            return True
+        except Exception:
+            pass
+
+    webbrowser.open(url)
+    return True
+
+
 class JobHuntHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(GUI_DIR), **kwargs)
@@ -154,6 +206,17 @@ class JobHuntHandler(SimpleHTTPRequestHandler):
                 self.send_header("Content-Type", "application/json")
                 self.end_headers()
                 self.wfile.write(json.dumps({"success": True, "started": action}).encode("utf-8"))
+                return
+
+        if path == "/api/launch-browser":
+            target_url = req_data.get("url")
+            target_browser = req_data.get("browser", "edge")
+            if target_url:
+                _launch_external_browser(target_url, target_browser)
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json")
+                self.end_headers()
+                self.wfile.write(json.dumps({"success": True, "browser": target_browser}).encode("utf-8"))
                 return
 
         self.send_response(400)

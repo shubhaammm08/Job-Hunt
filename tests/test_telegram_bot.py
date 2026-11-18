@@ -215,6 +215,22 @@ def test_callback_query_pitch_note(mock_store, sample_profile):
         assert "DataCo" in text
 
 
+def test_callback_query_autofill_kit(mock_store, sample_profile):
+    cb = {
+        "id": "cb_003",
+        "data": "kit:greenhouse:stripe:101",
+        "message": {"chat": {"id": 12345}},
+    }
+    with patch("jobhunt.telegram_bot.answer_callback") as mock_ans, patch("jobhunt.telegram_bot.send_telegram") as mock_send:
+        handle_callback_query("token", cb, mock_store, sample_profile)
+        mock_ans.assert_called_once()
+        mock_send.assert_called_once()
+        text = mock_send.call_args[0][0]
+        assert "Quick AutoFill Kit" in text
+        assert "Stripe" in text
+        assert "ssk080204@gmail.com" in text
+
+
 def test_generate_pitch_note(sample_profile):
     job_data = {"company": "Figma", "title": "Data Analyst"}
     pitch = generate_pitch_note(job_data, sample_profile)

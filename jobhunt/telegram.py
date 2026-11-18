@@ -23,14 +23,18 @@ def make_job_buttons(job_id: str, apply_url: str) -> dict[str, Any]:
     """Create interactive Telegram inline keyboard buttons for a job."""
     cb_applied = f"app:{job_id}"[:64]
     cb_pitch = f"pitch:{job_id}"[:64]
+    cb_kit = f"kit:{job_id}"[:64]
 
     keyboard = [
         [
             {"text": "🚀 1-Click Apply", "url": apply_url or DEFAULT_DASHBOARD_URL},
-            {"text": "📋 Pitch Note", "callback_data": cb_pitch},
+            {"text": "⚡ AutoFill Kit", "callback_data": cb_kit},
         ],
         [
+            {"text": "📋 Pitch Note", "callback_data": cb_pitch},
             {"text": "✅ Mark Applied", "callback_data": cb_applied},
+        ],
+        [
             {"text": "🌐 Dashboard", "url": DEFAULT_DASHBOARD_URL},
         ],
     ]

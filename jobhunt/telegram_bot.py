@@ -77,6 +77,7 @@ def set_bot_commands(token: str) -> bool:
         {"command": "top", "description": "🔥 View top recommended job matches"},
         {"command": "remote", "description": "🌐 Browse high-match remote roles"},
         {"command": "stats", "description": "📊 View application funnel & metrics"},
+        {"command": "kit", "description": "⚡ Tap-to-Copy AutoFill Kit (/kit <company>)"},
         {"command": "applied", "description": "✅ Mark a job as applied (/applied <name>)"},
         {"command": "reminders", "description": "⏰ Recruiter follow-up alerts & notes"},
         {"command": "hunt", "description": "⚡ Pipeline status & manual scan trigger"},
@@ -377,6 +378,62 @@ def generate_pitch_note(job_data: dict[str, Any], profile: dict[str, Any]) -> st
     return pitch
 
 
+def format_autofill_kit(job_data: dict[str, Any], profile: dict[str, Any]) -> str:
+    """Format a 1-click tap-to-copy application kit for mobile / desktop Telegram."""
+    name = profile.get("name", "Shubham Sunil Kadam")
+    email = "ssk080204@gmail.com"
+    phone = "+91 9324546597"
+    linkedin = "https://www.linkedin.com/in/shubham-kadam"
+    github = "https://github.com/shubhaammm08"
+    portfolio = DEFAULT_DASHBOARD_URL
+    company = job_data.get("company", "Company")
+    title = job_data.get("title", "Developer")
+
+    cover_note = (
+        f"Hi {company} Hiring Team,\n\n"
+        f"I am writing to express my strong interest in the {title} position. With 1 year of practical "
+        f"experience in Python, SQL, Power BI, and data pipeline automation, I have built production "
+        f"workflows that reduced reporting latency by 80% and engineered end-to-end data pipelines.\n\n"
+        f"I am excited to bring my problem-solving skills to {company}.\n\n"
+        f"Portfolio: {portfolio}\n"
+        f"Best regards,\n{name}"
+    )
+    pitch = generate_pitch_note(job_data, profile)
+
+    return (
+        f"⚡ *Quick AutoFill Kit: {company} — {title}*\n"
+        f"_Tap any field below to instantly copy it into your application:_\n\n"
+        f"👤 *Full Name:*\n`{name}`\n\n"
+        f"📧 *Email:*\n`{email}`\n\n"
+        f"📞 *Phone:*\n`{phone}`\n\n"
+        f"🔗 *LinkedIn:*\n`{linkedin}`\n\n"
+        f"💻 *GitHub:*\n`{github}`\n\n"
+        f"🌐 *Portfolio / Website:*\n`{portfolio}`\n\n"
+        f"⏳ *Notice Period:*\n`Immediate (0-15 days)`\n\n"
+        f"📍 *Location:*\n`Mumbai, India (Open to Remote / Relocation)`\n\n"
+        f"📝 *Tailored Cover Note (Tap to copy):*\n"
+        f"```\n{cover_note}\n```\n\n"
+        f"🎯 *2-Sentence Recruiter Hook (Tap to copy):*\n"
+        f"```\n{pitch}\n```"
+    )
+
+
+def handle_kit(chat_id: str | int, token: str, store: Store, profile: dict[str, Any], query: str = "") -> None:
+    """Deliver a complete tap-to-copy AutoFill kit for a company or role."""
+    q = query.strip()
+    match = None
+    if q:
+        match = store.find_job(q)
+    if not match and store.data:
+        top_jobs = store.list_jobs(min_score=0.0, limit=1)
+        if top_jobs:
+            match = top_jobs[0]
+
+    job_data = match[1] if match else {"company": "Target Company", "title": "Software Engineer"}
+    kit_text = format_autofill_kit(job_data, profile)
+    send_telegram(kit_text, bot_token=token, chat_id=str(chat_id))
+
+
 def handle_callback_query(token: str, cb: dict[str, Any], store: Store, profile: dict[str, Any]) -> None:
     """Handle interactive inline keyboard button clicks."""
     cb_id = cb.get("id", "")
@@ -445,6 +502,20 @@ def handle_callback_query(token: str, cb: dict[str, Any], store: Store, profile:
                 bot_token=token,
                 chat_id=str(chat_id),
             )
+        return
+
+    if data.startswith("kit:"):
+        jid_prefix = data[4:]
+        match = store.find_job(jid_prefix)
+        if match:
+            jid, d = match
+            kit_text = format_autofill_kit(d, profile)
+            answer_callback(token, cb_id, text="⚡ AutoFill Kit generated below!", show_alert=False)
+            send_telegram(kit_text, bot_token=token, chat_id=str(chat_id))
+        else:
+            answer_callback(token, cb_id, text="⚡ AutoFill Kit generated below!", show_alert=False)
+            sample_kit = format_autofill_kit({"company": "Target Company", "title": "Developer"}, profile)
+            send_telegram(sample_kit, bot_token=token, chat_id=str(chat_id))
         return
 
     answer_callback(token, cb_id)
@@ -554,6 +625,10 @@ def process_update(
         handle_remote(chat_id, token, store)
     elif lower_text.startswith("/stats"):
         handle_stats(chat_id, token, store)
+    elif lower_text.startswith("/kit"):
+        parts = text.split(maxsplit=1)
+        query = parts[1] if len(parts) > 1 else ""
+        handle_kit(chat_id, token, store, profile, query)
     elif lower_text.startswith("/applied"):
         parts = text.split(maxsplit=1)
         query = parts[1] if len(parts) > 1 else ""
