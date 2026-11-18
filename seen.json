@@ -931,5 +931,204 @@
     "emailed": true,
     "applied": false,
     "applied_on": null
+  },
+  "greenhouse:rubrik:8349847": {
+    "first_seen": "2026-11-18T04:43:18+00:00",
+    "company": "Rubrik",
+    "title": "Software Engineer",
+    "location": "bangalore",
+    "url": "https://www.rubrik.com/company/careers/departments/job.8349847?gh_jid=8349847",
+    "score": 4.0,
+    "reason": "The role requires deep expertise in identity protocols and cryptography, which falls outside the candidate's core backend profile.",
+    "canonical_source": "greenhouse",
+    "sources": [
+      "greenhouse"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Engineer"
+    ],
+    "fit_score": 4.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:rubrik:8282005": {
+    "first_seen": "2026-11-18T04:43:18+00:00",
+    "company": "Rubrik",
+    "title": "Software Engineer Product Infra: Core Services",
+    "location": "Bengaluru",
+    "url": "https://www.rubrik.com/company/careers/departments/job.8282005?gh_jid=8282005",
+    "score": 7.0,
+    "reason": "Good match for a mid-level backend engineer with strong distributed systems, Kubernetes, and infrastructure experience.",
+    "canonical_source": "greenhouse",
+    "sources": [
+      "greenhouse"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Engineer"
+    ],
+    "fit_score": 7.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "ashby:elevenlabs:ce3d5a59-fb8c-482b-bc3f-60e44576c5e0": {
+    "first_seen": "2026-11-18T04:43:18+00:00",
+    "company": "ElevenLabs",
+    "title": "Full-Stack Engineer (Backend Leaning) - Platform Engineering",
+    "location": "Remote",
+    "url": "https://jobs.ashbyhq.com/ElevenLabs/ce3d5a59-fb8c-482b-bc3f-60e44576c5e0",
+    "score": 6.0,
+    "reason": "Plausible backend role, though candidate lacks explicit full-stack framework experience mentioned in the job description.",
+    "canonical_source": "ashby",
+    "sources": [
+      "ashby"
+    ],
+    "role_families": [],
+    "matched_roles": [],
+    "fit_score": 6.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "ashby:elevenlabs:e4e0450f-d139-4f8e-b210-2f326a680d90": {
+    "first_seen": "2026-11-18T04:43:18+00:00",
+    "company": "ElevenLabs",
+    "title": "Full-Stack Engineer (Backend Leaning) - Payments Engineering",
+    "location": "Remote",
+    "url": "https://jobs.ashbyhq.com/ElevenLabs/e4e0450f-d139-4f8e-b210-2f326a680d90",
+    "score": 6.0,
+    "reason": "Plausible backend-leaning role, though lacks specific domain experience in payments engineering.",
+    "canonical_source": "ashby",
+    "sources": [
+      "ashby"
+    ],
+    "role_families": [],
+    "matched_roles": [],
+    "fit_score": 6.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "nodesk:rss:-engineer-production-engineering": {
+    "first_seen": "2026-11-18T04:43:18+00:00",
+    "company": "Ramp",
+    "title": "Software Engineer, Production Engineering",
+    "location": "Remote",
+    "url": "https://nodesk.co/remote-jobs/ramp-software-engineer-production-engineering/",
+    "score": 5.0,
+    "reason": "General production engineering role with some overlap in infrastructure, but lacking specific requirements detail.",
+    "canonical_source": "nodesk",
+    "sources": [
+      "nodesk"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Engineer"
+    ],
+    "fit_score": 5.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "wwr:rss:ptal-ai-engineer-agentic-systems": {
+    "first_seen": "2026-11-18T04:43:18+00:00",
+    "company": "Toptal",
+    "title": "AI Engineer - Agentic Systems",
+    "location": "Remote",
+    "url": "https://weworkremotely.com/remote-jobs/toptal-ai-engineer-agentic-systems",
+    "score": 3.0,
+    "reason": "Requires specialised production experience in AI agentic systems and multi-agent orchestration which the candidate does not have.",
+    "canonical_source": "weworkremotely",
+    "sources": [
+      "weworkremotely"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "AI Engineer"
+    ],
+    "fit_score": 3.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "wwr:rss:-ii-full-stack-revenue-analytics": {
+    "first_seen": "2026-11-18T04:43:18+00:00",
+    "company": "Affirm",
+    "title": "Analytics Engineer II, Full Stack (Revenue Analytics)",
+    "location": "Remote",
+    "url": "https://weworkremotely.com/remote-jobs/affirm-analytics-engineer-ii-full-stack-revenue-analytics",
+    "score": 2.0,
+    "reason": "Wrong functional track as this requires analytics engineering, dbt, and data modeling rather than backend infrastructure.",
+    "canonical_source": "weworkremotely",
+    "sources": [
+      "weworkremotely"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Analytics Engineer"
+    ],
+    "fit_score": 2.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "workingnomads:api:2026-11-09T073609-0500": {
+    "first_seen": "2026-11-18T04:43:18+00:00",
+    "company": "Peroptyx",
+    "title": "Data Analyst (No Experience Required) - Japanese and English",
+    "location": "Remote",
+    "url": "https://www.workingnomads.com/job/go/2007849/",
+    "score": 0.0,
+    "reason": "Entry-level mapping evaluator role, completely mismatched for a software engineer with distributed systems experience.",
+    "canonical_source": "workingnomads",
+    "sources": [
+      "workingnomads"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 0.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "workingnomads:api:2026-11-09T073552-0500": {
+    "first_seen": "2026-11-18T04:43:18+00:00",
+    "company": "Peroptyx",
+    "title": "Data Analyst (No Experience Required)",
+    "location": "Remote",
+    "url": "https://www.workingnomads.com/job/go/2007847/",
+    "score": 1.0,
+    "reason": "Wrong role family; this is a non-technical data analyst position, not software engineering.",
+    "canonical_source": "workingnomads",
+    "sources": [
+      "workingnomads"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 1.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
   }
 }
