@@ -167,9 +167,23 @@ ENDPOINTS = {
 def fetch_board(ats: str, slug: str, company: str | None = None,
                 session: requests.Session | None = None) -> list[Job]:
     """Hit one company's public board. Returns [] on any failure (never raises)."""
-    if ats not in ENDPOINTS:
-        raise ValueError(f"unknown ATS: {ats}")
-    url_tpl, parser = ENDPOINTS[ats]
+    ats_norm = (ats or "").lower().strip()
+    if ats_norm not in ENDPOINTS:
+        # Check if handled by source registry (SmartRecruiters, Workable, Personio, Breezy, etc.)
+        try:
+            from .sources import REGISTRY
+            cfg_lookup = {"companies": [{"name": company or slug, "slug": slug, "ats": ats_norm}]}
+            for name, adapter in REGISTRY.adapters.items():
+                clean_name = name.lower().replace(" ", "").replace("_", "")
+                clean_ats = ats_norm.replace(" ", "").replace("_", "")
+                if clean_name == clean_ats or clean_ats in clean_name:
+                    return adapter.fetch(cfg_lookup)
+        except Exception as e:
+            print(f"  ! {ats}/{slug} adapter lookup failed: {e}")
+        print(f"  ! unsupported ATS in companies.yaml: {ats} (slug: {slug})")
+        return []
+
+    url_tpl, parser = ENDPOINTS[ats_norm]
     sess = session or requests
     try:
         r = sess.get(url_tpl.format(slug=slug), headers=UA, timeout=TIMEOUT)
@@ -189,16 +203,23 @@ def fetch_all(companies: Iterable[dict], max_workers: int = 8,
     jobs: list[Job] = []
 
     def _fetch_one(c: dict) -> tuple[dict, list[Job]]:
-        got = fetch_board(c["ats"], c["slug"], c.get("name"))
-        return c, got
+        try:
+            got = fetch_board(c.get("ats", ""), c.get("slug", ""), c.get("name"))
+            return c, got
+        except Exception as e:
+            print(f"  ! error fetching {c.get('name') or c.get('slug')}: {e}")
+            return c, []
 
     workers = min(max_workers, max(1, len(companies_list)))
     with ThreadPoolExecutor(max_workers=workers) as pool:
         futures = [pool.submit(_fetch_one, c) for c in companies_list]
         for f in as_completed(futures):
-            c, got = f.result()
-            if got:
-                print(f"  {c.get('name') or c['slug']:<28} {len(got):>4} jobs  ({c['ats']})")
-            jobs.extend(got)
+            try:
+                c, got = f.result()
+                if got:
+                    print(f"  {c.get('name') or c['slug']:<28} {len(got):>4} jobs  ({c['ats']})")
+                jobs.extend(got)
+            except Exception as e:
+                print(f"  ! worker thread failed: {e}")
 
     return jobs
