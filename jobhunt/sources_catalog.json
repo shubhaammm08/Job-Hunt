@@ -426,18 +426,6 @@
     "last_scan": "2026-11-17T05:39:45.596554+00:00"
   },
   {
-    "source": "We Work Remotely",
-    "category": "remote",
-    "tier": 3,
-    "status": "HEALTHY",
-    "jobs_found": 0,
-    "jobs_after_filtering": 0,
-    "new_jobs": 0,
-    "duplicates_removed": 0,
-    "errors": [],
-    "last_scan": "2026-11-17T05:39:45.596558+00:00"
-  },
-  {
     "source": "Himalayas",
     "category": "remote",
     "tier": 3,
@@ -484,20 +472,6 @@
     "duplicates_removed": 0,
     "errors": [],
     "last_scan": "2026-11-17T05:39:45.596575+00:00"
-  },
-  {
-    "source": "FlexJobs",
-    "category": "remote",
-    "tier": 3,
-    "status": "CONFIG_REQUIRED",
-    "jobs_found": 0,
-    "jobs_after_filtering": 0,
-    "new_jobs": 0,
-    "duplicates_removed": 0,
-    "errors": [
-      "Requires partner API key: configure FLEXJOBS_API_KEY in GitHub Secrets."
-    ],
-    "last_scan": "2026-11-17T05:39:45.596579+00:00"
   },
   {
     "source": "Remote.co",

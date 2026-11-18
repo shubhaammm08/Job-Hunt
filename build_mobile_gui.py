@@ -473,6 +473,84 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       border: 1px solid rgba(210, 153, 34, 0.35);
       color: #e3b341;
       font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .tag-src-greenhouse {
+      background: rgba(46, 160, 67, 0.16);
+      border: 1px solid rgba(46, 160, 67, 0.45);
+      color: #3fb950;
+    }
+    .tag-src-ashby {
+      background: rgba(188, 140, 255, 0.16);
+      border: 1px solid rgba(188, 140, 255, 0.45);
+      color: #d2a8ff;
+    }
+    .tag-src-lever {
+      background: rgba(56, 189, 248, 0.16);
+      border: 1px solid rgba(56, 189, 248, 0.45);
+      color: #38bdf8;
+    }
+    .tag-src-linkedin {
+      background: rgba(10, 102, 194, 0.22);
+      border: 1px solid rgba(10, 102, 194, 0.5);
+      color: #70b5f9;
+    }
+    .tag-src-naukri {
+      background: rgba(69, 123, 247, 0.2);
+      border: 1px solid rgba(69, 123, 247, 0.45);
+      color: #60a5fa;
+    }
+    .tag-src-remoteok {
+      background: rgba(248, 81, 73, 0.18);
+      border: 1px solid rgba(248, 81, 73, 0.45);
+      color: #ff7b72;
+    }
+    .tag-src-remotive {
+      background: rgba(236, 72, 153, 0.18);
+      border: 1px solid rgba(236, 72, 153, 0.45);
+      color: #f472b6;
+    }
+    .tag-src-nodesk {
+      background: rgba(139, 92, 246, 0.18);
+      border: 1px solid rgba(139, 92, 246, 0.45);
+      color: #a78bfa;
+    }
+    .tag-src-workingnomads {
+      background: rgba(20, 184, 166, 0.18);
+      border: 1px solid rgba(20, 184, 166, 0.45);
+      color: #2dd4bf;
+    }
+    .tag-src-hackernews {
+      background: rgba(255, 102, 0, 0.18);
+      border: 1px solid rgba(255, 102, 0, 0.45);
+      color: #ff944d;
+    }
+    .tag-src-smartrecruiters {
+      background: rgba(99, 102, 241, 0.18);
+      border: 1px solid rgba(99, 102, 241, 0.45);
+      color: #818cf8;
+    }
+    .tag-src-workable {
+      background: rgba(245, 158, 11, 0.18);
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      color: #fbbf24;
+    }
+    .tag-src-indeed {
+      background: rgba(37, 99, 235, 0.18);
+      border: 1px solid rgba(37, 99, 235, 0.45);
+      color: #93c5fd;
+    }
+    .tag-src-direct_ats {
+      background: rgba(59, 130, 246, 0.18);
+      border: 1px solid rgba(59, 130, 246, 0.45);
+      color: #60a5fa;
+    }
+    .tag-src-other {
+      background: rgba(139, 148, 158, 0.15);
+      border: 1px solid rgba(139, 148, 158, 0.35);
+      color: #8b949e;
     }
 
     /* Workplace Tag Styles */
@@ -917,6 +995,15 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
             <option value="lever">Lever</option>
             <option value="remotive">Remotive</option>
             <option value="hackernews">Hacker News</option>
+            <option value="remoteok">Remote OK</option>
+            <option value="nodesk">NoDesk</option>
+            <option value="workingnomads">Working Nomads</option>
+            <option value="linkedin">LinkedIn</option>
+            <option value="naukri">Naukri</option>
+            <option value="indeed">Indeed</option>
+            <option value="smartrecruiters">SmartRecruiters</option>
+            <option value="workable">Workable</option>
+            <option value="direct_ats">Direct ATS / Company</option>
             <option value="other">Other / Unspecified</option>
           </select>
         </div>
@@ -1071,7 +1158,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     }
 
     /**
-     * Infers platform/ATS source (greenhouse, ashby, lever, remotive, hackernews, other).
+     * Infers platform/ATS source (greenhouse, ashby, lever, remotive, hackernews, remoteok, workingnomads, nodesk, linkedin, naukri, indeed, smartrecruiters, workable, direct_ats, other).
      */
     function inferPlatformSource(job) {
       if (job.platform) {
@@ -1079,8 +1166,26 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
         if (p.includes('greenhouse')) return 'greenhouse';
         if (p.includes('ashby')) return 'ashby';
         if (p.includes('lever')) return 'lever';
+        if (p.includes('smartrecruiters')) return 'smartrecruiters';
+        if (p.includes('workable')) return 'workable';
+        if (p.includes('recruitee')) return 'recruitee';
+        if (p.includes('personio')) return 'personio';
+        if (p.includes('breezy')) return 'breezy';
+        if (p.includes('bamboohr')) return 'bamboohr';
+        if (p.includes('workday')) return 'workday';
         if (p.includes('remotive')) return 'remotive';
+        if (p.includes('remoteok')) return 'remoteok';
+        if (p.includes('nodesk')) return 'nodesk';
+        if (p.includes('workingnomads') || p.includes('working nomads')) return 'workingnomads';
+        if (p.includes('himalayas')) return 'himalayas';
+        if (p.includes('jobicy')) return 'jobicy';
         if (p.includes('hacker') || p.includes('hn') || p.includes('ycombinator')) return 'hackernews';
+        if (p.includes('linkedin')) return 'linkedin';
+        if (p.includes('naukri')) return 'naukri';
+        if (p.includes('indeed')) return 'indeed';
+        if (p.includes('glassdoor')) return 'glassdoor';
+        if (p.includes('wellfound') || p.includes('angel')) return 'wellfound';
+        if (p.includes('direct') || p.includes('company')) return 'direct_ats';
         return 'other';
       }
 
@@ -1116,8 +1221,80 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
         return 'remotive';
       }
 
+      if (domain.includes('remoteok.com') || domain.includes('remoteok.io') || jid.startsWith('remoteok:') || canSrc === 'remoteok' || sources.includes('remoteok') || text.includes('remoteok')) {
+        return 'remoteok';
+      }
+
+      if (domain.includes('workingnomads.com') || jid.startsWith('workingnomads:') || canSrc === 'workingnomads' || sources.includes('workingnomads') || text.includes('workingnomads') || text.includes('working nomads')) {
+        return 'workingnomads';
+      }
+
+      if (domain.includes('nodesk.co') || jid.startsWith('nodesk:') || canSrc === 'nodesk' || sources.includes('nodesk') || text.includes('nodesk')) {
+        return 'nodesk';
+      }
+
       if (domain.includes('news.ycombinator.com') || domain.includes('ycombinator.com') || jid.startsWith('hn:') || jid.startsWith('hackernews:') || text.includes('hacker news') || text.includes('ycombinator')) {
         return 'hackernews';
+      }
+
+      if (domain.includes('smartrecruiters.com') || jid.startsWith('smartrecruiters:') || canSrc === 'smartrecruiters' || sources.includes('smartrecruiters') || text.includes('smartrecruiters')) {
+        return 'smartrecruiters';
+      }
+
+      if (domain.includes('workable.com') || jid.startsWith('workable:') || canSrc === 'workable' || sources.includes('workable') || text.includes('workable')) {
+        return 'workable';
+      }
+
+      if (domain.includes('recruitee.com') || jid.startsWith('recruitee:') || canSrc === 'recruitee' || sources.includes('recruitee')) {
+        return 'recruitee';
+      }
+
+      if (domain.includes('personio.de') || domain.includes('personio.com') || jid.startsWith('personio:') || canSrc === 'personio' || sources.includes('personio')) {
+        return 'personio';
+      }
+
+      if (domain.includes('breezy.hr') || jid.startsWith('breezy:') || canSrc === 'breezy' || sources.includes('breezy')) {
+        return 'breezy';
+      }
+
+      if (domain.includes('bamboohr.com') || jid.startsWith('bamboohr:') || canSrc === 'bamboohr' || sources.includes('bamboohr')) {
+        return 'bamboohr';
+      }
+
+      if (domain.includes('myworkdayjobs.com') || jid.startsWith('workday:') || canSrc === 'workday' || sources.includes('workday')) {
+        return 'workday';
+      }
+
+      if (domain.includes('linkedin.com') || jid.startsWith('linkedin:') || jid.startsWith('linkedin_india:') || jid.startsWith('linkedin_global:') || canSrc.startsWith('linkedin') || sources.includes('linkedin')) {
+        return 'linkedin';
+      }
+
+      if (domain.includes('naukri.com') || jid.startsWith('naukri:') || jid.startsWith('naukri_campus:') || canSrc.startsWith('naukri') || sources.includes('naukri')) {
+        return 'naukri';
+      }
+
+      if (domain.includes('indeed.com') || jid.startsWith('indeed:') || jid.startsWith('indeed_india:') || canSrc.startsWith('indeed') || sources.includes('indeed')) {
+        return 'indeed';
+      }
+
+      if (domain.includes('himalayas.app') || jid.startsWith('himalayas:') || canSrc === 'himalayas' || sources.includes('himalayas')) {
+        return 'himalayas';
+      }
+
+      if (domain.includes('jobicy.com') || jid.startsWith('jobicy:') || canSrc === 'jobicy' || sources.includes('jobicy')) {
+        return 'jobicy';
+      }
+
+      if (domain.includes('wellfound.com') || domain.includes('angel.co') || jid.startsWith('wellfound:') || canSrc === 'wellfound' || sources.includes('wellfound')) {
+        return 'wellfound';
+      }
+
+      if (domain.includes('glassdoor.com') || jid.startsWith('glassdoor:') || canSrc === 'glassdoor' || sources.includes('glassdoor')) {
+        return 'glassdoor';
+      }
+
+      if (job.ats || domain.includes('careers.') || domain.includes('jobs.') || url.includes('/careers') || url.includes('/jobs')) {
+        return 'direct_ats';
       }
 
       return 'other';
@@ -1130,6 +1307,24 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
         case 'lever': return 'Lever';
         case 'remotive': return 'Remotive';
         case 'hackernews': return 'Hacker News';
+        case 'remoteok': return 'Remote OK';
+        case 'nodesk': return 'NoDesk';
+        case 'workingnomads': return 'Working Nomads';
+        case 'linkedin': return 'LinkedIn';
+        case 'naukri': return 'Naukri';
+        case 'indeed': return 'Indeed';
+        case 'smartrecruiters': return 'SmartRecruiters';
+        case 'workable': return 'Workable';
+        case 'recruitee': return 'Recruitee';
+        case 'personio': return 'Personio';
+        case 'breezy': return 'Breezy HR';
+        case 'bamboohr': return 'BambooHR';
+        case 'workday': return 'Workday';
+        case 'himalayas': return 'Himalayas';
+        case 'jobicy': return 'Jobicy';
+        case 'wellfound': return 'Wellfound';
+        case 'glassdoor': return 'Glassdoor';
+        case 'direct_ats': return 'Direct ATS / Company';
         default: return 'Other / Unspecified';
       }
     }
@@ -1220,7 +1415,36 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       }
     }
 
+    function syncPlatformFilterOptions() {
+      const select = document.getElementById('filter-platform');
+      if (!select || !appData.jobs) return;
+      const currentVal = select.value;
+      const activePlatforms = new Set();
+      appData.jobs.forEach(j => {
+        const plat = inferPlatformSource(j);
+        if (plat && plat !== 'all') {
+          activePlatforms.add(plat);
+        }
+      });
+      activePlatforms.forEach(plat => {
+        let opt = select.querySelector(`option[value="${plat}"]`);
+        if (!opt) {
+          opt = document.createElement('option');
+          opt.value = plat;
+          opt.textContent = getPlatformLabel(plat);
+          const otherOpt = select.querySelector('option[value="other"]');
+          if (otherOpt) {
+            select.insertBefore(opt, otherOpt);
+          } else {
+            select.appendChild(opt);
+          }
+        }
+      });
+      select.value = currentVal;
+    }
+
     function renderAll() {
+      syncPlatformFilterOptions();
       renderStats();
       renderJobs();
       renderSources();
@@ -1330,7 +1554,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
             </div>
 
             <div class="job-tags">
-              <span class="tag tag-source">${ICONS.source} ${escapeHtml(platformLabel)}</span>
+              <span class="tag tag-source tag-src-${inferredPlat}">${ICONS.source} ${escapeHtml(platformLabel)}</span>
               <span class="tag tag-workplace tag-wp-${inferredWp}">${escapeHtml(workplaceLabel)}</span>
               ${familiesHtml}
               ${skillsHtml}
@@ -1521,6 +1745,13 @@ def main():
         except Exception:
             health_data = []
 
+    # Exclude disabled/paywalled sources from dashboard health payload
+    forbidden_sources = {"we work remotely", "flexjobs"}
+    health_data = [
+        s for s in health_data
+        if s.get("source", "").strip().lower() not in forbidden_sources
+    ]
+
     digest_html = ""
     for dp in [
         os.path.join(root, "out", "digest.html"),
@@ -1553,7 +1784,7 @@ def main():
             "applied": sum(1 for j in jobs_list if j.get("applied")),
             "emailed": sum(1 for j in jobs_list if j.get("emailed")),
             "recommended": sum(1 for j in jobs_list if (j.get("score") or 0.0) >= 6.0),
-            "sources_count": len(health_data) or 87
+            "sources_count": len(health_data) or 86
         },
         "profile": profile_data,
         "source_health": health_data,

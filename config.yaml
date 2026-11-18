@@ -354,6 +354,11 @@ source_health_file: out/source_health.json
 
 # --- sources configuration --------------------------------------------------
 sources:
+  weworkremotely:
+    enabled: false
+  flexjobs:
+    enabled: false
+
   enabled_categories:
     - direct_ats
     - remote_sources

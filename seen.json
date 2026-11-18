@@ -3,7 +3,7 @@
     "first_seen": "2026-11-14T04:39:06+00:00",
     "company": "Figma",
     "title": "Software Engineer - Distributed Systems",
-    "location": "San Francisco, CA • New York, NY • United States",
+    "location": "San Francisco, CA \u2022 New York, NY \u2022 United States",
     "url": "https://boards.greenhouse.io/figma/jobs/5552549004?gh_jid=5552549004",
     "score": 2.0,
     "reason": "This is a senior distributed systems role requiring extensive infrastructure experience, mismatching candidate's junior profile.",
@@ -700,29 +700,6 @@
     "applied": false,
     "applied_on": null
   },
-  "wwr:rss:ngineer-ai-coding-tasks-contract": {
-    "first_seen": "2026-11-14T08:30:27+00:00",
-    "company": "Askable",
-    "title": "Software Engineer, AI Coding Tasks (Contract)",
-    "location": "Remote",
-    "url": "https://weworkremotely.com/remote-jobs/askable-software-engineer-ai-coding-tasks-contract",
-    "score": 8.0,
-    "reason": "Strong match for a mid-level software engineer with solid coding experience to build AI testing tasks.",
-    "canonical_source": "weworkremotely",
-    "sources": [
-      "weworkremotely"
-    ],
-    "role_families": [
-      "SOFTWARE"
-    ],
-    "matched_roles": [
-      "Software Engineer"
-    ],
-    "fit_score": 8.0,
-    "emailed": true,
-    "applied": false,
-    "applied_on": null
-  },
   "remoteok:global:1137793": {
     "first_seen": "2026-11-14T08:30:27+00:00",
     "company": "Supabase",
@@ -909,29 +886,6 @@
     "applied": false,
     "applied_on": null
   },
-  "wwr:rss:ment-engineer-ii-remote-colombia": {
-    "first_seen": "2026-11-16T11:58:04+00:00",
-    "company": "OfferUp",
-    "title": "Software Development Engineer II (Remote @ Colombia)",
-    "location": "Remote",
-    "url": "https://weworkremotely.com/remote-jobs/offerup-software-development-engineer-ii-remote-colombia",
-    "score": 8.0,
-    "reason": "Strong match for a mid-level backend engineer experienced in Java, Kafka, and distributed systems.",
-    "canonical_source": "weworkremotely",
-    "sources": [
-      "weworkremotely"
-    ],
-    "role_families": [
-      "SOFTWARE"
-    ],
-    "matched_roles": [
-      "Software Development Engineer"
-    ],
-    "fit_score": 8.0,
-    "emailed": true,
-    "applied": false,
-    "applied_on": null
-  },
   "greenhouse:rubrik:8349847": {
     "first_seen": "2026-11-18T04:43:18+00:00",
     "company": "Rubrik",
@@ -1035,52 +989,6 @@
       "Software Engineer"
     ],
     "fit_score": 5.0,
-    "emailed": true,
-    "applied": false,
-    "applied_on": null
-  },
-  "wwr:rss:ptal-ai-engineer-agentic-systems": {
-    "first_seen": "2026-11-18T04:43:18+00:00",
-    "company": "Toptal",
-    "title": "AI Engineer - Agentic Systems",
-    "location": "Remote",
-    "url": "https://weworkremotely.com/remote-jobs/toptal-ai-engineer-agentic-systems",
-    "score": 3.0,
-    "reason": "Requires specialised production experience in AI agentic systems and multi-agent orchestration which the candidate does not have.",
-    "canonical_source": "weworkremotely",
-    "sources": [
-      "weworkremotely"
-    ],
-    "role_families": [
-      "AI_CORE"
-    ],
-    "matched_roles": [
-      "AI Engineer"
-    ],
-    "fit_score": 3.0,
-    "emailed": true,
-    "applied": false,
-    "applied_on": null
-  },
-  "wwr:rss:-ii-full-stack-revenue-analytics": {
-    "first_seen": "2026-11-18T04:43:18+00:00",
-    "company": "Affirm",
-    "title": "Analytics Engineer II, Full Stack (Revenue Analytics)",
-    "location": "Remote",
-    "url": "https://weworkremotely.com/remote-jobs/affirm-analytics-engineer-ii-full-stack-revenue-analytics",
-    "score": 2.0,
-    "reason": "Wrong functional track as this requires analytics engineering, dbt, and data modeling rather than backend infrastructure.",
-    "canonical_source": "weworkremotely",
-    "sources": [
-      "weworkremotely"
-    ],
-    "role_families": [
-      "DATA"
-    ],
-    "matched_roles": [
-      "Analytics Engineer"
-    ],
-    "fit_score": 2.0,
     "emailed": true,
     "applied": false,
     "applied_on": null

@@ -26,6 +26,9 @@ from .roles import classify_job
 
 logger = logging.getLogger("jobhunt.sources")
 
+# Paywalled and paid-subscription sources excluded from active ingestion
+DISABLED_PAYWALLED_SOURCES: set[str] = {"We Work Remotely", "FlexJobs"}
+
 
 # -----------------------------------------------------------------------------
 # Source Health & Status
@@ -553,58 +556,16 @@ class RemoteOKAdapter(BaseSourceAdapter):
 
 
 class WeWorkRemotelyAdapter(BaseSourceAdapter):
+    """Adapter for We Work Remotely. Disabled: paid subscription / paywalled source."""
     def __init__(self):
         super().__init__("We Work Remotely", "remote", tier=3)
+        self.health.status = "NOT_CONFIGURED"
+        self.health.errors.append("Disabled: paid subscription / paywalled job board.")
 
     def fetch(self, config: dict[str, Any]) -> list[Job]:
-        if not config.get("sources", {}).get("weworkremotely", {}).get("enabled", True):
-            self.health.status = "NOT_CONFIGURED"
-            return []
-
-        url = "https://weworkremotely.com/categories/remote-programming-jobs.rss"
-        resp = self._http_get_with_retry(url)
-        jobs: list[Job] = []
-
-        if resp and resp.status_code == 200:
-            try:
-                root = ET.fromstring(resp.content)
-                for item in root.findall(".//item")[:30]:
-                    title = item.findtext("title") or ""
-                    link = item.findtext("link") or ""
-                    guid = item.findtext("guid") or link
-                    desc = strip_html(item.findtext("description") or "")
-                    pub_date = item.findtext("pubDate")
-
-                    # Title usually formatted as "Company: Role"
-                    comp = "Remote Company"
-                    job_title = title
-                    if ":" in title:
-                        parts = title.split(":", 1)
-                        comp = parts[0].strip()
-                        job_title = parts[1].strip()
-
-                    jobs.append(Job(
-                        job_id=f"wwr:rss:{guid[-32:]}",
-                        ats="weworkremotely",
-                        company=comp,
-                        title=job_title,
-                        location="Remote",
-                        url=link,
-                        description=desc,
-                        posted_at=pub_date,
-                        remote=True,
-                        source="weworkremotely",
-                        source_tier=3
-                    ))
-                self.health.jobs_found = len(jobs)
-                self.health.status = "HEALTHY"
-            except Exception as e:
-                self.health.errors.append(f"WWR parse error: {e}")
-                self.health.status = "DEGRADED"
-        else:
-            self.health.status = "DEGRADED"
-
-        return jobs
+        # Disabled: paywalled / paid subscription job board
+        self.health.status = "NOT_CONFIGURED"
+        return []
 
 
 class HimalayasAdapter(BaseSourceAdapter):
@@ -963,13 +924,13 @@ class SourceRegistry:
         # 2. Remote Sources (Part 7)
         self._register(RemotiveAdapter())
         self._register(RemoteOKAdapter())
-        self._register(WeWorkRemotelyAdapter())
+        # WeWorkRemotelyAdapter disabled and excluded (paywalled / paid subscription)
         self._register(HimalayasAdapter())
         self._register(JobicyAdapter())
         self._register(WorkingNomadsAdapter())
         self._register(NoDeskAdapter())
         for name, slug in [
-            ("FlexJobs", "flexjobs"), ("Remote.co", "remoteco"),
+            ("Remote.co", "remoteco"),
             ("Jobspresso", "jobspresso"), ("Dynamite Jobs", "dynamitejobs"),
             ("JustRemote", "justremote")
         ]:
@@ -1047,7 +1008,10 @@ class SourceRegistry:
                 adapter.health.status = "DEGRADED"
                 return name, []
 
-        active_adapters = list(self.adapters.items())
+        active_adapters = [
+            (name, ad) for name, ad in self.adapters.items()
+            if name not in DISABLED_PAYWALLED_SOURCES
+        ]
         with ThreadPoolExecutor(max_workers=max_workers) as pool:
             futures = [pool.submit(_fetch_safe, name, ad) for name, ad in active_adapters]
             for f in as_completed(futures):
