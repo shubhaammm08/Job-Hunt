@@ -1336,6 +1336,63 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       }
     }
 
+    function extractLinkedInJobId(rawUrlOrId) {
+      const s = String(rawUrlOrId || '').trim();
+      if (!s) return '';
+      if (/^\d+$/.test(s)) return s;
+      const prefixMatch = s.match(/linkedin[^:]*:(\d+)/i);
+      if (prefixMatch && prefixMatch[1]) return prefixMatch[1];
+      const viewMatch = s.match(/\/jobs\/view\/(?:[a-zA-Z0-9\-_]+-)?(\d+)/i);
+      if (viewMatch && viewMatch[1]) return viewMatch[1];
+      const simpleViewMatch = s.match(/\/view\/(?:[a-zA-Z0-9\-_]+-)?(\d+)/i);
+      if (simpleViewMatch && simpleViewMatch[1]) return simpleViewMatch[1];
+      const queryMatch = s.match(/[?&]currentJobId=(\d+)/i);
+      if (queryMatch && queryMatch[1]) return queryMatch[1];
+      const urnMatch = s.match(/jobPosting:(\d+)/i);
+      if (urnMatch && urnMatch[1]) return urnMatch[1];
+      const trailingMatch = s.match(/(\d{6,})/);
+      if (trailingMatch && trailingMatch[1]) return trailingMatch[1];
+      return '';
+    }
+
+    function isLinkedInJob(job) {
+      if (!job) return false;
+      if (typeof inferPlatformSource === 'function' && inferPlatformSource(job) === 'linkedin') return true;
+      const jid = String(job.job_id || '').toLowerCase();
+      const url = String(job.url || '').toLowerCase();
+      const applyUrl = String(job.apply_url || '').toLowerCase();
+      const plat = String(job.platform || '').toLowerCase();
+      const canSrc = String(job.canonical_source || '').toLowerCase();
+      return jid.startsWith('linkedin') ||
+             url.includes('linkedin.com') ||
+             applyUrl.includes('linkedin.com') ||
+             plat === 'linkedin' ||
+             canSrc === 'linkedin';
+    }
+
+    function isLinkedInUrl(url) {
+      const s = String(url || '').toLowerCase();
+      return s.includes('linkedin.com/jobs/view/') || s.includes('linkedin.com');
+    }
+
+    function getLinkedInPostUrl(job) {
+      if (!job) return '';
+      const cleanId = extractLinkedInJobId(job.job_id) ||
+                      extractLinkedInJobId(job.url) ||
+                      extractLinkedInJobId(job.apply_url);
+      if (cleanId) {
+        return `https://www.linkedin.com/jobs/view/${cleanId}`;
+      }
+      const rawUrl = String(job.url || job.apply_url || '').trim();
+      if (rawUrl.includes('linkedin.com/jobs/view/')) {
+        return rawUrl.split('?')[0].split('#')[0];
+      }
+      if (rawUrl && rawUrl !== '#') {
+        return rawUrl;
+      }
+      return '';
+    }
+
     function setQuickChip(chipType) {
       const scoreSel = document.getElementById('filter-score');
       const statusSel = document.getElementById('filter-status');
@@ -1537,7 +1594,8 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
         const inferredWp = inferWorkplaceType(j);
         const workplaceLabel = getWorkplaceLabel(inferredWp);
 
-        const targetUrl = j.url || '#';
+        const isLI = isLinkedInJob(j);
+        const targetUrl = isLI ? (getLinkedInPostUrl(j) || j.url || '#') : (j.url || '#');
 
         const familiesHtml = (j.role_families || []).slice(0, 2).map(f => `<span class="tag tag-family">${escapeHtml(f)}</span>`).join('');
         const skillsHtml = (j.matched_skills || []).slice(0, 3).map(s => `<span class="tag">${escapeHtml(s)}</span>`).join('');
@@ -1581,6 +1639,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
                    target="_blank" 
                    rel="noopener noreferrer" 
                    class="btn-apply-link" 
+                   title="${isLI ? '1-Click Apply on LinkedIn' : 'Apply'}" 
                    onclick="event.stopPropagation();">
                   Apply ${ICONS.external}
                 </a>
@@ -1805,7 +1864,18 @@ def main():
             with open(target_file, "w", encoding="utf-8") as f:
                 f.write(digest_html)
 
-    jobs_list = [{"job_id": k, **v} for k, v in seen_data.items() if isinstance(v, dict)]
+    jobs_list = []
+    for k, v in seen_data.items():
+        if isinstance(v, dict):
+            entry = {"job_id": k, **v}
+            k_str = str(k).lower()
+            if k_str.startswith("linkedin") or str(entry.get("platform", "")).lower() == "linkedin":
+                url_str = str(entry.get("url") or "")
+                if not url_str or not url_str.startswith("https://www.linkedin.com/jobs/view/"):
+                    m = re.search(r"(\d{6,})", k_str + " " + url_str)
+                    if m:
+                        entry["url"] = f"https://www.linkedin.com/jobs/view/{m.group(1)}"
+            jobs_list.append(entry)
     jobs_list.sort(key=lambda j: (j.get("score") or 0.0, j.get("first_seen") or ""), reverse=True)
 
     payload = {

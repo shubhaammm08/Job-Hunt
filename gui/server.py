@@ -171,7 +171,16 @@ class JobHuntHandler(SimpleHTTPRequestHandler):
             jobs_list = []
             for jid, row in seen_data.items():
                 if isinstance(row, dict):
-                    jobs_list.append({"job_id": jid, **row})
+                    job_entry = {"job_id": jid, **row}
+                    jid_str = str(jid).lower()
+                    if jid_str.startswith("linkedin") or str(job_entry.get("platform", "")).lower() == "linkedin":
+                        url_str = str(job_entry.get("url") or "")
+                        if not url_str or not url_str.startswith("https://www.linkedin.com/jobs/view/"):
+                            import re
+                            m = re.search(r"(\d{6,})", jid_str + " " + url_str)
+                            if m:
+                                job_entry["url"] = f"https://www.linkedin.com/jobs/view/{m.group(1)}"
+                    jobs_list.append(job_entry)
 
             # Sort descending by score then date
             jobs_list.sort(key=lambda j: (j.get("score") or 0.0, j.get("first_seen") or ""), reverse=True)
