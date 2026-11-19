@@ -2816,7 +2816,8 @@
       const isStaticOrHttps = window.location.protocol === 'https:' && !window.location.host.includes('localhost') && !window.location.host.includes('127.0.0.1');
 
       if (isStaticOrHttps) {
-        showToast('On GitHub Pages, job scraping runs automatically via GitHub Actions or on-demand via Antigravity.');
+        showToast('Live scrapers run automatically in the cloud via GitHub Actions. Opening workflow actions...');
+        window.open('https://github.com/shubhaammm08/Job-Hunt/actions', '_blank');
         return;
       }
 
@@ -3062,7 +3063,7 @@
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
                     </svg>
-                    <span>${isRunning ? 'Scraping...' : 'Run Scrape'}</span>
+                    <span>${isRunning ? 'Scraping...' : (window.location.protocol === 'https:' ? 'Cloud Scraper Status' : 'Run Scrape')}</span>
                   </button>
                 </div>
               </div>
