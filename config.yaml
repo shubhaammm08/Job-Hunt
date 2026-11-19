@@ -374,9 +374,8 @@ source_health_file: out/source_health.json
 # --- sources configuration --------------------------------------------------
 sources:
   linkedin:
-    # Kept disabled by default for account safety.
-    # To use: create a dedicated dummy/throwaway account and run: python -m jobhunt linkedin-auth
-    enabled: false
+    # Enabled with dummy/throwaway account session (session.json)
+    enabled: true
     session_file: "session.json"
     headless: true
     rate_limit_delay: 2.0

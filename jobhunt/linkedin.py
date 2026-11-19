@@ -425,9 +425,14 @@ def fetch_linkedin_jobs(config: dict[str, Any]) -> list[Job]:
 # -----------------------------------------------------------------------------
 # Headful Authentication CLI Handler
 # -----------------------------------------------------------------------------
-async def _async_run_linkedin_auth(session_path: str = "session.json", timeout: int = 300) -> bool:
+async def _async_run_linkedin_auth(
+    session_path: str = "session.json",
+    timeout: int = 600,
+    email: str | None = None,
+    password: str | None = None,
+) -> bool:
     """Open headful Playwright browser for interactive LinkedIn login and save session state."""
-    if BrowserManager is None or wait_for_manual_login is None:
+    if BrowserManager is None:
         print("[-] Error: linkedin_scraper or Playwright not installed in environment.")
         return False
 
@@ -437,8 +442,8 @@ async def _async_run_linkedin_auth(session_path: str = "session.json", timeout: 
     print("=" * 60)
     print(f"[*] Opening headful browser window...")
     print(f"[*] Destination session file: {target_path.resolve()}")
-    print(f"[*] Please log in, solve any 2FA/CAPTCHA, and reach your LinkedIn feed.")
-    print(f"[*] Waiting up to {timeout} seconds for successful authentication...")
+    print(f"[*] Waiting up to {timeout} seconds for authentication...")
+    print(f"[*] Please log in, complete any verification code / CAPTCHA in the window.")
 
     bm = BrowserManager(headless=False)
     try:
@@ -446,8 +451,68 @@ async def _async_run_linkedin_auth(session_path: str = "session.json", timeout: 
         page = bm.page
         await page.goto("https://www.linkedin.com/login", wait_until="domcontentloaded")
 
-        # Wait for user to manually complete login
-        await wait_for_manual_login(page, timeout=timeout * 1000)
+        # Auto-fill credentials if provided
+        if email and password:
+            try:
+                await page.wait_for_selector("#username", timeout=8000)
+                await page.fill("#username", email)
+                await page.fill("#password", password)
+                print(f"[*] Pre-populated login credentials for: {email}")
+                submit_btn = page.locator('button[type="submit"]')
+                if await submit_btn.count() > 0:
+                    await submit_btn.click()
+                    print("[*] Clicked Sign In button automatically.")
+            except Exception as fe:
+                logger.debug("Auto-fill exception (user can enter manually): %s", fe)
+
+        # Monitor login completion via both li_at session cookie and DOM/URL
+        start_time = asyncio.get_event_loop().time()
+        authenticated = False
+        last_url = ""
+
+        while (asyncio.get_event_loop().time() - start_time) < timeout:
+            curr_url = page.url
+            if curr_url != last_url:
+                last_url = curr_url
+                print(f"[*] Current page: {curr_url}")
+
+            # 1. Gold standard: check for active li_at cookie
+            try:
+                cookies = await bm.context.cookies()
+                li_at_cookie = next((c for c in cookies if c.get("name") == "li_at" and c.get("value")), None)
+                if li_at_cookie:
+                    authenticated = True
+                    print("[+] Detected active LinkedIn session cookie (li_at)!")
+                    break
+            except Exception:
+                pass
+
+            # 2. Check is_logged_in helper
+            try:
+                if is_logged_in is not None and await is_logged_in(page):
+                    authenticated = True
+                    print("[+] Detected authenticated navigation!")
+                    break
+            except Exception:
+                pass
+
+            # 3. Check for feed or profile URL
+            if any(p in curr_url for p in ("/feed", "/mynetwork", "/in/")):
+                if not any(b in curr_url for b in ("/login", "/authwall", "/checkpoint", "/challenge", "/uas/")):
+                    authenticated = True
+                    print("[+] Reached authenticated LinkedIn page!")
+                    break
+
+            await asyncio.sleep(1.0)
+
+        if not authenticated:
+            print("=" * 60)
+            print("[-] Authentication timed out. Please try again.")
+            print("=" * 60)
+            return False
+
+        # Allow cookies & storage state to settle
+        await asyncio.sleep(2.0)
 
         # Save session storage state
         await bm.save_session(str(target_path))
@@ -458,7 +523,7 @@ async def _async_run_linkedin_auth(session_path: str = "session.json", timeout: 
     except Exception as e:
         logger.error("LinkedIn authentication failed: %s", e)
         print("=" * 60)
-        print(f"[-] Authentication failed or timed out: {e}")
+        print(f"[-] Authentication failed: {e}")
         print("=" * 60)
         return False
     finally:
@@ -468,9 +533,14 @@ async def _async_run_linkedin_auth(session_path: str = "session.json", timeout: 
             pass
 
 
-def run_linkedin_auth(session_path: str = "session.json", timeout: int = 300) -> bool:
+def run_linkedin_auth(
+    session_path: str = "session.json",
+    timeout: int = 600,
+    email: str | None = None,
+    password: str | None = None,
+) -> bool:
     """Open Playwright browser in headful mode and save authenticated session."""
-    return bool(_run_async(_async_run_linkedin_auth(session_path, timeout)))
+    return bool(_run_async(_async_run_linkedin_auth(session_path, timeout, email, password)))
 
 
 # -----------------------------------------------------------------------------

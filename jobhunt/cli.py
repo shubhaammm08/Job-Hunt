@@ -451,8 +451,10 @@ def cmd_linkedin_auth(args) -> int:
     """Run interactive headful LinkedIn login to save browser session."""
     from .linkedin import run_linkedin_auth
     session_path = getattr(args, "session", "session.json")
-    timeout = getattr(args, "timeout", 300)
-    success = run_linkedin_auth(session_path=session_path, timeout=timeout)
+    timeout = getattr(args, "timeout", 600)
+    email = getattr(args, "email", None)
+    password = getattr(args, "password", None)
+    success = run_linkedin_auth(session_path=session_path, timeout=timeout, email=email, password=password)
     return 0 if success else 1
 
 
@@ -509,7 +511,9 @@ def main(argv=None) -> int:
 
     sauth = sub.add_parser("linkedin-auth", help="interactive LinkedIn login to save browser session")
     sauth.add_argument("--session", default="session.json", help="path to session file (default: session.json)")
-    sauth.add_argument("--timeout", type=int, default=300, help="login timeout in seconds (default: 300)")
+    sauth.add_argument("--timeout", type=int, default=600, help="login timeout in seconds (default: 600)")
+    sauth.add_argument("--email", "--username", dest="email", help="LinkedIn login email / username")
+    sauth.add_argument("--password", help="LinkedIn login password")
     sauth.set_defaults(func=cmd_linkedin_auth)
 
     args = p.parse_args(argv)
