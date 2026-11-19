@@ -533,13 +533,58 @@ async def _async_run_linkedin_auth(
             pass
 
 
+def save_linkedin_cookie_session(cookie: str, session_path: str = "session.json") -> bool:
+    """Save raw li_at session cookie directly into Playwright storage_state format."""
+    target_path = Path(session_path)
+    clean_cookie = cookie.strip().strip('"').strip("'")
+    if not clean_cookie:
+        print("[-] Error: Cookie value cannot be empty.")
+        return False
+
+    session_payload = {
+        "cookies": [
+            {
+                "name": "li_at",
+                "value": clean_cookie,
+                "domain": ".www.linkedin.com",
+                "path": "/",
+                "expires": -1,
+                "httpOnly": True,
+                "secure": True,
+                "sameSite": "None",
+            },
+            {
+                "name": "li_at",
+                "value": clean_cookie,
+                "domain": ".linkedin.com",
+                "path": "/",
+                "expires": -1,
+                "httpOnly": True,
+                "secure": True,
+                "sameSite": "None",
+            },
+        ],
+        "origins": [],
+    }
+
+    target_path.parent.mkdir(parents=True, exist_ok=True)
+    target_path.write_text(json.dumps(session_payload, indent=2), encoding="utf-8")
+    print("=" * 60)
+    print(f"[+] Successfully saved LinkedIn session to: {target_path.resolve()}")
+    print("=" * 60)
+    return True
+
+
 def run_linkedin_auth(
     session_path: str = "session.json",
     timeout: int = 600,
     email: str | None = None,
     password: str | None = None,
+    cookie: str | None = None,
 ) -> bool:
-    """Open Playwright browser in headful mode and save authenticated session."""
+    """Open Playwright browser in headful mode or save cookie directly into authenticated session."""
+    if cookie:
+        return save_linkedin_cookie_session(cookie, session_path)
     return bool(_run_async(_async_run_linkedin_auth(session_path, timeout, email, password)))
 
 
