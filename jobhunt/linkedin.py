@@ -163,6 +163,22 @@ def _internal_normalize_linkedin_job(raw: dict[str, Any] | Any) -> Job:
         or "wfh" in location.lower()
     )
 
+    role_families = []
+    matched_roles = []
+    matched_skills = []
+    role_confidence = 0.0
+    experience_required = ""
+    try:
+        from .roles import classify_job
+        classification = classify_job(title, description)
+        matched_roles = classification.get("matched_roles", [])
+        role_families = classification.get("role_families", [])
+        matched_skills = classification.get("matched_skills", [])
+        role_confidence = classification.get("role_confidence", 0.0)
+        experience_required = classification.get("experience_required", "")
+    except Exception:
+        pass
+
     return Job(
         job_id=f"linkedin:{clean_id}",
         ats="linkedin",
@@ -181,6 +197,11 @@ def _internal_normalize_linkedin_job(raw: dict[str, Any] | Any) -> Job:
         apply_url=apply_url,
         canonical_source="linkedin",
         sources=["linkedin"],
+        role_families=role_families,
+        matched_roles=matched_roles,
+        matched_skills=matched_skills,
+        role_confidence=role_confidence,
+        experience_required=experience_required,
     )
 
 
@@ -232,6 +253,111 @@ def _load_seen_identifiers(seen_file: str | Path = "seen.json") -> set[str]:
     except Exception as e:
         logger.debug("Could not inspect seen file '%s': %s", seen_file, e)
     return seen
+
+
+# -----------------------------------------------------------------------------
+# DOM & Page Detail Fallback Extractor
+# -----------------------------------------------------------------------------
+async def _extract_details_from_page(page: Any, url: str) -> dict[str, Any]:
+    """Defensive fallback extractor directly inspecting page DOM and title."""
+    title = ""
+    company = ""
+    location = "India"
+    description = ""
+    workplace_type = "On-site"
+    employment_type = "Full-time"
+
+    try:
+        page_title = await page.title()
+        if "|" in page_title:
+            parts = [p.strip() for p in page_title.split("|")]
+            if len(parts) >= 3 and parts[-1].lower() == "linkedin":
+                title = parts[0]
+                company = parts[1]
+            elif len(parts) >= 2:
+                title = parts[0]
+                company = parts[1]
+    except Exception:
+        pass
+
+    try:
+        if not title:
+            for sel in [
+                ".job-details-jobs-unified-top-card__job-title",
+                ".jobs-unified-top-card__job-title",
+                ".top-card-layout__title",
+                "h1",
+            ]:
+                loc = page.locator(sel)
+                if await loc.count() > 0:
+                    t = (await loc.first.inner_text()).strip()
+                    if t:
+                        title = t
+                        break
+
+        if not company:
+            for sel in [
+                ".job-details-jobs-unified-top-card__company-name",
+                ".jobs-unified-top-card__company-name",
+                "a[href*='/company/']",
+            ]:
+                loc = page.locator(sel)
+                if await loc.count() > 0:
+                    c = (await loc.first.inner_text()).strip()
+                    if c and len(c) > 1 and not c.lower().startswith("logo"):
+                        company = c
+                        break
+
+        main_loc = page.locator("main")
+        if await main_loc.count() > 0:
+            main_txt = await main_loc.first.inner_text()
+            if "About the job" in main_txt:
+                desc_part = main_txt.split("About the job", 1)[1]
+                for end_marker in [
+                    "About the company",
+                    "Set alert for similar jobs",
+                    "More jobs",
+                    "People you can reach out to",
+                ]:
+                    if end_marker in desc_part:
+                        desc_part = desc_part.split(end_marker, 1)[0]
+                description = desc_part.strip()
+
+            lines = [line.strip() for line in main_txt.split("\n") if line.strip()]
+            for l in lines[1:10]:
+                if "·" in l or "India" in l or "Remote" in l or "Hybrid" in l:
+                    location = l.split("·")[0].strip()
+                    break
+
+            main_lower = main_txt.lower()
+            if "remote" in main_lower:
+                workplace_type = "Remote"
+            elif "hybrid" in main_lower:
+                workplace_type = "Hybrid"
+            else:
+                workplace_type = "On-site"
+        else:
+            for sel in [".jobs-description__content", "#job-details", "article"]:
+                loc = page.locator(sel)
+                if await loc.count() > 0:
+                    description = (await loc.first.inner_text()).strip()
+                    if description:
+                        break
+    except Exception as e:
+        logger.debug("Fallback page extraction warning for %s: %s", url, e)
+
+    return {
+        "url": url,
+        "job_title": title,
+        "title": title,
+        "company": company,
+        "company_name": company,
+        "location": location,
+        "job_description": description,
+        "description": description,
+        "workplace_type": workplace_type,
+        "employment_type": employment_type,
+    }
 
 
 # -----------------------------------------------------------------------------
@@ -385,8 +511,34 @@ async def _async_fetch_linkedin_jobs(config: dict[str, Any]) -> list[Job]:
                         logger.warning("Failed to scrape job %s after %d attempts: %s", url, max_retries, se)
                     await asyncio.sleep(1.0)
 
+            # Convert scraped_result or run defensive fallback extractor
+            job_dict: dict[str, Any] = {}
             if scraped_result is not None:
-                job_obj = normalize_linkedin_job(scraped_result)
+                if hasattr(scraped_result, "to_dict"):
+                    job_dict = scraped_result.to_dict()
+                elif hasattr(scraped_result, "__dict__"):
+                    job_dict = vars(scraped_result).copy()
+                elif isinstance(scraped_result, dict):
+                    job_dict = dict(scraped_result)
+
+            if not job_dict.get("job_title") or not job_dict.get("job_description"):
+                try:
+                    page_details = await _extract_details_from_page(bm.page, url)
+                    if not job_dict.get("job_title") and page_details.get("title"):
+                        job_dict["job_title"] = page_details["title"]
+                    if not job_dict.get("company") and page_details.get("company"):
+                        job_dict["company"] = page_details["company"]
+                    if not job_dict.get("location") and page_details.get("location"):
+                        job_dict["location"] = page_details["location"]
+                    if not job_dict.get("job_description") and page_details.get("description"):
+                        job_dict["job_description"] = page_details["description"]
+                    if page_details.get("workplace_type"):
+                        job_dict["workplace_type"] = page_details["workplace_type"]
+                except Exception as pe:
+                    logger.debug("Page details fallback extraction failed for %s: %s", url, pe)
+
+            if job_dict.get("job_title") or job_dict.get("title"):
+                job_obj = normalize_linkedin_job(job_dict)
                 scraped_jobs.append(job_obj)
                 seen_identifiers.add(clean_id)
                 seen_identifiers.add(f"linkedin:{clean_id}")
@@ -667,19 +819,58 @@ def run_linkedin_scrape_pipeline(
         from .dedupe import deduplicate_jobs
         unique_jobs, internal_dupes = deduplicate_jobs(jobs)
 
+        # Intelligent classification & scoring on all scraped jobs
+        from .roles import classify_job
+        from .llm import keyword_screen
+
+        root_dir = Path(__file__).resolve().parent.parent
+        profile_path = root_dir / "profile.json"
+        if not profile_path.exists():
+            profile_path = root_dir / "profile.example.json"
+        profile_data = {}
+        if profile_path.exists():
+            try:
+                profile_data = json.loads(profile_path.read_text(encoding="utf-8"))
+            except Exception:
+                pass
+
+        for j in unique_jobs:
+            if not getattr(j, "role_families", None):
+                c = classify_job(j.title, j.description)
+                j.matched_roles = c.get("matched_roles", [])
+                j.role_families = c.get("role_families", [])
+                j.matched_skills = c.get("matched_skills", [])
+                j.role_confidence = c.get("role_confidence", 0.0)
+                j.experience_required = c.get("experience_required", "")
+
+        if profile_data:
+            try:
+                keyword_screen(unique_jobs, profile_data)
+            except Exception as se:
+                logger.debug("Keyword screen scoring error: %s", se)
+
         seen_file = cfg.get("seen_file", "seen.json")
         store = Store(seen_file)
         unseen_jobs = store.unseen(unique_jobs)
         jobs_added = len(unseen_jobs)
         duplicates_filtered = jobs_found - jobs_added
 
-        if unseen_jobs:
-            store.record(unseen_jobs, emailed=False)
+        if unique_jobs:
+            store.record(unique_jobs, emailed=False)
             try:
                 out_tracker = Path(cfg.get("out_dir", "out")) / "tracker.csv"
                 store.export_csv(out_tracker)
             except Exception as e:
                 logger.debug("Failed to export tracker CSV: %s", e)
+
+            # Auto-rebuild mobile GUI to keep index.html and INITIAL_DATA in sync
+            try:
+                import subprocess, sys
+                build_script = root_dir / "build_mobile_gui.py"
+                if build_script.exists():
+                    subprocess.run([sys.executable, str(build_script)], cwd=str(root_dir), check=False)
+            except Exception as be:
+                logger.debug("Failed to rebuild mobile gui: %s", be)
 
         # Update registry health if LinkedIn adapter is registered
         if "LinkedIn" in REGISTRY.adapters:

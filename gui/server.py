@@ -142,7 +142,14 @@ class JobHuntHandler(SimpleHTTPRequestHandler):
         parsed = urllib.parse.urlparse(self.path)
         path = parsed.path
 
-        if path in ("", "/"):
+        if path in ("", "/", "/index.html"):
+            root_index = ROOT / "index.html"
+            if root_index.exists():
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.end_headers()
+                self.wfile.write(root_index.read_bytes())
+                return
             self.path = "/index.html"
             return super().do_GET()
 

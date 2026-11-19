@@ -3,7 +3,7 @@
     "first_seen": "2026-11-14T04:39:06+00:00",
     "company": "Figma",
     "title": "Software Engineer - Distributed Systems",
-    "location": "San Francisco, CA \u2022 New York, NY \u2022 United States",
+    "location": "San Francisco, CA • New York, NY • United States",
     "url": "https://boards.greenhouse.io/figma/jobs/5552549004?gh_jid=5552549004",
     "score": 2.0,
     "reason": "This is a senior distributed systems role requiring extensive infrastructure experience, mismatching candidate's junior profile.",
@@ -1036,6 +1036,188 @@
     ],
     "fit_score": 1.0,
     "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:airbnb:7826337": {
+    "first_seen": "2026-11-19T06:44:50+00:00",
+    "company": "Airbnb",
+    "title": "Machine Learning Engineer, Assistance Engineering",
+    "location": "Remote-USA",
+    "url": "https://careers.airbnb.com/positions/7826337?gh_jid=7826337",
+    "score": 3.0,
+    "reason": "Role requires advanced ML systems and SOTA agentic architecture expertise beyond a junior developer's background.",
+    "canonical_source": "greenhouse",
+    "sources": [
+      "greenhouse"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "Machine Learning Engineer"
+    ],
+    "fit_score": 3.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:stripe:8130876": {
+    "first_seen": "2026-11-19T06:44:50+00:00",
+    "company": "Stripe",
+    "title": "Software Engineer, New Grad",
+    "location": "Bangalore",
+    "url": "https://stripe.com/jobs/search?gh_jid=8130876",
+    "score": 8.0,
+    "reason": "Good match for a new grad with software engineering skills, matching the 0-1 years experience requirement.",
+    "canonical_source": "greenhouse",
+    "sources": [
+      "greenhouse"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Engineer"
+    ],
+    "fit_score": 8.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:reddit:7131932": {
+    "first_seen": "2026-11-19T06:44:50+00:00",
+    "company": "Reddit",
+    "title": "Machine Learning Engineer",
+    "location": "Remote - United States",
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/7131932",
+    "score": 2.0,
+    "reason": "Senior ML engineer position requiring large-scale distributed systems experience unsuitable for a junior profile.",
+    "canonical_source": "greenhouse",
+    "sources": [
+      "greenhouse"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "Machine Learning Engineer"
+    ],
+    "fit_score": 2.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "ashby:ramp:f90d32c1-7c10-4161-8913-075e1b423697": {
+    "first_seen": "2026-11-19T06:44:50+00:00",
+    "company": "Ramp",
+    "title": "Research Engineer, Agentic Systems",
+    "location": "Remote (US)",
+    "url": "https://jobs.ashbyhq.com/ramp/f90d32c1-7c10-4161-8913-075e1b423697",
+    "score": 2.0,
+    "reason": "Advanced research engineer role for agentic systems requiring senior-level AI research and infrastructure experience.",
+    "canonical_source": "ashby",
+    "sources": [
+      "ashby"
+    ],
+    "role_families": [],
+    "matched_roles": [],
+    "fit_score": 2.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:orationjobsbusiness-data-analyst": {
+    "first_seen": "2026-11-19T06:44:50+00:00",
+    "company": "Remote Employer",
+    "title": "Business Data Analyst",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/gp-strategies-corporation/jobs/business-data-analyst",
+    "score": 5.0,
+    "reason": "Plausible data analyst role, but lacks specific technical stack details and alignment with candidate's BI focus.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 5.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4488891299": {
+    "first_seen": "2026-11-19T06:46:57+00:00",
+    "company": "Accenture in India",
+    "title": "AI / ML Engineer",
+    "location": "Navi Mumbai, Maharashtra, India",
+    "url": "https://www.linkedin.com/jobs/view/4488891299",
+    "score": 8.2,
+    "reason": "Strong match for AI/ML Engineer in Navi Mumbai with alignment on Machine Learning and Cloud AI services.",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "ML Engineer"
+    ],
+    "fit_score": 8.2,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4480510917": {
+    "first_seen": "2026-11-19T06:46:57+00:00",
+    "company": "Capgemini",
+    "title": "Python Gen AI Engineer",
+    "location": "Navi Mumbai, Maharashtra, India",
+    "url": "https://www.linkedin.com/jobs/view/4480510917",
+    "score": 8.8,
+    "reason": "Outstanding match for Python and Generative AI engineer in Navi Mumbai with direct alignment on AI agent workflows.",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "AI_CORE",
+      "GENAI_AGENTIC"
+    ],
+    "matched_roles": [
+      "AI Engineer",
+      "Generative AI Engineer"
+    ],
+    "fit_score": 8.8,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4481408789": {
+    "first_seen": "2026-11-19T06:48:29+00:00",
+    "company": "Deloitte",
+    "title": "Power BI Developer",
+    "location": "Mumbai, Maharashtra, India",
+    "url": "https://www.linkedin.com/jobs/view/4481408789",
+    "score": 8.5,
+    "reason": "Direct match for Power BI and SQL data dashboarding and analytics developer profile.",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "BI Developer"
+    ],
+    "fit_score": 8.5,
+    "emailed": false,
     "applied": false,
     "applied_on": null
   }

@@ -31,23 +31,40 @@ class Store:
     def record(self, jobs: list[Job], emailed: bool) -> None:
         now = datetime.now(timezone.utc).isoformat(timespec="seconds")
         for j in jobs:
-            self.data.setdefault(j.job_id, {
-                "first_seen": now,
-                "company": j.company,
-                "title": j.title,
-                "location": j.location,
-                "url": j.url,
-                "score": j.score,
-                "reason": j.reason,
-                "canonical_source": j.canonical_source or j.source or j.ats,
-                "sources": j.sources or [j.source or j.ats],
-                "role_families": j.role_families,
-                "matched_roles": j.matched_roles,
-                "fit_score": j.fit_score or j.score,
-                "emailed": emailed,
-                "applied": False,
-                "applied_on": None,
-            })
+            entry = self.data.get(j.job_id)
+            if entry is not None and not entry.get("title") and j.title:
+                # Update existing entry that lacked title or detailed fields
+                entry["company"] = j.company or entry.get("company", "")
+                entry["title"] = j.title
+                entry["location"] = j.location or entry.get("location", "")
+                entry["url"] = j.url or entry.get("url", "")
+                if j.score is not None:
+                    entry["score"] = j.score
+                    entry["fit_score"] = j.fit_score or j.score
+                if j.reason:
+                    entry["reason"] = j.reason
+                if j.role_families:
+                    entry["role_families"] = j.role_families
+                if j.matched_roles:
+                    entry["matched_roles"] = j.matched_roles
+            else:
+                self.data.setdefault(j.job_id, {
+                    "first_seen": now,
+                    "company": j.company,
+                    "title": j.title,
+                    "location": j.location,
+                    "url": j.url,
+                    "score": j.score,
+                    "reason": j.reason,
+                    "canonical_source": j.canonical_source or j.source or j.ats,
+                    "sources": j.sources or [j.source or j.ats],
+                    "role_families": j.role_families,
+                    "matched_roles": j.matched_roles,
+                    "fit_score": j.fit_score or j.score,
+                    "emailed": emailed,
+                    "applied": False,
+                    "applied_on": None,
+                })
         self.save()
 
     def mark_applied(self, job_id: str) -> bool:
