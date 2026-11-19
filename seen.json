@@ -3,7 +3,7 @@
     "first_seen": "2026-11-14T04:39:06+00:00",
     "company": "Figma",
     "title": "Software Engineer - Distributed Systems",
-    "location": "San Francisco, CA \u2022 New York, NY \u2022 United States",
+    "location": "San Francisco, CA • New York, NY • United States",
     "url": "https://boards.greenhouse.io/figma/jobs/5552549004?gh_jid=5552549004",
     "score": 2.0,
     "reason": "This is a senior distributed systems role requiring extensive infrastructure experience, mismatching candidate's junior profile.",
@@ -1035,6 +1035,117 @@
       "Data Analyst"
     ],
     "fit_score": 1.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:airbnb:7826337": {
+    "first_seen": "2026-11-19T12:03:27+00:00",
+    "company": "Airbnb",
+    "title": "Machine Learning Engineer, Assistance Engineering",
+    "location": "Remote-USA",
+    "url": "https://careers.airbnb.com/positions/7826337?gh_jid=7826337",
+    "score": 2.0,
+    "reason": "Wrong stack and role domain; this is a Machine Learning Engineer role focused on LLMs and agentic AI.",
+    "canonical_source": "greenhouse",
+    "sources": [
+      "greenhouse"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "Machine Learning Engineer"
+    ],
+    "fit_score": 2.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:stripe:8130876": {
+    "first_seen": "2026-11-19T12:03:27+00:00",
+    "company": "Stripe",
+    "title": "Software Engineer, New Grad",
+    "location": "Bangalore",
+    "url": "https://stripe.com/jobs/search?gh_jid=8130876",
+    "score": 3.0,
+    "reason": "Junior/New Grad seniority mismatch for a candidate with three years of professional experience.",
+    "canonical_source": "greenhouse",
+    "sources": [
+      "greenhouse"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Engineer"
+    ],
+    "fit_score": 3.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "greenhouse:reddit:7131934": {
+    "first_seen": "2026-11-19T12:03:27+00:00",
+    "company": "Reddit",
+    "title": "Machine Learning Engineer",
+    "location": "Remote - Ontario, Canada",
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/7131934",
+    "score": 2.0,
+    "reason": "Wrong role; this is a Machine Learning Engineer position requiring deep learning and ML modeling expertise.",
+    "canonical_source": "greenhouse",
+    "sources": [
+      "greenhouse"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "Machine Learning Engineer"
+    ],
+    "fit_score": 2.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "ashby:ramp:f90d32c1-7c10-4161-8913-075e1b423697": {
+    "first_seen": "2026-11-19T12:03:27+00:00",
+    "company": "Ramp",
+    "title": "Research Engineer, Agentic Systems",
+    "location": "Remote (US)",
+    "url": "https://jobs.ashbyhq.com/ramp/f90d32c1-7c10-4161-8913-075e1b423697",
+    "score": 2.0,
+    "reason": "Wrong domain; this is an AI/LLM research engineering role rather than a backend or platform engineering position.",
+    "canonical_source": "ashby",
+    "sources": [
+      "ashby"
+    ],
+    "role_families": [],
+    "matched_roles": [],
+    "fit_score": 2.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:obsmachine-learning-engineer-iii": {
+    "first_seen": "2026-11-19T12:03:27+00:00",
+    "company": "Remote Employer",
+    "title": "Machine Learning Engineer III",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/avalara/jobs/machine-learning-engineer-iii",
+    "score": 2.0,
+    "reason": "Wrong role specialty; this is an MLE role requiring machine learning modeling experience.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "Machine Learning Engineer"
+    ],
+    "fit_score": 2.0,
     "emailed": true,
     "applied": false,
     "applied_on": null
