@@ -447,6 +447,15 @@ def cmd_bot(args) -> int:
     return 0
 
 
+def cmd_linkedin_auth(args) -> int:
+    """Run interactive headful LinkedIn login to save browser session."""
+    from .linkedin import run_linkedin_auth
+    session_path = getattr(args, "session", "session.json")
+    timeout = getattr(args, "timeout", 300)
+    success = run_linkedin_auth(session_path=session_path, timeout=timeout)
+    return 0 if success else 1
+
+
 def main(argv=None) -> int:
     _load_env()
     p = argparse.ArgumentParser(
@@ -497,6 +506,11 @@ def main(argv=None) -> int:
     sbot.add_argument("--once", action="store_true", help="process pending messages once and exit")
     sbot.add_argument("--poll", action="store_true", help="continuous long-polling daemon (default)")
     sbot.set_defaults(func=cmd_bot)
+
+    sauth = sub.add_parser("linkedin-auth", help="interactive LinkedIn login to save browser session")
+    sauth.add_argument("--session", default="session.json", help="path to session file (default: session.json)")
+    sauth.add_argument("--timeout", type=int, default=300, help="login timeout in seconds (default: 300)")
+    sauth.set_defaults(func=cmd_linkedin_auth)
 
     args = p.parse_args(argv)
     return args.func(args)

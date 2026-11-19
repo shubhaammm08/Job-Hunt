@@ -4,6 +4,7 @@ Serves modern responsive dashboard and provides REST APIs for live tracking and 
 from __future__ import annotations
 
 import csv
+from datetime import datetime, timezone
 import json
 import os
 from pathlib import Path
@@ -18,6 +19,43 @@ ROOT = Path(__file__).resolve().parent.parent
 GUI_DIR = Path(__file__).resolve().parent
 HOST = "127.0.0.1"
 PORT = 8080
+
+LINKEDIN_STATUS_LOCK = threading.Lock()
+LINKEDIN_STATUS = {
+    "status": "idle",              # "idle" | "running" | "completed" | "error" | "auth_required"
+    "is_running": False,
+    "jobs_found": 0,
+    "jobs_added": 0,
+    "duplicates_filtered": 0,
+    "last_scan": None,
+    "started_at": None,
+    "finished_at": None,
+    "current_keyword": None,
+    "current_location": None,
+    "progress_percent": 0,
+    "error": None,
+    "auth_valid": True,
+}
+
+
+def reset_linkedin_status():
+    """Reset LINKEDIN_STATUS to initial idle state (useful for tests)."""
+    with LINKEDIN_STATUS_LOCK:
+        LINKEDIN_STATUS.update({
+            "status": "idle",
+            "is_running": False,
+            "jobs_found": 0,
+            "jobs_added": 0,
+            "duplicates_filtered": 0,
+            "last_scan": None,
+            "started_at": None,
+            "finished_at": None,
+            "current_keyword": None,
+            "current_location": None,
+            "progress_percent": 0,
+            "error": None,
+            "auth_valid": True,
+        })
 
 
 def load_json_safe(path: Path) -> dict | list:
@@ -156,6 +194,48 @@ class JobHuntHandler(SimpleHTTPRequestHandler):
             self.wfile.write(content.encode("utf-8"))
             return
 
+        if path == "/api/sources/linkedin/status":
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.end_headers()
+            with LINKEDIN_STATUS_LOCK:
+                if LINKEDIN_STATUS.get("last_scan") is None and not LINKEDIN_STATUS.get("is_running"):
+                    # Optionally inspect out/linkedin_status.json or out/source_health.json to load previous status
+                    out_status_file = ROOT / "out" / "linkedin_status.json"
+                    saved = load_json_safe(out_status_file)
+                    if isinstance(saved, dict) and saved:
+                        for k, v in saved.items():
+                            if k in LINKEDIN_STATUS and k != "is_running":
+                                LINKEDIN_STATUS[k] = v
+                    else:
+                        health_file = ROOT / "out" / "source_health.json"
+                        health_data = load_json_safe(health_file)
+                        if isinstance(health_data, list):
+                            for h in health_data:
+                                if isinstance(h, dict) and h.get("source_name") == "LinkedIn":
+                                    LINKEDIN_STATUS["last_scan"] = h.get("last_scan")
+                                    LINKEDIN_STATUS["jobs_found"] = h.get("jobs_found", 0)
+                                    LINKEDIN_STATUS["jobs_added"] = h.get("new_jobs", 0)
+                                    LINKEDIN_STATUS["duplicates_filtered"] = h.get("duplicates_removed", 0)
+                                    status_val = h.get("status")
+                                    if status_val == "HEALTHY":
+                                        LINKEDIN_STATUS["status"] = "completed"
+                                    elif status_val == "CONFIG_REQUIRED":
+                                        LINKEDIN_STATUS["status"] = "auth_required"
+                                        LINKEDIN_STATUS["auth_valid"] = False
+                                    break
+                status_copy = dict(LINKEDIN_STATUS)
+
+            # SECURITY: Ensure no credentials, tokens, or cookie secrets are ever leaked in the response.
+            safe_keys = {
+                "status", "is_running", "jobs_found", "jobs_added", "duplicates_filtered",
+                "last_scan", "started_at", "finished_at", "current_keyword", "current_location",
+                "progress_percent", "error", "auth_valid",
+            }
+            safe_status = {k: status_copy[k] for k in safe_keys if k in status_copy}
+            self.wfile.write(json.dumps(safe_status, ensure_ascii=False).encode("utf-8"))
+            return
+
         return super().do_GET()
 
     def do_POST(self):
@@ -230,6 +310,63 @@ class JobHuntHandler(SimpleHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(json.dumps({"success": True, "browser": target_browser}).encode("utf-8"))
                 return
+
+        if path == "/api/sources/linkedin/scrape":
+            if not isinstance(req_data, dict):
+                req_data = {}
+
+            with LINKEDIN_STATUS_LOCK:
+                if LINKEDIN_STATUS.get("is_running"):
+                    self.send_response(409)
+                    self.send_header("Content-Type", "application/json")
+                    self.end_headers()
+                    self.wfile.write(json.dumps({
+                        "success": False,
+                        "status": "already_running",
+                        "message": "A LinkedIn scrape task is currently in progress."
+                    }).encode("utf-8"))
+                    return
+
+                now_iso = datetime.now(timezone.utc).isoformat()
+                LINKEDIN_STATUS["status"] = "running"
+                LINKEDIN_STATUS["is_running"] = True
+                LINKEDIN_STATUS["started_at"] = now_iso
+                LINKEDIN_STATUS["finished_at"] = None
+                LINKEDIN_STATUS["error"] = None
+                LINKEDIN_STATUS["progress_percent"] = 0
+                LINKEDIN_STATUS["jobs_found"] = 0
+                LINKEDIN_STATUS["jobs_added"] = 0
+                LINKEDIN_STATUS["duplicates_filtered"] = 0
+                LINKEDIN_STATUS["auth_valid"] = True
+
+            def _bg_scrape():
+                try:
+                    from jobhunt.linkedin import run_linkedin_scrape_pipeline
+                    run_linkedin_scrape_pipeline(
+                        config_path=ROOT / "config.yaml",
+                        params=req_data,
+                        status_tracker=LINKEDIN_STATUS,
+                        lock=LINKEDIN_STATUS_LOCK,
+                    )
+                except Exception as e:
+                    with LINKEDIN_STATUS_LOCK:
+                        LINKEDIN_STATUS["status"] = "error"
+                        LINKEDIN_STATUS["is_running"] = False
+                        LINKEDIN_STATUS["error"] = str(e)
+                        LINKEDIN_STATUS["finished_at"] = datetime.now(timezone.utc).isoformat()
+
+            threading.Thread(target=_bg_scrape, daemon=True).start()
+
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(json.dumps({
+                "success": True,
+                "status": "running",
+                "message": "LinkedIn scrape initiated in background.",
+                "started_at": now_iso
+            }).encode("utf-8"))
+            return
 
         self.send_response(400)
         self.end_headers()

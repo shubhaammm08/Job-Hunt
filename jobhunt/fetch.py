@@ -4,6 +4,7 @@ from __future__ import annotations
 import html
 import re
 import time
+from datetime import datetime, timezone
 from dataclasses import dataclass, asdict, field
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any, Iterable
@@ -155,6 +156,167 @@ def parse_ashby(slug: str, company: str, body: Any) -> list[Job]:
             salary=salary,
         ))
     return out
+
+
+def extract_linkedin_job_id(raw_url_or_id: str | int | None) -> str:
+    """Extract clean numeric LinkedIn job ID from URL or string."""
+    s = str(raw_url_or_id or "").strip()
+    if not s:
+        return ""
+    if s.isdigit():
+        return s
+
+    # Match /jobs/view/123456 or /jobs/view/title-slug-123456
+    m = re.search(r"/jobs/view/(?:[a-zA-Z0-9\-_]+-)?(\d+)", s)
+    if m:
+        return m.group(1)
+
+    # Match /view/123456 or /view/title-slug-123456
+    m = re.search(r"/view/(?:[a-zA-Z0-9\-_]+-)?(\d+)", s)
+    if m:
+        return m.group(1)
+
+    # Match query parameter currentJobId=123456 (case-insensitive)
+    m = re.search(r"[?&]currentJobId=(\d+)", s, flags=re.IGNORECASE)
+    if m:
+        return m.group(1)
+    m = re.search(r"\bcurrentJobId=(\d+)", s, flags=re.IGNORECASE)
+    if m:
+        return m.group(1)
+
+    # Match LinkedIn URN format: urn:li:jobPosting:123456 or urn:li:fs_normalized_jobPosting:123456
+    m = re.search(r"jobPosting:(\d+)", s, flags=re.IGNORECASE)
+    if m:
+        return m.group(1)
+
+    # Match standalone 8 to 12 digit number
+    m = re.search(r"\b(\d{8,12})\b", s)
+    if m:
+        return m.group(1)
+
+    # Fallback to sanitized alphanumeric token
+    cleaned = re.sub(r"[^\w]", "", s)
+    return cleaned[-16:] if len(cleaned) > 16 else cleaned
+
+
+def normalize_linkedin_job(raw: dict[str, Any]) -> Job:
+    """Map raw scraped LinkedIn job data into canonical Job."""
+    raw_id = (
+        raw.get("job_id")
+        or raw.get("id")
+        or raw.get("urn")
+        or raw.get("url")
+        or raw.get("job_url")
+        or raw.get("link")
+        or ""
+    )
+    clean_id = extract_linkedin_job_id(raw_id)
+    if not clean_id:
+        comp_clean = re.sub(r"[^\w]", "", str(raw.get("company", "") or raw.get("company_name", "")).lower())
+        title_clean = re.sub(r"[^\w]", "", str(raw.get("title", "") or raw.get("job_title", "")).lower())
+        clean_id = f"{comp_clean}_{title_clean}" if (comp_clean or title_clean) else "unknown"
+
+    canonical_url = f"https://www.linkedin.com/jobs/view/{clean_id}"
+
+    ext_url = (
+        raw.get("apply_url")
+        or raw.get("external_url")
+        or raw.get("external_apply_url")
+        or raw.get("company_apply_url")
+        or ""
+    )
+    ext_url_str = str(ext_url).strip()
+    if ext_url_str and not ext_url_str.startswith("https://www.linkedin.com/jobs/view/"):
+        apply_url = ext_url_str
+    else:
+        apply_url = canonical_url
+
+    title = str(raw.get("title") or raw.get("job_title") or "").strip()
+    company = str(raw.get("company") or raw.get("company_name") or raw.get("hiring_company") or "Company").strip()
+    location = str(raw.get("location") or raw.get("place") or raw.get("city") or "India").strip()
+    if not location:
+        location = "India"
+
+    description = strip_html(raw.get("description") or raw.get("job_description") or raw.get("content") or "")
+
+    raw_date = (
+        raw.get("posted_at")
+        or raw.get("posted_date")
+        or raw.get("date_posted")
+        or raw.get("post_date")
+        or raw.get("listed_at")
+    )
+    posted_at = None
+    if raw_date:
+        if isinstance(raw_date, (int, float)):
+            ts = raw_date / 1000 if raw_date > 1e11 else raw_date
+            posted_at = time.strftime("%Y-%m-%d", time.gmtime(ts))
+        elif isinstance(raw_date, str):
+            raw_date_str = raw_date.strip()
+            m_date = re.match(r"^(\d{4}-\d{2}-\d{2})", raw_date_str)
+            if m_date:
+                posted_at = m_date.group(1)
+            else:
+                posted_at = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    if not posted_at:
+        posted_at = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+    salary = raw.get("salary") or raw.get("compensation") or None
+    if salary:
+        salary = str(salary).strip() or None
+
+    # Country inference
+    country = "India"
+    loc_lower = location.lower()
+    if any(k in loc_lower for k in ("singapore",)):
+        country = "Singapore"
+    elif any(k in loc_lower for k in ("united states", "usa", "us ", " san francisco", "new york", "seattle")):
+        country = "United States"
+    elif any(k in loc_lower for k in ("united kingdom", "uk", "london")):
+        country = "United Kingdom"
+    elif any(k in loc_lower for k in ("germany", "berlin", "munich")):
+        country = "Germany"
+    elif any(k in loc_lower for k in ("canada", "toronto", "vancouver")):
+        country = "Canada"
+    elif "remote" in loc_lower and not any(k in loc_lower for k in ("india", "bangalore", "mumbai", "pune", "hyderabad", "delhi", "noida", "gurgaon", "chennai")):
+        country = "Remote"
+
+    # Remote detection
+    wp = str(raw.get("workplace_type") or raw.get("workplace") or "").lower()
+    title_lower = title.lower()
+    is_remote = bool(
+        raw.get("remote") is True
+        or "remote" in wp
+        or "remote" in title_lower
+        or "remote" in loc_lower
+        or "wfh" in loc_lower
+        or "work from home" in loc_lower
+        or "anywhere" in loc_lower
+    )
+
+    employment_type = str(raw.get("employment_type") or raw.get("job_type") or "Full-time").strip()
+    if not employment_type:
+        employment_type = "Full-time"
+
+    return Job(
+        job_id=f"linkedin:{clean_id}",
+        ats="linkedin",
+        company=company,
+        title=title,
+        location=location,
+        url=canonical_url,
+        description=description,
+        posted_at=posted_at,
+        salary=salary,
+        source="linkedin",
+        source_tier=2,
+        country=country,
+        remote=is_remote,
+        employment_type=employment_type,
+        apply_url=apply_url,
+        canonical_source="linkedin",
+        sources=["linkedin"],
+    )
 
 
 ENDPOINTS = {

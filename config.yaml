@@ -21,6 +21,13 @@ target_roles:
     - ML Developer
     - Artificial Intelligence Engineer
     - Artificial Intelligence Developer
+    - NLP Engineer
+    - Computer Vision Engineer
+    - Deep Learning Engineer
+    - Research Engineer
+    - AI Engineer Intern
+    - GenAI Engineer Intern
+    - ML Engineer Intern
 
   GENAI_AGENTIC:
     - GenAI Engineer
@@ -43,6 +50,7 @@ target_roles:
     - Agentic Workflow Engineer
     - RAG Engineer
     - RAG Developer
+    - Retrieval Augmented Generation Engineer
     - Retrieval Engineer
     - MCP Engineer
     - MCP Developer
@@ -59,6 +67,8 @@ target_roles:
     - LLM Evaluation Engineer
     - AI Quality Engineer
     - AI Safety Engineer
+    - AI Solutions Engineer
+    - GenAI Engineer Intern
 
   DEPLOYMENT:
     - Forward Deployed Engineer
@@ -110,6 +120,7 @@ target_roles:
     - Associate Data Scientist
     - Applied Data Scientist
     - Machine Learning Data Scientist
+    - ML Data Scientist
     - Product Analyst
     - Product Data Analyst
     - Business Analyst
@@ -143,6 +154,9 @@ target_roles:
     - AI Backend Engineer
     - AI Backend Developer
     - AI Software Engineer
+    - Software Engineer AI/ML
+    - Backend Engineer AI
+    - Python AI Engineer
     - Application Engineer
     - Application Developer
     - Software Application Engineer
@@ -165,6 +179,7 @@ target_roles:
     - ML Platform Engineer
     - ML Infrastructure Engineer
     - ML Infrastructure Developer
+    - Machine Learning Infrastructure Engineer
     - MLOps Engineer
     - MLOps Developer
     - Machine Learning Operations Engineer
@@ -201,6 +216,7 @@ target_roles:
     - AI Automation Developer
     - Intelligent Automation Engineer
     - Intelligent Automation Developer
+    - AI Solutions Engineer
     - Process Automation Engineer
     - Process Automation Developer
     - Workflow Automation Engineer
@@ -324,7 +340,10 @@ filters:
     - gurgaon
     - noida
     - delhi
+    - chennai
+    - worldwide
     - india
+    # 'remote' is fully supported via allow_remote: true below (and in sources.linkedin.locations)
 
   allow_remote: true
   max_age_days: 30
@@ -354,6 +373,33 @@ source_health_file: out/source_health.json
 
 # --- sources configuration --------------------------------------------------
 sources:
+  linkedin:
+    enabled: true
+    session_file: "session.json"
+    headless: true
+    rate_limit_delay: 2.0
+    max_pages_per_search: 2
+    limit_per_search: 15
+    keywords:
+      - "AI Engineer"
+      - "GenAI Engineer"
+      - "LLM Engineer"
+      - "RAG Engineer"
+      - "Data Analyst"
+      - "Machine Learning Engineer"
+      - "Python Developer"
+    locations:
+      - "India"
+      - "Mumbai"
+      - "Pune"
+      - "Bangalore"
+      - "Hyderabad"
+      - "Delhi"
+      - "Gurgaon"
+      - "Noida"
+      - "Chennai"
+      - "Remote"
+
   weworkremotely:
     enabled: false
   flexjobs:

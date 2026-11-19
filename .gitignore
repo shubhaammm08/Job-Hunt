@@ -9,6 +9,13 @@ credentials.json
 client_secret*.json
 *.log
 logs/
+session.json
+*.session
+linkedin_session.json
+storage_state.json
+.auth/
+*.cookie
+*.cookies
 
 # your actual resume and the profile derived from it
 resume.*

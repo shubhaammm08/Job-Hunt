@@ -15,7 +15,10 @@ from .fetch import Job
 STRIP_PARAMS = {
     "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content",
     "ref", "source", "gh_src", "lever-source", "ashby_jid", "tracking",
-    "trk", "from", "shared", "midToken", "midSig"
+    "trk", "from", "shared", "midToken", "midSig", "midtoken", "midsig",
+    # LinkedIn-specific tracking parameters
+    "refid", "trackingid", "position", "pagenum", "originalsubdomain",
+    "currentjobid", "ebp", "recommendedflavor", "refsource"
 }
 
 
@@ -112,8 +115,10 @@ def deduplicate_jobs(jobs: Sequence[Job]) -> tuple[list[Job], int]:
                     matched_existing.url = j.url
                 if j.apply_url:
                     matched_existing.apply_url = j.apply_url
-                if len(j.description or "") > len(matched_existing.description or ""):
-                    matched_existing.description = j.description
+
+            # Retain longer description if available
+            if len(j.description or "") > len(matched_existing.description or ""):
+                matched_existing.description = j.description
         else:
             # First time seeing this job
             if not j.canonical_source:

@@ -9,3 +9,7 @@ anthropic>=0.40
 
 # Tests
 pytest>=8.0
+
+# LinkedIn Scraper & Browser Automation
+playwright>=1.40
+linkedin-scraper>=3.1.2

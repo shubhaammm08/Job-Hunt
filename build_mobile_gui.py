@@ -945,6 +945,13 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
           <button class="filter-chip" id="chip-greenhouse" onclick="setQuickChip('greenhouse')">Greenhouse</button>
           <button class="filter-chip" id="chip-ashby" onclick="setQuickChip('ashby')">Ashby</button>
           <button class="filter-chip" id="chip-lever" onclick="setQuickChip('lever')">Lever</button>
+          <button class="filter-chip" id="chip-linkedin" onclick="setQuickChip('linkedin')">
+            <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+              <rect x="2" y="9" width="4" height="12"/>
+              <circle cx="4" cy="4" r="2"/>
+            </svg> LinkedIn
+          </button>
           <button class="filter-chip" id="chip-remotive" onclick="setQuickChip('remotive')">Remotive</button>
           <button class="filter-chip" id="chip-hackernews" onclick="setQuickChip('hackernews')">Hacker News</button>
           <button class="filter-chip" id="chip-other-plat" onclick="setQuickChip('other_plat')">Other Sources</button>
@@ -1362,6 +1369,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
         case 'greenhouse': platformSel.value = 'greenhouse'; break;
         case 'ashby': platformSel.value = 'ashby'; break;
         case 'lever': platformSel.value = 'lever'; break;
+        case 'linkedin': platformSel.value = 'linkedin'; break;
         case 'remotive': platformSel.value = 'remotive'; break;
         case 'hackernews': platformSel.value = 'hackernews'; break;
         case 'other_plat': platformSel.value = 'other'; break;
@@ -1751,6 +1759,29 @@ def main():
         s for s in health_data
         if s.get("source", "").strip().lower() not in forbidden_sources
     ]
+
+    has_linkedin = any(s.get("source") == "LinkedIn" for s in health_data)
+    if not has_linkedin:
+        li_status_path = os.path.join(root, "out", "linkedin_status.json")
+        li_status = {}
+        if os.path.exists(li_status_path):
+            try:
+                with open(li_status_path, "r", encoding="utf-8") as f:
+                    li_status = json.load(f)
+            except Exception:
+                pass
+        health_data.insert(0, {
+            "source": "LinkedIn",
+            "category": "professional_network",
+            "tier": 2,
+            "status": "HEALTHY",
+            "jobs_found": li_status.get("jobs_found", 0),
+            "jobs_after_filtering": li_status.get("jobs_found", 0),
+            "new_jobs": li_status.get("jobs_added", 0),
+            "duplicates_removed": li_status.get("duplicates_filtered", 0),
+            "errors": [li_status["error"]] if li_status.get("error") else [],
+            "last_scan": li_status.get("last_scan")
+        })
 
     digest_html = ""
     for dp in [

@@ -885,6 +885,37 @@ class CredentialGuardedAdapter(BaseSourceAdapter):
         return []
 
 
+class LinkedInAdapter(BaseSourceAdapter):
+    """Native LinkedIn scraper source adapter powered by Playwright and linkedin-scraper."""
+
+    def __init__(self, name: str = "LinkedIn", category: str = "professional_network",
+                 tier: int = 2, enabled: bool = True):
+        super().__init__(name, category, tier=tier, enabled=enabled)
+
+    def fetch(self, config: dict[str, Any]) -> list[Job]:
+        from .linkedin import fetch_linkedin_jobs
+
+        self.health.last_scan = datetime.now(timezone.utc).isoformat()
+        try:
+            jobs = fetch_linkedin_jobs(config)
+            self.health.jobs_found = len(jobs)
+            li_cfg = config.get("sources", {}).get("linkedin", {}) if isinstance(config.get("sources"), dict) else config.get("linkedin", config)
+            session_file = li_cfg.get("session_file", "session.json") if isinstance(li_cfg, dict) else "session.json"
+            if not Path(session_file).exists():
+                self.health.status = "CONFIG_REQUIRED"
+                msg = f"Missing session file: {session_file}. Run 'python -m jobhunt linkedin-auth'"
+                if msg not in self.health.errors:
+                    self.health.errors.append(msg)
+            else:
+                self.health.status = "HEALTHY"
+            return jobs
+        except Exception as e:
+            self.health.status = "DEGRADED"
+            self.health.errors.append(f"{type(e).__name__}: {e}")
+            logger.warning("LinkedIn fetch failed: %s", e)
+            return []
+
+
 # -----------------------------------------------------------------------------
 # Source Registry & Concurrent Execution Engine
 # -----------------------------------------------------------------------------
@@ -945,6 +976,9 @@ class SourceRegistry:
             ("Product Hunt Jobs", "producthunt_jobs")
         ]:
             self._register(CredentialGuardedAdapter(name, slug, "startup", tier=2 if slug == "wellfound" else 3))
+
+        # Native LinkedIn Scraper Engine (Milestone 2)
+        self._register(LinkedInAdapter())
 
         # 4. India Job Boards (Part 4)
         self._register(JSearchAggregatorAdapter("LinkedIn Jobs India", "linkedin_india", "india_job_board", tier=2))
