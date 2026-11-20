@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#07080A">
+  <title>Shubham's JobHunt — Command Center Studio Presentation</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%236366F1%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><circle cx=%2212%22 cy=%2212%22 r=%2210%22/><circle cx=%2212%22 cy=%2212%22 r=%226%22/><circle cx=%2212%22 cy=%2212%22 r=%222%22/></svg>">
+  <style>
+    :root {
+      --bg-studio: #07080A;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-highlight: rgba(255, 255, 255, 0.15);
+      --indigo-glow: rgba(99, 102, 241, 0.14);
+      --emerald-glow: rgba(16, 185, 129, 0.09);
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --desktop-scale: 0.65;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      background: var(--bg-studio);
+      color: #F8FAFC;
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      overflow-x: auto;
+      overflow-y: auto;
+    }
+
+    /* Architectural 32px Grid Canvas with Ambient Radial Glows */
+    .studio-canvas {
+      position: relative;
+      min-height: 100vh;
+      width: 100%;
+      min-width: 1600px;
+      background-color: var(--bg-studio);
+      background-image: 
+        radial-gradient(circle at 18% 18%, var(--indigo-glow) 0%, transparent 45%),
+        radial-gradient(circle at 82% 82%, var(--emerald-glow) 0%, transparent 45%),
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 32px 32px, 32px 32px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Studio HUD Bar */
+    .studio-hud {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(7, 8, 10, 0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 12px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .hud-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .hud-brand-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      color: #FFFFFF;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    .hud-brand-glyph {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 800;
+    }
+    .hud-title-meta {
+      display: flex;
+      flex-direction: column;
+    }
+    .hud-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #F8FAFC;
+      letter-spacing: -0.2px;
+    }
+    .hud-sub {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: #94A3B8;
+    }
+
+    /* Controls Center */
+    .hud-center {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .scale-control-group {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      padding: 3px;
+      border-radius: 8px;
+    }
+    .scale-label {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: #94A3B8;
+      padding: 0 8px;
+      font-weight: 600;
+    }
+    .scale-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: #94A3B8;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 9px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .scale-btn:hover {
+      color: #FFFFFF;
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .scale-btn.active {
+      background: #4F46E5;
+      color: #FFFFFF;
+      border-color: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+    }
+
+    /* Role Quick Selector */
+    .role-switcher-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      padding: 3px;
+      border-radius: 8px;
+    }
+    .role-switch-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: #94A3B8;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 9px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .role-switch-btn:hover {
+      color: #FFFFFF;
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .role-switch-btn.active {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34D399;
+      border-color: rgba(16, 185, 129, 0.35);
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+    }
+
+    .hud-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .sync-status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: #34D399;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 5px 10px;
+      border-radius: 6px;
+    }
+    .sync-pulse {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10B981;
+      box-shadow: 0 0 8px #10B981;
+      animation: pulseSync 2s infinite;
+    }
+    @keyframes pulseSync {
+      0% { opacity: 0.4; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.15); }
+      100% { opacity: 0.4; transform: scale(0.9); }
+    }
+    .btn-open-app {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      color: #FFFFFF;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s;
+    }
+    .btn-open-app:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: var(--border-highlight);
+    }
+
+    /* Main Showcase Stage (Side-by-Side Frames) */
+    .studio-stage {
+      flex: 1;
+      padding: 36px 40px 60px 40px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 48px;
+    }
+
+    /* Frame Column Wrapper */
+    .frame-column {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Sharp Uppercase JetBrains Mono Labels */
+    .frame-label-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 4px;
+    }
+    .frame-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .frame-title.desktop {
+      color: #818CF8;
+    }
+    .frame-title.mobile {
+      color: #34D399;
+    }
+    .frame-meta-tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 600;
+      color: #64748B;
+      letter-spacing: 0.04em;
+    }
+
+    /* Desktop Chassis (Browser Window Mockup) */
+    .desktop-viewport-wrapper {
+      position: relative;
+      width: calc(1440px * var(--desktop-scale));
+      height: calc(900px * var(--desktop-scale) + 38px);
+      transition: width 0.25s ease, height 0.25s ease;
+      background: #101216;
+      border-radius: 12px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.06);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .browser-chrome {
+      height: 38px;
+      background: #0E1015;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      gap: 16px;
+      user-select: none;
+      flex-shrink: 0;
+    }
+    .window-dots {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .dot-close { background: #FF5F56; }
+    .dot-min { background: #FFBD2E; }
+    .dot-max { background: #27C93F; }
+    .browser-address-bar {
+      flex: 1;
+      max-width: 420px;
+      margin: 0 auto;
+      height: 24px;
+      background: #07080A;
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: #94A3B8;
+    }
+    .lock-icon {
+      color: #10B981;
+    }
+    .desktop-frame-scaler {
+      width: 1440px;
+      height: 900px;
+      transform: scale(var(--desktop-scale));
+      transform-origin: top left;
+      flex-shrink: 0;
+    }
+    .desktop-iframe {
+      width: 1440px;
+      height: 900px;
+      border: none;
+      background: #0B0C0E;
+      display: block;
+    }
+
+    /* Mobile Chassis (iPhone 15 Pro Hardware Mockup) */
+    .mobile-chassis {
+      width: 414px;
+      height: 872px;
+      border-radius: 52px;
+      padding: 12px;
+      background: #18191E;
+      border: 3px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(0, 0, 0, 0.9), inset 0 0 0 2px rgba(255, 255, 255, 0.05);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    .mobile-screen-bezel {
+      width: 390px;
+      height: 844px;
+      border-radius: 40px;
+      overflow: hidden;
+      position: relative;
+      background: #0B0C0E;
+    }
+    .dynamic-island {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 110px;
+      height: 28px;
+      background: #000000;
+      border-radius: 20px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      pointer-events: none;
+    }
+    .island-lens {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #0B0D14;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .island-sensor {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #080A10;
+    }
+    .home-indicator {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 130px;
+      height: 4.5px;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 999px;
+      z-index: 1000;
+      pointer-events: none;
+    }
+    .mobile-iframe {
+      width: 390px;
+      height: 844px;
+      border: none;
+      display: block;
+      background: #0B0C0E;
+    }
+
+    /* Bottom Studio Footer */
+    .studio-footer {
+      border-top: 1px solid var(--border-subtle);
+      padding: 18px 40px;
+      background: rgba(7, 8, 10, 0.95);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11.5px;
+      color: #64748B;
+      font-family: var(--font-mono);
+    }
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .footer-highlight {
+      color: #94A3B8;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="studio-canvas">
+
+    <!-- Top Studio HUD Bar -->
+    <header class="studio-hud">
+      <div class="hud-left">
+        <div class="hud-brand-pill">
+          <div class="hud-brand-glyph">SH</div>
+          <span>COMMAND CENTER STUDIO</span>
+        </div>
+        <div class="hud-title-meta">
+          <span class="hud-title">Shubham's JobHunt — Executive Dual-Surface Presentation</span>
+          <span class="hud-sub">Desktop Workspace (1440px 3-Pane) &amp; Mobile Stack (390px 1-Pane)</span>
+        </div>
+      </div>
+
+      <!-- Center Controls -->
+      <div class="hud-center">
+        <!-- Scale Controls -->
+        <div class="scale-control-group">
+          <span class="scale-label">SCALE:</span>
+          <button class="scale-btn" onclick="setScale(0.55)" id="btn-scale-55">55%</button>
+          <button class="scale-btn active" onclick="setScale(0.65)" id="btn-scale-65">65% (1080p)</button>
+          <button class="scale-btn" onclick="setScale(0.80)" id="btn-scale-80">80%</button>
+          <button class="scale-btn" onclick="setScale(1.00)" id="btn-scale-100">100%</button>
+        </div>
+
+        <!-- Synchronized Role Switcher -->
+        <div class="role-switcher-group">
+          <span class="scale-label">ACTIVE ROLE:</span>
+          <button class="role-switch-btn active" id="btn-role-cap" onclick="broadcastRole('linkedin:4480510917')">Capgemini (8.8)</button>
+          <button class="role-switch-btn" id="btn-role-del" onclick="broadcastRole('greenhouse:figma:5552549004')">Figma (8.0)</button>
+        </div>
+      </div>
+
+      <!-- Right Actions & Status -->
+      <div class="hud-right">
+        <div class="sync-status-indicator" title="Cross-frame postMessage event bus active">
+          <div class="sync-pulse"></div>
+          <span>LIVE SYNC ACTIVE</span>
+        </div>
+        <a href="index.html" target="_blank" class="btn-open-app" title="Open live production app in new tab">
+          <span>Open Standalone App</span> ↗
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Side-by-Side Presentation Stage -->
+    <main class="studio-stage">
+
+      <!-- FRAME 1: Desktop Workspace (1440px 3-Pane) -->
+      <section class="frame-column">
+        <div class="frame-label-header">
+          <div class="frame-title desktop">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            <span>DESKTOP WORKSPACE (3-PANE)</span>
+          </div>
+          <span class="frame-meta-tag">1440 × 900 · 72PX RAIL · 360PX FEED · TRIAGE DECK</span>
+        </div>
+
+        <div class="desktop-viewport-wrapper" id="desktop-wrapper">
+          <div class="browser-chrome">
+            <div class="window-dots">
+              <span class="dot dot-close"></span>
+              <span class="dot dot-min"></span>
+              <span class="dot dot-max"></span>
+            </div>
+            <div class="browser-address-bar">
+              <svg class="lock-icon" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: #10B981; vertical-align: -1px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <span>https://jobhunt.shubham.dev/pipeline</span>
+            </div>
+          </div>
+          <div class="desktop-frame-scaler" id="desktop-scaler">
+            <iframe class="desktop-iframe" id="desktop-frame" src="index.html?mode=desktop" title="Desktop Workspace View"></iframe>
+          </div>
+        </div>
+      </section>
+
+      <!-- FRAME 2: Mobile View (390px 1-Pane Tight inside iPhone Chassis) -->
+      <section class="frame-column">
+        <div class="frame-label-header">
+          <div class="frame-title mobile">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            <span>MOBILE VIEW (1-PANE TIGHT)</span>
+          </div>
+          <span class="frame-meta-tag">390 × 844 · IPHONE 15 PRO HARDWARE CHASSIS</span>
+        </div>
+
+        <div class="mobile-chassis">
+          <div class="mobile-screen-bezel">
+            <!-- Dynamic Island -->
+            <div class="dynamic-island">
+              <div class="island-lens"></div>
+              <div class="island-sensor"></div>
+            </div>
+            <!-- Home Indicator Bar -->
+            <div class="home-indicator"></div>
+            <!-- Iframe Loading Mobile View -->
+            <iframe class="mobile-iframe" id="mobile-frame" src="index.html?mode=mobile" title="Mobile View"></iframe>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Studio Footer -->
+    <footer class="studio-footer">
+      <div class="footer-left">
+        <span>ENGINEERING ARCHITECTURE: <strong class="footer-highlight">Dark Command Center (#0B0C0E)</strong></span>
+        <span>•</span>
+        <span>TYPOGRAPHY: <strong class="footer-highlight">Inter &amp; JetBrains Mono (Zero CDNs)</strong></span>
+        <span>•</span>
+        <span>ICONS: <strong class="footer-highlight">100% Inline SVG (Zero Emojis)</strong></span>
+      </div>
+      <div>
+        <span>SHUBHAM'S JOBHUNT // UI/UX REDESIGN MILESTONE 1</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    const desktopFrame = document.getElementById('desktop-frame');
+    const mobileFrame = document.getElementById('mobile-frame');
+    const desktopWrapper = document.getElementById('desktop-wrapper');
+    const desktopScaler = document.getElementById('desktop-scaler');
+
+    // Interactive Scaling Controller
+    function setScale(scale) {
+      document.documentElement.style.setProperty('--desktop-scale', scale);
+      document.querySelectorAll('.scale-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById(`btn-scale-${Math.round(scale * 100)}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      desktopWrapper.style.width = `calc(1440px * ${scale})`;
+      desktopWrapper.style.height = `calc(900px * ${scale} + 38px)`;
+      desktopScaler.style.transform = `scale(${scale})`;
+    }
+
+    // Initialize Default Scale (0.65 for 1080p fit)
+    setScale(0.65);
+
+    // Cross-Frame Bidirectional Synchronization via window.postMessage
+    window.addEventListener('message', (e) => {
+      if (!e.data || typeof e.data !== 'object') return;
+
+      if (e.data.type === 'JOB_SELECTED') {
+        // Forward from desktop to mobile or vice-versa
+        if (e.source === desktopFrame.contentWindow) {
+          mobileFrame.contentWindow.postMessage(e.data, '*');
+        } else if (e.source === mobileFrame.contentWindow) {
+          desktopFrame.contentWindow.postMessage(e.data, '*');
+        }
+        updateRoleSwitcherButtons(e.data.jobId);
+      } else if (e.data.type === 'JOB_APPLIED') {
+        if (e.source === desktopFrame.contentWindow) {
+          mobileFrame.contentWindow.postMessage(e.data, '*');
+        } else if (e.source === mobileFrame.contentWindow) {
+          desktopFrame.contentWindow.postMessage(e.data, '*');
+        }
+      }
+    });
+
+    // Broadcast Role Selection to Both Frames
+    function broadcastRole(jobId) {
+      desktopFrame.contentWindow.postMessage({ type: 'JOB_SELECTED', jobId: jobId }, '*');
+      mobileFrame.contentWindow.postMessage({ type: 'JOB_SELECTED', jobId: jobId }, '*');
+      updateRoleSwitcherButtons(jobId);
+    }
+
+    function updateRoleSwitcherButtons(jobId) {
+      document.querySelectorAll('.role-switch-btn').forEach(b => b.classList.remove('active'));
+      if (jobId.includes('4480510917')) {
+        const btn = document.getElementById('btn-role-cap');
+        if (btn) btn.classList.add('active');
+      } else if (jobId.includes('5552549004')) {
+        const btn = document.getElementById('btn-role-del');
+        if (btn) btn.classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>
