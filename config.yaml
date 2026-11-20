@@ -1,5 +1,199 @@
 # jobhunt configuration customized for Shubham Sunil Kadam
-# Data Analyst | Python • SQL • Power BI • Machine Learning | Computer Engineering
+# AI & Software Engineer | GenAI • Backend • Full-Stack • Mobile • Automation • ML
+
+# -----------------------------------------------------------------------------
+# 7 Target Career Tracks & Associated Keywords
+# -----------------------------------------------------------------------------
+target_career_tracks:
+  ai_engineer:
+    title: "AI Engineer"
+    roles:
+      - "AI Engineer"
+      - "Applied AI Engineer"
+      - "AI Developer"
+      - "Artificial Intelligence Engineer"
+      - "AI Software Engineer"
+    skills:
+      - "Machine Learning"
+      - "GenAI"
+      - "LLMs"
+      - "NLP"
+      - "LangChain"
+      - "Python"
+    keywords:
+      - "ai"
+      - "artificial intelligence"
+      - "deep learning"
+      - "neural network"
+      - "machine learning"
+      - "python"
+
+  genai_llm_engineer:
+    title: "GenAI & LLM Engineer / Developer (GenAI, LLMs, NLP, LangChain)"
+    roles:
+      - "GenAI Engineer"
+      - "Generative AI Engineer"
+      - "GenAI Developer"
+      - "Generative AI Developer"
+      - "LLM Engineer"
+      - "Large Language Model Engineer"
+      - "LLM Developer"
+      - "AI Agent Engineer"
+      - "AI Agent Developer"
+      - "LangChain Developer"
+      - "LangChain Engineer"
+      - "NLP Engineer"
+      - "NLP Developer"
+      - "RAG Engineer"
+      - "Prompt Engineer"
+    skills:
+      - "GenAI"
+      - "LLMs"
+      - "NLP"
+      - "LangChain"
+      - "Python"
+      - "Machine Learning"
+    keywords:
+      - "genai"
+      - "generative ai"
+      - "llm"
+      - "llms"
+      - "nlp"
+      - "langchain"
+      - "rag"
+      - "agents"
+      - "openai"
+      - "gemini"
+
+  api_backend_engineer:
+    title: "API Development / Backend Engineer (FastAPI, Flask, REST APIs)"
+    roles:
+      - "Backend Engineer"
+      - "Backend Developer"
+      - "API Engineer"
+      - "API Developer"
+      - "Python Backend Developer"
+      - "Python Backend Engineer"
+      - "FastAPI Developer"
+      - "FastAPI Engineer"
+      - "Flask Developer"
+      - "REST API Developer"
+      - "Node.js Backend Developer"
+    skills:
+      - "FastAPI"
+      - "Flask"
+      - "REST APIs"
+      - "Node.js"
+      - "Python"
+    keywords:
+      - "fastapi"
+      - "flask"
+      - "rest api"
+      - "rest apis"
+      - "restful"
+      - "node.js"
+      - "nodejs"
+      - "python"
+      - "backend"
+      - "api"
+
+  full_stack_developer:
+    title: "Full-Stack Developer / Engineer (React, Node.js)"
+    roles:
+      - "Full Stack Developer"
+      - "Full Stack Engineer"
+      - "Full-Stack Developer"
+      - "Full-Stack Engineer"
+      - "React Developer"
+      - "Node.js Developer"
+      - "Web Developer"
+      - "Software Engineer"
+    skills:
+      - "React"
+      - "Node.js"
+    keywords:
+      - "react"
+      - "react.js"
+      - "reactjs"
+      - "node.js"
+      - "nodejs"
+      - "node"
+      - "full stack"
+      - "full-stack"
+      - "frontend"
+      - "web"
+
+  mobile_developer:
+    title: "Mobile Developer (Flutter)"
+    roles:
+      - "Mobile Developer"
+      - "Mobile Engineer"
+      - "Flutter Developer"
+      - "Flutter Engineer"
+      - "Mobile Application Developer"
+      - "Cross-Platform Mobile Developer"
+    skills:
+      - "Flutter"
+    keywords:
+      - "flutter"
+      - "dart"
+      - "mobile"
+      - "mobile developer"
+      - "mobile engineer"
+      - "cross-platform"
+
+  automation_engineer:
+    title: "Automation Engineer (n8n, Docker, CI/CD, Workflow Automation)"
+    roles:
+      - "Automation Engineer"
+      - "Workflow Automation Engineer"
+      - "Automation Developer"
+      - "n8n Developer"
+      - "Process Automation Engineer"
+      - "CI/CD Engineer"
+      - "DevOps Engineer"
+    skills:
+      - "n8n"
+      - "Docker"
+      - "CI/CD"
+      - "Automation"
+    keywords:
+      - "n8n"
+      - "docker"
+      - "ci/cd"
+      - "cicd"
+      - "automation"
+      - "workflow automation"
+      - "process automation"
+      - "devops"
+
+  ml_python_developer:
+    title: "Machine Learning & Python Developer"
+    roles:
+      - "Machine Learning Engineer"
+      - "Machine Learning Developer"
+      - "ML Engineer"
+      - "ML Developer"
+      - "Python Developer"
+      - "Python Engineer"
+      - "Data Scientist"
+    skills:
+      - "Machine Learning"
+      - "Python"
+      - "SQL"
+      - "Power BI"
+      - "Pandas"
+      - "NumPy"
+      - "Scikit-learn"
+    keywords:
+      - "machine learning"
+      - "python"
+      - "ml"
+      - "scikit-learn"
+      - "pandas"
+      - "numpy"
+      - "sql"
+      - "power bi"
 
 target_roles:
   AI_CORE:
@@ -21,6 +215,8 @@ target_roles:
     - ML Developer
     - Artificial Intelligence Engineer
     - Artificial Intelligence Developer
+    - Machine Learning & Python Developer
+    - ML & Python Developer
     - NLP Engineer
     - Computer Vision Engineer
     - Deep Learning Engineer
@@ -34,6 +230,9 @@ target_roles:
     - Generative AI Engineer
     - Generative AI Developer
     - GenAI Developer
+    - GenAI & LLM Engineer / Developer (GenAI, LLMs, NLP, LangChain)
+    - GenAI & LLM Engineer
+    - GenAI & LLM Developer
     - LLM Engineer
     - Large Language Model Engineer
     - LLM Developer
@@ -157,6 +356,27 @@ target_roles:
     - Software Engineer AI/ML
     - Backend Engineer AI
     - Python AI Engineer
+    - API Development / Backend Engineer (FastAPI, Flask, REST APIs)
+    - API Development / Backend Engineer
+    - FastAPI Developer
+    - FastAPI Engineer
+    - Flask Developer
+    - REST API Developer
+    - Node.js Developer
+    - Node.js Engineer
+    - Full-Stack Developer / Engineer (React, Node.js)
+    - Full-Stack Developer / Engineer
+    - Full Stack Developer / Engineer
+    - Full-Stack Developer
+    - Full-Stack Engineer
+    - React Developer
+    - React Engineer
+    - Mobile Developer (Flutter)
+    - Mobile Developer
+    - Mobile Engineer
+    - Flutter Developer
+    - Flutter Engineer
+    - Mobile App Developer
     - Application Engineer
     - Application Developer
     - Software Application Engineer
@@ -210,6 +430,7 @@ target_roles:
     - Infrastructure Software Engineer
 
   AUTOMATION:
+    - Automation Engineer (n8n, Docker, CI/CD, Workflow Automation)
     - Automation Engineer
     - Automation Developer
     - AI Automation Engineer
@@ -221,6 +442,10 @@ target_roles:
     - Process Automation Developer
     - Workflow Automation Engineer
     - AI Workflow Automation Engineer
+    - n8n Developer
+    - n8n Automation Engineer
+    - CI/CD Engineer
+    - DevOps Automation Engineer
     - RPA Developer
     - RPA Engineer
     - Robotic Process Automation Engineer
@@ -321,6 +546,22 @@ filters:
     - '\bgraduate\s+engineer\b'
     - '\bjunior\s+(software|data|python|ai)\b'
 
+    # --- Full-Stack & Frontend track ---
+    - '\bfull[-\s]?stack\b'
+    - '\breact\b'
+
+    # --- Mobile Development track ---
+    - '\bmobile\s+(developer|engineer)\b'
+    - '\bflutter\b'
+
+    # --- API & Backend track ---
+    - '\b(fastapi|flask|rest\s+apis?)\b'
+    - '\bbackend\s+(developer|engineer)\b'
+
+    # --- Automation & Workflow track ---
+    - '\b(automation|workflow\s+automation)\s+(engineer|developer)\b'
+    - '\bn8n\b'
+
   exclude_titles:
     - '\b(staff|principal|distinguished|fellow|architect)\b'
     - '\b(sr\.?|senior)\b'
@@ -328,7 +569,7 @@ filters:
     - '\b(director|vp|vice president|head of|chief|cto)\b'
     - '\b(manager|management)\b'
     - '\b(sales|account executive|marketing|recruit|support|success)\b'
-    - '\b(frontend|front-end|ios|android|mobile|game|designer)\b'
+    - '\b(frontend|front-end|designer|game)\b'
 
   locations:
     - mumbai

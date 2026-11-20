@@ -18,12 +18,15 @@ ROLE_TAXONOMY: dict[str, list[str]] = {
         "AI Research Engineer", "AI Research Scientist", "AI Scientist",
         "Machine Learning Scientist", "AI Software Engineer", "AI Product Engineer",
         "AI Systems Engineer", "AI Developer", "Machine Learning Developer",
-        "ML Developer", "Artificial Intelligence Engineer", "Artificial Intelligence Developer"
+        "ML Developer", "Artificial Intelligence Engineer", "Artificial Intelligence Developer",
+        "Machine Learning & Python Developer", "ML & Python Developer"
     ],
     "GENAI_AGENTIC": [
         "GenAI Engineer", "Generative AI Engineer", "Generative AI Developer",
         "GenAI Developer", "LLM Engineer", "Large Language Model Engineer",
         "LLM Developer", "LLM Application Engineer", "LLM Application Developer",
+        "GenAI & LLM Engineer / Developer (GenAI, LLMs, NLP, LangChain)",
+        "GenAI & LLM Engineer", "GenAI & LLM Developer",
         "Agentic AI Engineer", "Agentic AI Developer", "AI Agent Engineer",
         "AI Agent Developer", "Agent Engineer", "Agent Developer",
         "AI Agents Engineer", "AI Workflow Engineer", "Agentic Workflow Engineer",
@@ -32,6 +35,7 @@ ROLE_TAXONOMY: dict[str, list[str]] = {
         "AI Automation Developer", "Intelligent Automation Engineer",
         "AI Application Engineer", "GenAI Application Engineer",
         "Conversational AI Engineer", "Conversational AI Developer", "Prompt Engineer",
+        "LangChain Developer", "LangChain Engineer", "NLP Engineer", "NLP Developer",
         "AI Evaluation Engineer", "LLM Evaluation Engineer", "AI Quality Engineer",
         "AI Safety Engineer"
     ],
@@ -65,10 +69,18 @@ ROLE_TAXONOMY: dict[str, list[str]] = {
         "Backend Developer", "Backend Software Engineer", "Python Developer",
         "Python Engineer", "Python Backend Developer", "Python Backend Engineer",
         "AI Backend Engineer", "AI Backend Developer", "AI Software Engineer",
+        "API Development / Backend Engineer (FastAPI, Flask, REST APIs)",
+        "API Development / Backend Engineer", "API Backend Engineer",
+        "FastAPI Developer", "FastAPI Engineer", "Flask Developer", "Flask Engineer",
+        "REST API Developer", "REST API Engineer", "Node.js Developer", "Node.js Engineer",
+        "Full-Stack Developer / Engineer (React, Node.js)", "Full-Stack Developer / Engineer",
+        "Full Stack Developer / Engineer", "Full-Stack Developer", "Full-Stack Engineer",
+        "Full Stack Developer", "Full Stack Engineer", "React Developer", "React Engineer",
+        "Mobile Developer (Flutter)", "Mobile Developer", "Mobile Engineer",
+        "Flutter Developer", "Flutter Engineer", "Mobile App Developer",
         "Application Engineer", "Application Developer", "Software Application Engineer",
-        "Full Stack Developer", "Full Stack Engineer", "Web Application Engineer",
-        "API Engineer", "API Developer", "Integration Engineer", "Integration Developer",
-        "Platform Software Engineer"
+        "Web Application Engineer", "API Engineer", "API Developer",
+        "Integration Engineer", "Integration Developer", "Platform Software Engineer"
     ],
     "PLATFORM": [
         "AI Platform Engineer", "AI Platform Developer", "AI Systems Engineer",
@@ -87,12 +99,14 @@ ROLE_TAXONOMY: dict[str, list[str]] = {
         "Reliability Engineer", "Infrastructure Engineer", "Infrastructure Software Engineer"
     ],
     "AUTOMATION": [
+        "Automation Engineer (n8n, Docker, CI/CD, Workflow Automation)",
         "Automation Engineer", "Automation Developer", "AI Automation Engineer",
         "AI Automation Developer", "Intelligent Automation Engineer",
         "Intelligent Automation Developer", "Process Automation Engineer",
         "Process Automation Developer", "Workflow Automation Engineer",
-        "AI Workflow Automation Engineer", "RPA Developer", "RPA Engineer",
-        "Robotic Process Automation Engineer"
+        "AI Workflow Automation Engineer", "n8n Developer", "n8n Automation Engineer",
+        "CI/CD Engineer", "DevOps Automation Engineer",
+        "RPA Developer", "RPA Engineer", "Robotic Process Automation Engineer"
     ],
     "SECURITY": [
         "Cybersecurity Analyst", "Security Analyst", "Junior Security Analyst",
@@ -119,6 +133,86 @@ ROLE_TAXONOMY: dict[str, list[str]] = {
         "Production Support Engineer", "Systems Engineer", "Systems Developer",
         "Computer Systems Engineer", "Technical Operations Engineer"
     ]
+}
+
+# -----------------------------------------------------------------------------
+# 7 Target Career Tracks with Roles, Categorized Skills & Keywords
+# -----------------------------------------------------------------------------
+TARGET_CAREER_TRACKS: dict[str, dict[str, Any]] = {
+    "AI_ENGINEER": {
+        "id": "ai_engineer",
+        "title": "AI Engineer",
+        "roles": [
+            "AI Engineer", "Applied AI Engineer", "AI Developer",
+            "Artificial Intelligence Engineer", "AI Software Engineer"
+        ],
+        "skills": ["Machine Learning", "GenAI", "LLMs", "NLP", "LangChain", "Python"],
+        "keywords": ["ai", "artificial intelligence", "deep learning", "neural network", "machine learning", "python"],
+    },
+    "GENAI_LLM": {
+        "id": "genai_llm",
+        "title": "GenAI & LLM Engineer / Developer (GenAI, LLMs, NLP, LangChain)",
+        "roles": [
+            "GenAI Engineer", "Generative AI Engineer", "GenAI Developer",
+            "Generative AI Developer", "LLM Engineer", "Large Language Model Engineer",
+            "LLM Developer", "AI Agent Engineer", "AI Agent Developer",
+            "LangChain Developer", "LangChain Engineer", "NLP Engineer", "NLP Developer",
+            "RAG Engineer", "Prompt Engineer"
+        ],
+        "skills": ["GenAI", "LLMs", "NLP", "LangChain", "Python", "Machine Learning"],
+        "keywords": ["genai", "generative ai", "llm", "llms", "nlp", "langchain", "rag", "agents", "openai", "gemini"],
+    },
+    "API_BACKEND": {
+        "id": "api_backend",
+        "title": "API Development / Backend Engineer (FastAPI, Flask, REST APIs)",
+        "roles": [
+            "Backend Engineer", "Backend Developer", "API Engineer", "API Developer",
+            "Python Backend Developer", "Python Backend Engineer", "FastAPI Developer",
+            "FastAPI Engineer", "Flask Developer", "REST API Developer", "Node.js Backend Developer"
+        ],
+        "skills": ["FastAPI", "Flask", "REST APIs", "Node.js", "Python"],
+        "keywords": ["fastapi", "flask", "rest api", "rest apis", "restful", "node.js", "nodejs", "python", "backend", "api"],
+    },
+    "FULL_STACK": {
+        "id": "full_stack",
+        "title": "Full-Stack Developer / Engineer (React, Node.js)",
+        "roles": [
+            "Full Stack Developer", "Full Stack Engineer", "Full-Stack Developer",
+            "Full-Stack Engineer", "React Developer", "Node.js Developer", "Web Developer"
+        ],
+        "skills": ["React", "Node.js"],
+        "keywords": ["react", "react.js", "reactjs", "node.js", "nodejs", "node", "full stack", "full-stack", "frontend", "web"],
+    },
+    "MOBILE": {
+        "id": "mobile",
+        "title": "Mobile Developer (Flutter)",
+        "roles": [
+            "Mobile Developer", "Mobile Engineer", "Flutter Developer", "Flutter Engineer",
+            "Mobile Application Developer", "Cross-Platform Mobile Developer"
+        ],
+        "skills": ["Flutter"],
+        "keywords": ["flutter", "dart", "mobile", "mobile developer", "mobile engineer", "cross-platform"],
+    },
+    "AUTOMATION": {
+        "id": "automation",
+        "title": "Automation Engineer (n8n, Docker, CI/CD, Workflow Automation)",
+        "roles": [
+            "Automation Engineer", "Workflow Automation Engineer", "Automation Developer",
+            "n8n Developer", "Process Automation Engineer", "CI/CD Engineer", "DevOps Engineer"
+        ],
+        "skills": ["n8n", "Docker", "CI/CD", "Automation"],
+        "keywords": ["n8n", "docker", "ci/cd", "cicd", "automation", "workflow automation", "process automation", "devops"],
+    },
+    "ML_PYTHON": {
+        "id": "ml_python",
+        "title": "Machine Learning & Python Developer",
+        "roles": [
+            "Machine Learning Engineer", "Machine Learning Developer", "ML Engineer",
+            "ML Developer", "Python Developer", "Python Engineer", "Data Scientist"
+        ],
+        "skills": ["Machine Learning", "Python", "SQL", "Power BI", "Pandas", "NumPy", "Scikit-learn"],
+        "keywords": ["machine learning", "python", "ml", "scikit-learn", "pandas", "numpy", "sql", "power bi"],
+    },
 }
 
 # -----------------------------------------------------------------------------
@@ -151,12 +245,14 @@ FALSE_POSITIVE_PATTERNS = [
 # -----------------------------------------------------------------------------
 TECH_SKILLS = [
     "python", "sql", "power bi", "tableau", "pandas", "numpy", "scikit-learn",
-    "machine learning", "deep learning", "nlp", "llm", "rag", "langchain",
+    "machine learning", "deep learning", "nlp", "llm", "llms", "rag", "langchain",
     "llamaindex", "gemini", "openai", "agentic", "agents", "mcp", "n8n",
     "docker", "kubernetes", "fastapi", "flask", "django", "pytorch",
     "tensorflow", "mysql", "postgresql", "mongodb", "etl", "data pipeline",
-    "aws", "gcp", "azure", "git", "rest api", "spark", "kafka", "dbt",
-    "selenium", "playwright", "pytest", "devops", "ci/cd", "linux"
+    "aws", "gcp", "azure", "git", "rest api", "rest apis", "spark", "kafka", "dbt",
+    "selenium", "playwright", "pytest", "devops", "ci/cd", "linux",
+    "react", "node.js", "nodejs", "flutter", "dart", "genai", "generative ai",
+    "automation", "workflow automation"
 ]
 
 EXPERIENCE_PATTERNS = [
@@ -180,6 +276,37 @@ COMPILED_ROLES = {
 COMPILED_FALSE_POSITIVES = [re.compile(p, re.IGNORECASE) for p in FALSE_POSITIVE_PATTERNS]
 
 
+def get_career_tracks() -> dict[str, dict[str, Any]]:
+    """Return definition of all 7 Target Career Tracks with associated roles, skills, and keywords."""
+    return TARGET_CAREER_TRACKS
+
+
+def match_career_tracks(title: str, description: str = "", requirements: str = "") -> list[str]:
+    """Match a job title/posting against the 7 Target Career Tracks."""
+    clean_title = (title or "").lower()
+    full_text = f"{clean_title} {description} {requirements}".lower()
+    matched_tracks: list[str] = []
+
+    for track_key, track_info in TARGET_CAREER_TRACKS.items():
+        # Check title against track roles
+        role_matched = False
+        for role in track_info["roles"]:
+            if re.search(rf"\b{re.escape(role.lower())}\b", clean_title):
+                matched_tracks.append(track_info["title"])
+                role_matched = True
+                break
+        if role_matched:
+            continue
+
+        # Check title and text against keywords
+        title_kw = any(re.search(rf"\b{re.escape(kw)}\b", clean_title) for kw in track_info["keywords"])
+        text_kw_count = sum(1 for kw in track_info["keywords"] if re.search(rf"\b{re.escape(kw)}\b", full_text))
+        if title_kw or text_kw_count >= 2:
+            matched_tracks.append(track_info["title"])
+
+    return matched_tracks
+
+
 def extract_experience(text: str) -> str:
     """Extract required experience from title or description snippet."""
     for pattern, fmt in EXPERIENCE_PATTERNS:
@@ -198,6 +325,7 @@ def classify_job(title: str, description: str = "", requirements: str = "") -> d
         role_families: list[str]
         role_confidence: float (0.0 to 1.0)
         matched_skills: list[str]
+        matched_tracks: list[str]
         experience_required: str
         is_false_positive: bool
     """
@@ -212,6 +340,7 @@ def classify_job(title: str, description: str = "", requirements: str = "") -> d
                 "role_families": [],
                 "role_confidence": 0.0,
                 "matched_skills": [],
+                "matched_tracks": [],
                 "experience_required": "",
                 "is_false_positive": True
             }
@@ -242,7 +371,10 @@ def classify_job(title: str, description: str = "", requirements: str = "") -> d
         if re.search(rf"\b{re.escape(skill)}\b", full_text, re.IGNORECASE)
     ]
 
-    # 4. Confidence calculation
+    # 4. Matched career tracks
+    matched_tracks = match_career_tracks(clean_title, description, requirements)
+
+    # 5. Confidence calculation
     if title_matches > 0:
         confidence = min(0.98, 0.70 + (title_matches * 0.08) + min(len(matched_skills) * 0.03, 0.20))
     elif matched_roles:
@@ -257,6 +389,7 @@ def classify_job(title: str, description: str = "", requirements: str = "") -> d
         "role_families": role_families,
         "role_confidence": round(confidence, 2),
         "matched_skills": matched_skills[:12],
+        "matched_tracks": matched_tracks,
         "experience_required": exp_req,
         "is_false_positive": False
     }

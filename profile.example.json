@@ -1,43 +1,113 @@
 {
   "name": "Sample Candidate",
-  "current_title": "Software Engineer II",
-  "years_experience": 3,
+  "email": "ssk080204@gmail.com",
+  "phone": "+918169832448",
+  "location": "Mumbai Metropolitan Region / Remote",
+  "target_locations": [
+    "Mumbai Metropolitan Region",
+    "Remote"
+  ],
+  "current_title": "AI & Software Engineer",
+  "years_experience": 1,
+  "seniority": "junior",
+  "target_roles": [
+    "AI Engineer",
+    "GenAI & LLM Engineer / Developer (GenAI, LLMs, NLP, LangChain)",
+    "API Development / Backend Engineer (FastAPI, Flask, REST APIs)",
+    "Full-Stack Developer / Engineer (React, Node.js)",
+    "Mobile Developer (Flutter)",
+    "Automation Engineer (n8n, Docker, CI/CD, Workflow Automation)",
+    "Machine Learning & Python Developer"
+  ],
+  "skills": {
+    "AI & ML": [
+      "Machine Learning",
+      "GenAI",
+      "LLMs",
+      "NLP",
+      "LangChain",
+      "Python"
+    ],
+    "API & Backend": [
+      "FastAPI",
+      "Flask",
+      "REST APIs",
+      "Node.js",
+      "Python"
+    ],
+    "Full-Stack & Frontend": [
+      "React",
+      "Node.js"
+    ],
+    "Mobile": [
+      "Flutter"
+    ],
+    "Automation & DevOps": [
+      "n8n",
+      "Docker",
+      "CI/CD",
+      "Automation"
+    ],
+    "Data & BI": [
+      "SQL",
+      "Power BI",
+      "Pandas",
+      "NumPy",
+      "Scikit-learn"
+    ]
+  },
   "core_skills": [
-    "Go",
-    "Java",
+    "Machine Learning",
+    "GenAI",
+    "LLMs",
+    "NLP",
+    "LangChain",
     "Python",
-    "distributed systems",
-    "Kubernetes",
-    "Kafka",
-    "gRPC",
-    "PostgreSQL",
-    "Redis",
+    "FastAPI",
+    "Flask",
+    "REST APIs",
+    "Node.js",
+    "React",
+    "Flutter",
+    "n8n",
     "Docker",
-    "Terraform",
-    "observability",
-    "TCP/IP",
-    "HTTP",
-    "DNS",
-    "system design"
+    "CI/CD",
+    "Automation",
+    "SQL",
+    "Power BI",
+    "Pandas",
+    "NumPy",
+    "Scikit-learn"
   ],
   "domains": [
-    "backend services",
-    "distributed systems",
-    "CDN and edge networking",
-    "platform infrastructure"
+    "artificial intelligence, GenAI, and large language models",
+    "backend services, API development, and microservices",
+    "full-stack web development and user interfaces",
+    "cross-platform mobile application development",
+    "workflow automation, CI/CD, and DevOps pipelines",
+    "data analysis, business intelligence, and predictive modeling"
   ],
   "notable_projects": [
-    "Rebuilt a request-routing layer in Go, cutting p99 latency from 340ms to 95ms",
-    "Owned the migration of 40 services onto Kubernetes with zero customer-facing downtime",
-    "Built a Kafka-based event pipeline handling 1.2B events/day"
+    "Engineered production GenAI & LLM applications and agentic workflows using LangChain, Python, and modern LLM APIs",
+    "Built scalable backend APIs and microservices using FastAPI, Flask, and Node.js with REST architectures and Docker containerization",
+    "Developed high-performance cross-platform mobile applications in Flutter and interactive responsive web apps using React",
+    "Implemented automated CI/CD and workflow orchestrations using n8n and Docker, cutting operational friction and automating data processing"
   ],
-  "education": "B.E. Computer Science, 2022",
+  "education": "Bachelor of Engineering (B.E.) in Computer Engineering, Vidyavardhini College of Engineering, Mumbai (2022-2026)",
   "target_titles": [
-    "Software Engineer",
+    "AI Engineer",
+    "GenAI & LLM Engineer / Developer (GenAI, LLMs, NLP, LangChain)",
+    "API Development / Backend Engineer (FastAPI, Flask, REST APIs)",
+    "Full-Stack Developer / Engineer (React, Node.js)",
+    "Mobile Developer (Flutter)",
+    "Automation Engineer (n8n, Docker, CI/CD, Workflow Automation)",
+    "Machine Learning & Python Developer",
+    "Generative AI Engineer",
+    "LLM Engineer",
     "Backend Engineer",
-    "Software Development Engineer",
-    "Site Reliability Engineer",
-    "Platform Engineer"
-  ],
-  "seniority": "mid"
+    "Full Stack Developer",
+    "Mobile Developer",
+    "Automation Engineer",
+    "Python Developer"
+  ]
 }

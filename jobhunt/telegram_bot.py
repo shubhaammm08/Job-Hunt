@@ -381,8 +381,8 @@ def generate_pitch_note(job_data: dict[str, Any], profile: dict[str, Any]) -> st
 def format_autofill_kit(job_data: dict[str, Any], profile: dict[str, Any]) -> str:
     """Format a 1-click tap-to-copy application kit for mobile / desktop Telegram."""
     name = profile.get("name", "Shubham Sunil Kadam")
-    email = "ssk080204@gmail.com"
-    phone = "+91 9324546597"
+    email = profile.get("email", "ssk080204@gmail.com")
+    phone = profile.get("phone", "+918169832448")
     linkedin = "https://www.linkedin.com/in/shubham-kadam"
     github = "https://github.com/shubhaammm08"
     portfolio = DEFAULT_DASHBOARD_URL

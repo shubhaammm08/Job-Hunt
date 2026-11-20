@@ -1,5 +1,6 @@
 import os
 import json
+import re
 
 HTML_TEMPLATE = r"""<!DOCTYPE html>
 <html lang="en">
@@ -1047,31 +1048,76 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
           <div class="avatar">SK</div>
           <div>
             <h2 id="profile-name" style="font-size:18px;">Shubham Sunil Kadam</h2>
-            <p style="color:var(--text-muted);font-size:13px;" id="profile-title">Data Analyst · Python, SQL & Junior AI Developer</p>
-            <p style="color:var(--accent-blue);font-size:12px;margin-top:2px;" id="profile-email">ssk080204@gmail.com</p>
+            <p style="color:var(--text-muted);font-size:13px;" id="profile-title">AI &amp; Software Engineer</p>
+            <p style="color:var(--accent-blue);font-size:12px;margin-top:2px;" id="profile-email">ssk080204@gmail.com · +918169832448</p>
           </div>
         </div>
 
         <div class="p-group">
           <div class="p-title">Target Career Tracks</div>
-          <div class="job-tags" id="profile-target-roles"></div>
+          <div class="job-tags" id="profile-target-roles">
+            <span class="tag tag-family">AI Engineer</span>
+            <span class="tag tag-family">GenAI &amp; LLM Engineer / Developer (GenAI, LLMs, NLP, LangChain)</span>
+            <span class="tag tag-family">API Development / Backend Engineer (FastAPI, Flask, REST APIs)</span>
+            <span class="tag tag-family">Full-Stack Developer / Engineer (React, Node.js)</span>
+            <span class="tag tag-family">Mobile Developer (Flutter)</span>
+            <span class="tag tag-family">Automation Engineer (n8n, Docker, CI/CD, Workflow Automation)</span>
+            <span class="tag tag-family">Machine Learning &amp; Python Developer</span>
+          </div>
         </div>
 
         <div class="p-group">
-          <div class="p-title">Core Technical Stack</div>
-          <div class="job-tags" id="profile-skills"></div>
+          <div class="p-title">Core Technical Stack &amp; Skills</div>
+          <div class="job-tags" id="profile-skills">
+            <div style="width:100%;margin-top:6px;margin-bottom:3px;"><strong style="font-size:12px;color:var(--accent-blue);">AI &amp; ML:</strong></div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;">
+              <span class="tag" style="background:#1f242d;color:#79c0ff;">Machine Learning</span>
+              <span class="tag" style="background:#1f242d;color:#79c0ff;">GenAI</span>
+              <span class="tag" style="background:#1f242d;color:#79c0ff;">LLMs</span>
+              <span class="tag" style="background:#1f242d;color:#79c0ff;">NLP</span>
+              <span class="tag" style="background:#1f242d;color:#79c0ff;">LangChain</span>
+              <span class="tag" style="background:#1f242d;color:#79c0ff;">Python</span>
+            </div>
+            <div style="width:100%;margin-top:6px;margin-bottom:3px;"><strong style="font-size:12px;color:var(--accent-blue);">API &amp; Backend:</strong></div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;">
+              <span class="tag" style="background:#1f242d;color:#79c0ff;">FastAPI</span>
+              <span class="tag" style="background:#1f242d;color:#79c0ff;">Flask</span>
+              <span class="tag" style="background:#1f242d;color:#79c0ff;">REST APIs</span>
+              <span class="tag" style="background:#1f242d;color:#79c0ff;">Node.js</span>
+              <span class="tag" style="background:#1f242d;color:#79c0ff;">Python</span>
+            </div>
+            <div style="width:100%;margin-top:6px;margin-bottom:3px;"><strong style="font-size:12px;color:var(--accent-blue);">Full-Stack &amp; Frontend:</strong></div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;">
+              <span class="tag" style="background:#1f242d;color:#79c0ff;">React</span>
+              <span class="tag" style="background:#1f242d;color:#79c0ff;">Node.js</span>
+            </div>
+            <div style="width:100%;margin-top:6px;margin-bottom:3px;"><strong style="font-size:12px;color:var(--accent-blue);">Mobile:</strong></div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;">
+              <span class="tag" style="background:#1f242d;color:#79c0ff;">Flutter</span>
+            </div>
+            <div style="width:100%;margin-top:6px;margin-bottom:3px;"><strong style="font-size:12px;color:var(--accent-blue);">Automation &amp; DevOps:</strong></div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;">
+              <span class="tag" style="background:#1f242d;color:#79c0ff;">n8n</span>
+              <span class="tag" style="background:#1f242d;color:#79c0ff;">Docker</span>
+              <span class="tag" style="background:#1f242d;color:#79c0ff;">CI/CD</span>
+              <span class="tag" style="background:#1f242d;color:#79c0ff;">Automation</span>
+            </div>
+            <div style="width:100%;margin-top:6px;margin-bottom:3px;"><strong style="font-size:12px;color:var(--accent-blue);">Data &amp; BI:</strong></div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;">
+              <span class="tag" style="background:#1f242d;color:#79c0ff;">SQL</span>
+              <span class="tag" style="background:#1f242d;color:#79c0ff;">Power BI</span>
+              <span class="tag" style="background:#1f242d;color:#79c0ff;">Pandas</span>
+              <span class="tag" style="background:#1f242d;color:#79c0ff;">NumPy</span>
+              <span class="tag" style="background:#1f242d;color:#79c0ff;">Scikit-learn</span>
+            </div>
+          </div>
         </div>
 
         <div class="p-group">
           <div class="p-title">Target Locations</div>
           <div class="job-tags">
-            <span class="tag">Mumbai</span>
-            <span class="tag">Powai</span>
-            <span class="tag">Pune</span>
-            <span class="tag">Bangalore</span>
-            <span class="tag">Hyderabad</span>
-            <span class="tag">Delhi NCR</span>
-            <span class="tag" style="background:#238636;color:#fff;font-weight:bold;">Remote (India & Global)</span>
+            <span class="tag" style="background:#1f242d;color:#58a6ff;font-weight:600;">Mumbai Metropolitan Region</span>
+            <span class="tag" style="background:#238636;color:#fff;font-weight:bold;">Remote</span>
           </div>
         </div>
 
@@ -1721,15 +1767,30 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       const p = appData.profile || {};
       if (p.name) document.getElementById('profile-name').innerText = p.name;
       if (p.current_title) document.getElementById('profile-title').innerText = p.current_title;
+      if (document.getElementById('profile-email')) {
+        const emailStr = p.email || 'ssk080204@gmail.com';
+        const phoneStr = p.phone || '+918169832448';
+        document.getElementById('profile-email').innerText = `${emailStr} · ${phoneStr}`;
+      }
       
       const skillsContainer = document.getElementById('profile-skills');
-      if (skillsContainer && p.core_skills) {
-        skillsContainer.innerHTML = p.core_skills.map(s => `<span class="tag" style="background:#1f242d;color:#79c0ff;">${escapeHtml(s)}</span>`).join('');
+      if (skillsContainer) {
+        if (p.skills && typeof p.skills === 'object' && !Array.isArray(p.skills)) {
+          let html = '';
+          for (const [category, skillList] of Object.entries(p.skills)) {
+            html += `<div style="width:100%;margin-top:6px;margin-bottom:3px;"><strong style="font-size:12px;color:var(--accent-blue);">${escapeHtml(category)}:</strong></div>`;
+            html += `<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;">` + skillList.map(s => `<span class="tag" style="background:#1f242d;color:#79c0ff;">${escapeHtml(s)}</span>`).join('') + `</div>`;
+          }
+          skillsContainer.innerHTML = html;
+        } else if (p.core_skills) {
+          skillsContainer.innerHTML = p.core_skills.map(s => `<span class="tag" style="background:#1f242d;color:#79c0ff;">${escapeHtml(s)}</span>`).join('');
+        }
       }
 
       const rolesContainer = document.getElementById('profile-target-roles');
-      if (rolesContainer && p.target_titles) {
-        rolesContainer.innerHTML = p.target_titles.map(t => `<span class="tag tag-family">${escapeHtml(t)}</span>`).join('');
+      const targetTracks = p.target_roles || p.target_titles || [];
+      if (rolesContainer && targetTracks.length) {
+        rolesContainer.innerHTML = targetTracks.map(t => `<span class="tag tag-family">${escapeHtml(t)}</span>`).join('');
       }
     }
 
@@ -1750,9 +1811,41 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
         stats: { total: 48, applied: 0, recommended: 48, sources_count: 87 },
         profile: {
           name: "Shubham Sunil Kadam",
-          current_title: "Data Analyst · Python, SQL & Junior AI Developer",
-          core_skills: ["Python", "SQL", "Power BI", "Tableau", "Pandas", "NumPy", "Scikit-Learn", "Machine Learning", "FastAPI", "PostgreSQL", "Docker", "Git"],
-          target_titles: ["Data Analyst", "Junior AI Developer", "Python Developer", "Business Intelligence Analyst", "Analytics Engineer"]
+          current_title: "AI & Software Engineer",
+          email: "ssk080204@gmail.com",
+          phone: "+918169832448",
+          location: "Mumbai Metropolitan Region / Remote",
+          target_roles: [
+            "AI Engineer",
+            "GenAI & LLM Engineer / Developer (GenAI, LLMs, NLP, LangChain)",
+            "API Development / Backend Engineer (FastAPI, Flask, REST APIs)",
+            "Full-Stack Developer / Engineer (React, Node.js)",
+            "Mobile Developer (Flutter)",
+            "Automation Engineer (n8n, Docker, CI/CD, Workflow Automation)",
+            "Machine Learning & Python Developer"
+          ],
+          target_titles: [
+            "AI Engineer",
+            "GenAI & LLM Engineer / Developer (GenAI, LLMs, NLP, LangChain)",
+            "API Development / Backend Engineer (FastAPI, Flask, REST APIs)",
+            "Full-Stack Developer / Engineer (React, Node.js)",
+            "Mobile Developer (Flutter)",
+            "Automation Engineer (n8n, Docker, CI/CD, Workflow Automation)",
+            "Machine Learning & Python Developer"
+          ],
+          skills: {
+            "AI & ML": ["Machine Learning", "GenAI", "LLMs", "NLP", "LangChain", "Python"],
+            "API & Backend": ["FastAPI", "Flask", "REST APIs", "Node.js", "Python"],
+            "Full-Stack & Frontend": ["React", "Node.js"],
+            "Mobile": ["Flutter"],
+            "Automation & DevOps": ["n8n", "Docker", "CI/CD", "Automation"],
+            "Data & BI": ["SQL", "Power BI", "Pandas", "NumPy", "Scikit-learn"]
+          },
+          core_skills: [
+            "Machine Learning", "GenAI", "LLMs", "NLP", "LangChain", "Python",
+            "FastAPI", "Flask", "REST APIs", "Node.js", "React", "Flutter",
+            "n8n", "Docker", "CI/CD", "Automation", "SQL", "Power BI", "Pandas", "NumPy", "Scikit-learn"
+          ]
         },
         source_health: [
           { source: "Greenhouse", category: "direct_ats", tier: 1, status: "HEALTHY" },
