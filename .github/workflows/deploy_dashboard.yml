@@ -7,6 +7,7 @@ on:
       - "gui/**"
       - "index.html"
       - "digest.html"
+      - "studio_presentation.html"
       - ".github/workflows/deploy_dashboard.yml"
   workflow_run:
     workflows: ["JobHunter Daily Autonomous Pipeline"]
@@ -42,6 +43,7 @@ jobs:
           mkdir -p _site
           cp -r gui/* _site/
           cp digest.html _site/ 2>/dev/null || cp gui/digest.html _site/ 2>/dev/null || true
+          cp studio_presentation.html _site/ 2>/dev/null || cp gui/studio_presentation.html _site/ 2>/dev/null || true
           
           # Fetch latest seen.json from state/jobhunter branch
           git fetch origin state/jobhunter:refs/remotes/origin/state/jobhunter --depth=1 2>/dev/null || true
