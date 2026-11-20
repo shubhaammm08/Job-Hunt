@@ -1149,5 +1149,261 @@
     "emailed": true,
     "applied": false,
     "applied_on": null
+  },
+  "greenhouse:reddit:7131932": {
+    "first_seen": "2026-11-20T12:06:59+00:00",
+    "company": "Reddit",
+    "title": "Machine Learning Engineer",
+    "location": "Remote - United States",
+    "url": "https://job-boards.greenhouse.io/reddit/jobs/7131932",
+    "score": 4.0,
+    "reason": "The role requires extensive scale and experience beyond a junior candidate with one year of experience.",
+    "canonical_source": "greenhouse",
+    "sources": [
+      "greenhouse"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "Machine Learning Engineer"
+    ],
+    "fit_score": 4.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "ashby:elevenlabs:3abf96ca-2937-4290-9d23-5208aece08b2": {
+    "first_seen": "2026-11-20T12:06:59+00:00",
+    "company": "ElevenLabs",
+    "title": "Full-Stack Engineer - Ads Engine",
+    "location": "Remote",
+    "url": "https://jobs.ashbyhq.com/ElevenLabs/3abf96ca-2937-4290-9d23-5208aece08b2",
+    "score": 4.0,
+    "reason": "ElevenLabs targets top-tier senior builders and founders, making this a reach for a junior engineer.",
+    "canonical_source": "ashby",
+    "sources": [
+      "ashby"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Full-Stack Engineer"
+    ],
+    "fit_score": 4.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "ashby:elevenlabs:108c99e6-ba2b-44a0-b830-7d535e14a152": {
+    "first_seen": "2026-11-20T12:06:59+00:00",
+    "company": "ElevenLabs",
+    "title": "Full-Stack Engineer - ElevenAPI",
+    "location": "Remote",
+    "url": "https://jobs.ashbyhq.com/ElevenLabs/108c99e6-ba2b-44a0-b830-7d535e14a152",
+    "score": 4.0,
+    "reason": "ElevenLabs roles typically require senior engineering pedigree exceeding a junior candidate's profile.",
+    "canonical_source": "ashby",
+    "sources": [
+      "ashby"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Full-Stack Engineer"
+    ],
+    "fit_score": 4.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "ashby:elevenlabs:34dbe44c-9815-40b2-81f4-91c607fd84b2": {
+    "first_seen": "2026-11-20T12:06:59+00:00",
+    "company": "ElevenLabs",
+    "title": "Full-Stack Engineer - ElevenCreative Enterprise",
+    "location": "Remote",
+    "url": "https://jobs.ashbyhq.com/ElevenLabs/34dbe44c-9815-40b2-81f4-91c607fd84b2",
+    "score": 4.0,
+    "reason": "Seniority mismatch; ElevenLabs engineering positions demand extensive industry experience.",
+    "canonical_source": "ashby",
+    "sources": [
+      "ashby"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Full-Stack Engineer"
+    ],
+    "fit_score": 4.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "ashby:elevenlabs:10e6475e-67ef-4621-8718-7b087c354651": {
+    "first_seen": "2026-11-20T12:06:59+00:00",
+    "company": "ElevenLabs",
+    "title": "Full-Stack Engineer - Productions",
+    "location": "Remote",
+    "url": "https://jobs.ashbyhq.com/ElevenLabs/10e6475e-67ef-4621-8718-7b087c354651",
+    "score": 4.0,
+    "reason": "The company expects seasoned engineers and industry veterans rather than entry-level applicants.",
+    "canonical_source": "ashby",
+    "sources": [
+      "ashby"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Full-Stack Engineer"
+    ],
+    "fit_score": 4.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "ashby:elevenlabs:1b90a2b2-1352-458d-b2b7-3900f6e02df5": {
+    "first_seen": "2026-11-20T12:06:59+00:00",
+    "company": "ElevenLabs",
+    "title": "Mobile Engineer - ElevenMusic",
+    "location": "Remote",
+    "url": "https://jobs.ashbyhq.com/ElevenLabs/1b90a2b2-1352-458d-b2b7-3900f6e02df5",
+    "score": 4.0,
+    "reason": "Mobile engineering at ElevenLabs requires higher seniority than a junior background provides.",
+    "canonical_source": "ashby",
+    "sources": [
+      "ashby"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Mobile Engineer"
+    ],
+    "fit_score": 4.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "ashby:elevenlabs:0547cf3a-856f-4db2-8307-73db634c4096": {
+    "first_seen": "2026-11-20T12:06:59+00:00",
+    "company": "ElevenLabs",
+    "title": "Full-Stack Engineer - ElevenMusic",
+    "location": "Remote",
+    "url": "https://jobs.ashbyhq.com/ElevenLabs/0547cf3a-856f-4db2-8307-73db634c4096",
+    "score": 4.0,
+    "reason": "This position requires advanced systems experience that a 1-year junior engineer lacks.",
+    "canonical_source": "ashby",
+    "sources": [
+      "ashby"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Full-Stack Engineer"
+    ],
+    "fit_score": 4.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "remotive:global:2091165": {
+    "first_seen": "2026-11-20T12:06:59+00:00",
+    "company": "Fluence International, Inc.",
+    "title": "Full-Stack Developer",
+    "location": "Worldwide",
+    "url": "https://remotive.com/remote-jobs/software-development/full-stack-developer-2091165",
+    "score": 6.0,
+    "reason": "Good tech stack match with React and LLMs, but reports to a senior lead and requires deep AWS proficiency.",
+    "canonical_source": "remotive",
+    "sources": [
+      "remotive"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Full-Stack Developer"
+    ],
+    "fit_score": 6.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "nodesk:rss:olygon-labs-ai-platform-engineer": {
+    "first_seen": "2026-11-20T12:06:59+00:00",
+    "company": "Polygon Labs",
+    "title": "AI Platform Engineer",
+    "location": "Remote",
+    "url": "https://nodesk.co/remote-jobs/polygon-labs-ai-platform-engineer/",
+    "score": 3.0,
+    "reason": "Platform engineer role at a global blockchain company is too senior and lacks explicit requirement matches.",
+    "canonical_source": "nodesk",
+    "sources": [
+      "nodesk"
+    ],
+    "role_families": [
+      "PLATFORM"
+    ],
+    "matched_roles": [
+      "AI Platform Engineer",
+      "Platform Engineer"
+    ],
+    "fit_score": 3.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "nodesk:rss:oftware-engineer-ai-coding-tasks": {
+    "first_seen": "2026-11-20T12:06:59+00:00",
+    "company": "Askable",
+    "title": "Software Engineer, AI Coding Tasks",
+    "location": "Remote",
+    "url": "https://nodesk.co/remote-jobs/askable-software-engineer-ai-coding-tasks/",
+    "score": 5.0,
+    "reason": "Requires 2+ years of professional software engineering experience, while candidate has 1 year.",
+    "canonical_source": "nodesk",
+    "sources": [
+      "nodesk",
+      "remoteok"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Engineer"
+    ],
+    "fit_score": 5.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "remoteok:global:1137805": {
+    "first_seen": "2026-11-20T12:06:59+00:00",
+    "company": "Treatwell",
+    "title": "SEO Full Stack Engineer",
+    "location": "Remote",
+    "url": "https://remoteOK.com/remote-jobs/remote-seo-full-stack-engineer-treatwell-1137805",
+    "score": 3.0,
+    "reason": "Full-stack role relies on Java, Spring Boot, and Kubernetes which do not align with the candidate's stack.",
+    "canonical_source": "remoteok",
+    "sources": [
+      "remoteok"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Full-Stack Engineer",
+      "Full Stack Engineer"
+    ],
+    "fit_score": 3.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
   }
 }
