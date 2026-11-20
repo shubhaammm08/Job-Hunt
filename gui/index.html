@@ -168,6 +168,51 @@
       position: relative;
       overflow: hidden;
     }
+    .metric-card.clickable {
+      cursor: pointer;
+      transition: border-color 0.15s, transform 0.1s, box-shadow 0.15s;
+    }
+    .metric-card.clickable:hover {
+      border-color: var(--accent-blue);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+    }
+    .metric-card.clickable:active {
+      transform: scale(0.985);
+    }
+    .btn-applied-hub-pill {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--accent-blue);
+      background: rgba(88, 166, 255, 0.15);
+      border: 1px solid rgba(88, 166, 255, 0.35);
+      padding: 2px 7px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-applied-hub-pill:hover {
+      background: rgba(88, 166, 255, 0.3);
+      border-color: var(--accent-blue);
+    }
+    .btn-applied-export {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      font-size: 12px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+      transition: all 0.15s;
+      text-decoration: none;
+    }
+    .btn-applied-export:hover {
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
     .metric-label {
       font-size: 11px;
       color: var(--text-muted);
@@ -591,6 +636,15 @@
       background: rgba(139, 148, 158, 0.15);
       border: 1px solid rgba(139, 148, 158, 0.4);
       color: #8b949e;
+    }
+    .tag-applied {
+      background: rgba(46, 160, 67, 0.18);
+      border: 1px solid rgba(46, 160, 67, 0.5);
+      color: #3fb950;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
     }
 
     .job-reason {
@@ -1134,22 +1188,25 @@
 
     <!-- Key Metrics Grid (2x2 on Mobile, 4x1 on Desktop) -->
     <div class="metrics-grid">
-      <div class="metric-card">
+      <div class="metric-card clickable" onclick="setQuickChip('all')" title="Filter: All Tracked Jobs" role="button" tabindex="0">
         <span class="metric-label">Tracked Jobs</span>
         <span class="metric-val" id="metric-total">--</span>
         <span class="metric-sub">In seen.json</span>
       </div>
-      <div class="metric-card">
+      <div class="metric-card clickable" onclick="setQuickChip('rec')" title="Filter: Recommended (Score ≥ 6.0)" role="button" tabindex="0">
         <span class="metric-label">Recommended</span>
         <span class="metric-val" id="metric-recommended" style="color: #3fb950;">--</span>
         <span class="metric-sub">Score ≥ 6.0</span>
       </div>
-      <div class="metric-card">
-        <span class="metric-label">Applied</span>
+      <div class="metric-card clickable" id="metric-card-applied" onclick="setQuickChip('applied')" title="Filter: View Applied Jobs (or click Hub to manage)" role="button" tabindex="0">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span class="metric-label">Applied</span>
+          <button class="btn-applied-hub-pill" onclick="event.stopPropagation(); openAppliedTrackerModal();" title="Open Applied Jobs Hub">Hub ↗</button>
+        </div>
         <span class="metric-val" id="metric-applied" style="color: #58a6ff;">--</span>
         <span class="metric-sub" id="metric-applied-rate">0% applied</span>
       </div>
-      <div class="metric-card">
+      <div class="metric-card clickable" onclick="switchTab('sources')" title="View Connected Sources" role="button" tabindex="0">
         <span class="metric-label">Sources</span>
         <span class="metric-val" id="metric-sources">87</span>
         <span class="metric-sub">Connected</span>
@@ -1194,11 +1251,20 @@
             </span>
             <input type="text" id="search-input" placeholder="Search title, company, skill, city..." oninput="renderJobs()">
           </div>
+          <button class="btn-applied-export" onclick="openAppliedTrackerModal()" title="View and manage all applied jobs" style="height:44px;padding:0 14px;flex-shrink:0;">
+            <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <span>Applied Hub</span>
+          </button>
         </div>
 
         <!-- 1-Touch Quick Filter Chips for Mobile Thumbs -->
         <div class="chips-scroll" role="region" aria-label="Quick filters">
           <button class="filter-chip active" id="chip-all" onclick="setQuickChip('all')">All Jobs</button>
+          <button class="filter-chip" id="chip-applied" onclick="setQuickChip('applied')">
+            <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+            </svg> Applied (<span id="chip-count-applied">0</span>)
+          </button>
           <button class="filter-chip" id="chip-high" onclick="setQuickChip('high')">
             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg> High Fit (8+)
           </button>
@@ -1875,6 +1941,44 @@
     </div>
   </div>
 
+  <!-- Modal 4: Applied Jobs Tracker Hub -->
+  <div class="modal-backdrop" id="modal-applied-tracker" onclick="if(event.target===this)closeAppliedTrackerModal()">
+    <div class="modal-card" style="max-width:760px;" role="dialog" aria-modal="true" aria-labelledby="applied-tracker-title">
+      <div class="modal-header">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            <span class="tag tag-applied" style="font-size:11px;">
+              <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> APPLIED TRACKER
+            </span>
+            <span style="font-size:12px;color:var(--text-muted);" id="applied-tracker-count">0 applications</span>
+          </div>
+          <h2 id="applied-tracker-title" style="font-size:18px;font-weight:800;color:var(--text-main);">Applied Jobs Hub</h2>
+        </div>
+        <button class="modal-close-btn" onclick="closeAppliedTrackerModal()" aria-label="Close modal">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;padding:10px 14px;background:rgba(0,0,0,0.25);border-radius:8px;border:1px solid var(--card-border);">
+        <span style="font-size:12.5px;color:var(--text-muted);">Manage your submitted applications and export records:</span>
+        <div style="display:flex;gap:8px;">
+          <button class="btn-applied-export" onclick="exportAppliedJobsCsv()" title="Download CSV export">
+            <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Export CSV</span>
+          </button>
+          <button class="btn-applied-export" onclick="copyAppliedJobLinks()" title="Copy all links to clipboard">
+            <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span>Copy Links</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="applied-tracker-list" style="display:flex;flex-direction:column;gap:10px;max-height:55vh;overflow-y:auto;padding-right:4px;">
+        <!-- Dynamically rendered applied jobs -->
+      </div>
+    </div>
+  </div>
+
   <!-- Global Floating Toast Notification -->
   <div id="global-toast" class="toast-msg"></div>
 
@@ -2193,6 +2297,7 @@
       platformSel.value = 'all';
 
       switch (chipType) {
+        case 'applied': statusSel.value = 'applied'; break;
         case 'high': scoreSel.value = '8'; break;
         case 'rec': scoreSel.value = '6'; break;
         case 'unapplied': statusSel.value = 'unapplied'; break;
@@ -2245,18 +2350,67 @@
       }
     }
 
+    function syncAppliedStateWithStorage() {
+      try {
+        const storedMeta = JSON.parse(localStorage.getItem('jobhunt_applied_jobs') || '{}');
+        const legacyList = JSON.parse(localStorage.getItem('jobhunt_applied') || '[]');
+
+        legacyList.forEach(id => {
+          if (!storedMeta[id]) {
+            storedMeta[id] = { job_id: id, applied_at: new Date().toISOString() };
+          }
+        });
+
+        if (appData && Array.isArray(appData.jobs)) {
+          appData.jobs.forEach(j => {
+            if (storedMeta[j.job_id] || legacyList.includes(j.job_id) || j.applied) {
+              j.applied = true;
+              if (!storedMeta[j.job_id]) {
+                storedMeta[j.job_id] = {
+                  job_id: j.job_id,
+                  applied_at: new Date().toISOString(),
+                  title: j.title || '',
+                  company: j.company || '',
+                  location: j.location || '',
+                  url: isLinkedInJob(j) ? (getLinkedInPostUrl(j) || j.url || '') : (j.url || ''),
+                  score: j.score || 0.0,
+                  platform: inferPlatformSource(j)
+                };
+              }
+              if (!legacyList.includes(j.job_id)) {
+                legacyList.push(j.job_id);
+              }
+            }
+          });
+
+          localStorage.setItem('jobhunt_applied_jobs', JSON.stringify(storedMeta));
+          localStorage.setItem('jobhunt_applied', JSON.stringify(legacyList));
+
+          if (appData.stats) {
+            appData.stats.applied = appData.jobs.filter(j => j.applied).length;
+          }
+        }
+      } catch (e) {
+        console.warn('Could not sync applied state with storage', e);
+      }
+    }
+
     async function loadData() {
       // 1. Initial pre-bundled payload if available
       if (window.INITIAL_DATA && window.INITIAL_DATA.jobs && window.INITIAL_DATA.jobs.length) {
         appData = window.INITIAL_DATA;
+        syncAppliedStateWithStorage();
         renderAll();
       }
       // 2. Query local server API if running locally
       try {
-        const res = await fetch('/api/data');
-        if (res.ok) {
-          appData = await res.json();
-          renderAll();
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+          const res = await fetch('/api/data');
+          if (res.ok) {
+            appData = await res.json();
+            syncAppliedStateWithStorage();
+            renderAll();
+          }
         }
       } catch (err) {
         // Static mode or offline fallback
@@ -2306,14 +2460,23 @@
 
     function renderStats() {
       const stats = appData.stats || {};
-      document.getElementById('metric-total').innerText = stats.total || 0;
-      document.getElementById('metric-recommended').innerText = stats.recommended || 0;
-      document.getElementById('metric-applied').innerText = stats.applied || 0;
+      const appliedCount = (appData.jobs || []).filter(j => j.applied).length;
+      stats.applied = appliedCount;
+      
+      document.getElementById('metric-total').innerText = stats.total || (appData.jobs || []).length || 0;
+      document.getElementById('metric-recommended').innerText = stats.recommended || (appData.jobs || []).filter(j => (parseFloat(j.score) || 0) >= 6.0).length || 0;
+      document.getElementById('metric-applied').innerText = appliedCount;
       document.getElementById('metric-sources').innerText = stats.sources_count || 87;
       
-      const rate = stats.total ? Math.round((stats.applied / stats.total) * 100) : 0;
+      const totalJobs = (appData.jobs && appData.jobs.length) ? appData.jobs.length : (stats.total || 0);
+      const rate = totalJobs ? Math.round((appliedCount / totalJobs) * 100) : 0;
       document.getElementById('metric-applied-rate').innerText = `${rate}% applied`;
-      document.getElementById('tab-count-jobs').innerText = stats.total || 0;
+      document.getElementById('tab-count-jobs').innerText = totalJobs;
+
+      const chipCount = document.getElementById('chip-count-applied');
+      if (chipCount) chipCount.innerText = appliedCount;
+      const modalCount = document.getElementById('applied-tracker-count');
+      if (modalCount) modalCount.innerText = `${appliedCount} application${appliedCount === 1 ? '' : 's'}`;
     }
 
     function renderJobs() {
@@ -2356,14 +2519,23 @@
         return true;
       });
 
-      document.getElementById('results-count').innerText = `Showing ${filtered.length} of ${(appData.jobs || []).length} opportunities`;
+      const statusSuffix = (statusFilter === 'applied') ? ' (Applied Jobs)' : ((statusFilter === 'unapplied') ? ' (Unapplied Jobs)' : '');
+      document.getElementById('results-count').innerText = `Showing ${filtered.length} of ${(appData.jobs || []).length} opportunities${statusSuffix}`;
 
       if (!filtered.length) {
+        const isAppliedFilter = statusFilter === 'applied';
+        const emptyMsg = isAppliedFilter
+          ? 'No applied jobs recorded yet'
+          : 'No matching opportunities found';
+        const emptySub = isAppliedFilter
+          ? 'Click "Apply" or "Mark Applied" on any opportunity card to track your applications here.'
+          : 'Try adjusting your filters or search keywords.';
         listContainer.innerHTML = `
           <div style="text-align:center;padding:50px 20px;color:var(--text-muted);background:var(--card-bg);border:1px dashed var(--card-border);border-radius:12px;">
             <div style="display:flex;justify-content:center;margin-bottom:8px;">${ICONS.searchEmpty}</div>
-            <div style="font-weight:600;color:var(--text-main);">No matching opportunities found</div>
-            <div style="font-size:12px;margin-top:4px;">Try adjusting your filters or search keywords.</div>
+            <div style="font-weight:600;color:var(--text-main);">${escapeHtml(emptyMsg)}</div>
+            <div style="font-size:12px;margin-top:4px;">${escapeHtml(emptySub)}</div>
+            ${isAppliedFilter ? `<button class="btn-applied-export" style="margin-top:14px;background:var(--accent-blue);color:#fff;border-color:transparent;" onclick="setQuickChip('all')">View All Opportunities</button>` : ''}
           </div>
         `;
         return;
@@ -2375,6 +2547,7 @@
         const appliedClass = j.applied ? 'is-applied' : '';
         const btnAppliedHtml = j.applied ? `${ICONS.check} Applied` : 'Mark Applied';
         const btnAppliedClass = j.applied ? 'btn-applied active' : 'btn-applied';
+        const appliedBadgeHtml = j.applied ? `<span class="tag tag-applied">${ICONS.check} APPLIED</span>` : '';
 
         const inferredPlat = inferPlatformSource(j);
         const platformLabel = getPlatformLabel(inferredPlat);
@@ -2393,8 +2566,8 @@
                id="card-${j.job_id}" 
                role="link" 
                tabindex="0" 
-               onclick="handleCardClick(event, '${escapeHtml(targetUrl)}')"
-               onkeydown="if(event.key==='Enter'||event.key===' '){if(!event.target.closest('button,a')){event.preventDefault();handleCardClick(event, '${escapeHtml(targetUrl)}');}}">
+               onclick="handleCardClick(event, '${escapeHtml(targetUrl)}', '${j.job_id}')"
+               onkeydown="if(event.key==='Enter'||event.key===' '){if(!event.target.closest('button,a')){event.preventDefault();handleCardClick(event, '${escapeHtml(targetUrl)}', '${j.job_id}');}}">
             <div class="job-header">
               <div class="job-title-area">
                 <div class="job-title">${escapeHtml(j.title || 'Untitled')}</div>
@@ -2403,7 +2576,10 @@
                   <span class="job-location">${ICONS.mapPin} ${escapeHtml(j.location || 'Not Specified')}</span>
                 </div>
               </div>
-              <span class="score-badge ${scoreClass}">${score.toFixed(1)} Match</span>
+              <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+                ${appliedBadgeHtml}
+                <span class="score-badge ${scoreClass}">${score.toFixed(1)} Match</span>
+              </div>
             </div>
 
             <div class="job-tags">
@@ -2442,21 +2618,19 @@
       }).join('');
     }
 
-    function handleCardClick(event, url) {
-      if (event.target.closest('button, a')) {
+    function handleCardClick(event, url, jobId) {
+      if (event && event.target && event.target.closest('button, a')) {
         return;
       }
-      if (url && url !== '#') {
-        if (isLinkedInUrl(url)) {
-          window.open(url, '_blank', 'noopener,noreferrer');
-        } else {
-          launchJobInBrowser(url);
-        }
+      if (!url || url === '#') {
+        showToast('Application link not available for this role.');
+        return;
       }
+      window.open(url, '_blank', 'noopener,noreferrer');
     }
 
     function getPreferredBrowser() {
-      return localStorage.getItem('jobhunt_apply_browser') || 'edge';
+      return localStorage.getItem('jobhunt_apply_browser') || 'default';
     }
 
     function savePreferredBrowser(val) {
@@ -2468,34 +2642,7 @@
 
     function launchJobInBrowser(url, browserPref) {
       if (!url || url === '#') return;
-      if (isLinkedInUrl(url)) {
-        window.open(url, '_blank', 'noopener,noreferrer');
-        return;
-      }
-      const pref = browserPref || getPreferredBrowser();
-
-      // 1. If running locally with Python server, notify backend to launch executable directly
-      try {
-        fetch('/api/launch-browser', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url: url, browser: pref })
-        }).catch(() => {});
-      } catch (e) {}
-
-      // 2. Client-side browser handling
-      if (pref === 'edge') {
-        // Windows OS protocol opens Microsoft Edge immediately
-        window.open('microsoft-edge:' + url, '_blank');
-      } else if (pref === 'window' || pref === 'brave') {
-        // Dedicated companion popup window sized to right half of screen
-        const w = Math.min(1080, Math.floor((screen.availWidth || 1920) * 0.55));
-        const h = screen.availHeight || 900;
-        const left = Math.max(0, (screen.availWidth || 1920) - w);
-        window.open(url, 'JobApplyWindow', `width=${w},height=${h},left=${left},top=0,resizable=yes,scrollbars=yes`);
-      } else {
-        window.open(url, '_blank', 'noopener,noreferrer');
-      }
+      window.open(url, '_blank', 'noopener,noreferrer');
     }
 
     function handleApplyCardLink(jobId, url, event) {
@@ -2527,27 +2674,182 @@
       if (!job) return;
       
       job.applied = !job.applied;
+
+      // Unconditionally persist to localStorage immediately
+      try {
+        const storedMeta = JSON.parse(localStorage.getItem('jobhunt_applied_jobs') || '{}');
+        const legacyList = JSON.parse(localStorage.getItem('jobhunt_applied') || '[]');
+        
+        if (job.applied) {
+          storedMeta[jobId] = {
+            job_id: jobId,
+            applied_at: new Date().toISOString(),
+            title: job.title || '',
+            company: job.company || '',
+            location: job.location || '',
+            url: isLinkedInJob(job) ? (getLinkedInPostUrl(job) || job.url || '') : (job.url || ''),
+            score: job.score || 0.0,
+            platform: inferPlatformSource(job)
+          };
+          if (!legacyList.includes(jobId)) legacyList.push(jobId);
+          showToast(`Marked "${job.title || 'Role'}" as Applied!`);
+        } else {
+          delete storedMeta[jobId];
+          const idx = legacyList.indexOf(jobId);
+          if (idx > -1) legacyList.splice(idx, 1);
+          showToast(`Unmarked "${job.title || 'Role'}" from Applied.`);
+        }
+        localStorage.setItem('jobhunt_applied_jobs', JSON.stringify(storedMeta));
+        localStorage.setItem('jobhunt_applied', JSON.stringify(legacyList));
+      } catch (e) {
+        console.warn('Could not save applied state to localStorage', e);
+      }
+
+      if (appData.stats) {
+        appData.stats.applied = (appData.jobs || []).filter(j => j.applied).length;
+      }
       renderStats();
       renderJobs();
 
-      // If running with local python server
+      const modalTracker = document.getElementById('modal-applied-tracker');
+      if (modalTracker && modalTracker.classList.contains('open')) {
+        renderAppliedTrackerList();
+      }
+
+      // If running with local python server on localhost, notify API silently
       try {
-        await fetch('/api/toggle-applied', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ job_id: jobId })
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+          fetch('/api/toggle-applied', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ job_id: jobId })
+          }).catch(() => {});
+        }
+      } catch (err) {}
+    }
+
+    function openAppliedTrackerModal() {
+      renderAppliedTrackerList();
+      const m = document.getElementById('modal-applied-tracker');
+      if (m) m.classList.add('open');
+    }
+
+    function closeAppliedTrackerModal() {
+      const m = document.getElementById('modal-applied-tracker');
+      if (m) m.classList.remove('open');
+    }
+
+    function renderAppliedTrackerList() {
+      const container = document.getElementById('applied-tracker-list');
+      const countEl = document.getElementById('applied-tracker-count');
+      if (!container) return;
+
+      const appliedJobs = (appData.jobs || []).filter(j => j.applied);
+      if (countEl) countEl.innerText = `${appliedJobs.length} application${appliedJobs.length === 1 ? '' : 's'}`;
+
+      if (!appliedJobs.length) {
+        container.innerHTML = `
+          <div style="text-align:center;padding:40px 16px;color:var(--text-muted);border:1px dashed var(--card-border);border-radius:10px;">
+            <div style="display:flex;justify-content:center;margin-bottom:8px;">${ICONS.searchEmpty}</div>
+            <div style="font-weight:600;color:var(--text-main);font-size:14px;">No Applied Jobs Recorded Yet</div>
+            <div style="font-size:12px;margin-top:4px;">When you click "Apply" or "Mark Applied" on any job card, it will appear here permanently.</div>
+          </div>
+        `;
+        return;
+      }
+
+      const storedMeta = JSON.parse(localStorage.getItem('jobhunt_applied_jobs') || '{}');
+
+      container.innerHTML = appliedJobs.map(j => {
+        const meta = storedMeta[j.job_id] || {};
+        const appliedDate = meta.applied_at ? new Date(meta.applied_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recorded';
+        const inferredPlat = inferPlatformSource(j);
+        const platformLabel = getPlatformLabel(inferredPlat);
+        const score = parseFloat(j.score) || 0.0;
+        const scoreClass = score >= 8.0 ? 'score-high' : (score >= 6.0 ? 'score-mid' : 'score-low');
+        const targetUrl = isLinkedInJob(j) ? (getLinkedInPostUrl(j) || j.url || '#') : (j.url || '#');
+
+        return `
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;background:rgba(255,255,255,0.02);border:1px solid var(--card-border);border-radius:10px;flex-wrap:wrap;">
+            <div style="min-width:0;flex:1;">
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;flex-wrap:wrap;">
+                <span class="tag tag-source tag-src-${inferredPlat}">${escapeHtml(platformLabel)}</span>
+                <span class="score-badge ${scoreClass}" style="font-size:11px;padding:2px 6px;">${score.toFixed(1)} Match</span>
+                <span style="font-size:11px;color:var(--text-muted);">${ICONS.clock} ${appliedDate}</span>
+              </div>
+              <div style="font-size:14px;font-weight:700;color:var(--text-main);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(j.title || 'Untitled')}</div>
+              <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">${escapeHtml(j.company || 'Unknown')} · ${escapeHtml(j.location || 'Remote')}</div>
+            </div>
+            <div style="display:flex;gap:6px;align-items:center;flex-shrink:0;">
+              <a href="${escapeHtml(targetUrl)}" target="_blank" rel="noopener noreferrer" class="btn-applied-export" style="background:var(--accent-green);color:#fff;border-color:transparent;" title="Open Job Application">
+                Open ${ICONS.external}
+              </a>
+              <button class="btn-applied-export" onclick="toggleApplied('${j.job_id}'); renderAppliedTrackerList();" title="Remove from applied">
+                Remove
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function exportAppliedJobsCsv() {
+      const appliedJobs = (appData.jobs || []).filter(j => j.applied);
+      if (!appliedJobs.length) {
+        showToast('No applied jobs to export.');
+        return;
+      }
+      const storedMeta = JSON.parse(localStorage.getItem('jobhunt_applied_jobs') || '{}');
+      const rows = [
+        ['Job ID', 'Title', 'Company', 'Location', 'Platform', 'Score', 'Applied Date', 'URL']
+      ];
+      appliedJobs.forEach(j => {
+        const meta = storedMeta[j.job_id] || {};
+        const appliedDate = meta.applied_at || '';
+        const plat = inferPlatformSource(j);
+        const targetUrl = isLinkedInJob(j) ? (getLinkedInPostUrl(j) || j.url || '') : (j.url || '');
+        rows.push([
+          j.job_id || '',
+          (j.title || '').replace(/"/g, '""'),
+          (j.company || '').replace(/"/g, '""'),
+          (j.location || '').replace(/"/g, '""'),
+          plat,
+          j.score || '0.0',
+          appliedDate,
+          targetUrl
+        ]);
+      });
+
+      const csvContent = "data:text/csv;charset=utf-8," + rows.map(r => r.map(f => `"${f}"`).join(',')).join('\n');
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', `applied_jobs_${new Date().toISOString().split('T')[0]}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast(`Exported ${appliedJobs.length} applied jobs to CSV!`);
+    }
+
+    function copyAppliedJobLinks() {
+      const appliedJobs = (appData.jobs || []).filter(j => j.applied);
+      if (!appliedJobs.length) {
+        showToast('No applied jobs to copy.');
+        return;
+      }
+      const links = appliedJobs.map(j => {
+        const targetUrl = isLinkedInJob(j) ? (getLinkedInPostUrl(j) || j.url || '') : (j.url || '');
+        return `${j.title || 'Role'} @ ${j.company || 'Company'}: ${targetUrl}`;
+      }).join('\n');
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(links).then(() => {
+          showToast(`Copied ${appliedJobs.length} job links to clipboard!`);
+        }).catch(() => {
+          showToast('Failed to copy links to clipboard.');
         });
-      } catch (err) {
-        // In static GitHub Pages mode, persist in localStorage so user's applied status stays saved!
-        try {
-          const appliedIds = JSON.parse(localStorage.getItem('jobhunt_applied') || '[]');
-          if (job.applied && !appliedIds.includes(jobId)) appliedIds.push(jobId);
-          else if (!job.applied) {
-            const idx = appliedIds.indexOf(jobId);
-            if (idx > -1) appliedIds.splice(idx, 1);
-          }
-          localStorage.setItem('jobhunt_applied', JSON.stringify(appliedIds));
-        } catch (e) {}
+      } else {
+        showToast('Clipboard access not supported in this browser.');
       }
     }
 

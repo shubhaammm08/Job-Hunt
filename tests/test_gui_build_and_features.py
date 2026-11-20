@@ -422,3 +422,52 @@ def test_ats_autofill_persistence_and_dynamic_bookmarklet_logic():
         # Verify safe JSON serialization in dynamic bookmarklet generator
         assert "JSON.stringify(p)" in content, f"Safe JSON serialization missing in {html_path}"
 
+
+def test_applied_jobs_persistence_and_sync():
+    """Asserts client-side applied job state persistence and synchronization with localStorage."""
+    for html_path in [GUI_INDEX, ROOT_INDEX]:
+        with open(html_path, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        assert "syncAppliedStateWithStorage" in content, f"syncAppliedStateWithStorage missing in {html_path}"
+        assert "jobhunt_applied_jobs" in content, f"jobhunt_applied_jobs storage key missing in {html_path}"
+        assert "jobhunt_applied" in content, f"jobhunt_applied storage key missing in {html_path}"
+        assert "localStorage.setItem('jobhunt_applied_jobs'" in content, f"localStorage save missing in {html_path}"
+        assert "localStorage.getItem('jobhunt_applied_jobs'" in content, f"localStorage read missing in {html_path}"
+
+
+def test_applied_quick_chip_and_hub_modal():
+    """Asserts existence of Applied quick filter chip, interactive metric card, and Applied Jobs Hub modal."""
+    for html_path in [GUI_INDEX, ROOT_INDEX]:
+        with open(html_path, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        # Applied quick chip
+        assert 'id="chip-applied"' in content, f"chip-applied missing in {html_path}"
+        assert "setQuickChip('applied')" in content, f"setQuickChip('applied') missing in {html_path}"
+        assert 'id="chip-count-applied"' in content, f"chip-count-applied missing in {html_path}"
+
+        # Interactive Applied metric card
+        assert 'id="metric-card-applied"' in content, f"metric-card-applied missing in {html_path}"
+        assert 'class="metric-card clickable"' in content, f"clickable metric card class missing in {html_path}"
+
+        # Applied Jobs Tracker Modal
+        assert 'id="modal-applied-tracker"' in content, f"modal-applied-tracker missing in {html_path}"
+        assert 'id="applied-tracker-list"' in content, f"applied-tracker-list container missing in {html_path}"
+        assert "openAppliedTrackerModal" in content, f"openAppliedTrackerModal missing in {html_path}"
+        assert "exportAppliedJobsCsv" in content, f"exportAppliedJobsCsv missing in {html_path}"
+        assert "copyAppliedJobLinks" in content, f"copyAppliedJobLinks missing in {html_path}"
+
+
+def test_all_job_cards_clickable_navigation():
+    """Asserts all job cards are styled as pointer, have role='link', and open cleanly via window.open."""
+    for html_path in [GUI_INDEX, ROOT_INDEX]:
+        with open(html_path, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        assert "handleCardClick" in content
+        assert "window.open(url, '_blank', 'noopener,noreferrer')" in content
+        assert ".metric-card.clickable" in content
+        assert ".tag-applied" in content
+
+
