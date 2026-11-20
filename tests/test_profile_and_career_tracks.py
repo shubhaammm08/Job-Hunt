@@ -164,3 +164,59 @@ def test_root_index_html_bundled_profile_payload():
     roles = profile.get("target_roles", [])
     for track in EXPECTED_7_TRACKS:
         assert track in roles, f"Track '{track}' missing in window.INITIAL_DATA.profile.target_roles"
+
+
+def test_edge_case_none_and_empty_inputs():
+    """Adversarial probe: roles.py functions must never crash on None or empty inputs."""
+    from jobhunt.roles import extract_experience
+
+    # classify_job with None description
+    res1 = classify_job("AI Engineer", description=None)
+    assert res1["matched_roles"]
+    assert not res1["is_false_positive"]
+
+    # classify_job with all None
+    res2 = classify_job(None, description=None, requirements=None)
+    assert res2["matched_roles"] == []
+    assert res2["role_confidence"] == 0.0
+    assert not res2["is_false_positive"]
+
+    # extract_experience with None
+    assert extract_experience(None) == ""
+    assert extract_experience("") == ""
+
+    # match_career_tracks with None
+    assert match_career_tracks(None, None, None) == []
+    assert match_career_tracks("", "", "") == []
+
+
+def test_parentheses_and_punctuation_role_matching():
+    """Adversarial probe: roles with parentheses must match exact titles without regex boundary issues."""
+    cases = [
+        ("Mobile Developer (Flutter)", "Mobile Developer (Flutter)"),
+        ("Automation Engineer (n8n, Docker, CI/CD, Workflow Automation)", "Automation Engineer (n8n, Docker, CI/CD, Workflow Automation)"),
+        ("GenAI & LLM Engineer / Developer (GenAI, LLMs, NLP, LangChain)", "GenAI & LLM Engineer / Developer (GenAI, LLMs, NLP, LangChain)"),
+        ("API Development / Backend Engineer (FastAPI, Flask, REST APIs)", "API Development / Backend Engineer (FastAPI, Flask, REST APIs)"),
+        ("Full-Stack Developer / Engineer (React, Node.js)", "Full-Stack Developer / Engineer (React, Node.js)"),
+    ]
+    for title, expected_track in cases:
+        tracks = match_career_tracks(title)
+        assert expected_track in tracks, f"Expected '{expected_track}' in matched tracks for '{title}', got: {tracks}"
+
+        classification = classify_job(title)
+        assert expected_track in classification["matched_tracks"]
+        assert len(classification["matched_roles"]) > 0
+
+
+def test_hybrid_and_multi_track_matching():
+    """Adversarial probe: titles with multi-track keywords correctly assign all relevant tracks."""
+    # Full-Stack + Mobile
+    hybrid_tracks = match_career_tracks("Full-Stack/Mobile Hybrid Dev")
+    assert "Full-Stack Developer / Engineer (React, Node.js)" in hybrid_tracks
+    assert "Mobile Developer (Flutter)" in hybrid_tracks
+
+    # Frontend + Backend
+    fe_be_tracks = match_career_tracks("Frontend and Backend Developer")
+    assert "API Development / Backend Engineer (FastAPI, Flask, REST APIs)" in fe_be_tracks
+    assert "Full-Stack Developer / Engineer (React, Node.js)" in fe_be_tracks
+

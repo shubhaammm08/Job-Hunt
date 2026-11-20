@@ -1220,5 +1220,100 @@
     "emailed": false,
     "applied": false,
     "applied_on": null
+  },
+  "nodesk:rss:olygon-labs-ai-platform-engineer": {
+    "first_seen": "2026-11-20T06:10:14+00:00",
+    "company": "Polygon Labs",
+    "title": "AI Platform Engineer",
+    "location": "Remote",
+    "url": "https://nodesk.co/remote-jobs/polygon-labs-ai-platform-engineer/",
+    "score": 3.0,
+    "reason": "Seniority mismatch; this platform engineering role requires advanced infrastructure experience beyond a junior developer.",
+    "canonical_source": "nodesk",
+    "sources": [
+      "nodesk"
+    ],
+    "role_families": [
+      "PLATFORM"
+    ],
+    "matched_roles": [
+      "AI Platform Engineer",
+      "Platform Engineer"
+    ],
+    "fit_score": 3.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "nodesk:rss:oftware-engineer-ai-coding-tasks": {
+    "first_seen": "2026-11-20T06:10:14+00:00",
+    "company": "Askable",
+    "title": "Software Engineer, AI Coding Tasks",
+    "location": "Remote",
+    "url": "https://nodesk.co/remote-jobs/askable-software-engineer-ai-coding-tasks/",
+    "score": 4.0,
+    "reason": "Requires experienced software engineers to create difficult tasks from established codebases, unsuited for a junior.",
+    "canonical_source": "nodesk",
+    "sources": [
+      "nodesk"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Engineer"
+    ],
+    "fit_score": 4.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:neer-ai-finance-agent-6982251167": {
+    "first_seen": "2026-11-20T06:10:14+00:00",
+    "company": "Remote Employer",
+    "title": "Backend Software Engineer - AI Finance Agent",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/bjak/jobs/backend-software-engineer-ai-finance-agent-6982251167",
+    "score": 4.0,
+    "reason": "Backend engineering role requiring strong production experience exceeding the candidate's one year.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Engineer",
+      "Backend Software Engineer"
+    ],
+    "fit_score": 4.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4448393291": {
+    "first_seen": "2026-11-20T06:10:14+00:00",
+    "company": "Accenture in India",
+    "title": "AI / ML Engineer",
+    "location": "Navi Mumbai, Maharashtra, India",
+    "url": "https://www.linkedin.com/jobs/view/4448393291",
+    "score": 2.0,
+    "reason": "Hard requirement of minimum 5 years of experience, failing the candidate's 1 year profile.",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "ML Engineer",
+      "Machine Learning Engineer"
+    ],
+    "fit_score": 2.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
   }
 }

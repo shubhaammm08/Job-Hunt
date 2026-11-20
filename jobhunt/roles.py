@@ -266,7 +266,7 @@ EXPERIENCE_PATTERNS = [
 def compile_role_regex(role_name: str) -> re.Pattern:
     """Compile role into word-bounded, case-insensitive regex."""
     clean = re.escape(role_name).replace(r"\ ", r"\s+").replace(r"\/", r"[\/\s]+")
-    return re.compile(rf"\b{clean}\b", re.IGNORECASE)
+    return re.compile(rf"(?<!\w){clean}(?!\w)", re.IGNORECASE)
 
 
 COMPILED_ROLES = {
@@ -283,15 +283,19 @@ def get_career_tracks() -> dict[str, dict[str, Any]]:
 
 def match_career_tracks(title: str, description: str = "", requirements: str = "") -> list[str]:
     """Match a job title/posting against the 7 Target Career Tracks."""
-    clean_title = (title or "").lower()
-    full_text = f"{clean_title} {description} {requirements}".lower()
+    clean_title = (title or "").lower().strip()
+    clean_desc = (description or "").lower().strip()
+    clean_req = (requirements or "").lower().strip()
+    full_text = f"{clean_title} {clean_desc} {clean_req}".strip()
     matched_tracks: list[str] = []
 
     for track_key, track_info in TARGET_CAREER_TRACKS.items():
-        # Check title against track roles
+        # Check title against track title and track roles
         role_matched = False
-        for role in track_info["roles"]:
-            if re.search(rf"\b{re.escape(role.lower())}\b", clean_title):
+        candidates = [track_info["title"]] + track_info["roles"]
+        for role in candidates:
+            clean_role = role.lower()
+            if re.search(rf"(?<!\w){re.escape(clean_role)}(?!\w)", clean_title):
                 matched_tracks.append(track_info["title"])
                 role_matched = True
                 break
@@ -299,8 +303,8 @@ def match_career_tracks(title: str, description: str = "", requirements: str = "
             continue
 
         # Check title and text against keywords
-        title_kw = any(re.search(rf"\b{re.escape(kw)}\b", clean_title) for kw in track_info["keywords"])
-        text_kw_count = sum(1 for kw in track_info["keywords"] if re.search(rf"\b{re.escape(kw)}\b", full_text))
+        title_kw = any(re.search(rf"(?<!\w){re.escape(kw)}(?!\w)", clean_title) for kw in track_info["keywords"])
+        text_kw_count = sum(1 for kw in track_info["keywords"] if re.search(rf"(?<!\w){re.escape(kw)}(?!\w)", full_text))
         if title_kw or text_kw_count >= 2:
             matched_tracks.append(track_info["title"])
 
@@ -309,6 +313,8 @@ def match_career_tracks(title: str, description: str = "", requirements: str = "
 
 def extract_experience(text: str) -> str:
     """Extract required experience from title or description snippet."""
+    if not text:
+        return ""
     for pattern, fmt in EXPERIENCE_PATTERNS:
         m = re.search(pattern, text, re.IGNORECASE)
         if m:
@@ -330,7 +336,9 @@ def classify_job(title: str, description: str = "", requirements: str = "") -> d
         is_false_positive: bool
     """
     clean_title = (title or "").strip()
-    full_text = f"{clean_title} {description} {requirements}".lower()
+    clean_desc = (description or "").strip()
+    clean_req = (requirements or "").strip()
+    full_text = f"{clean_title} {clean_desc} {clean_req}".lower()
 
     # 1. Guardrail check
     for fp in COMPILED_FALSE_POSITIVES:
@@ -357,7 +365,7 @@ def classify_job(title: str, description: str = "", requirements: str = "") -> d
                 matched_roles.append(role_name)
                 family_matched = True
                 title_matches += 1
-            elif description and reg.search(description[:800]):
+            elif clean_desc and reg.search(clean_desc[:800]):
                 # weaker match in opening description
                 if role_name not in matched_roles:
                     matched_roles.append(role_name)
@@ -368,11 +376,11 @@ def classify_job(title: str, description: str = "", requirements: str = "") -> d
     # 3. Matched skills
     matched_skills = [
         skill for skill in TECH_SKILLS
-        if re.search(rf"\b{re.escape(skill)}\b", full_text, re.IGNORECASE)
+        if re.search(rf"(?<!\w){re.escape(skill)}(?!\w)", full_text, re.IGNORECASE)
     ]
 
     # 4. Matched career tracks
-    matched_tracks = match_career_tracks(clean_title, description, requirements)
+    matched_tracks = match_career_tracks(clean_title, clean_desc, clean_req)
 
     # 5. Confidence calculation
     if title_matches > 0:
@@ -382,7 +390,8 @@ def classify_job(title: str, description: str = "", requirements: str = "") -> d
     else:
         confidence = 0.0
 
-    exp_req = extract_experience(f"{clean_title} {description[:1200]}")
+    snippet = f"{clean_title} {clean_desc[:1200]}".strip()
+    exp_req = extract_experience(snippet)
 
     return {
         "matched_roles": matched_roles[:6],
