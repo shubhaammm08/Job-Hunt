@@ -1405,5 +1405,28 @@
     "emailed": true,
     "applied": false,
     "applied_on": null
+  },
+  "greenhouse:airbnb:8396777": {
+    "first_seen": "2026-11-21T11:41:24+00:00",
+    "company": "Airbnb",
+    "title": "Data Engineer Tech Foundations",
+    "location": "US - Remote",
+    "url": "https://careers.airbnb.com/positions/8396777?gh_jid=8396777",
+    "score": 3.0,
+    "reason": "Wrong geography (US remote) and senior data engineering role requiring Spark and enterprise dataset experience.",
+    "canonical_source": "greenhouse",
+    "sources": [
+      "greenhouse"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Engineer"
+    ],
+    "fit_score": 3.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
   }
 }
