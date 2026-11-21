@@ -14,6 +14,23 @@
       try {
         var saved = localStorage.getItem('jobhunt_theme') || 'light';
         document.documentElement.setAttribute('data-theme', saved);
+        var fw = parseInt(localStorage.getItem('jobhunt_feed_width') || '', 10);
+        if (fw >= 280 && fw <= 560) {
+          document.documentElement.style.setProperty('--feed-width', fw + 'px');
+        }
+        // Restore the chosen avatar before first paint to avoid an initials flash.
+        var av = localStorage.getItem('jobhunt_avatar');
+        if (av) {
+          var avatarCounts = { vibrent: 27, upstream: 22, memo: 35, notion: 15, toon: 10, bluey: 10, teams: 9, '3d': 5 };
+          var match = /^([a-z0-9]+)_(\d+)$/.exec(av);
+          if (match && avatarCounts[match[1]] && +match[2] >= 1 && +match[2] <= avatarCounts[match[1]]) {
+            var avatarBase = (location.protocol === 'file:' && location.pathname.indexOf('/gui/') === -1)
+              ? 'gui/avatars/'
+              : 'avatars/';
+            document.documentElement.style.setProperty('--user-avatar-url', 'url("' + avatarBase + av + '.png")');
+            document.documentElement.classList.add('has-user-avatar');
+          }
+        }
       } catch(e) {}
     })();
   </script>
@@ -74,6 +91,9 @@
       --font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+      /* Resizable feed ↔ details divider (persisted in localStorage) */
+      --feed-width: 340px;
     }
 
     [data-theme="dark"] {
@@ -297,6 +317,34 @@
       cursor: pointer;
       user-select: none;
     }
+
+    /* User avatar (alohe/avatars pack, MIT) */
+    .user-avatar {
+      position: relative;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      overflow: hidden;
+    }
+    .user-avatar .avatar-initials {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      line-height: 1;
+    }
+    html.has-user-avatar .user-avatar {
+      background-image: var(--user-avatar-url);
+    }
+    html.has-user-avatar .user-avatar .avatar-initials {
+      opacity: 0;
+    }
+    .brand-glyph.user-avatar,
+    .brand-glyph-sm.user-avatar {
+      background-color: var(--accent-indigo, #4F46E5);
+    }
+
     .rail-nav {
       display: flex;
       flex-direction: column;
@@ -351,9 +399,9 @@
 
     /* PANE 2: Middle Master Role Feed (340px fixed) */
     .master-feed {
-      width: 340px;
-      min-width: 340px;
-      max-width: 340px;
+      width: var(--feed-width, 340px);
+      min-width: var(--feed-width, 340px);
+      max-width: var(--feed-width, 340px);
       height: 100%;
       background: var(--bg-feed);
       border-right: 1px solid var(--border-subtle);
@@ -364,6 +412,61 @@
       position: relative;
       overflow-y: auto;
     }
+
+    /* Draggable divider between the job feed and the details deck */
+    .pane-resizer {
+      position: relative;
+      width: 6px;
+      min-width: 6px;
+      align-self: stretch;
+      cursor: col-resize;
+      background: transparent;
+      z-index: 35;
+      flex-shrink: 0;
+      touch-action: none;
+    }
+    .pane-resizer::before {
+      /* Wider invisible hit area so the 6px grip is easy to grab. */
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -4px;
+      right: -4px;
+    }
+    .pane-resizer::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 2px;
+      height: 32px;
+      transform: translate(-50%, -50%);
+      border-radius: 999px;
+      background: var(--border-subtle);
+      transition: background 0.15s ease, box-shadow 0.15s ease, height 0.15s ease;
+    }
+    .pane-resizer:hover::after,
+    .pane-resizer:focus-visible::after,
+    .pane-resizer.dragging::after {
+      background: var(--accent-indigo, #4F46E5);
+      box-shadow: 0 0 8px var(--indigo-glow);
+      height: 64px;
+    }
+    .pane-resizer:focus-visible {
+      outline: 2px solid var(--accent-indigo, #4F46E5);
+      outline-offset: -2px;
+      border-radius: 4px;
+    }
+    body.pane-resizing {
+      cursor: col-resize !important;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+    }
+    body.pane-resizing iframe {
+      pointer-events: none;
+    }
+
     .feed-header {
       padding: 8px 10px 6px 10px;
       border-bottom: 1px solid var(--border-subtle);
@@ -813,6 +916,48 @@
       font-weight: 800;
       font-size: 16px;
       color: #fff;
+    }
+    .profile-header .avatar.avatar-edit-trigger {
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      flex: 0 0 48px;
+      box-shadow: 0 0 0 2px var(--indigo-border);
+    }
+    .avatar-edit-glyph {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(15, 23, 42, 0.55);
+      color: #FFFFFF;
+      font-size: 15px;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      pointer-events: none;
+    }
+    .avatar-edit-trigger:hover .avatar-edit-glyph,
+    .avatar-edit-trigger:focus-visible .avatar-edit-glyph {
+      opacity: 1;
+    }
+    .avatar-change-btn {
+      margin-top: 6px;
+      background: var(--indigo-bg);
+      border: 1px solid var(--indigo-border);
+      color: var(--accent-indigo);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 9px;
+      border-radius: 999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .avatar-change-btn:hover {
+      background: var(--indigo-500);
+      color: #FFFFFF;
     }
     .p-group {
       margin-bottom: 20px;
@@ -1397,6 +1542,57 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+    /* Custom themed tooltips (hover + keyboard focus) */
+    .jh-tooltip {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 10000;
+      max-width: 280px;
+      padding: 6px 9px;
+      border-radius: 6px;
+      background: var(--bg-card, #FFFFFF);
+      color: var(--text-primary, #0F172A);
+      border: 1px solid var(--border-subtle, #E2E8F0);
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.16);
+      font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+      font-size: 11.5px;
+      font-weight: 500;
+      line-height: 1.4;
+      letter-spacing: 0.1px;
+      white-space: normal;
+      text-align: left;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(2px);
+      transition: opacity 0.12s ease, transform 0.12s ease;
+      will-change: top, left, opacity, transform;
+    }
+    .jh-tooltip.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .jh-tooltip::after {
+      content: "";
+      position: absolute;
+      left: var(--arrow-x, 50%);
+      width: 7px;
+      height: 7px;
+      background: var(--bg-card, #FFFFFF);
+      border: 1px solid var(--border-subtle, #E2E8F0);
+      transform: translateX(-50%) rotate(45deg);
+    }
+    .jh-tooltip[data-placement="top"]::after {
+      bottom: -5px;
+      border-top: none;
+      border-left: none;
+    }
+    .jh-tooltip[data-placement="bottom"]::after {
+      top: -5px;
+      border-bottom: none;
+      border-right: none;
+    }
+
     /* Modal Backdrop & Cards */
     .modal-backdrop {
       position: fixed;
@@ -1449,6 +1645,202 @@
     .modal-close-btn:hover {
       color: #FFFFFF;
       background: rgba(255, 255, 255, 0.06);
+    }
+
+    /* Avatar picker modal */
+    .avatar-picker-card {
+      max-width: 760px;
+      background: var(--bg-card);
+      color: var(--text-main);
+      border-color: var(--border-subtle);
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.35);
+      padding: 20px;
+    }
+    .avatar-picker-heading {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+    .avatar-picker-heading .avatar-preview {
+      width: 52px;
+      height: 52px;
+      flex: 0 0 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6366F1, #8B5CF6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      font-weight: 800;
+      font-size: 17px;
+      box-shadow: 0 0 0 2px var(--indigo-border);
+    }
+    .avatar-picker-title {
+      font-size: 16px;
+      font-weight: 800;
+      margin: 0;
+      color: var(--text-main);
+    }
+    .avatar-picker-sub {
+      margin: 3px 0 0;
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+    .avatar-style-tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 4px 0 12px;
+      scrollbar-width: thin;
+    }
+    .avatar-style-tab {
+      flex: 0 0 auto;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-surface-subtle);
+      color: var(--text-secondary);
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .avatar-style-tab:hover {
+      border-color: var(--border-hover);
+      color: var(--text-main);
+    }
+    .avatar-style-tab.active {
+      background: var(--accent-indigo);
+      border-color: var(--accent-indigo);
+      color: #FFFFFF;
+    }
+    .avatar-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(58px, 1fr));
+      gap: 8px;
+      max-height: min(46vh, 420px);
+      overflow-y: auto;
+      padding: 6px;
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      background: var(--bg-surface-inset);
+    }
+    .avatar-option {
+      position: relative;
+      aspect-ratio: 1;
+      padding: 0;
+      border: 2px solid transparent;
+      border-radius: 50%;
+      background: var(--bg-card);
+      cursor: pointer;
+      overflow: hidden;
+      transition: transform 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+    }
+    .avatar-option img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .avatar-option:hover {
+      transform: translateY(-1px) scale(1.03);
+      border-color: var(--border-hover);
+    }
+    .avatar-option.selected {
+      border-color: var(--accent-indigo);
+      box-shadow: 0 0 0 3px var(--indigo-bg);
+    }
+    .avatar-option.selected::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent-indigo);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+      z-index: 2;
+    }
+    .avatar-option.selected::before {
+      content: "";
+      position: absolute;
+      right: 5px;
+      bottom: 7px;
+      width: 5px;
+      height: 9px;
+      border: solid #FFFFFF;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+      z-index: 3;
+    }
+    .avatar-option:focus-visible {
+      outline: 2px solid var(--accent-indigo);
+      outline-offset: 2px;
+    }
+    .avatar-picker-footer {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-subtle);
+    }
+    .avatar-picker-note {
+      flex: 1;
+      min-width: 160px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .avatar-reset-btn {
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      border-radius: 8px;
+      padding: 7px 11px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .avatar-reset-btn:hover {
+      border-color: var(--border-hover);
+      color: var(--text-main);
+    }
+    .avatar-done-btn {
+      padding: 8px 16px;
+      font-size: 12px;
+    }
+    body.avatar-picker-open {
+      overflow: hidden;
+    }
+    @media (max-width: 600px) {
+      .avatar-picker-card {
+        padding: 14px;
+        max-height: 94vh;
+      }
+      .avatar-picker-heading .avatar-preview {
+        width: 44px;
+        height: 44px;
+        flex-basis: 44px;
+        font-size: 15px;
+      }
+      .avatar-picker-title {
+        font-size: 15px;
+      }
+      .avatar-picker-sub {
+        font-size: 10.5px;
+      }
+      .avatar-grid {
+        grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
+        gap: 6px;
+        max-height: 48vh;
+      }
+      .avatar-picker-note {
+        order: 3;
+        flex-basis: 100%;
+      }
     }
 
     /* Sources Grid */
@@ -1504,6 +1896,9 @@
         padding-bottom: calc(76px + env(safe-area-inset-bottom, 12px));
       }
       .nav-rail {
+        display: none !important;
+      }
+      .pane-resizer {
         display: none !important;
       }
       .triage-deck {
@@ -1566,6 +1961,7 @@
       .brand-glyph-sm {
         width: 32px;
         height: 32px;
+        flex: 0 0 32px;
         border-radius: 50%;
         background: var(--brand-gradient, linear-gradient(135deg, #FF6188 0%, #AB9DF2 100%));
         color: #FFFFFF;
@@ -1901,9 +2297,9 @@
     }
     body.force-desktop .master-feed {
       display: flex !important;
-      width: 340px !important;
-      min-width: 340px !important;
-      max-width: 340px !important;
+      width: var(--feed-width, 340px) !important;
+      min-width: var(--feed-width, 340px) !important;
+      max-width: var(--feed-width, 340px) !important;
       height: 100vh !important;
       border-right: 1px solid var(--border-subtle) !important;
       overflow: hidden !important;
@@ -1941,6 +2337,7 @@
       padding-bottom: calc(76px + env(safe-area-inset-bottom, 12px)) !important;
     }
     body.force-mobile .nav-rail,
+    body.force-mobile .pane-resizer,
     body.force-mobile .triage-deck {
       display: none !important;
     }
@@ -2022,7 +2419,7 @@
   <!-- Mobile Sticky Top Bar (Phone Viewport) -->
   <div class="mobile-top-bar" aria-label="Mobile Navigation Bar">
     <div class="mobile-brand">
-      <div class="brand-glyph-sm">SH</div>
+      <div class="brand-glyph-sm user-avatar" id="mobile-brand-avatar" aria-hidden="true"><span class="avatar-initials">SH</span></div>
       <div class="mobile-brand-title">Shubham's JobHunt</div>
       <span class="mobile-live-dot" title="Pipeline Active"></span>
     </div>
@@ -2133,7 +2530,7 @@
     <!-- PANE 1: Left Navigation Rail (72px fixed) -->
     <aside class="nav-rail" aria-label="Command Navigation">
       <div class="rail-top">
-        <div class="brand-glyph" onclick="switchNav('tracker')" title="Shubham Sunil Kadam">SH</div>
+        <div class="brand-glyph user-avatar" id="rail-brand-avatar" onclick="switchNav('tracker')" title="Shubham Sunil Kadam" aria-label="Shubham Sunil Kadam"><span class="avatar-initials">SH</span></div>
       </div>
       <nav class="rail-nav">
         <button class="rail-item active" id="rail-btn-opps" onclick="switchNav('tracker')" title="Opportunities (78)">
@@ -2316,6 +2713,12 @@
         <!-- Rendered dynamically by renderJobs() -->
       </div>
     </section>
+
+    <!-- Draggable divider: feed ↔ details deck -->
+    <div class="pane-resizer" id="pane-resizer" role="separator" aria-orientation="vertical"
+         aria-label="Resize job feed and details panes" aria-valuemin="280" aria-valuemax="560"
+         aria-valuenow="340" tabindex="0"
+         data-tooltip="Drag to resize · double-click to reset"></div>
 
     <!-- PANE 3: Right Details & Triage Deck (flex-1 scrollable) -->
     <main class="triage-deck" id="triage-deck" aria-label="Role Details and Triage Deck">
@@ -2506,11 +2909,23 @@
           <div id="tab-profile" class="deck-tab-panel" style="display:none;">
             <div class="profile-card">
               <div class="profile-header">
-                <div class="avatar">SK</div>
+                <div class="avatar avatar-edit-trigger user-avatar" id="profile-avatar" role="button" tabindex="0"
+                     onclick="openAvatarPicker()"
+                     onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openAvatarPicker();}"
+                     title="Change profile avatar" aria-label="Change profile avatar">
+                  <span class="avatar-initials">SK</span>
+                  <span class="avatar-edit-glyph" aria-hidden="true">
+                    <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                  </span>
+                </div>
                 <div>
                   <h2 id="profile-name" style="font-size:18px;">Shubham Sunil Kadam</h2>
                   <p style="color:var(--text-muted);font-size:13px;" id="profile-title">AI &amp; Software Engineer</p>
                   <p style="color:var(--accent-blue);font-size:12px;margin-top:2px;" id="profile-email">ssk080204@gmail.com · +918169832448</p>
+                  <button class="avatar-change-btn" type="button" onclick="openAvatarPicker()" title="Choose from 133 avatars">
+                    <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                    Change avatar
+                  </button>
                 </div>
               </div>
 
@@ -3099,6 +3514,31 @@
 
       <div id="applied-tracker-list" style="display:flex;flex-direction:column;gap:10px;max-height:55vh;overflow-y:auto;padding-right:4px;">
         <!-- Dynamically rendered applied jobs -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Avatar Picker Modal -->
+  <div class="modal-backdrop" id="avatar-picker-modal" aria-hidden="true" onclick="if(event.target===this)closeAvatarPicker()">
+    <div class="modal-card avatar-picker-card" role="dialog" aria-modal="true" aria-labelledby="avatar-picker-title">
+      <div class="modal-header">
+        <div class="avatar-picker-heading">
+          <div class="avatar avatar-preview user-avatar" id="avatar-preview" aria-hidden="true"><span class="avatar-initials">SK</span></div>
+          <div>
+            <h3 class="avatar-picker-title" id="avatar-picker-title">Choose your avatar</h3>
+            <p class="avatar-picker-sub">133 illustrations from the alohe/avatars pack · saved on this device</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" type="button" onclick="closeAvatarPicker()" aria-label="Close avatar picker" title="Close">
+          <svg class="icon icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="avatar-style-tabs" id="avatar-style-tabs" role="tablist" aria-label="Avatar styles"></div>
+      <div class="avatar-grid" id="avatar-grid" role="listbox" aria-label="Avatar options"></div>
+      <div class="avatar-picker-footer">
+        <button class="avatar-reset-btn" type="button" onclick="resetAvatar()" title="Remove the avatar and show initials">Use initials</button>
+        <span class="avatar-picker-note" id="avatar-picker-note">Your choice is saved in this browser.</span>
+        <button class="btn-action-primary avatar-done-btn" type="button" onclick="closeAvatarPicker()">Done</button>
       </div>
     </div>
   </div>
@@ -5094,6 +5534,9 @@ let appData = {
       if (rolesContainer && targetTracks.length) {
         rolesContainer.innerHTML = targetTracks.map(t => `<span class="tag tag-family">${escapeHtml(t)}</span>`).join('');
       }
+
+      // Avatar: localStorage choice wins, otherwise profile.json's default.
+      applyAvatar(preferredAvatar());
     }
 
     function renderDigest() {
@@ -5173,9 +5616,390 @@ let appData = {
       renderAll();
     }
 
+    /* ---------------------------------------------------------------
+       Resizable feed ↔ details divider (persisted in localStorage)
+       --------------------------------------------------------------- */
+    function initPaneResizer() {
+      const resizer = document.getElementById('pane-resizer');
+      const feed = document.querySelector('.master-feed');
+      if (!resizer || !feed) return;
+
+      const NAV_W = 72;
+      const HANDLE_W = 6;
+      const DECK_MIN = 420;
+      const FEED_MIN = 280;
+      const FEED_MAX = 560;
+      const DEFAULT_W = 340;
+      const root = document.documentElement;
+
+      function currentWidth() {
+        return Math.round(feed.getBoundingClientRect().width);
+      }
+      function maxWidth() {
+        return Math.max(FEED_MIN, Math.min(FEED_MAX, window.innerWidth - NAV_W - HANDLE_W - DECK_MIN));
+      }
+      function clamp(w) {
+        return Math.round(Math.min(maxWidth(), Math.max(FEED_MIN, w)));
+      }
+      function applyWidth(w, persist) {
+        const width = clamp(w);
+        root.style.setProperty('--feed-width', width + 'px');
+        resizer.setAttribute('aria-valuenow', String(width));
+        resizer.setAttribute('aria-valuemax', String(Math.round(maxWidth())));
+        if (persist) {
+          try { localStorage.setItem('jobhunt_feed_width', String(width)); } catch (e) {}
+        }
+        return width;
+      }
+
+      // The head script restores the width before first paint; sync ARIA here.
+      let saved = DEFAULT_W;
+      try {
+        const raw = parseInt(localStorage.getItem('jobhunt_feed_width') || '', 10);
+        if (raw >= FEED_MIN && raw <= FEED_MAX) saved = raw;
+      } catch (e) {}
+      applyWidth(saved, false);
+
+      let dragging = false;
+      let startX = 0;
+      let startW = 0;
+
+      function onPointerMove(e) {
+        if (!dragging) return;
+        applyWidth(startW + (e.clientX - startX), false);
+        e.preventDefault();
+      }
+      function stopDrag(e) {
+        if (!dragging) return;
+        dragging = false;
+        resizer.classList.remove('dragging');
+        document.body.classList.remove('pane-resizing');
+        applyWidth(currentWidth(), true);
+        window.removeEventListener('pointermove', onPointerMove);
+        window.removeEventListener('pointerup', stopDrag);
+        window.removeEventListener('pointercancel', stopDrag);
+        if (e && e.pointerId != null && resizer.hasPointerCapture && resizer.hasPointerCapture(e.pointerId)) {
+          try { resizer.releasePointerCapture(e.pointerId); } catch (err) {}
+        }
+      }
+      resizer.addEventListener('pointerdown', (e) => {
+        if (e.button !== 0) return;
+        dragging = true;
+        startX = e.clientX;
+        startW = currentWidth();
+        resizer.classList.add('dragging');
+        document.body.classList.add('pane-resizing');
+        try { resizer.setPointerCapture(e.pointerId); } catch (err) {}
+        window.addEventListener('pointermove', onPointerMove, { passive: false });
+        window.addEventListener('pointerup', stopDrag);
+        window.addEventListener('pointercancel', stopDrag);
+        e.preventDefault();
+      });
+
+      // Keyboard: arrows resize, Home/End jump to limits, Enter/Space resets.
+      resizer.addEventListener('keydown', (e) => {
+        const step = e.shiftKey ? 32 : 12;
+        let next = null;
+        if (e.key === 'ArrowLeft') next = currentWidth() - step;
+        else if (e.key === 'ArrowRight') next = currentWidth() + step;
+        else if (e.key === 'Home') next = FEED_MIN;
+        else if (e.key === 'End') next = maxWidth();
+        else if (e.key === 'Enter' || e.key === ' ') next = DEFAULT_W;
+        if (next !== null) {
+          e.preventDefault();
+          applyWidth(next, true);
+        }
+      });
+
+      resizer.addEventListener('dblclick', () => applyWidth(DEFAULT_W, true));
+      window.addEventListener('resize', () => applyWidth(currentWidth(), false));
+    }
+
+    /* ---------------------------------------------------------------
+       Theme-aware custom tooltips (hover + keyboard focus)
+       --------------------------------------------------------------- */
+    function initTooltips() {
+      const tip = document.createElement('div');
+      tip.className = 'jh-tooltip';
+      tip.setAttribute('role', 'tooltip');
+      tip.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(tip);
+
+      const TRUNCATED_SELECTOR = '.job-title, .job-company, .job-location, .metric-label, .mobile-company-name, .mobile-brand-title, .hero-company, .source-name, .brand h1';
+      const CANDIDATE_SELECTOR = '[data-tooltip], [title], ' + TRUNCATED_SELECTOR;
+      let showTimer = null;
+      let activeEl = null;
+      let savedTitle = null;
+
+      function resolveText(el) {
+        const explicit = el.getAttribute('data-tooltip');
+        if (explicit) return explicit.trim();
+        const title = el.getAttribute('title');
+        if (title) return title.trim();
+        if (el.matches(TRUNCATED_SELECTOR) && el.scrollWidth > el.clientWidth + 1) {
+          return (el.textContent || '').trim();
+        }
+        return '';
+      }
+
+      function place(el, text) {
+        if (!el.isConnected) return hide();
+        tip.textContent = text;
+        tip.classList.add('visible');
+        tip.setAttribute('aria-hidden', 'false');
+
+        const rect = el.getBoundingClientRect();
+        const tipRect = tip.getBoundingClientRect();
+        const gap = 8;
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+
+        let placement = 'top';
+        let top = rect.top - tipRect.height - gap;
+        if (top < 6) {
+          placement = 'bottom';
+          top = rect.bottom + gap;
+        }
+        top = Math.max(6, Math.min(vh - tipRect.height - 6, top));
+
+        let left = rect.left + rect.width / 2 - tipRect.width / 2;
+        left = Math.max(6, Math.min(vw - tipRect.width - 6, left));
+
+        const arrowX = Math.max(10, Math.min(tipRect.width - 10, rect.left + rect.width / 2 - left));
+        tip.style.setProperty('--arrow-x', arrowX + 'px');
+        tip.style.top = top + 'px';
+        tip.style.left = left + 'px';
+        tip.setAttribute('data-placement', placement);
+      }
+
+      function show(el) {
+        if (activeEl === el) return;
+        hide();
+        const text = resolveText(el);
+        if (!text) return;
+        activeEl = el;
+        // Suppress the native tooltip so only the themed bubble shows.
+        if (el.hasAttribute('title')) {
+          savedTitle = el.getAttribute('title');
+          el.removeAttribute('title');
+        }
+        showTimer = window.setTimeout(() => place(el, text), 120);
+      }
+
+      function hide() {
+        if (showTimer) { clearTimeout(showTimer); showTimer = null; }
+        if (activeEl && savedTitle !== null) {
+          activeEl.setAttribute('title', savedTitle);
+        }
+        savedTitle = null;
+        activeEl = null;
+        tip.classList.remove('visible');
+        tip.setAttribute('aria-hidden', 'true');
+      }
+
+      document.addEventListener('pointerover', (e) => {
+        if (e.pointerType && e.pointerType !== 'mouse') return;
+        const el = e.target.closest ? e.target.closest(CANDIDATE_SELECTOR) : null;
+        if (!el) return;
+        if (e.relatedTarget && el.contains(e.relatedTarget)) return;
+        show(el);
+      });
+
+      document.addEventListener('pointerout', (e) => {
+        if (!activeEl) return;
+        if (e.relatedTarget && activeEl.contains(e.relatedTarget)) return;
+        hide();
+      });
+
+      document.addEventListener('focusin', (e) => {
+        const el = e.target.closest ? e.target.closest(CANDIDATE_SELECTOR) : null;
+        if (el) show(el);
+      });
+      document.addEventListener('focusout', () => hide());
+
+      window.addEventListener('scroll', () => hide(), true);
+      document.addEventListener('pointerdown', () => hide(), true);
+      window.addEventListener('resize', () => hide());
+    }
+
+    /* ---------------------------------------------------------------
+       Avatar picker (alohe/avatars pack, MIT licensed)
+       --------------------------------------------------------------- */
+    const AVATAR_STYLES = [
+      { id: 'vibrent', label: 'Vibrent', count: 27 },
+      { id: 'upstream', label: 'Upstream', count: 22 },
+      { id: 'memo', label: 'Memo', count: 35 },
+      { id: 'notion', label: 'Notion', count: 15 },
+      { id: 'toon', label: 'Toon', count: 10 },
+      { id: 'bluey', label: 'Bluey', count: 10 },
+      { id: 'teams', label: 'Teams', count: 9 },
+      { id: '3d', label: '3D', count: 5 }
+    ];
+    const AVATAR_STORAGE_KEY = 'jobhunt_avatar';
+    const avatarState = { current: '', style: 'vibrent', lastFocus: null };
+
+    function avatarBasePath() {
+      return (location.protocol === 'file:' && location.pathname.indexOf('/gui/') === -1)
+        ? 'gui/avatars/'
+        : 'avatars/';
+    }
+    function avatarUrl(name) {
+      return avatarBasePath() + name + '.png';
+    }
+    function isValidAvatar(name) {
+      if (!name) return false;
+      const match = /^([a-z0-9]+)_(\d+)$/.exec(name);
+      if (!match) return false;
+      const style = AVATAR_STYLES.find(s => s.id === match[1]);
+      return !!style && +match[2] >= 1 && +match[2] <= style.count;
+    }
+    function avatarStyleOf(name) {
+      const match = /^([a-z0-9]+)_\d+$/.exec(name || '');
+      return match && AVATAR_STYLES.some(s => s.id === match[1]) ? match[1] : '';
+    }
+    function storedAvatar() {
+      try {
+        const value = localStorage.getItem(AVATAR_STORAGE_KEY);
+        if (value === 'initials') return '';
+        if (isValidAvatar(value)) return value;
+      } catch (e) {}
+      return null; // No explicit choice: fall back to profile.json's default.
+    }
+    function preferredAvatar() {
+      const stored = storedAvatar();
+      if (stored !== null) return stored;
+      const profileAvatar = (appData && appData.profile) ? appData.profile.avatar : '';
+      return isValidAvatar(profileAvatar) ? profileAvatar : '';
+    }
+    function updateAvatarNote() {
+      const note = document.getElementById('avatar-picker-note');
+      if (!note) return;
+      note.textContent = avatarState.current
+        ? `Selected: ${avatarState.current.replace('_', ' #')} · saved in this browser.`
+        : 'Using initials · your choice is saved in this browser.';
+    }
+    function updateAvatarSelection() {
+      document.querySelectorAll('.avatar-option').forEach(btn => {
+        const selected = btn.dataset.avatar === avatarState.current;
+        btn.classList.toggle('selected', selected);
+        btn.setAttribute('aria-selected', selected ? 'true' : 'false');
+      });
+    }
+    function updateAvatarTabs() {
+      document.querySelectorAll('.avatar-style-tab').forEach(btn => {
+        const active = btn.dataset.style === avatarState.style;
+        btn.classList.toggle('active', active);
+        btn.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+    }
+    function applyAvatar(name) {
+      const valid = isValidAvatar(name);
+      avatarState.current = valid ? name : '';
+      const root = document.documentElement;
+      if (valid) {
+        root.style.setProperty('--user-avatar-url', `url("${avatarUrl(name)}")`);
+        root.classList.add('has-user-avatar');
+      } else {
+        root.style.removeProperty('--user-avatar-url');
+        root.classList.remove('has-user-avatar');
+      }
+      updateAvatarSelection();
+      updateAvatarNote();
+    }
+    function renderAvatarTabs() {
+      const tabs = document.getElementById('avatar-style-tabs');
+      if (!tabs || tabs.dataset.built) return;
+      tabs.innerHTML = AVATAR_STYLES.map(style => `
+        <button class="avatar-style-tab" type="button" role="tab" data-style="${style.id}"
+                aria-selected="false" onclick="selectAvatarStyle('${style.id}')">
+          ${escapeHtml(style.label)} <span style="opacity:.65">${style.count}</span>
+        </button>
+      `).join('');
+      tabs.dataset.built = '1';
+    }
+    function renderAvatarGrid(styleId) {
+      const grid = document.getElementById('avatar-grid');
+      const conf = AVATAR_STYLES.find(s => s.id === styleId);
+      if (!grid || !conf) return;
+      const frag = document.createDocumentFragment();
+      for (let i = 1; i <= conf.count; i++) {
+        const name = `${styleId}_${i}`;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'avatar-option';
+        btn.dataset.avatar = name;
+        btn.setAttribute('role', 'option');
+        btn.setAttribute('aria-label', `${conf.label} avatar ${i}`);
+        btn.setAttribute('aria-selected', 'false');
+        btn.title = `${conf.label} #${i}`;
+        btn.innerHTML = `<img src="${avatarUrl(name)}" alt="" loading="lazy" decoding="async">`;
+        btn.addEventListener('click', () => selectAvatar(name));
+        frag.appendChild(btn);
+      }
+      grid.replaceChildren(frag);
+      updateAvatarSelection();
+      const selected = grid.querySelector('.avatar-option.selected');
+      if (selected) selected.scrollIntoView({ block: 'nearest' });
+    }
+    function selectAvatarStyle(styleId) {
+      if (!AVATAR_STYLES.some(s => s.id === styleId)) return;
+      avatarState.style = styleId;
+      renderAvatarGrid(styleId);
+      updateAvatarTabs();
+    }
+    function selectAvatar(name) {
+      if (!isValidAvatar(name)) return;
+      try { localStorage.setItem(AVATAR_STORAGE_KEY, name); } catch (e) {}
+      applyAvatar(name);
+    }
+    function resetAvatar() {
+      try { localStorage.setItem(AVATAR_STORAGE_KEY, 'initials'); } catch (e) {}
+      applyAvatar('');
+    }
+    function openAvatarPicker() {
+      const modal = document.getElementById('avatar-picker-modal');
+      if (!modal) return;
+      avatarState.lastFocus = document.activeElement;
+      renderAvatarTabs();
+      avatarState.style = avatarStyleOf(avatarState.current) || 'vibrent';
+      renderAvatarGrid(avatarState.style);
+      updateAvatarTabs();
+      updateAvatarNote();
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('avatar-picker-open');
+      const closeBtn = modal.querySelector('.modal-close-btn');
+      if (closeBtn) closeBtn.focus();
+    }
+    function closeAvatarPicker() {
+      const modal = document.getElementById('avatar-picker-modal');
+      if (!modal || !modal.classList.contains('open')) return;
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('avatar-picker-open');
+      const focusTarget = avatarState.lastFocus;
+      avatarState.lastFocus = null;
+      if (focusTarget && focusTarget.isConnected) focusTarget.focus();
+    }
+    function initAvatarPicker() {
+      renderAvatarTabs();
+      applyAvatar(preferredAvatar());
+      document.addEventListener('keydown', (e) => {
+        if (e.key !== 'Escape') return;
+        const modal = document.getElementById('avatar-picker-modal');
+        if (modal && modal.classList.contains('open')) {
+          e.preventDefault();
+          closeAvatarPicker();
+        }
+      });
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       updateThemeToggleIcons(getTheme());
       initBookmarkletLink();
+      initPaneResizer();
+      initTooltips();
+      initAvatarPicker();
       loadData();
     });
   </script>
