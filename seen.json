@@ -1315,5 +1315,277 @@
     "emailed": true,
     "applied": false,
     "applied_on": null
+  },
+  "greenhouse:airbnb:8396777": {
+    "first_seen": "2026-11-21T05:31:11+00:00",
+    "company": "Airbnb",
+    "title": "Data Engineer Tech Foundations",
+    "location": "US - Remote",
+    "url": "https://careers.airbnb.com/positions/8396777?gh_jid=8396777",
+    "score": 4.0,
+    "reason": "The role is for a Data Engineer focused on core datasets, whereas the candidate is a junior AI and software engineer.",
+    "canonical_source": "greenhouse",
+    "sources": [
+      "greenhouse"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Engineer"
+    ],
+    "fit_score": 4.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "ashby:elevenlabs:3abf96ca-2937-4290-9d23-5208aece08b2": {
+    "first_seen": "2026-11-21T05:31:11+00:00",
+    "company": "ElevenLabs",
+    "title": "Full-Stack Engineer - Ads Engine",
+    "location": "Remote",
+    "url": "https://jobs.ashbyhq.com/ElevenLabs/3abf96ca-2937-4290-9d23-5208aece08b2",
+    "score": 5.0,
+    "reason": "ElevenLabs is a top-tier AI company, but the full-stack role likely requires more senior software engineering experience.",
+    "canonical_source": "ashby",
+    "sources": [
+      "ashby"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Full-Stack Engineer"
+    ],
+    "fit_score": 5.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "ashby:elevenlabs:108c99e6-ba2b-44a0-b830-7d535e14a152": {
+    "first_seen": "2026-11-21T05:31:11+00:00",
+    "company": "ElevenLabs",
+    "title": "Full-Stack Engineer - ElevenAPI",
+    "location": "Remote",
+    "url": "https://jobs.ashbyhq.com/ElevenLabs/108c99e6-ba2b-44a0-b830-7d535e14a152",
+    "score": 5.0,
+    "reason": "A junior full-stack profile aligns with the tech stack, but ElevenLabs typically hires highly experienced engineers.",
+    "canonical_source": "ashby",
+    "sources": [
+      "ashby"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Full-Stack Engineer"
+    ],
+    "fit_score": 5.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "ashby:elevenlabs:34dbe44c-9815-40b2-81f4-91c607fd84b2": {
+    "first_seen": "2026-11-21T05:31:11+00:00",
+    "company": "ElevenLabs",
+    "title": "Full-Stack Engineer - ElevenCreative Enterprise",
+    "location": "Remote",
+    "url": "https://jobs.ashbyhq.com/ElevenLabs/34dbe44c-9815-40b2-81f4-91c607fd84b2",
+    "score": 5.0,
+    "reason": "Enterprise full-stack engineering at ElevenLabs requires robust production experience beyond a junior level.",
+    "canonical_source": "ashby",
+    "sources": [
+      "ashby"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Full-Stack Engineer"
+    ],
+    "fit_score": 5.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "ashby:elevenlabs:10e6475e-67ef-4621-8718-7b087c354651": {
+    "first_seen": "2026-11-21T05:31:11+00:00",
+    "company": "ElevenLabs",
+    "title": "Full-Stack Engineer - Productions",
+    "location": "Remote",
+    "url": "https://jobs.ashbyhq.com/ElevenLabs/10e6475e-67ef-4621-8718-7b087c354651",
+    "score": 5.0,
+    "reason": "Strong alignment with AI and full-stack interests, but seniority expectations at ElevenLabs are high.",
+    "canonical_source": "ashby",
+    "sources": [
+      "ashby"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Full-Stack Engineer"
+    ],
+    "fit_score": 5.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "ashby:elevenlabs:1b90a2b2-1352-458d-b2b7-3900f6e02df5": {
+    "first_seen": "2026-11-21T05:31:11+00:00",
+    "company": "ElevenLabs",
+    "title": "Mobile Engineer - ElevenMusic",
+    "location": "Remote",
+    "url": "https://jobs.ashbyhq.com/ElevenLabs/1b90a2b2-1352-458d-b2b7-3900f6e02df5",
+    "score": 4.0,
+    "reason": "Candidate has some Flutter experience, but specialized mobile engineering at ElevenLabs demands deeper expertise.",
+    "canonical_source": "ashby",
+    "sources": [
+      "ashby"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Mobile Engineer"
+    ],
+    "fit_score": 4.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "ashby:elevenlabs:0547cf3a-856f-4db2-8307-73db634c4096": {
+    "first_seen": "2026-11-21T05:31:11+00:00",
+    "company": "ElevenLabs",
+    "title": "Full-Stack Engineer - ElevenMusic",
+    "location": "Remote",
+    "url": "https://jobs.ashbyhq.com/ElevenLabs/0547cf3a-856f-4db2-8307-73db634c4096",
+    "score": 5.0,
+    "reason": "Matches the candidate's full-stack background, though company seniority bar presents a significant hurdle.",
+    "canonical_source": "ashby",
+    "sources": [
+      "ashby"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Full-Stack Engineer"
+    ],
+    "fit_score": 5.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "remotive:global:2091165": {
+    "first_seen": "2026-11-21T05:31:11+00:00",
+    "company": "Fluence International, Inc.",
+    "title": "Full-Stack Developer",
+    "location": "Worldwide",
+    "url": "https://remotive.com/remote-jobs/software-development/full-stack-developer-2091165",
+    "score": 7.0,
+    "reason": "The stack and LLM/automation requirements align well with the candidate's skills and junior-to-mid profile.",
+    "canonical_source": "remotive",
+    "sources": [
+      "remotive"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Full-Stack Developer"
+    ],
+    "fit_score": 7.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:coding-tasks-contract-5812118603": {
+    "first_seen": "2026-11-21T05:31:11+00:00",
+    "company": "Remote Employer",
+    "title": "Software Engineer, AI Coding Tasks (Contract)",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/askable/jobs/software-engineer-ai-coding-tasks-contract-5812118603",
+    "score": null,
+    "reason": null,
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Engineer"
+    ],
+    "fit_score": null,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4448398197": {
+    "first_seen": "2026-11-21T05:31:11+00:00",
+    "company": "Accenture in India",
+    "title": "AI / ML Engineer",
+    "location": "Navi Mumbai, Maharashtra, India",
+    "url": "https://www.linkedin.com/jobs/view/4448398197",
+    "score": null,
+    "reason": null,
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "ML Engineer"
+    ],
+    "fit_score": null,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4485688619": {
+    "first_seen": "2026-11-21T05:31:11+00:00",
+    "company": "JPMorganChase",
+    "title": "Data Analytics Associate",
+    "location": "Mumbai, Maharashtra, India",
+    "url": "https://www.linkedin.com/jobs/view/4485688619",
+    "score": null,
+    "reason": null,
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [],
+    "matched_roles": [],
+    "fit_score": null,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4490851206": {
+    "first_seen": "2026-11-21T05:31:11+00:00",
+    "company": "JPMorganChase",
+    "title": "Analyst - Python Developer",
+    "location": "Mumbai, Maharashtra, India",
+    "url": "https://www.linkedin.com/jobs/view/4490851206",
+    "score": null,
+    "reason": null,
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Python Developer"
+    ],
+    "fit_score": null,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
   }
 }

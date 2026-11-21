@@ -5,13 +5,78 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="color-scheme" content="dark">
-  <meta name="theme-color" content="#18181A">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#F8FAFC">
   <title>Shubham's JobHunt — Executive Dashboard</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23FF6188%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><circle cx=%2212%22 cy=%2212%22 r=%2210%22/><circle cx=%2212%22 cy=%2212%22 r=%226%22/><circle cx=%2212%22 cy=%2212%22 r=%222%22/></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%234F46E5%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><circle cx=%2212%22 cy=%2212%22 r=%2210%22/><circle cx=%2212%22 cy=%2212%22 r=%226%22/><circle cx=%2212%22 cy=%2212%22 r=%222%22/></svg>">
+  <script>
+    (function() {
+      try {
+        var saved = localStorage.getItem('jobhunt_theme') || 'light';
+        document.documentElement.setAttribute('data-theme', saved);
+      } catch(e) {}
+    })();
+  </script>
   <style>
 
-    :root {
+    :root, [data-theme="light"] {
+      color-scheme: light;
+      --bg: #F8FAFC;
+      --bg-canvas: #F8FAFC;
+      --bg-rail: #F1F5F9;
+      --bg-feed: #F8FAFC;
+      --bg-panel: #F1F5F9;
+      --bg-card: #FFFFFF;
+      --bg-card-hover: #F8FAFC;
+      --bg-card-active: #EEF2FF;
+      --bg-input: #FFFFFF;
+      --bg-shelf: #F1F5F9;
+      --bg-surface-subtle: #F1F5F9;
+      --bg-surface-inset: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --card-border: #E2E8F0;
+      --border-subtle: #E2E8F0;
+      --border-hover: #CBD5E1;
+      --border-active: #4F46E5;
+      --shadow-card: 0 1px 3px rgba(15, 23, 42, 0.05);
+      --inner-highlight: 0 1px 3px rgba(15, 23, 42, 0.05);
+
+      --text-main: #0F172A;
+      --text-primary: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #64748B;
+      --text-dim: #94A3B8;
+
+      --accent-blue: #2563EB;
+      --accent-indigo: #4F46E5;
+      --accent-green: #059669;
+      --accent-emerald: #059669;
+      --green-light: #10B981;
+
+      --emerald-500: #059669;
+      --emerald-400: #10B981;
+      --emerald-glow: 0 0 16px rgba(5, 150, 105, 0.25);
+      --emerald-bg: rgba(5, 150, 105, 0.1);
+      --emerald-border: rgba(5, 150, 105, 0.3);
+
+      --indigo-500: #4F46E5;
+      --indigo-600: #4338CA;
+      --indigo-400: #6366F1;
+      --indigo-glow: 0 0 16px rgba(79, 70, 229, 0.25);
+      --indigo-bg: rgba(79, 70, 229, 0.08);
+      --indigo-border: rgba(79, 70, 229, 0.3);
+
+      --brand-gradient: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+      --accent-purple: #7C3AED;
+      --accent-amber: #D97706;
+      --accent-red: #DC2626;
+
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    [data-theme="dark"] {
       color-scheme: dark;
       --bg: #18181A;
       --bg-canvas: #18181A;
@@ -22,11 +87,15 @@
       --bg-card-hover: #302F37;
       --bg-card-active: #2C2834;
       --bg-input: #131315;
+      --bg-shelf: rgba(11, 12, 14, 0.94);
+      --bg-surface-subtle: #14171F;
+      --bg-surface-inset: #090A0D;
       --card-bg: #26252C;
       --card-border: rgba(255, 255, 255, 0.08);
       --border-subtle: rgba(255, 255, 255, 0.08);
       --border-hover: rgba(255, 255, 255, 0.16);
       --border-active: rgba(255, 97, 136, 0.65);
+      --shadow-card: none;
       --inner-highlight: inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
 
       --text-main: #FCFCFA;
@@ -38,6 +107,7 @@
       --accent-blue: #78DCE8;
       --accent-indigo: #FF6188;
       --accent-green: #A9DC76;
+      --accent-emerald: #A9DC76;
       --green-light: #C3E88D;
 
       --emerald-500: #A9DC76;
@@ -57,10 +127,6 @@
       --accent-purple: #AB9DF2;
       --accent-amber: #FFD866;
       --accent-red: #FF6188;
-
-      --font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -130,7 +196,7 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      color: #F8FAFC;
+      color: var(--text-primary);
     }
     .brand p {
       font-size: 11px;
@@ -166,7 +232,7 @@
       box-shadow: 0 0 6px #10B981;
     }
     .btn-actions {
-      background: #14171F;
+      background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       color: var(--text-main);
       font-size: 11.5px;
@@ -180,8 +246,8 @@
       transition: background 0.15s, border-color 0.15s;
     }
     .btn-actions:hover {
-      background: #1D2230;
-      border-color: rgba(255, 255, 255, 0.16);
+      background: var(--bg-card-hover);
+      border-color: var(--border-hover);
     }
 
     /* Layout Wrapper */
@@ -219,7 +285,7 @@
       width: 42px;
       height: 42px;
       border-radius: 50%;
-      background: var(--brand-gradient, linear-gradient(135deg, #FF6188 0%, #AB9DF2 100%));
+      background: var(--accent-indigo, #4F46E5);
       color: #FFFFFF;
       font-family: var(--font-mono);
       font-weight: 800;
@@ -227,7 +293,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 0 2px rgba(255, 97, 136, 0.4), 0 4px 12px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 0 0 2px var(--indigo-border), 0 2px 6px rgba(0, 0, 0, 0.15);
       cursor: pointer;
       user-select: none;
     }
@@ -253,28 +319,28 @@
       transition: all 0.15s ease;
     }
     .rail-item:hover {
-      background: rgba(255, 255, 255, 0.05);
-      color: #FFFFFF;
-      border-color: rgba(255, 255, 255, 0.08);
+      background: var(--bg-card);
+      color: var(--text-primary);
+      border-color: var(--border-subtle);
     }
     .rail-item.active {
       background: var(--indigo-bg);
-      color: #FFFFFF;
+      color: var(--accent-indigo, #4F46E5);
       border-color: var(--indigo-border);
-      box-shadow: 0 0 12px rgba(99, 102, 241, 0.35);
+      box-shadow: 0 0 10px var(--indigo-glow);
     }
     .rail-badge {
       position: absolute;
       top: -3px;
       right: -3px;
-      background: #4F46E5;
+      background: var(--accent-indigo, #4F46E5);
       color: #FFFFFF;
       font-family: var(--font-mono);
       font-size: 9.5px;
       font-weight: 700;
       padding: 1px 4.5px;
       border-radius: 999px;
-      border: 1px solid #08090B;
+      border: 1px solid var(--bg-rail);
       line-height: 1.2;
     }
     .rail-bottom {
@@ -283,11 +349,11 @@
       align-items: center;
     }
 
-    /* PANE 2: Middle Master Role Feed (360px fixed) */
+    /* PANE 2: Middle Master Role Feed (340px fixed) */
     .master-feed {
-      width: 360px;
-      min-width: 360px;
-      max-width: 360px;
+      width: 340px;
+      min-width: 340px;
+      max-width: 340px;
       height: 100%;
       background: var(--bg-feed);
       border-right: 1px solid var(--border-subtle);
@@ -296,15 +362,16 @@
       flex-shrink: 0;
       z-index: 30;
       position: relative;
+      overflow-y: auto;
     }
     .feed-header {
-      padding: 12px 12px 8px 12px;
+      padding: 8px 10px 6px 10px;
       border-bottom: 1px solid var(--border-subtle);
-      background: rgba(14, 16, 21, 0.96);
+      background: var(--bg-feed);
       backdrop-filter: blur(16px);
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
     }
     .feed-search-box {
       display: flex;
@@ -314,12 +381,13 @@
       border: 1px solid var(--border-subtle);
       border-radius: 8px;
       padding: 0 10px;
-      height: 38px;
+      height: 32px;
+      box-shadow: var(--shadow-card);
       transition: border-color 0.15s, box-shadow 0.15s;
     }
     .feed-search-box:focus-within {
       border-color: var(--indigo-500);
-      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25);
+      box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.25);
     }
     .search-icon {
       color: var(--text-muted);
@@ -330,7 +398,7 @@
       background: transparent;
       border: none;
       outline: none;
-      color: var(--text-main);
+      color: var(--text-primary);
       font-family: var(--font-sans);
       font-size: 12.5px;
       min-width: 0;
@@ -343,8 +411,8 @@
       font-size: 10px;
       font-weight: 600;
       color: var(--text-muted);
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: var(--bg-surface-subtle);
+      border: 1px solid var(--border-subtle);
       padding: 2px 5px;
       border-radius: 4px;
       flex-shrink: 0;
@@ -352,14 +420,14 @@
     }
     .status-ribbon {
       font-family: var(--font-mono);
-      font-size: 11px;
+      font-size: 10px;
       color: var(--text-secondary);
       letter-spacing: 0.2px;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
-      padding: 2px 0;
+      padding: 0;
     }
     .chips-scroll {
       display: flex;
@@ -371,12 +439,12 @@
     }
     .chips-scroll::-webkit-scrollbar { display: none; }
     .filter-chip {
-      background: rgba(255, 255, 255, 0.04);
+      background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       color: var(--text-secondary);
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 500;
-      padding: 4px 10px;
+      padding: 3px 8px;
       border-radius: 6px;
       cursor: pointer;
       white-space: nowrap;
@@ -386,16 +454,16 @@
       transition: all 0.15s;
     }
     .filter-chip:hover {
-      background: rgba(255, 255, 255, 0.08);
-      color: #FFFFFF;
-      border-color: rgba(255, 255, 255, 0.15);
+      background: var(--bg-card-hover);
+      color: var(--text-primary);
+      border-color: var(--border-hover);
     }
     .filter-chip.active {
       background: var(--indigo-bg);
-      color: #FFFFFF;
+      color: var(--accent-indigo, #4F46E5);
       border-color: var(--indigo-500);
       font-weight: 600;
-      box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+      box-shadow: 0 0 10px var(--indigo-glow);
     }
     .filter-selects {
       display: grid;
@@ -403,11 +471,11 @@
       gap: 6px;
     }
     .select-filter {
-      background: var(--bg-input);
+      background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       color: var(--text-secondary);
-      font-size: 11px;
-      padding: 5px 8px;
+      font-size: 10.5px;
+      padding: 3px 6px;
       border-radius: 6px;
       outline: none;
       cursor: pointer;
@@ -439,8 +507,8 @@
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: 8px;
-      padding: 12px;
-      box-shadow: var(--inner-highlight);
+      padding: 9px 10px;
+      box-shadow: var(--shadow-card);
       transition: all 0.15s ease;
       position: relative;
     }
@@ -449,19 +517,35 @@
       border-color: var(--border-hover);
     }
     .job-card.active {
-      border-left: 3px solid var(--indigo-500) !important;
+      border: 1px solid var(--accent-indigo, #4F46E5) !important;
+      border-left: 3px solid var(--accent-indigo, #4F46E5) !important;
       background: var(--bg-card-active) !important;
-      box-shadow: inset 3px 0 12px -2px var(--indigo-glow), 0 4px 14px rgba(0, 0, 0, 0.5) !important;
+      box-shadow: 0 1px 4px rgba(79, 70, 229, 0.15) !important;
     }
     .job-card.active .job-title {
-      color: #FFFFFF !important;
+      color: var(--text-primary) !important;
+    }
+    .company-glyph-sm {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      background: var(--bg-surface-subtle);
+      border: 1px solid var(--border-subtle);
+      color: var(--accent-indigo, #4F46E5);
+      font-family: var(--font-mono);
+      font-weight: 800;
+      font-size: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
     }
     .job-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       gap: 8px;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
     .job-title-area {
       min-width: 0;
@@ -500,7 +584,7 @@
     }
     .score-badge.score-high {
       background: var(--emerald-bg);
-      color: var(--emerald-400);
+      color: var(--accent-emerald, #059669);
       border: 1px solid var(--emerald-border);
       box-shadow: var(--emerald-glow);
     }
@@ -516,10 +600,12 @@
     }
     .job-tags {
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       gap: 4px;
-      margin: 6px 0;
+      margin: 4px 0;
+      overflow: hidden;
     }
+    .job-tags .tag { flex-shrink: 0; }
     .tag {
       font-size: 10px;
       font-weight: 600;
@@ -649,33 +735,43 @@
     }
 
     /* Command Center Telemetry HUD (Pane 2 Feed Header) */
+    /* Compact telemetry strip: 4 across, label + value only (density pass). */
     .feed-header .metrics-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 6px;
-      margin: 8px 0;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 4px;
+      margin: 5px 0;
     }
     .feed-header .metric-card {
-      padding: 8px 10px;
-      border-radius: 8px;
-      background: #14171F;
-      border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+      padding: 5px 6px;
+      border-radius: 6px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-card);
+      min-width: 0;
     }
     .feed-header .metric-label {
-      font-size: 9.5px;
-      letter-spacing: 0.5px;
+      font-size: 8px;
+      letter-spacing: 0.2px;
       color: var(--text-muted);
       text-transform: uppercase;
       font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .feed-header .metric-val {
-      font-size: 18px;
+      font-size: 14px;
       font-weight: 800;
+      line-height: 1.1;
       font-family: var(--font-mono, 'JetBrains Mono', monospace);
     }
     .feed-header .metric-sub {
-      font-size: 10px;
-      color: var(--text-muted);
+      display: none;
+    }
+    .feed-header .btn-applied-hub-pill {
+      font-size: 8px;
+      padding: 0 3px;
     }
 
     /* Deck Tab Panels (Pane 3) */
@@ -688,14 +784,15 @@
       min-height: 750px;
       border: none;
       border-radius: 12px;
-      background: #14171F;
+      background: var(--bg-canvas);
     }
     .profile-card {
-      background: #14171F;
-      border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
       border-radius: 12px;
       padding: 24px;
       margin-bottom: 24px;
+      box-shadow: var(--shadow-card);
     }
     .profile-header {
       display: flex;
@@ -703,7 +800,7 @@
       gap: 16px;
       margin-bottom: 24px;
       padding-bottom: 16px;
-      border-bottom: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+      border-bottom: 1px solid var(--border-subtle);
     }
     .profile-header .avatar {
       width: 48px;
@@ -723,7 +820,7 @@
     .p-title {
       font-size: 13px;
       font-weight: 700;
-      color: var(--text-main, #E2E8F0);
+      color: var(--text-primary);
       text-transform: uppercase;
       letter-spacing: 0.5px;
       margin-bottom: 10px;
@@ -737,21 +834,25 @@
       padding: 1px 5px;
     }
     .job-reason {
-      font-size: 11px;
+      font-size: 10.5px;
       color: var(--text-secondary);
-      line-height: 1.45;
+      line-height: 1.35;
       background: rgba(0, 0, 0, 0.25);
       border-left: 2px solid var(--emerald-500);
-      padding: 6px 8px;
+      padding: 4px 6px;
       border-radius: 0 4px 4px 0;
-      margin: 6px 0;
+      margin: 4px 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
     .job-actions {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 8px;
-      padding-top: 6px;
+      margin-top: 5px;
+      padding-top: 4px;
       border-top: 1px solid rgba(255, 255, 255, 0.04);
       font-size: 10.5px;
       color: var(--text-muted);
@@ -762,12 +863,12 @@
       gap: 6px;
     }
     .btn-applied, .btn-apply-link, .btn-kit {
-      background: rgba(255, 255, 255, 0.05);
+      background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       color: var(--text-secondary);
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 600;
-      padding: 4px 8px;
+      padding: 3px 7px;
       border-radius: 4px;
       cursor: pointer;
       display: inline-flex;
@@ -777,12 +878,13 @@
       transition: all 0.15s;
     }
     .btn-applied:hover, .btn-apply-link:hover, .btn-kit:hover {
-      background: rgba(255, 255, 255, 0.1);
-      color: #FFFFFF;
+      background: var(--bg-card-hover);
+      color: var(--text-primary);
+      border-color: var(--border-hover);
     }
     .btn-applied.active {
       background: var(--indigo-bg);
-      color: #A5B4FC;
+      color: var(--accent-indigo, #4F46E5);
       border-color: var(--indigo-500);
     }
     .btn-applied-hub-pill {
@@ -824,10 +926,10 @@
     .deck-scrollable {
       flex: 1;
       overflow-y: auto;
-      padding: 28px 36px 36px 36px;
+      padding: 20px 24px 28px 24px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 14px;
     }
     .deck-hero {
       display: flex;
@@ -845,14 +947,14 @@
       font-size: 26px;
       font-weight: 800;
       letter-spacing: -0.4px;
-      color: #F8FAFC;
+      color: var(--text-primary);
       line-height: 1.25;
       margin-bottom: 6px;
     }
     .hero-company {
       font-size: 17px;
-      font-weight: 600;
-      color: #818CF8;
+      font-weight: 700;
+      color: var(--accent-indigo, #4F46E5);
       margin-bottom: 8px;
     }
     .hero-meta-row {
@@ -881,16 +983,16 @@
       width: 80px;
       height: 80px;
       transform: rotate(-90deg);
-      filter: drop-shadow(0 0 12px rgba(16, 185, 129, 0.55));
+      filter: drop-shadow(0 0 12px rgba(5, 150, 105, 0.45));
     }
     .ring-bg {
       fill: none;
-      stroke: rgba(255, 255, 255, 0.08);
+      stroke: var(--border-subtle, #E2E8F0);
       stroke-width: 6;
     }
     .ring-prog {
       fill: none;
-      stroke: #10B981;
+      stroke: var(--accent-emerald, #059669);
       stroke-width: 6;
       stroke-linecap: round;
       transition: stroke-dashoffset 0.5s ease;
@@ -907,7 +1009,7 @@
       font-family: var(--font-mono);
       font-size: 20px;
       font-weight: 800;
-      color: #F8FAFC;
+      color: var(--text-primary, #0F172A);
       line-height: 1;
     }
     .ring-score-text .score-sub {
@@ -915,17 +1017,17 @@
       font-size: 8.5px;
       font-weight: 700;
       letter-spacing: 0.12em;
-      color: #10B981;
+      color: var(--accent-emerald, #059669);
       margin-top: 2px;
     }
 
     /* AI Match Breakdown Card */
     .ai-breakdown-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
+      background: var(--bg-card, #FFFFFF);
+      border: 1px solid var(--border-subtle, #E2E8F0);
       border-radius: 12px;
       padding: 20px;
-      box-shadow: var(--inner-highlight);
+      box-shadow: var(--shadow-card, 0 1px 3px rgba(15, 23, 42, 0.05));
     }
     .card-kicker {
       display: flex;
@@ -935,13 +1037,13 @@
       font-size: 11px;
       font-weight: 700;
       letter-spacing: 0.08em;
-      color: #A78BFA;
+      color: var(--accent-purple, #7C3AED);
       text-transform: uppercase;
       margin-bottom: 12px;
     }
     .breakdown-summary {
       font-size: 13.5px;
-      color: #E2E8F0;
+      color: var(--text-primary, #0F172A);
       line-height: 1.6;
       margin-bottom: 18px;
     }
@@ -962,20 +1064,20 @@
       font-size: 12px;
     }
     .pill-label-title {
-      color: var(--text-secondary);
-      font-weight: 500;
+      color: var(--accent-emerald, #059669);
+      font-weight: 600;
     }
     .pill-label-val {
-      color: #F8FAFC;
+      color: var(--text-primary, #0F172A);
       font-weight: 700;
       font-size: 11.5px;
     }
     .pill-bar-track {
       height: 6px;
-      background: #090A0D;
+      background: var(--bg-surface-subtle, #F1F5F9);
       border-radius: 999px;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle, #E2E8F0);
     }
     .pill-bar-fill {
       height: 100%;
@@ -984,20 +1086,20 @@
     }
     .pill-bar-fill.emerald {
       background: linear-gradient(90deg, #059669 0%, #10B981 100%);
-      box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+      box-shadow: 0 0 8px rgba(5, 150, 105, 0.4);
     }
     .pill-bar-fill.indigo {
       background: linear-gradient(90deg, #4F46E5 0%, #6366F1 100%);
-      box-shadow: 0 0 8px rgba(99, 102, 241, 0.5);
+      box-shadow: 0 0 8px rgba(79, 70, 229, 0.4);
     }
 
     /* Document Hub / 'Kit' Section */
     .document-hub-section {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
+      background: var(--bg-card, #FFFFFF);
+      border: 1px solid var(--border-subtle, #E2E8F0);
       border-radius: 12px;
       padding: 20px;
-      box-shadow: var(--inner-highlight);
+      box-shadow: var(--shadow-card, 0 1px 3px rgba(15, 23, 42, 0.05));
     }
     .hub-header {
       display: flex;
@@ -1015,16 +1117,16 @@
       font-size: 12px;
       font-weight: 700;
       letter-spacing: 0.08em;
-      color: #F8FAFC;
+      color: var(--text-primary, #0F172A);
       text-transform: uppercase;
     }
     .hub-status-tag {
       font-family: var(--font-mono);
       font-size: 10px;
       font-weight: 700;
-      color: #34D399;
-      background: var(--emerald-bg);
-      border: 1px solid var(--emerald-border);
+      color: var(--accent-emerald, #059669);
+      background: var(--emerald-bg, rgba(5, 150, 105, 0.1));
+      border: 1px solid var(--emerald-border, rgba(5, 150, 105, 0.25));
       padding: 2px 7px;
       border-radius: 4px;
     }
@@ -1035,8 +1137,8 @@
       margin-bottom: 16px;
     }
     .kit-chip {
-      background: #101216;
-      border: 1px solid var(--border-subtle);
+      background: var(--bg-surface-subtle, #F1F5F9);
+      border: 1px solid var(--border-subtle, #E2E8F0);
       border-radius: 8px;
       padding: 10px 12px;
       display: flex;
@@ -1046,8 +1148,8 @@
       transition: all 0.15s ease;
     }
     .kit-chip:hover {
-      background: #1A1E29;
-      border-color: var(--border-hover);
+      background: var(--bg-card, #FFFFFF);
+      border-color: var(--border-hover, #CBD5E1);
       transform: translateY(-1px);
     }
     .kit-chip-icon {
@@ -1060,16 +1162,16 @@
       flex-shrink: 0;
     }
     .kit-chip-icon.pdf {
-      background: rgba(59, 130, 246, 0.15);
-      color: #60A5FA;
+      background: rgba(220, 38, 38, 0.12);
+      color: #DC2626;
     }
     .kit-chip-icon.doc {
-      background: rgba(168, 85, 247, 0.15);
-      color: #C084FC;
+      background: rgba(37, 99, 235, 0.12);
+      color: #2563EB;
     }
     .kit-chip-icon.chat {
-      background: rgba(16, 185, 129, 0.15);
-      color: #34D399;
+      background: rgba(5, 150, 105, 0.12);
+      color: #059669;
     }
     .kit-info {
       display: flex;
@@ -1079,7 +1181,7 @@
     .kit-info .name {
       font-size: 12px;
       font-weight: 600;
-      color: #F8FAFC;
+      color: var(--text-primary, #0F172A);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -1092,8 +1194,8 @@
       text-overflow: ellipsis;
     }
     .outreach-preview-box {
-      background: #090A0D;
-      border: 1px solid var(--border-subtle);
+      background: var(--bg-surface-subtle, #F1F5F9);
+      border: 1px solid var(--border-subtle, #E2E8F0);
       border-radius: 8px;
       padding: 12px;
     }
@@ -1111,9 +1213,9 @@
       letter-spacing: 0.05em;
     }
     .btn-copy-mini {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: #A5B4FC;
+      background: var(--bg-card, #FFFFFF);
+      border: 1px solid var(--border-subtle, #E2E8F0);
+      color: var(--accent-indigo, #4F46E5);
       font-size: 10.5px;
       font-weight: 600;
       padding: 2px 7px;
@@ -1122,13 +1224,13 @@
       transition: all 0.15s;
     }
     .btn-copy-mini:hover {
-      background: var(--indigo-bg);
-      color: #FFFFFF;
-      border-color: var(--indigo-500);
+      background: var(--indigo-bg, rgba(79, 70, 229, 0.1));
+      color: var(--text-primary, #0F172A);
+      border-color: var(--accent-indigo, #4F46E5);
     }
     .outreach-text {
       font-size: 12px;
-      color: var(--text-secondary);
+      color: var(--text-secondary, #475569);
       line-height: 1.5;
     }
 
@@ -1139,9 +1241,9 @@
       left: 0;
       right: 0;
       padding: 14px 36px;
-      background: rgba(11, 12, 14, 0.94);
+      background: var(--bg-shelf, #F1F5F9);
       backdrop-filter: blur(16px);
-      border-top: 1px solid var(--border-subtle);
+      border-top: 1px solid var(--border-subtle, #E2E8F0);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -1153,9 +1255,9 @@
       gap: 10px;
     }
     .btn-action-ghost {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-main);
+      background: var(--bg-card, #FFFFFF);
+      border: 1px solid var(--border-subtle, #E2E8F0);
+      color: var(--text-primary, #0F172A);
       font-size: 12.5px;
       font-weight: 600;
       padding: 9px 16px;
@@ -1164,16 +1266,17 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      box-shadow: var(--shadow-card, 0 1px 3px rgba(15, 23, 42, 0.05));
       transition: all 0.15s;
     }
     .btn-action-ghost:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.18);
+      background: var(--bg-surface-subtle, #F1F5F9);
+      border-color: var(--border-hover, #CBD5E1);
     }
     .btn-action-secondary {
-      background: #1D2230;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      color: var(--text-main);
+      background: var(--bg-card, #FFFFFF);
+      border: 1px solid var(--border-subtle, #E2E8F0);
+      color: var(--text-primary, #0F172A);
       font-size: 12.5px;
       font-weight: 600;
       padding: 9px 16px;
@@ -1182,15 +1285,16 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      box-shadow: var(--shadow-card, 0 1px 3px rgba(15, 23, 42, 0.05));
       transition: all 0.15s;
     }
     .btn-action-secondary:hover {
-      background: #252B3D;
-      border-color: rgba(255, 255, 255, 0.2);
+      background: var(--bg-surface-subtle, #F1F5F9);
+      border-color: var(--border-hover, #CBD5E1);
     }
     .btn-action-primary {
-      background: linear-gradient(135deg, var(--indigo-500) 0%, var(--indigo-600) 100%);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: linear-gradient(135deg, var(--accent-indigo, #4F46E5) 0%, #6366F1 100%);
+      border: 1px solid var(--accent-indigo, #4F46E5);
       color: #FFFFFF;
       font-size: 13px;
       font-weight: 700;
@@ -1203,10 +1307,10 @@
       transition: all 0.2s;
     }
     .btn-action-primary.glow {
-      box-shadow: 0 0 20px var(--indigo-glow), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      box-shadow: 0 0 16px var(--indigo-glow), inset 0 1px 0 rgba(255, 255, 255, 0.25);
     }
     .btn-action-primary.glow:hover {
-      box-shadow: 0 0 28px var(--indigo-glow);
+      box-shadow: 0 0 24px var(--indigo-glow);
       transform: translateY(-1px);
     }
     .hotkey-tag {
@@ -1418,6 +1522,28 @@
         height: auto;
       }
 
+      /* Density pass: the phone layout already has capsules, an active card
+         and an accordion. Keep the search field but drop the duplicated
+         desktop telemetry/filter stack so the first job is above the fold. */
+      .feed-header {
+        padding: 8px 12px !important;
+        gap: 0 !important;
+      }
+      .feed-header .status-ribbon,
+      .feed-header .metrics-grid,
+      .feed-header .chips-scroll,
+      .feed-header .results-count-bar {
+        display: none !important;
+      }
+      .feed-header .filter-selects {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 4px;
+        margin-top: 6px;
+      }
+      .feed-header .feed-search-box {
+        height: 34px;
+      }
+
       /* Mobile Sticky Top Bar */
       .mobile-top-bar {
         display: flex !important;
@@ -1511,8 +1637,8 @@
       .mobile-active-card {
         display: flex !important;
         flex-direction: column;
-        margin: 14px 14px 10px 14px;
-        padding: 16px;
+        margin: 10px 14px 8px 14px;
+        padding: 12px;
         background: #14171F;
         border: 1px solid var(--border-subtle);
         border-left: 3px solid #6366F1;
@@ -1775,9 +1901,9 @@
     }
     body.force-desktop .master-feed {
       display: flex !important;
-      width: 360px !important;
-      min-width: 360px !important;
-      max-width: 360px !important;
+      width: 340px !important;
+      min-width: 340px !important;
+      max-width: 340px !important;
       height: 100vh !important;
       border-right: 1px solid var(--border-subtle) !important;
       overflow: hidden !important;
@@ -1901,6 +2027,10 @@
       <span class="mobile-live-dot" title="Pipeline Active"></span>
     </div>
     <div class="mobile-top-actions">
+      <button class="btn-actions" id="mobile-theme-toggle-btn" onclick="toggleMobileTheme()" title="Toggle Theme" aria-label="Daylight Mode">
+        <svg class="icon icon-sm theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg class="icon icon-sm theme-icon-moon" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
       <button class="btn-actions" onclick="focusSearchMobile()" title="Search Opportunities">
         <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </button>
@@ -1992,8 +2122,8 @@
       <span>Cover_Letter_Draft.docx</span>
     </div>
     <div class="mobile-doc-chip" onclick="copyOutreachNote()">
-      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      <span>Outreach Snippet</span>
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span>Suggested Outreach Message</span>
     </div>
   </div>
 
@@ -2030,6 +2160,14 @@
         </button>
       </nav>
       <div class="rail-bottom">
+        <button class="rail-item theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Alabaster Daylight / Dark Theme" aria-label="Toggle Alabaster Daylight / Dark Theme">
+          <svg class="icon icon-md theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <svg class="icon icon-md theme-icon-moon" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
         <button class="rail-item" id="rail-btn-phone" onclick="openWhatsAppGuide()" title="Phone Alerts (Telegram &amp; WhatsApp)">
           <svg class="icon icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
@@ -2190,9 +2328,9 @@
             <div class="hero-meta-row" id="deck-meta">
               <span id="deck-meta-loc">Mumbai (Onsite)</span>
               <span class="meta-bullet">•</span>
-              <span id="deck-meta-date">Tracked: 2026-11-19</span>
+              <span id="deck-meta-date">Seen: 2026-11-19</span>
               <span class="meta-bullet">•</span>
-              <span id="deck-meta-source">Source: Lever</span>
+              <span id="deck-meta-source">Lever</span>
             </div>
           </div>
           <div class="hero-right">
@@ -2219,29 +2357,29 @@
             <span>AI MATCH BREAKDOWN</span>
           </div>
           <p class="breakdown-summary" id="deck-ai-summary">
-            Outstanding match for Python and Generative AI engineer in Navi Mumbai with direct alignment on AI agent workflows. Strong junior-plus technical suitability with Python, LangChain, and LLM orchestration.
+            <strong>Match Rationale:</strong> Outstanding match for Python and Generative AI engineer in Navi Mumbai with direct alignment on AI agent workflows. Strong junior-plus technical suitability with Python, LangChain, and LLM orchestration.
           </p>
           <div class="breakdown-pills-list" id="deck-breakdown-pills">
             <div class="pill-bar-row">
               <div class="pill-bar-label">
-                <span class="pill-label-title" id="pill-title-1">AI Agent Workflows</span>
+                <span class="pill-label-title" id="pill-title-1">AI Agent Workflows (95%)</span>
                 <span class="pill-label-val mono" id="pill-val-1">95%</span>
               </div>
               <div class="pill-bar-track"><div class="pill-bar-fill emerald" id="pill-bar-1" style="width: 95%;"></div></div>
             </div>
             <div class="pill-bar-row">
               <div class="pill-bar-label">
-                <span class="pill-label-title" id="pill-title-2">Python &amp; GenAI</span>
+                <span class="pill-label-title" id="pill-title-2">Python &amp; GenAI (92%)</span>
                 <span class="pill-label-val mono" id="pill-val-2">92%</span>
               </div>
               <div class="pill-bar-track"><div class="pill-bar-fill emerald" id="pill-bar-2" style="width: 92%;"></div></div>
             </div>
             <div class="pill-bar-row">
               <div class="pill-bar-label">
-                <span class="pill-label-title" id="pill-title-3">Location (Mumbai MMR)</span>
+                <span class="pill-label-title" id="pill-title-3">Location &amp; Workplace (92%)</span>
                 <span class="pill-label-val mono" id="pill-val-3">92%</span>
               </div>
-              <div class="pill-bar-track"><div class="pill-bar-fill indigo" id="pill-bar-3" style="width: 92%;"></div></div>
+              <div class="pill-bar-track"><div class="pill-bar-fill emerald" id="pill-bar-3" style="width: 92%;"></div></div>
             </div>
           </div>
         </section>
@@ -2250,13 +2388,13 @@
         <section class="document-hub-section" id="deck-kit-section">
           <div class="hub-header">
             <div class="hub-title-row">
-              <svg class="icon icon-md" viewBox="0 0 24 24" fill="none" stroke="#818CF8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg class="icon icon-md" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                 <polyline points="14 2 14 8 20 8"></polyline>
                 <line x1="16" y1="13" x2="8" y2="13"></line>
                 <line x1="16" y1="17" x2="8" y2="17"></line>
               </svg>
-              <h3>DOCUMENT HUB &amp; 'KIT'</h3>
+              <h3>Document Hub / 'Kit'</h3>
             </div>
             <span class="hub-status-tag">3 Assets Ready</span>
           </div>
@@ -2284,7 +2422,7 @@
                 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
               </div>
               <div class="kit-info">
-                <span class="name">Outreach Message Snippet</span>
+                <span class="name">Suggested Outreach Message</span>
                 <span class="sub">1-Click Copy</span>
               </div>
             </div>
@@ -2971,6 +3109,70 @@
 
   <script>
 
+    // --- ALABASTER DAYLIGHT THEME ENGINE ---
+    function getTheme() {
+      try {
+        const stored = localStorage.getItem('jobhunt_theme');
+        if (stored === 'dark' || stored === 'light') return stored;
+      } catch(e) {}
+      return document.documentElement.getAttribute('data-theme') || 'light';
+    }
+
+    function setTheme(theme) {
+      if (theme !== 'dark' && theme !== 'light') theme = 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+      if (document.body) {
+        document.body.setAttribute('data-theme', theme);
+      }
+      try {
+        localStorage.setItem('jobhunt_theme', theme);
+      } catch(e) {}
+      updateThemeToggleIcons(theme);
+      try {
+        window.postMessage({ type: 'THEME_CHANGED', theme: theme }, '*');
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: 'THEME_CHANGED', theme: theme }, '*');
+        }
+      } catch(e) {}
+    }
+
+    function toggleTheme() {
+      const current = getTheme();
+      const next = current === 'dark' ? 'light' : 'dark';
+      setTheme(next);
+      showToast(`Switched to ${next === 'dark' ? 'Dark' : 'Alabaster Daylight'} theme`);
+    }
+
+    function toggleMobileTheme() {
+      toggleTheme();
+    }
+
+    function updateThemeToggleIcons(theme) {
+      const isDark = (theme === 'dark');
+      document.querySelectorAll('.theme-icon-sun').forEach(el => {
+        el.style.display = isDark ? 'inline-block' : 'none';
+      });
+      document.querySelectorAll('.theme-icon-moon').forEach(el => {
+        el.style.display = isDark ? 'none' : 'inline-block';
+      });
+      const railBtn = document.getElementById('theme-toggle-btn');
+      if (railBtn) {
+        railBtn.setAttribute('title', isDark ? 'Switch to Alabaster Daylight Theme' : 'Switch to Dark Theme');
+        railBtn.setAttribute('aria-label', isDark ? 'Switch to Alabaster Daylight Theme' : 'Switch to Dark Theme');
+      }
+      const mobBtn = document.getElementById('mobile-theme-toggle-btn');
+      if (mobBtn) {
+        mobBtn.setAttribute('title', isDark ? 'Switch to Daylight' : 'Switch to Dark');
+        mobBtn.setAttribute('aria-label', isDark ? 'Switch to Daylight' : 'Switch to Dark');
+      }
+    }
+
+    // Initialize theme immediately
+    (function initThemeEarly() {
+      const initialTheme = getTheme();
+      document.documentElement.setAttribute('data-theme', initialTheme);
+    })();
+
     // --- COMMAND CENTER STATE & INTERACTIVE TRIAGE ---
     let state = {
       activeJobId: 'linkedin:4480510917', // Default to Capgemini Python Gen AI Engineer
@@ -3027,10 +3229,10 @@
       }
       if (dateEl) {
         const d = job.first_seen ? job.first_seen.split('T')[0] : '2026-11-19';
-        dateEl.innerText = `Tracked: ${d}`;
+        dateEl.innerText = `Seen: ${d}`;
       }
       if (srcEl) {
-        srcEl.innerText = `Source: ${platLabel}`;
+        srcEl.innerText = platLabel;
       }
 
       // Circular Ring: r=35 -> circumference = 220
@@ -3044,7 +3246,8 @@
 
       // 2. AI Match Summary & Micro-Progress Pill Bars
       if (summaryEl) {
-        summaryEl.innerText = job.reason || 'Outstanding match for Python and Generative AI engineer in Navi Mumbai with direct alignment on AI agent workflows. Strong junior-plus technical suitability with Python, LangChain, and LLM orchestration.';
+        let reasonText = job.reason || 'Outstanding match for Python and Generative AI engineer in Navi Mumbai with direct alignment on AI agent workflows. Strong junior-plus technical suitability with Python, LangChain, and LLM orchestration.';
+        summaryEl.innerHTML = `<strong>Match Rationale:</strong> ${escapeHtml(reasonText.replace(/^Match Rationale:\s*/i, ''))}`;
       }
 
       const p1 = document.getElementById('pill-bar-1');
@@ -3063,8 +3266,11 @@
       const val3 = (job.location || '').toLowerCase().includes('mumbai') || (inferredWp === 'remote') ? 92 : 82;
 
       if (p1 && p1Val) { p1.style.width = val1 + '%'; p1Val.innerText = val1 + '%'; }
+      if (p1Title) { p1Title.innerText = `AI Agent Workflows (${val1}%)`; }
       if (p2 && p2Val) { p2.style.width = val2 + '%'; p2Val.innerText = val2 + '%'; }
+      if (p2Title) { p2Title.innerText = `Python & GenAI (${val2}%)`; }
       if (p3 && p3Val) { p3.style.width = val3 + '%'; p3Val.innerText = val3 + '%'; }
+      if (p3Title) { p3Title.innerText = `Location & Workplace (${val3}%)`; }
 
       // 3. Document Hub & Outreach Preview
       const clSub = document.getElementById('deck-cl-sub');
@@ -3347,7 +3553,14 @@
     // Cross-Frame PostMessage Listener
     window.addEventListener('message', (e) => {
       if (!e.data || typeof e.data !== 'object') return;
-      if (e.data.type === 'JOB_SELECTED' && e.data.jobId) {
+      if (e.data.type === 'SET_THEME' && e.data.theme) {
+        setTheme(e.data.theme);
+      } else if (e.data.type === 'THEME_CHANGED' && e.data.theme) {
+        if (getTheme() !== e.data.theme) {
+          document.documentElement.setAttribute('data-theme', e.data.theme);
+          updateThemeToggleIcons(e.data.theme);
+        }
+      } else if (e.data.type === 'JOB_SELECTED' && e.data.jobId) {
         if (state.activeJobId !== e.data.jobId) {
           selectJob(e.data.jobId, false);
         }
@@ -3946,8 +4159,9 @@ let appData = {
         const isLI = isLinkedInJob(j);
         const targetUrl = isLI ? (getLinkedInPostUrl(j) || j.url || '#') : (j.url || '#');
 
-        const familiesHtml = (j.role_families || []).slice(0, 2).map(f => `<span class="tag tag-family">${escapeHtml(f)}</span>`).join('');
-        const skillsHtml = (j.matched_skills || []).slice(0, 3).map(s => `<span class="tag">${escapeHtml(s)}</span>`).join('');
+        // Density pass: keep the badge row to a single scannable line.
+        const familiesHtml = (j.role_families || []).slice(0, 1).map(f => `<span class="tag tag-family">${escapeHtml(f)}</span>`).join('');
+        const skillsHtml = (j.matched_skills || []).slice(0, 2).map(s => `<span class="tag">${escapeHtml(s)}</span>`).join('');
         const sourcesNote = (j.sources && j.sources.length > 1) ? ` · Found on: ${j.sources.join(', ')}` : '';
 
         const isActive = (j.job_id === state.activeJobId) ? 'active' : '';
@@ -3962,6 +4176,7 @@ let appData = {
               <div class="job-title-area">
                 <div class="job-title">${escapeHtml(j.title || 'Untitled')}</div>
                 <div class="job-meta-line">
+                  <span class="company-glyph-sm">${escapeHtml((j.company || 'C').slice(0, 2).toUpperCase())}</span>
                   <span class="job-company">${escapeHtml(j.company || 'Unknown')}</span>
                   <span class="job-location">${ICONS.mapPin} ${escapeHtml(j.location || 'Not Specified')}</span>
                 </div>
@@ -4959,6 +5174,7 @@ let appData = {
     }
 
     window.addEventListener('DOMContentLoaded', () => {
+      updateThemeToggleIcons(getTheme());
       initBookmarkletLink();
       loadData();
     });

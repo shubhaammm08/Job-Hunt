@@ -1,49 +1,99 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="color-scheme" content="dark">
-  <meta name="theme-color" content="#07080A">
-  <title>Shubham's JobHunt — Command Center Studio Presentation</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%236366F1%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><circle cx=%2212%22 cy=%2212%22 r=%2210%22/><circle cx=%2212%22 cy=%2212%22 r=%226%22/><circle cx=%2212%22 cy=%2212%22 r=%222%22/></svg>">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#F1F5F9">
+  <title>Shubham's JobHunt — Executive Dual-Surface Presentation</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%234F46E5%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><circle cx=%2212%22 cy=%2212%22 r=%2210%22/><circle cx=%2212%22 cy=%2212%22 r=%226%22/><circle cx=%2212%22 cy=%2212%22 r=%222%22/></svg>">
   <style>
     :root {
-      --bg-studio: #141416;
-      --border-subtle: rgba(255, 255, 255, 0.08);
-      --border-highlight: rgba(255, 255, 255, 0.15);
-      --indigo-glow: rgba(255, 97, 136, 0.14);
-      --emerald-glow: rgba(169, 220, 118, 0.09);
+      /* Alabaster Daylight Executive Theme (Default) */
+      --bg-studio: #F1F5F9;
+      --bg-canvas: #F8FAFC;
+      --bg-surface: #FFFFFF;
+      --bg-chrome: #F8FAFC;
+      --bg-address: #FFFFFF;
+      --border-subtle: #E2E8F0;
+      --border-highlight: #CBD5E1;
+      --indigo-accent: #4F46E5;
+      --indigo-glow: rgba(79, 70, 229, 0.08);
+      --emerald-accent: #059669;
+      --emerald-glow: rgba(5, 150, 105, 0.08);
+      --text-primary: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #64748B;
+      --grid-line: rgba(15, 23, 42, 0.05);
+      --hud-bg: rgba(255, 255, 255, 0.94);
+      --footer-bg: rgba(255, 255, 255, 0.95);
+      --desktop-chassis-bg: #FFFFFF;
+      --desktop-chassis-shadow: 0 25px 70px rgba(15, 23, 42, 0.08), 0 0 0 1px #E2E8F0;
+      --mobile-chassis-bg: #FFFFFF;
+      --mobile-chassis-border: #CBD5E1;
+      --mobile-chassis-shadow: 0 30px 80px rgba(15, 23, 42, 0.12), 0 0 0 1px #E2E8F0;
+      --btn-active-bg: #4F46E5;
+      --btn-active-text: #FFFFFF;
       --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       --desktop-scale: 0.65;
     }
 
+    [data-theme="dark"] {
+      /* Dark Command Center Mode */
+      --bg-studio: #141416;
+      --bg-canvas: #18181A;
+      --bg-surface: #26252C;
+      --bg-chrome: #0E1015;
+      --bg-address: #07080A;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-highlight: rgba(255, 255, 255, 0.15);
+      --indigo-accent: #818CF8;
+      --indigo-glow: rgba(255, 97, 136, 0.14);
+      --emerald-accent: #10B981;
+      --emerald-glow: rgba(169, 220, 118, 0.09);
+      --text-primary: #FCFCFA;
+      --text-secondary: #94A3B8;
+      --text-muted: #64748B;
+      --grid-line: rgba(255, 255, 255, 0.025);
+      --hud-bg: rgba(7, 8, 10, 0.94);
+      --footer-bg: rgba(7, 8, 10, 0.95);
+      --desktop-chassis-bg: #101216;
+      --desktop-chassis-shadow: 0 25px 70px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.06);
+      --mobile-chassis-bg: #18191E;
+      --mobile-chassis-border: rgba(255, 255, 255, 0.16);
+      --mobile-chassis-shadow: 0 30px 80px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(0, 0, 0, 0.9);
+      --btn-active-bg: #4F46E5;
+      --btn-active-text: #FFFFFF;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
       background: var(--bg-studio);
-      color: #F8FAFC;
+      color: var(--text-primary);
       font-family: var(--font-sans);
       min-height: 100vh;
       overflow-x: auto;
       overflow-y: auto;
+      transition: background-color 0.2s ease, color 0.2s ease;
     }
 
-    /* Architectural 32px Grid Canvas with Ambient Radial Glows */
+    /* Architectural 32px Grid Canvas with Subtle Ambient Glow */
     .studio-canvas {
       position: relative;
       min-height: 100vh;
       width: 100%;
       min-width: 1600px;
       background-color: var(--bg-studio);
-      background-image: 
+      background-image:
         radial-gradient(circle at 18% 18%, var(--indigo-glow) 0%, transparent 45%),
         radial-gradient(circle at 82% 82%, var(--emerald-glow) 0%, transparent 45%),
-        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
       background-size: 100% 100%, 100% 100%, 32px 32px, 32px 32px;
       display: flex;
       flex-direction: column;
+      transition: background-color 0.2s ease;
     }
 
     /* Top Studio HUD Bar */
@@ -51,7 +101,7 @@
       position: sticky;
       top: 0;
       z-index: 1000;
-      background: rgba(7, 8, 10, 0.94);
+      background: var(--hud-bg);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border-subtle);
@@ -60,6 +110,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 20px;
+      transition: background 0.2s ease, border-color 0.2s ease;
     }
     .hud-left {
       display: flex;
@@ -72,9 +123,9 @@
       gap: 8px;
       padding: 6px 12px;
       border-radius: 8px;
-      background: rgba(255, 97, 136, 0.12);
-      border: 1px solid rgba(255, 97, 136, 0.35);
-      color: #FFFFFF;
+      background: rgba(79, 70, 229, 0.08);
+      border: 1px solid rgba(79, 70, 229, 0.25);
+      color: var(--indigo-accent);
       font-family: var(--font-mono);
       font-size: 12px;
       font-weight: 700;
@@ -84,7 +135,8 @@
       width: 22px;
       height: 22px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #FF6188 0%, #AB9DF2 100%);
+      background: linear-gradient(135deg, #4F46E5 0%, #059669 100%);
+      color: #FFFFFF;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -98,41 +150,88 @@
     .hud-title {
       font-size: 13.5px;
       font-weight: 700;
-      color: #F8FAFC;
+      color: var(--text-primary);
       letter-spacing: -0.2px;
     }
     .hud-sub {
       font-family: var(--font-mono);
       font-size: 10.5px;
-      color: #94A3B8;
+      color: var(--text-secondary);
     }
 
     /* Controls Center */
     .hud-center {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
     }
-    .scale-control-group {
+
+    /* Studio Theme Switcher Toggle */
+    .theme-switcher-group {
       display: flex;
       align-items: center;
       gap: 4px;
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(15, 23, 42, 0.04);
       border: 1px solid var(--border-subtle);
       padding: 3px;
       border-radius: 8px;
     }
+    [data-theme="dark"] .theme-switcher-group {
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .theme-switch-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 9px;
+      border-radius: 5px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s;
+    }
+    .theme-switch-btn:hover {
+      color: var(--text-primary);
+      background: rgba(15, 23, 42, 0.06);
+    }
+    [data-theme="dark"] .theme-switch-btn:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .theme-switch-btn.active {
+      background: var(--indigo-accent);
+      color: #FFFFFF;
+      border-color: rgba(79, 70, 229, 0.35);
+      box-shadow: 0 1px 4px rgba(79, 70, 229, 0.3);
+    }
+
+    /* Scale Control Group */
+    .scale-control-group {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(15, 23, 42, 0.04);
+      border: 1px solid var(--border-subtle);
+      padding: 3px;
+      border-radius: 8px;
+    }
+    [data-theme="dark"] .scale-control-group {
+      background: rgba(255, 255, 255, 0.04);
+    }
     .scale-label {
       font-family: var(--font-mono);
       font-size: 10.5px;
-      color: #94A3B8;
+      color: var(--text-muted);
       padding: 0 8px;
       font-weight: 600;
     }
     .scale-btn {
       background: transparent;
       border: 1px solid transparent;
-      color: #94A3B8;
+      color: var(--text-secondary);
       font-family: var(--font-mono);
       font-size: 11px;
       font-weight: 600;
@@ -142,30 +241,36 @@
       transition: all 0.15s;
     }
     .scale-btn:hover {
-      color: #FFFFFF;
+      color: var(--text-primary);
+      background: rgba(15, 23, 42, 0.06);
+    }
+    [data-theme="dark"] .scale-btn:hover {
       background: rgba(255, 255, 255, 0.06);
     }
     .scale-btn.active {
-      background: #4F46E5;
+      background: var(--indigo-accent);
       color: #FFFFFF;
-      border-color: rgba(255, 255, 255, 0.15);
-      box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+      border-color: rgba(79, 70, 229, 0.35);
+      box-shadow: 0 1px 4px rgba(79, 70, 229, 0.3);
     }
 
     /* Role Quick Selector */
     .role-switcher-group {
       display: flex;
       align-items: center;
-      gap: 6px;
-      background: rgba(255, 255, 255, 0.04);
+      gap: 4px;
+      background: rgba(15, 23, 42, 0.04);
       border: 1px solid var(--border-subtle);
       padding: 3px;
       border-radius: 8px;
     }
+    [data-theme="dark"] .role-switcher-group {
+      background: rgba(255, 255, 255, 0.04);
+    }
     .role-switch-btn {
       background: transparent;
       border: 1px solid transparent;
-      color: #94A3B8;
+      color: var(--text-secondary);
       font-family: var(--font-mono);
       font-size: 11px;
       font-weight: 600;
@@ -175,14 +280,17 @@
       transition: all 0.15s;
     }
     .role-switch-btn:hover {
-      color: #FFFFFF;
+      color: var(--text-primary);
+      background: rgba(15, 23, 42, 0.06);
+    }
+    [data-theme="dark"] .role-switch-btn:hover {
       background: rgba(255, 255, 255, 0.06);
     }
     .role-switch-btn.active {
-      background: rgba(16, 185, 129, 0.15);
-      color: #34D399;
-      border-color: rgba(16, 185, 129, 0.35);
-      box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+      background: rgba(5, 150, 105, 0.12);
+      color: var(--emerald-accent);
+      border-color: rgba(5, 150, 105, 0.35);
+      box-shadow: 0 1px 4px rgba(5, 150, 105, 0.2);
     }
 
     .hud-right {
@@ -197,9 +305,9 @@
       font-family: var(--font-mono);
       font-size: 11px;
       font-weight: 700;
-      color: #34D399;
-      background: rgba(16, 185, 129, 0.1);
-      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: var(--emerald-accent);
+      background: rgba(5, 150, 105, 0.08);
+      border: 1px solid rgba(5, 150, 105, 0.25);
       padding: 5px 10px;
       border-radius: 6px;
     }
@@ -207,8 +315,8 @@
       width: 7px;
       height: 7px;
       border-radius: 50%;
-      background: #10B981;
-      box-shadow: 0 0 8px #10B981;
+      background: var(--emerald-accent);
+      box-shadow: 0 0 8px var(--emerald-accent);
       animation: pulseSync 2s infinite;
     }
     @keyframes pulseSync {
@@ -217,9 +325,9 @@
       100% { opacity: 0.4; transform: scale(0.9); }
     }
     .btn-open-app {
-      background: rgba(255, 255, 255, 0.06);
+      background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
-      color: #FFFFFF;
+      color: var(--text-primary);
       font-family: var(--font-mono);
       font-size: 11px;
       font-weight: 600;
@@ -228,11 +336,11 @@
       text-decoration: none;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
       transition: all 0.15s;
     }
     .btn-open-app:hover {
-      background: rgba(255, 255, 255, 0.12);
+      background: var(--bg-canvas);
       border-color: var(--border-highlight);
     }
 
@@ -271,16 +379,16 @@
       gap: 8px;
     }
     .frame-title.desktop {
-      color: #818CF8;
+      color: var(--indigo-accent);
     }
     .frame-title.mobile {
-      color: #34D399;
+      color: var(--emerald-accent);
     }
     .frame-meta-tag {
       font-family: var(--font-mono);
       font-size: 10px;
       font-weight: 600;
-      color: #64748B;
+      color: var(--text-muted);
       letter-spacing: 0.04em;
     }
 
@@ -290,17 +398,17 @@
       width: calc(1440px * var(--desktop-scale));
       height: calc(900px * var(--desktop-scale) + 38px);
       transition: width 0.25s ease, height 0.25s ease;
-      background: #101216;
+      background: var(--desktop-chassis-bg);
       border-radius: 12px;
       border: 1px solid var(--border-subtle);
-      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.06);
+      box-shadow: var(--desktop-chassis-shadow);
       overflow: hidden;
       display: flex;
       flex-direction: column;
     }
     .browser-chrome {
       height: 38px;
-      background: #0E1015;
+      background: var(--bg-chrome);
       border-bottom: 1px solid var(--border-subtle);
       display: flex;
       align-items: center;
@@ -327,7 +435,7 @@
       max-width: 420px;
       margin: 0 auto;
       height: 24px;
-      background: #07080A;
+      background: var(--bg-address);
       border: 1px solid var(--border-subtle);
       border-radius: 6px;
       display: flex;
@@ -336,10 +444,10 @@
       gap: 6px;
       font-family: var(--font-mono);
       font-size: 10.5px;
-      color: #94A3B8;
+      color: var(--text-secondary);
     }
     .lock-icon {
-      color: #10B981;
+      color: var(--emerald-accent);
     }
     .desktop-frame-scaler {
       width: 1440px;
@@ -352,7 +460,7 @@
       width: 1440px;
       height: 900px;
       border: none;
-      background: #0B0C0E;
+      background: var(--bg-surface);
       display: block;
     }
 
@@ -362,13 +470,14 @@
       height: 872px;
       border-radius: 52px;
       padding: 12px;
-      background: #18191E;
-      border: 3px solid rgba(255, 255, 255, 0.16);
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(0, 0, 0, 0.9), inset 0 0 0 2px rgba(255, 255, 255, 0.05);
+      background: var(--mobile-chassis-bg);
+      border: 3px solid var(--mobile-chassis-border);
+      box-shadow: var(--mobile-chassis-shadow);
       position: relative;
       display: flex;
       flex-direction: column;
       flex-shrink: 0;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
     }
     .mobile-screen-bezel {
       width: 390px;
@@ -376,7 +485,7 @@
       border-radius: 40px;
       overflow: hidden;
       position: relative;
-      background: #0B0C0E;
+      background: var(--bg-surface);
     }
     .dynamic-island {
       position: absolute;
@@ -414,30 +523,34 @@
       transform: translateX(-50%);
       width: 130px;
       height: 4.5px;
-      background: rgba(255, 255, 255, 0.4);
+      background: rgba(15, 23, 42, 0.3);
       border-radius: 999px;
       z-index: 1000;
       pointer-events: none;
+    }
+    [data-theme="dark"] .home-indicator {
+      background: rgba(255, 255, 255, 0.4);
     }
     .mobile-iframe {
       width: 390px;
       height: 844px;
       border: none;
       display: block;
-      background: #0B0C0E;
+      background: var(--bg-surface);
     }
 
     /* Bottom Studio Footer */
     .studio-footer {
       border-top: 1px solid var(--border-subtle);
       padding: 18px 40px;
-      background: rgba(7, 8, 10, 0.95);
+      background: var(--footer-bg);
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 11.5px;
-      color: #64748B;
+      color: var(--text-muted);
       font-family: var(--font-mono);
+      transition: background 0.2s ease, border-color 0.2s ease;
     }
     .footer-left {
       display: flex;
@@ -445,7 +558,7 @@
       gap: 12px;
     }
     .footer-highlight {
-      color: #94A3B8;
+      color: var(--text-primary);
       font-weight: 600;
     }
   </style>
@@ -469,6 +582,19 @@
 
       <!-- Center Controls -->
       <div class="hud-center">
+        <!-- Studio Theme Switcher Toggle -->
+        <div class="theme-switcher-group">
+          <span class="scale-label">THEME:</span>
+          <button class="theme-switch-btn active" id="btn-theme-light" onclick="setStudioTheme('light')" title="Switch to Alabaster Daylight Theme">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            <span>Daylight</span>
+          </button>
+          <button class="theme-switch-btn" id="btn-theme-dark" onclick="setStudioTheme('dark')" title="Switch to Dark Command Center Theme">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <span>Dark</span>
+          </button>
+        </div>
+
         <!-- Scale Controls -->
         <div class="scale-control-group">
           <span class="scale-label">SCALE:</span>
@@ -482,7 +608,8 @@
         <div class="role-switcher-group">
           <span class="scale-label">ACTIVE ROLE:</span>
           <button class="role-switch-btn active" id="btn-role-cap" onclick="broadcastRole('linkedin:4480510917')">Capgemini (8.8)</button>
-          <button class="role-switch-btn" id="btn-role-del" onclick="broadcastRole('greenhouse:figma:5552549004')">Figma (8.0)</button>
+          <button class="role-switch-btn" id="btn-role-del" onclick="broadcastRole('linkedin:4481408789')">Deloitte (8.5)</button>
+          <button class="role-switch-btn" id="btn-role-fig" onclick="broadcastRole('greenhouse:figma:5552549004')">Figma (8.0)</button>
         </div>
       </div>
 
@@ -493,7 +620,8 @@
           <span>LIVE SYNC ACTIVE</span>
         </div>
         <a href="index.html" target="_blank" class="btn-open-app" title="Open live production app in new tab">
-          <span>Open Standalone App</span> ↗
+          <span>Open Standalone App</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         </a>
       </div>
     </header>
@@ -508,7 +636,7 @@
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
             <span>DESKTOP WORKSPACE (3-PANE)</span>
           </div>
-          <span class="frame-meta-tag">1440 × 900 · 72PX RAIL · 360PX FEED · TRIAGE DECK</span>
+          <span class="frame-meta-tag">1440 × 900 · 72PX RAIL · 340PX FEED · TRIAGE DECK</span>
         </div>
 
         <div class="desktop-viewport-wrapper" id="desktop-wrapper">
@@ -519,7 +647,7 @@
               <span class="dot dot-max"></span>
             </div>
             <div class="browser-address-bar">
-              <svg class="lock-icon" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: #10B981; vertical-align: -1px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <svg class="lock-icon" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
               <span>https://jobhunt.shubham.dev/pipeline</span>
             </div>
           </div>
@@ -559,14 +687,14 @@
     <!-- Studio Footer -->
     <footer class="studio-footer">
       <div class="footer-left">
-        <span>ENGINEERING ARCHITECTURE: <strong class="footer-highlight">Dark Command Center (#0B0C0E)</strong></span>
+        <span>ENGINEERING ARCHITECTURE: <strong class="footer-highlight">Alabaster Daylight Executive (#F8FAFC / #F1F5F9)</strong></span>
         <span>•</span>
         <span>TYPOGRAPHY: <strong class="footer-highlight">Inter &amp; JetBrains Mono (Zero CDNs)</strong></span>
         <span>•</span>
         <span>ICONS: <strong class="footer-highlight">100% Inline SVG (Zero Emojis)</strong></span>
       </div>
       <div>
-        <span>SHUBHAM'S JOBHUNT // UI/UX REDESIGN MILESTONE 1</span>
+        <span>SHUBHAM'S JOBHUNT // UI/UX REDESIGN MILESTONE 4</span>
       </div>
     </footer>
 
@@ -577,6 +705,65 @@
     const mobileFrame = document.getElementById('mobile-frame');
     const desktopWrapper = document.getElementById('desktop-wrapper');
     const desktopScaler = document.getElementById('desktop-scaler');
+
+    // Studio Theme Switching Controller
+    function setStudioTheme(theme) {
+      const targetTheme = (theme === 'dark') ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', targetTheme);
+      try {
+        localStorage.setItem('jobhunt_theme', targetTheme);
+      } catch (err) {}
+      updateStudioThemeUI(targetTheme);
+
+      // Broadcast SET_THEME to both child frames
+      if (desktopFrame && desktopFrame.contentWindow) {
+        desktopFrame.contentWindow.postMessage({ type: 'SET_THEME', theme: targetTheme }, '*');
+      }
+      if (mobileFrame && mobileFrame.contentWindow) {
+        mobileFrame.contentWindow.postMessage({ type: 'SET_THEME', theme: targetTheme }, '*');
+      }
+    }
+
+    function toggleStudioTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      setStudioTheme(current === 'light' ? 'dark' : 'light');
+    }
+
+    function updateStudioThemeUI(theme) {
+      const btnLight = document.getElementById('btn-theme-light');
+      const btnDark = document.getElementById('btn-theme-dark');
+      if (btnLight && btnDark) {
+        if (theme === 'dark') {
+          btnDark.classList.add('active');
+          btnLight.classList.remove('active');
+        } else {
+          btnLight.classList.add('active');
+          btnDark.classList.remove('active');
+        }
+      }
+    }
+
+    // Initialize Theme from localStorage or Default to 'light'
+    (function initTheme() {
+      let savedTheme = 'light';
+      try {
+        savedTheme = localStorage.getItem('jobhunt_theme') || 'light';
+      } catch (err) {}
+      setStudioTheme(savedTheme);
+    })();
+
+    // Synchronize Initial Theme once Iframes are ready
+    function syncThemeToFrames() {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      if (desktopFrame && desktopFrame.contentWindow) {
+        desktopFrame.contentWindow.postMessage({ type: 'SET_THEME', theme: currentTheme }, '*');
+      }
+      if (mobileFrame && mobileFrame.contentWindow) {
+        mobileFrame.contentWindow.postMessage({ type: 'SET_THEME', theme: currentTheme }, '*');
+      }
+    }
+    if (desktopFrame) desktopFrame.addEventListener('load', syncThemeToFrames);
+    if (mobileFrame) mobileFrame.addEventListener('load', syncThemeToFrames);
 
     // Interactive Scaling Controller
     function setScale(scale) {
@@ -599,35 +786,59 @@
 
       if (e.data.type === 'JOB_SELECTED') {
         // Forward from desktop to mobile or vice-versa
-        if (e.source === desktopFrame.contentWindow) {
+        if (desktopFrame && e.source === desktopFrame.contentWindow && mobileFrame && mobileFrame.contentWindow) {
           mobileFrame.contentWindow.postMessage(e.data, '*');
-        } else if (e.source === mobileFrame.contentWindow) {
+        } else if (mobileFrame && e.source === mobileFrame.contentWindow && desktopFrame && desktopFrame.contentWindow) {
           desktopFrame.contentWindow.postMessage(e.data, '*');
         }
         updateRoleSwitcherButtons(e.data.jobId);
       } else if (e.data.type === 'JOB_APPLIED') {
-        if (e.source === desktopFrame.contentWindow) {
+        if (desktopFrame && e.source === desktopFrame.contentWindow && mobileFrame && mobileFrame.contentWindow) {
           mobileFrame.contentWindow.postMessage(e.data, '*');
-        } else if (e.source === mobileFrame.contentWindow) {
+        } else if (mobileFrame && e.source === mobileFrame.contentWindow && desktopFrame && desktopFrame.contentWindow) {
           desktopFrame.contentWindow.postMessage(e.data, '*');
         }
+      } else if (e.data.type === 'THEME_CHANGED' && e.data.theme) {
+        // Synchronize studio presentation theme when child toggles theme
+        document.documentElement.setAttribute('data-theme', e.data.theme);
+        try {
+          localStorage.setItem('jobhunt_theme', e.data.theme);
+        } catch (err) {}
+        updateStudioThemeUI(e.data.theme);
+
+        // Forward to peer frame
+        if (desktopFrame && e.source === desktopFrame.contentWindow && mobileFrame && mobileFrame.contentWindow) {
+          mobileFrame.contentWindow.postMessage({ type: 'SET_THEME', theme: e.data.theme }, '*');
+        } else if (mobileFrame && e.source === mobileFrame.contentWindow && desktopFrame && desktopFrame.contentWindow) {
+          desktopFrame.contentWindow.postMessage({ type: 'SET_THEME', theme: e.data.theme }, '*');
+        }
+      } else if (e.data.type === 'SET_THEME' && e.data.theme) {
+        setStudioTheme(e.data.theme);
       }
     });
 
     // Broadcast Role Selection to Both Frames
     function broadcastRole(jobId) {
-      desktopFrame.contentWindow.postMessage({ type: 'JOB_SELECTED', jobId: jobId }, '*');
-      mobileFrame.contentWindow.postMessage({ type: 'JOB_SELECTED', jobId: jobId }, '*');
+      if (desktopFrame && desktopFrame.contentWindow) {
+        desktopFrame.contentWindow.postMessage({ type: 'JOB_SELECTED', jobId: jobId }, '*');
+      }
+      if (mobileFrame && mobileFrame.contentWindow) {
+        mobileFrame.contentWindow.postMessage({ type: 'JOB_SELECTED', jobId: jobId }, '*');
+      }
       updateRoleSwitcherButtons(jobId);
     }
 
     function updateRoleSwitcherButtons(jobId) {
       document.querySelectorAll('.role-switch-btn').forEach(b => b.classList.remove('active'));
+      if (!jobId) return;
       if (jobId.includes('4480510917')) {
         const btn = document.getElementById('btn-role-cap');
         if (btn) btn.classList.add('active');
-      } else if (jobId.includes('5552549004')) {
+      } else if (jobId.includes('4481408789') || jobId.includes('deloitte')) {
         const btn = document.getElementById('btn-role-del');
+        if (btn) btn.classList.add('active');
+      } else if (jobId.includes('5552549004') || jobId.includes('figma')) {
+        const btn = document.getElementById('btn-role-fig');
         if (btn) btn.classList.add('active');
       }
     }
