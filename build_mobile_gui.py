@@ -1,6 +1,7 @@
 import os
 import json
 import re
+import shutil
 
 HTML_TEMPLATE = r"""<!DOCTYPE html>
 <html lang="en">
@@ -3581,6 +3582,14 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 
 def main():
     root = os.path.dirname(os.path.abspath(__file__))
+
+    # Keep the repo-root avatar mirror in sync for branch-based GitHub Pages
+    # deployments (which serve root index.html and expect ./avatars/).
+    src_avatars = os.path.join(root, "gui", "avatars")
+    dst_avatars = os.path.join(root, "avatars")
+    if os.path.isdir(src_avatars):
+        shutil.copytree(src_avatars, dst_avatars, dirs_exist_ok=True)
+
     gui_index = os.path.join(root, "gui", "index.html")
     if os.path.exists(gui_index):
         with open(gui_index, "r", encoding="utf-8") as f:
