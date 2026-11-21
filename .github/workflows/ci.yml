@@ -38,6 +38,10 @@ jobs:
           pip install -r requirements.txt
           python -m playwright install --with-deps chromium
 
+      - name: "Prepare local profile for tests"
+        run: |
+          cp profile.example.json profile.json
+
       - name: "Run Pytest Suite"
         run: |
           pytest tests/ -v
