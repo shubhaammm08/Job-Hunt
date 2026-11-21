@@ -96,6 +96,43 @@ def test_avatar_picker_select_persist_and_reset():
         browser.close()
 
 
+def test_avatar_background_is_cover_on_all_slots():
+    """Regression: later background shorthands must not crop profile/mobile avatars."""
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        viewports = [
+            (1440, 900, ("#profile-avatar", "#rail-brand-avatar", "#mobile-brand-avatar")),
+            (390, 844, ("#profile-avatar", "#mobile-brand-avatar")),
+        ]
+        for width, height, slots in viewports:
+            context = browser.new_context(viewport={"width": width, "height": height})
+            page = context.new_page()
+            page.goto(ROOT_INDEX.as_uri(), wait_until="domcontentloaded")
+            page.wait_for_selector(".job-card", timeout=5000)
+            page.evaluate("localStorage.removeItem('jobhunt_avatar')")
+            page.reload(wait_until="domcontentloaded")
+            page.wait_for_selector(".job-card", timeout=5000)
+            page.wait_for_timeout(150)
+
+            for selector in slots:
+                style = page.evaluate(
+                    """sel => {
+                        const cs = getComputedStyle(document.querySelector(sel));
+                        return {image: cs.backgroundImage, size: cs.backgroundSize, position: cs.backgroundPosition};
+                    }""",
+                    selector,
+                )
+                assert "vibrent_1.png" in style["image"], f"{selector} missing default avatar"
+                assert style["size"] == "cover", (
+                    f"{selector} avatar is cropped (background-size={style['size']})"
+                )
+                assert style["position"] in ("center", "50% 50%"), (
+                    f"{selector} avatar is not centered (background-position={style['position']})"
+                )
+            context.close()
+        browser.close()
+
+
 def test_avatar_picker_fits_mobile_viewport():
     """The picker stays inside a 390x844 viewport without horizontal overflow."""
     with sync_playwright() as p:

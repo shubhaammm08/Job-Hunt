@@ -15,7 +15,8 @@
         var saved = localStorage.getItem('jobhunt_theme') || 'light';
         document.documentElement.setAttribute('data-theme', saved);
         var fw = parseInt(localStorage.getItem('jobhunt_feed_width') || '', 10);
-        if (fw >= 280 && fw <= 560) {
+        var maxFeed = Math.max(280, window.innerWidth - 72 - 6 - 420);
+        if (fw >= 280 && fw <= maxFeed) {
           document.documentElement.style.setProperty('--feed-width', fw + 'px');
         }
         // Restore the chosen avatar before first paint to avoid an initials flash.
@@ -92,8 +93,9 @@
       --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-      /* Resizable feed ↔ details divider (persisted in localStorage) */
-      --feed-width: 340px;
+      /* Resizable feed ↔ details divider (persisted in localStorage).
+         Default: split the workspace after the 72px rail and 6px grip 50/50. */
+      --feed-width: calc((100vw - 78px) / 2);
     }
 
     [data-theme="dark"] {
@@ -336,6 +338,12 @@
     }
     html.has-user-avatar .user-avatar {
       background-image: var(--user-avatar-url);
+      /* Keep these longhands here: later `background:` shorthands on
+         .profile-header .avatar and .brand-glyph-sm otherwise reset the
+         image to its natural 200px size and crop only its top-left corner. */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
     }
     html.has-user-avatar .user-avatar .avatar-initials {
       opacity: 0;
@@ -5636,18 +5644,21 @@ let appData = {
       const HANDLE_W = 6;
       const DECK_MIN = 420;
       const FEED_MIN = 280;
-      const FEED_MAX = 560;
-      const DEFAULT_W = 340;
       const root = document.documentElement;
+      let userSet = false;
 
       function currentWidth() {
         return Math.round(feed.getBoundingClientRect().width);
       }
       function maxWidth() {
-        return Math.max(FEED_MIN, Math.min(FEED_MAX, window.innerWidth - NAV_W - HANDLE_W - DECK_MIN));
+        return Math.max(FEED_MIN, window.innerWidth - NAV_W - HANDLE_W - DECK_MIN);
       }
       function clamp(w) {
         return Math.round(Math.min(maxWidth(), Math.max(FEED_MIN, w)));
+      }
+      function defaultWidth() {
+        // 50/50 of the workspace left after the 72px rail and 6px grip.
+        return clamp((window.innerWidth - NAV_W - HANDLE_W) / 2);
       }
       function applyWidth(w, persist) {
         const width = clamp(w);
@@ -5655,16 +5666,20 @@ let appData = {
         resizer.setAttribute('aria-valuenow', String(width));
         resizer.setAttribute('aria-valuemax', String(Math.round(maxWidth())));
         if (persist) {
+          userSet = true;
           try { localStorage.setItem('jobhunt_feed_width', String(width)); } catch (e) {}
         }
         return width;
       }
 
       // The head script restores the width before first paint; sync ARIA here.
-      let saved = DEFAULT_W;
+      let saved = defaultWidth();
       try {
         const raw = parseInt(localStorage.getItem('jobhunt_feed_width') || '', 10);
-        if (raw >= FEED_MIN && raw <= FEED_MAX) saved = raw;
+        if (raw >= FEED_MIN && raw <= maxWidth()) {
+          saved = raw;
+          userSet = true;
+        }
       } catch (e) {}
       applyWidth(saved, false);
 
@@ -5712,15 +5727,15 @@ let appData = {
         else if (e.key === 'ArrowRight') next = currentWidth() + step;
         else if (e.key === 'Home') next = FEED_MIN;
         else if (e.key === 'End') next = maxWidth();
-        else if (e.key === 'Enter' || e.key === ' ') next = DEFAULT_W;
+        else if (e.key === 'Enter' || e.key === ' ') next = defaultWidth();
         if (next !== null) {
           e.preventDefault();
           applyWidth(next, true);
         }
       });
 
-      resizer.addEventListener('dblclick', () => applyWidth(DEFAULT_W, true));
-      window.addEventListener('resize', () => applyWidth(currentWidth(), false));
+      resizer.addEventListener('dblclick', () => applyWidth(defaultWidth(), true));
+      window.addEventListener('resize', () => applyWidth(userSet ? currentWidth() : defaultWidth(), false));
     }
 
     /* ---------------------------------------------------------------

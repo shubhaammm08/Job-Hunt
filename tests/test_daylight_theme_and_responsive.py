@@ -277,12 +277,22 @@ class TestTier1FeatureCoverage:
         assert "SH" in brand_glyph.inner_text(), "Brand glyph text must display 'SH'"
 
     def test_f3_middle_feed_dimensions_and_controls(self, desktop_page: Page):
-        """F3.2: Validates middle triage feed renders at 340px-360px width with search and status ribbon."""
+        """F3.2: Feed opens at 50% of the workspace after the 72px rail (681px at 1440px)."""
         feed = desktop_page.query_selector(".master-feed, .feed-panel, #feed-panel")
         assert feed is not None, "Middle feed panel must exist"
         bbox = feed.bounding_box()
         assert bbox is not None
-        assert 330.0 <= bbox["width"] <= 365.0, f"Feed panel width must be ~340-360px, got {bbox['width']}"
+        expected = (1440.0 - 72.0 - 6.0) / 2
+        assert abs(bbox["width"] - expected) <= 3.0, (
+            f"Feed panel should open at a 50/50 split ({expected}px), got {bbox['width']}"
+        )
+        deck = desktop_page.query_selector(".triage-deck")
+        assert deck is not None, "Details deck must exist"
+        deck_box = deck.bounding_box()
+        assert deck_box is not None and abs(deck_box["width"] - expected) <= 4.0, (
+            f"Details deck should match the 50/50 split ({expected}px), got "
+            f"{deck_box['width'] if deck_box else None}"
+        )
 
         search_input = desktop_page.query_selector("#search-input")
         assert search_input is not None, "#search-input must exist"
@@ -294,6 +304,43 @@ class TestTier1FeatureCoverage:
         assert "78 Tracked" in content or "78 opportunities" in content or "Tracked Jobs" in content, (
             "Status ribbon must report tracked jobs"
         )
+
+    def test_f3_resizer_default_drag_persistence_and_reset(self, desktop_page: Page):
+        """F3.2b: Divider opens 50/50, resizes live, persists, and resets on double-click."""
+        page = desktop_page
+        feed = page.query_selector(".master-feed")
+        resizer = page.query_selector("#pane-resizer")
+        assert feed is not None and resizer is not None
+        expected = (1440.0 - 72.0 - 6.0) / 2
+
+        box = resizer.bounding_box()
+        assert box is not None
+        x = box["x"] + box["width"] / 2
+        y = box["y"] + box["height"] / 2
+        page.mouse.move(x, y)
+        page.mouse.down()
+        page.mouse.move(x - 120, y, steps=6)
+        page.mouse.up()
+        page.wait_for_timeout(120)
+
+        dragged = page.query_selector(".master-feed").bounding_box()["width"]
+        assert abs(dragged - (expected - 120)) <= 6, f"Live drag did not resize feed: {dragged}"
+        stored = int(page.evaluate("localStorage.getItem('jobhunt_feed_width')"))
+        assert abs(stored - dragged) <= 2, f"Dragged width was not persisted: {stored} vs {dragged}"
+
+        page.reload(wait_until="domcontentloaded")
+        page.wait_for_selector(".job-card", timeout=5000)
+        page.wait_for_timeout(150)
+        restored = page.query_selector(".master-feed").bounding_box()["width"]
+        assert abs(restored - dragged) <= 2, f"Width not restored after reload: {restored} vs {dragged}"
+
+        resizer = page.query_selector("#pane-resizer")
+        rb = resizer.bounding_box()
+        assert rb is not None
+        page.mouse.dblclick(rb["x"] + rb["width"] / 2, rb["y"] + rb["height"] / 2)
+        page.wait_for_timeout(120)
+        reset = page.query_selector(".master-feed").bounding_box()["width"]
+        assert abs(reset - expected) <= 3, f"Double-click should reset to 50/50, got {reset}"
 
     def test_f3_active_job_card_capgemini(self, desktop_page: Page):
         """F3.3: Validates active top card is Capgemini (8.8 match score) with indigo outline and tech pills."""
