@@ -105,7 +105,7 @@ def test_avatar_picker_fits_mobile_viewport():
         page.goto(ROOT_INDEX.as_uri(), wait_until="domcontentloaded")
         page.wait_for_selector(".job-card", timeout=5000)
 
-        page.evaluate("openAvatarPicker()")
+        page.click("#mobile-brand-avatar")
         page.wait_for_selector("#avatar-picker-modal.open")
         page.wait_for_timeout(150)
 

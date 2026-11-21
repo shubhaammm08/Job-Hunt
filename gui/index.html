@@ -1963,6 +1963,7 @@
         height: 32px;
         flex: 0 0 32px;
         border-radius: 50%;
+        cursor: pointer;
         background: var(--brand-gradient, linear-gradient(135deg, #FF6188 0%, #AB9DF2 100%));
         color: #FFFFFF;
         font-family: var(--font-mono);
@@ -1972,6 +1973,10 @@
         align-items: center;
         justify-content: center;
         box-shadow: 0 0 0 2px rgba(255, 97, 136, 0.4);
+      }
+      .brand-glyph-sm:focus-visible {
+        outline: 2px solid var(--accent-indigo);
+        outline-offset: 2px;
       }
       .mobile-brand-title {
         font-size: 15px;
@@ -2419,7 +2424,10 @@
   <!-- Mobile Sticky Top Bar (Phone Viewport) -->
   <div class="mobile-top-bar" aria-label="Mobile Navigation Bar">
     <div class="mobile-brand">
-      <div class="brand-glyph-sm user-avatar" id="mobile-brand-avatar" aria-hidden="true"><span class="avatar-initials">SH</span></div>
+      <div class="brand-glyph-sm user-avatar" id="mobile-brand-avatar" role="button" tabindex="0"
+           onclick="openAvatarPicker()"
+           onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openAvatarPicker();}"
+           title="Change profile avatar" aria-label="Change profile avatar"><span class="avatar-initials">SH</span></div>
       <div class="mobile-brand-title">Shubham's JobHunt</div>
       <span class="mobile-live-dot" title="Pipeline Active"></span>
     </div>
