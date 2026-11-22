@@ -1428,5 +1428,28 @@
     "emailed": true,
     "applied": false,
     "applied_on": null
+  },
+  "himalayas:rss:obsfull-stack-developer-ao-14278": {
+    "first_seen": "2026-11-22T11:55:43+00:00",
+    "company": "Remote Employer",
+    "title": "Full Stack Developer (AO-14278)",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/access-offshoring-philippines-inc/jobs/full-stack-developer-ao-14278",
+    "score": 0.0,
+    "reason": "Location restriction limits applications exclusively to candidates currently based in the Philippines.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Full Stack Developer"
+    ],
+    "fit_score": 0.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
   }
 }
