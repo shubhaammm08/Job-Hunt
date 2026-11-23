@@ -3059,6 +3059,7 @@
           <button class="filter-chip" id="chip-ashby" onclick="setQuickChip('ashby')">Ashby</button>
           <button class="filter-chip" id="chip-lever" onclick="setQuickChip('lever')">Lever</button>
           <button class="filter-chip" id="chip-linkedin" onclick="setQuickChip('linkedin')">LinkedIn</button>
+          <button class="filter-chip" id="chip-naukri" onclick="setQuickChip('naukri')">Naukri</button>
           <button class="filter-chip" id="chip-remotive" onclick="setQuickChip('remotive')">Remotive</button>
           <button class="filter-chip" id="chip-hackernews" onclick="setQuickChip('hackernews')">Hacker News</button>
           <button class="filter-chip" id="chip-other-plat" onclick="setQuickChip('other_plat')">Other Sources</button>
@@ -4915,6 +4916,7 @@ let appData = {
         case 'ashby': platformSel.value = 'ashby'; break;
         case 'lever': platformSel.value = 'lever'; break;
         case 'linkedin': platformSel.value = 'linkedin'; break;
+        case 'naukri': platformSel.value = 'naukri'; break;
         case 'remotive': platformSel.value = 'remotive'; break;
         case 'hackernews': platformSel.value = 'hackernews'; break;
         case 'other_plat': platformSel.value = 'other'; break;
@@ -5994,7 +5996,7 @@ let appData = {
 
         const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         if (!isLocal) {
-          showToast('Live scan runs via local backend (http://localhost:8080).');
+          showToast('Live scraper runs locally (Desktop icon or localhost:8080) and auto-deploys here daily.');
           resetScanBtn();
           return;
         }
