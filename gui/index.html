@@ -3986,8 +3986,9 @@
             ]
           },
           {
-            duration: 600,
-            easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+            // Slower, expo-out reveal: settles gently instead of snapping.
+            duration: 900,
+            easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
             pseudoElement: '::view-transition-new(root)'
           }
         );
@@ -5854,6 +5855,11 @@ let appData = {
     }
 
     async function fetchLinkedInStatus() {
+      // This endpoint only exists in gui/server.py. On GitHub Pages/file://
+      // it would 404 and pollute the console, so stay with bundled status.
+      const isLocalBackend = window.location.hostname === 'localhost' ||
+        window.location.hostname === '127.0.0.1';
+      if (!isLocalBackend) return;
       try {
         const res = await fetch('/api/sources/linkedin/status');
         if (res.ok) {

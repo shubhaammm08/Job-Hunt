@@ -638,17 +638,29 @@ class TestFeedFreshnessAndThemeReveal:
             .filter(a => a.effect && a.effect.pseudoElement === '::view-transition-new(root)')
             .map(a => ({
                 duration: a.effect.getTiming().duration,
+                easing: a.effect.getTiming().easing,
                 keyframes: a.effect.getKeyframes().map(k => k.clipPath || '')
             }))""")
         assert animations, "Circular theme reveal animation was not created"
-        assert animations[0]["duration"] == 600
+        assert animations[0]["duration"] == 900
+        assert animations[0]["easing"] == 'cubic-bezier(0.16, 1, 0.3, 1)'
         assert any("circle(" in frame for frame in animations[0]["keyframes"]), animations
 
-        desktop_page.wait_for_timeout(800)
+        desktop_page.wait_for_timeout(1000)
         toggled = desktop_page.evaluate("() => document.documentElement.getAttribute('data-theme')")
         assert toggled != initial
         desktop_page.click("#theme-toggle-btn")
-        desktop_page.wait_for_timeout(800)
+        desktop_page.wait_for_timeout(1000)
+
+    def test_static_host_does_not_request_local_backend_status(self, desktop_page: Page):
+        """GitHub Pages/file loads must not request the localhost-only LinkedIn API."""
+        requests = []
+        desktop_page.on("request", lambda request: requests.append(request.url))
+        desktop_page.reload(wait_until="domcontentloaded")
+        desktop_page.wait_for_selector(".job-card", timeout=5000)
+        desktop_page.wait_for_timeout(300)
+        backend_urls = [url for url in requests if "/api/sources/linkedin/status" in url]
+        assert backend_urls == [], f"Static dashboard should not call local backend: {backend_urls}"
 
     def test_light_theme_key_components_meet_wcag_contrast(self, desktop_page: Page):
         """Tags, score badges, rationale, and metrics stay at or above 4.5:1 in light mode."""

@@ -181,6 +181,9 @@ def test_mobile_layout_glitch_regressions():
         assert "function closeMobileMoreMenu" in content, html_path
         assert "[data-theme=\"light\"] .mobile-top-bar" in content, html_path
         assert "[data-theme=\"light\"] .mobile-bottom-dock" in content, html_path
+        assert "duration: 900" in content, html_path
+        assert "cubic-bezier(0.16, 1, 0.3, 1)" in content, html_path
+        assert "if (!isLocalBackend) return;" in content, html_path
 
 
 def test_metadata_inference_logic_on_seen_jobs():
