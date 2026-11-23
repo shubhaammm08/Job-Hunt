@@ -3808,5 +3808,28 @@
     "emailed": false,
     "applied": false,
     "applied_on": null
+  },
+  "linkedin:4492543971": {
+    "first_seen": "2026-11-23T11:05:58+00:00",
+    "company": "TerraTern",
+    "title": "AI Engineer",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4492543971",
+    "score": 6.0,
+    "reason": "Junior AI Engineer role matches stack, but requires relocation to Bengaluru.",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "AI Engineer"
+    ],
+    "fit_score": 6.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
   }
 }
