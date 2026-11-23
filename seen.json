@@ -1451,5 +1451,116 @@
     "emailed": true,
     "applied": false,
     "applied_on": null
+  },
+  "himalayas:rss:ineer-remote-contract-9180236709": {
+    "first_seen": "2026-11-23T13:33:04+00:00",
+    "company": "Remote Employer",
+    "title": "🌍 GPU Programming Software Engineer, Remote- Contract",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/xperteez-technology/jobs/gpu-programming-software-engineer-remote-contract-9180236709",
+    "score": 1.0,
+    "reason": "Requires deep C++ and GPU programming like CUDA, which is outside the candidate's stack.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Engineer"
+    ],
+    "fit_score": 1.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:uxjobsadvanced-software-engineer": {
+    "first_seen": "2026-11-23T13:33:04+00:00",
+    "company": "Remote Employer",
+    "title": "Advanced Software Engineer",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/veryux/jobs/advanced-software-engineer",
+    "score": 3.0,
+    "reason": "Seniority mismatch; candidate is a junior engineer with 1 year of experience.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Engineer"
+    ],
+    "fit_score": 3.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:inee-internship-track-full-stack": {
+    "first_seen": "2026-11-23T13:33:04+00:00",
+    "company": "Web Engineer Trainee (Internship Track",
+    "title": "Full Stack)",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/kraftpixel-digital-solutions-private-limited/jobs/web-engineer-trainee-internship-track-full-stack",
+    "score": 7.0,
+    "reason": "Good match for a full-stack internship track matching the candidate's background.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [],
+    "matched_roles": [],
+    "fit_score": 7.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4492573591": {
+    "first_seen": "2026-11-23T13:33:04+00:00",
+    "company": "V2 Retail Ltd",
+    "title": "Python Developer",
+    "location": "Gurugram, Haryana, India",
+    "url": "https://www.linkedin.com/jobs/view/4492573591",
+    "score": 6.0,
+    "reason": "Plausible Python Developer role, though located in Gurugram rather than Mumbai or Remote.",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Python Developer"
+    ],
+    "fit_score": 6.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4468058393": {
+    "first_seen": "2026-11-23T13:33:04+00:00",
+    "company": "Infosys",
+    "title": "Python Developer",
+    "location": "Bengaluru East, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4468058393",
+    "score": 5.0,
+    "reason": "Python Developer role matching skills, but location in Bengaluru does not match target locations.",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Python Developer"
+    ],
+    "fit_score": 5.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
   }
 }
