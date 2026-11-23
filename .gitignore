@@ -10,8 +10,10 @@ client_secret*.json
 *.log
 logs/
 session.json
+session_naukri.json
 *.session
 linkedin_session.json
+session_naukri.json
 storage_state.json
 .auth/
 *.cookie

@@ -619,27 +619,33 @@ sources:
     enabled: true
     session_file: "session.json"
     headless: true
-    rate_limit_delay: 2.0
-    max_pages_per_search: 2
-    limit_per_search: 15
+    rate_limit_delay: 1.5
+    max_pages_per_search: 1
+    limit_per_search: 10
     keywords:
       - "AI Engineer"
-      - "GenAI Engineer"
-      - "LLM Engineer"
-      - "RAG Engineer"
       - "Data Analyst"
       - "Machine Learning Engineer"
       - "Python Developer"
     locations:
       - "India"
-      - "Mumbai"
-      - "Pune"
+      - "Remote"
+
+  naukri:
+    enabled: true
+    session_file: "session_naukri.json"
+    run_in_ci: false # Local desktop runs only (safe skip in GitHub Actions)
+    experience: "0-2" # Junior / Fresher focus (0-2 years)
+    max_pages_per_search: 1
+    limit_per_search: 20
+    keywords:
+      - "Python Developer"
+      - "Data Analyst"
+      - "AI Engineer"
+      - "Machine Learning"
+    locations:
+      - "India"
       - "Bangalore"
-      - "Hyderabad"
-      - "Delhi"
-      - "Gurgaon"
-      - "Noida"
-      - "Chennai"
       - "Remote"
 
   weworkremotely:
@@ -652,6 +658,8 @@ sources:
     - remote_sources
     - startup_sources
     - india_job_boards
+    - india_job_board
+    - professional_network
     - global_job_boards
     - fresher_sources
     - ai_sources

@@ -3690,6 +3690,11 @@ def main():
                     m = re.search(r"(\d{6,})", k_str + " " + url_str)
                     if m:
                         entry["url"] = f"https://www.linkedin.com/jobs/view/{m.group(1)}"
+            elif k_str.startswith("naukri") or str(entry.get("platform", "")).lower() == "naukri":
+                url_str = str(entry.get("url") or "")
+                if not url_str or not url_str.startswith("http"):
+                    clean = re.sub(r"[^\w]", "", k_str.replace("naukri:", ""))
+                    entry["url"] = f"https://www.naukri.com/job-listings-{clean}"
             jobs_list.append(entry)
     jobs_list.sort(key=lambda j: (j.get("score") or 0.0, j.get("first_seen") or ""), reverse=True)
 

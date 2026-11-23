@@ -95,28 +95,14 @@ def prefilter(jobs: list[Job], cfg: dict[str, Any]) -> list[Job]:
     stats = {"title": 0, "location": 0, "age": 0}
 
     for j in jobs:
-        # 1. Intelligent Role Classification Layer (Part 2)
-        classification = classify_job(j.title, j.description)
-        j.matched_roles = classification["matched_roles"]
-        j.role_families = classification["role_families"]
-        j.role_confidence = classification["role_confidence"]
-        j.matched_skills = classification["matched_skills"]
-        if classification.get("experience_required"):
-            j.experience_required = classification["experience_required"]
-
-        # 2. Guardrails: Filter out non-software false positives (e.g. civil/mechanical/data center)
-        if classification.get("is_false_positive"):
-            stats["title"] += 1
-            continue
-
-        # 3. Role Matching
+        # 1. Fast Role Matching by Title (filters out ~85% of irrelevant postings instantly)
         if inc:
             role_matched = _any_match(inc, j.title)
             if not role_matched:
                 stats["title"] += 1
                 continue
 
-        # 4. Seniority Gating (Part 20)
+        # 2. Fast Seniority Gating by Title
         if exc and _any_match(exc, j.title):
             stats["title"] += 1
             continue
@@ -125,11 +111,7 @@ def prefilter(jobs: list[Job], cfg: dict[str, Any]) -> list[Job]:
             stats["title"] += 1
             continue
 
-        if j.experience_required and is_senior_experience(j.experience_required):
-            stats["title"] += 1
-            continue
-
-        # 5. Location Filtering (Part 21)
+        # 3. Location Filtering
         loc_ok, is_rem = is_location_match(j.location, j.title, locs, allow_remote)
         if is_rem:
             j.remote = True
@@ -137,12 +119,30 @@ def prefilter(jobs: list[Job], cfg: dict[str, Any]) -> list[Job]:
             stats["location"] += 1
             continue
 
-        # 6. Freshness Filter
+        # 4. Freshness Filter
         if cutoff:
             posted = _parse_date(j.posted_at)
             if posted and posted < cutoff:
                 stats["age"] += 1
                 continue
+
+        # 5. Intelligent Role Classification Layer (run only on title/loc/freshness candidates)
+        classification = classify_job(j.title, j.description)
+        j.matched_roles = classification["matched_roles"]
+        j.role_families = classification["role_families"]
+        j.role_confidence = classification["role_confidence"]
+        j.matched_skills = classification["matched_skills"]
+        if classification.get("experience_required"):
+            j.experience_required = classification["experience_required"]
+
+        # 6. Guardrails: Filter out non-software false positives (e.g. civil/mechanical/data center)
+        if classification.get("is_false_positive"):
+            stats["title"] += 1
+            continue
+
+        if j.experience_required and is_senior_experience(j.experience_required):
+            stats["title"] += 1
+            continue
 
         kept.append(j)
 

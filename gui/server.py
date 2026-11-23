@@ -180,6 +180,12 @@ class JobHuntHandler(SimpleHTTPRequestHandler):
                             m = re.search(r"(\d{6,})", jid_str + " " + url_str)
                             if m:
                                 job_entry["url"] = f"https://www.linkedin.com/jobs/view/{m.group(1)}"
+                    elif jid_str.startswith("naukri") or str(job_entry.get("platform", "")).lower() == "naukri":
+                        url_str = str(job_entry.get("url") or "")
+                        if not url_str or not url_str.startswith("http"):
+                            import re
+                            clean = re.sub(r"[^\w]", "", jid_str.replace("naukri:", ""))
+                            job_entry["url"] = f"https://www.naukri.com/job-listings-{clean}"
                     jobs_list.append(job_entry)
 
             # Sort descending by score then date

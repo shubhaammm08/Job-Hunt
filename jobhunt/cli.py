@@ -465,6 +465,20 @@ def cmd_linkedin_auth(args) -> int:
     return 0 if success else 1
 
 
+def cmd_naukri_auth(args) -> int:
+    """Run interactive or cookie-based Naukri session save."""
+    from .naukri import run_naukri_auth
+    session_path = getattr(args, "session", "session_naukri.json")
+    timeout = getattr(args, "timeout", 300)
+    cookie = getattr(args, "cookie", None)
+    success = run_naukri_auth(
+        session_path=session_path,
+        timeout=timeout,
+        cookie=cookie,
+    )
+    return 0 if success else 1
+
+
 def main(argv=None) -> int:
     _load_env()
     p = argparse.ArgumentParser(
@@ -523,6 +537,12 @@ def main(argv=None) -> int:
     sauth.add_argument("--password", help="LinkedIn login password")
     sauth.add_argument("--cookie", "--li-at", dest="cookie", help="direct li_at cookie value (bypasses Cloudflare)")
     sauth.set_defaults(func=cmd_linkedin_auth)
+
+    snaukri = sub.add_parser("naukri-auth", help="interactive Naukri login or cookie save to session file")
+    snaukri.add_argument("--session", default="session_naukri.json", help="path to session file (default: session_naukri.json)")
+    snaukri.add_argument("--timeout", type=int, default=300, help="login timeout in seconds (default: 300)")
+    snaukri.add_argument("--cookie", help="direct Naukri cookie header string")
+    snaukri.set_defaults(func=cmd_naukri_auth)
 
     args = p.parse_args(argv)
     return args.func(args)

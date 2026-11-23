@@ -559,19 +559,144 @@ async def _async_fetch_linkedin_jobs(config: dict[str, Any]) -> list[Job]:
 
 
 # -----------------------------------------------------------------------------
+# Zero-Login Public Guest Scraper
+# -----------------------------------------------------------------------------
+def fetch_linkedin_guest_jobs(config: dict[str, Any]) -> list[Job]:
+    """Fetch LinkedIn jobs via public guest search endpoint without requiring any credentials or login."""
+    import requests
+    import urllib.parse
+    import time
+
+    li_cfg = config.get("sources", {}).get("linkedin", {}) if isinstance(config.get("sources"), dict) else config.get("linkedin", config)
+    if not isinstance(li_cfg, dict):
+        li_cfg = {}
+
+    keywords = li_cfg.get("keywords") or [
+        "Python Developer", "Data Analyst", "AI Engineer", "Machine Learning"
+    ]
+    if isinstance(keywords, str):
+        keywords = [keywords]
+
+    locations = li_cfg.get("locations") or ["India", "Remote"]
+    if isinstance(locations, str):
+        locations = [locations]
+
+    limit_per_search = int(li_cfg.get("limit_per_search", 10))
+    rate_limit_delay = float(li_cfg.get("rate_limit_delay", 1.5))
+
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    }
+
+    seen_ids: set[str] = set()
+    jobs: list[Job] = []
+
+    for kw in keywords:
+        for loc in locations:
+            params = {
+                "keywords": kw,
+                "location": loc,
+                "start": 0,
+            }
+            if loc.lower() == "remote":
+                params["f_WT"] = "2"
+
+            qs = urllib.parse.urlencode(params)
+            url = f"https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search?{qs}"
+            try:
+                r = requests.get(url, headers=headers, timeout=12)
+                if r.status_code != 200:
+                    logger.debug("LinkedIn guest search for '%s' in '%s' returned HTTP %d", kw, loc, r.status_code)
+                    continue
+
+                cards = re.findall(r'<div[^>]+base-search-card[^>]+>.*?</li>', r.text, re.DOTALL)
+                for c in cards[:limit_per_search]:
+                    jid_m = re.search(r'data-entity-urn="urn:li:jobPosting:(\d+)"', c)
+                    if not jid_m:
+                        continue
+                    clean_id = jid_m.group(1)
+                    if clean_id in seen_ids:
+                        continue
+                    seen_ids.add(clean_id)
+
+                    t_m = re.search(r'base-search-card__title"[^>]*>\s*(.*?)\s*</h3>', c, re.DOTALL)
+                    comp_m = re.search(r'base-search-card__subtitle"[^>]*>.*?<a[^>]*>\s*(.*?)\s*</a>', c, re.DOTALL)
+                    if not comp_m:
+                        comp_m = re.search(r'base-search-card__subtitle"[^>]*>\s*(.*?)\s*</h4>', c, re.DOTALL)
+                    loc_m = re.search(r'job-search-card__location"[^>]*>\s*(.*?)\s*</span>', c, re.DOTALL)
+                    dt_m = re.search(r'datetime="([^"]+)"', c)
+
+                    title = html.unescape(t_m.group(1).strip()) if t_m else ""
+                    company = html.unescape(comp_m.group(1).strip()) if comp_m else ""
+                    location_str = html.unescape(loc_m.group(1).strip()) if loc_m else loc
+                    date_val = dt_m.group(1) if dt_m else datetime.now(timezone.utc).isoformat()
+
+                    if not title or not company:
+                        continue
+
+                    job_url = f"https://www.linkedin.com/jobs/view/{clean_id}"
+                    job_obj = Job(
+                        job_id=f"linkedin:{clean_id}",
+                        title=title,
+                        company=company,
+                        location=location_str,
+                        url=job_url,
+                        apply_url=job_url,
+                        ats="linkedin",
+                        source="linkedin",
+                        source_tier=2,
+                        country="India" if "india" in location_str.lower() else "",
+                        remote="remote" in location_str.lower() or loc.lower() == "remote",
+                        description=f"{title} at {company} in {location_str}. View and apply on LinkedIn: {job_url}",
+                        posted_at=date_val,
+                    )
+                    jobs.append(job_obj)
+
+            except Exception as e:
+                logger.debug("LinkedIn guest search error for '%s' in '%s': %s", kw, loc, e)
+
+            time.sleep(rate_limit_delay)
+
+    logger.info("LinkedIn guest scraper collected %d jobs.", len(jobs))
+    return jobs
+
+
+# -----------------------------------------------------------------------------
 # Synchronous Entry Point
 # -----------------------------------------------------------------------------
 def fetch_linkedin_jobs(config: dict[str, Any]) -> list[Job]:
     """Synchronous entry point to fetch LinkedIn jobs using Playwright & linkedin-scraper.
 
     Handles event loops cleanly whether called from main thread or background ThreadPoolExecutor.
+    Falls back seamlessly to Zero-Login Guest scraper if session is invalid or missing.
     """
     li_cfg = config.get("sources", {}).get("linkedin", {}) if isinstance(config.get("sources"), dict) else config.get("linkedin", config)
     if isinstance(li_cfg, dict) and not li_cfg.get("enabled", True):
         logger.info("LinkedIn scraper disabled in config.")
         return []
 
-    return _run_async(_async_fetch_linkedin_jobs(config))
+    session_file = li_cfg.get("session_file", "session.json") if isinstance(li_cfg, dict) else "session.json"
+    session_path = Path(session_file)
+    guest_mode = li_cfg.get("guest_mode", False) if isinstance(li_cfg, dict) else False
+
+    # If guest_mode or session file does not exist, use fast Zero-Login guest search directly
+    if guest_mode or not session_path.exists():
+        logger.info("Running Zero-Login LinkedIn Guest Job Search...")
+        return fetch_linkedin_guest_jobs(config)
+
+    # Try authenticated scraper if session file is present
+    try:
+        jobs = _run_async(_async_fetch_linkedin_jobs(config))
+        if jobs:
+            return jobs
+    except Exception as e:
+        logger.warning("LinkedIn authenticated scraper error: %s", e)
+
+    # Fallback to Zero-Login Guest scraper
+    logger.info("Falling back to Zero-Login LinkedIn Guest Job Search...")
+    return fetch_linkedin_guest_jobs(config)
 
 
 # -----------------------------------------------------------------------------

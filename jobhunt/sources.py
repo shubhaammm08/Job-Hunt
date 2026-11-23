@@ -899,20 +899,52 @@ class LinkedInAdapter(BaseSourceAdapter):
         try:
             jobs = fetch_linkedin_jobs(config)
             self.health.jobs_found = len(jobs)
-            li_cfg = config.get("sources", {}).get("linkedin", {}) if isinstance(config.get("sources"), dict) else config.get("linkedin", config)
-            session_file = li_cfg.get("session_file", "session.json") if isinstance(li_cfg, dict) else "session.json"
-            if not Path(session_file).exists():
-                self.health.status = "CONFIG_REQUIRED"
-                msg = f"Missing session file: {session_file}. Run 'python -m jobhunt linkedin-auth'"
-                if msg not in self.health.errors:
-                    self.health.errors.append(msg)
-            else:
-                self.health.status = "HEALTHY"
+            self.health.status = "HEALTHY"
             return jobs
         except Exception as e:
             self.health.status = "DEGRADED"
             self.health.errors.append(f"{type(e).__name__}: {e}")
             logger.warning("LinkedIn fetch failed: %s", e)
+            return []
+
+
+class NaukriAdapter(BaseSourceAdapter):
+    """Native Naukri scraper adapter based on Rockposedon/WebScraping API schema.
+    Supports dual-mode session authentication (cookies & Playwright) and safe CI skipping."""
+
+    def __init__(self, name: str = "Naukri", category: str = "india_job_board",
+                 tier: int = 2, enabled: bool = True):
+        super().__init__(name, category, tier=tier, enabled=enabled)
+
+    def fetch(self, config: dict[str, Any]) -> list[Job]:
+        from .naukri import fetch_naukri_jobs
+
+        self.health.last_scan = datetime.now(timezone.utc).isoformat()
+        naukri_cfg = (
+            config.get("sources", {}).get("naukri", {})
+            if isinstance(config.get("sources"), dict)
+            else config.get("naukri", {})
+        )
+
+        # Check CI
+        is_ci = os.environ.get("GITHUB_ACTIONS") == "true" or os.environ.get("CI") == "true"
+        run_in_ci = naukri_cfg.get("run_in_ci", False)
+        if is_ci and not run_in_ci:
+            self.health.status = "NOT_CONFIGURED"
+            msg = "Skipped in CI (GitHub Actions) to prevent IP blocking. Runs on local desktop."
+            if msg not in self.health.errors:
+                self.health.errors.append(msg)
+            return []
+
+        try:
+            jobs = fetch_naukri_jobs(config)
+            self.health.jobs_found = len(jobs)
+            self.health.status = "HEALTHY"
+            return jobs
+        except Exception as e:
+            self.health.status = "DEGRADED"
+            self.health.errors.append(f"{type(e).__name__}: {e}")
+            logger.warning("Naukri fetch failed: %s", e)
             return []
 
 
@@ -983,7 +1015,7 @@ class SourceRegistry:
         # 4. India Job Boards (Part 4)
         self._register(JSearchAggregatorAdapter("LinkedIn Jobs India", "linkedin_india", "india_job_board", tier=2))
         self._register(JSearchAggregatorAdapter("Indeed India", "indeed_india", "india_job_board", tier=4))
-        self._register(JSearchAggregatorAdapter("Naukri", "naukri", "india_job_board", tier=2))
+        self._register(NaukriAdapter())
 
         india_boards = [
             ("Naukri Campus", "naukri_campus", 3),
