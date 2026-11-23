@@ -12,7 +12,7 @@ Test Methodology: 4-Tier Architecture (TEST_INFRA.md)
 - Tier 2: Boundary & Corner Cases (≥5 tests per feature, 5 categories = ≥25 tests)
 - Tier 3: Pairwise & Cross-Feature Combinations (≥10 interaction tests)
 - Tier 4: Real-World Application Scenarios (≥5 realistic workflows)
-Total tests: 72 (65 original + 7 freshness, applied-visibility, and theme-reveal regressions)
+Total tests: 78 (65 original + 13 freshness, applied-visibility, theme-reveal, and mobile-layout regressions)
 """
 
 from __future__ import annotations
@@ -440,15 +440,81 @@ class TestTier1FeatureCoverage:
         assert content_elem is not None, "Accordion content element must exist"
 
     def test_f4_mobile_docs_and_bottom_dock(self, mobile_page: Page):
-        """F4.5: Validates horizontal document chips and sticky bottom dock on mobile."""
+        """F4.5: Validates document chips and sticky bottom dock on mobile."""
         docs_row = mobile_page.query_selector(".mobile-docs-row, #mobile-docs-row")
-        assert docs_row is not None, "Mobile horizontal document chips row must exist"
+        assert docs_row is not None, "Mobile document chips row must exist"
 
         bottom_dock = mobile_page.query_selector(".mobile-bottom-dock")
         assert bottom_dock is not None, "Mobile sticky bottom action dock must exist"
         assert bottom_dock.is_visible(), "Bottom dock must be visible in 390px viewport"
         dock_text = bottom_dock.inner_text()
         assert "Apply" in dock_text or "Auto-Fill" in dock_text, f"Bottom dock must contain apply action: {dock_text}"
+
+    def test_f4_mobile_top_bar_fits_narrow_phones(self, mobile_page: Page):
+        """F4.6: Sticky header and its actions must stay inside 360/390px viewports."""
+        for width in (360, 390):
+            mobile_page.set_viewport_size({"width": width, "height": 844})
+            mobile_page.wait_for_timeout(80)
+            metrics = mobile_page.evaluate("""() => {
+                const actions = document.querySelector('.mobile-top-actions');
+                const brand = document.querySelector('.mobile-brand');
+                const r = actions.getBoundingClientRect();
+                const b = brand.getBoundingClientRect();
+                return {
+                    right: r.right, left: r.left, brandLeft: b.left,
+                    scrollW: document.documentElement.scrollWidth, vw: innerWidth
+                };
+            }""")
+            assert metrics["scrollW"] <= width, f"Document overflows at {width}px: {metrics}"
+            assert metrics["right"] <= width, f"Top actions overflow at {width}px: {metrics}"
+            assert metrics["brandLeft"] >= 0, f"Brand clipped at {width}px: {metrics}"
+
+        mobile_page.click("#mobile-more-btn")
+        assert mobile_page.eval_on_selector("#mobile-more-menu", "el => el.classList.contains('open')")
+        assert mobile_page.get_attribute("#mobile-more-btn", "aria-expanded") == "true"
+        mobile_page.keyboard.press("Escape")
+        assert not mobile_page.eval_on_selector("#mobile-more-menu", "el => el.classList.contains('open')")
+
+    def test_f4_mobile_document_chips_all_visible(self, mobile_page: Page):
+        """F4.7: All three document chips, including outreach, fit without scrolling."""
+        chips = mobile_page.eval_on_selector_all(".mobile-doc-chip", """els => els.map(el => {
+            const r = el.getBoundingClientRect();
+            return {left: r.left, right: r.right, text: el.innerText.trim()};
+        })""")
+        assert len(chips) == 3, f"Expected three document chips, got {len(chips)}"
+        assert any("Outreach" in c["text"] for c in chips), "Outreach chip must be present"
+        for chip in chips:
+            assert chip["left"] >= 0 and chip["right"] <= 390 + 1, f"Chip outside viewport: {chip}"
+
+    def test_f4_mobile_feed_starts_above_dock(self, mobile_page: Page):
+        """F4.8: Compact filters keep the job list well above the fixed action dock."""
+        positions = mobile_page.evaluate("""() => ({
+            listTop: document.querySelector('#job-list').getBoundingClientRect().top,
+            dockTop: document.querySelector('.mobile-bottom-dock').getBoundingClientRect().top
+        })""")
+        assert positions["dockTop"] - positions["listTop"] > 150, (
+            f"Feed list starts too low on mobile: {positions}"
+        )
+
+    def test_f3_kit_grid_contains_outreach_chip(self, desktop_page: Page):
+        """F3.10: Document Hub chips stay inside the details pane at all desktop widths."""
+        for width in (1024, 1280, 1440):
+            desktop_page.set_viewport_size({"width": width, "height": 900})
+            desktop_page.wait_for_timeout(80)
+            result = desktop_page.evaluate("""() => {
+                const section = document.querySelector('.document-hub-section');
+                const chips = [...document.querySelectorAll('.kit-chip')];
+                const sr = section.getBoundingClientRect();
+                return {
+                    sectionRight: sr.right,
+                    rights: chips.map(el => el.getBoundingClientRect().right),
+                    cols: getComputedStyle(document.querySelector('.kit-chips-grid')).gridTemplateColumns
+                };
+            }""")
+            assert all(r <= result["sectionRight"] + 1 for r in result["rights"]), (
+                f"Kit chip overflows details pane at {width}px: {result}"
+            )
+            assert "minmax" in result["cols"] or "px" in result["cols"], result
 
     # -------------------------------------------------------------------------
     # Feature 5: Side-by-Side Studio Presentation Showcase (5 Tests)
@@ -640,6 +706,26 @@ class TestFeedFreshnessAndThemeReveal:
         }""")
         assert chip is not None, "Mobile document chip must exist"
         assert chip["ratio"] >= 4.5, f"Mobile document chip contrast too low: {chip}"
+
+    def test_light_theme_mobile_surfaces_are_not_dark(self, mobile_page: Page):
+        """Daylight mode must remap all previously hardcoded dark mobile surfaces."""
+        mobile_page.evaluate("localStorage.setItem('jobhunt_theme', 'light')")
+        mobile_page.reload(wait_until="domcontentloaded")
+        mobile_page.wait_for_selector(".mobile-active-card", timeout=5000)
+        mobile_page.wait_for_timeout(200)
+        colors = mobile_page.evaluate("""() => {
+            const out = {};
+            ['.mobile-top-bar', '.mobile-active-card', '.mobile-accordion', '.mobile-bottom-dock'].forEach(sel => {
+                const el = document.querySelector(sel);
+                out[sel] = getComputedStyle(el).backgroundColor;
+            });
+            return out;
+        }""")
+        for selector, value in colors.items():
+            match = re.search(r"rgba?\((\d+), (\d+), (\d+)", value)
+            assert match, f"Unexpected background for {selector}: {value}"
+            channels = [int(match.group(i)) for i in (1, 2, 3)]
+            assert min(channels) >= 200, f"{selector} is still dark in Daylight mode: {value}"
 
 
 # =============================================================================

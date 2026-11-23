@@ -170,6 +170,19 @@ def test_mobile_touch_targets_compliance():
         assert ".btn-applied" in media_content
 
 
+def test_mobile_layout_glitch_regressions():
+    """Static invariants for the outreach grid and compact mobile header fixes."""
+    for html_path in [GUI_INDEX, ROOT_INDEX]:
+        with open(html_path, "r", encoding="utf-8") as f:
+            content = f.read()
+        assert "grid-template-columns: repeat(3, minmax(0, 1fr))" in content, html_path
+        assert 'id="mobile-more-btn"' in content, html_path
+        assert "function toggleMobileMoreMenu" in content, html_path
+        assert "function closeMobileMoreMenu" in content, html_path
+        assert "[data-theme=\"light\"] .mobile-top-bar" in content, html_path
+        assert "[data-theme=\"light\"] .mobile-bottom-dock" in content, html_path
+
+
 def test_metadata_inference_logic_on_seen_jobs():
     """Validates the inference engine correctly categorizes all jobs in seen.json."""
     assert os.path.exists(SEEN_JSON), "seen.json must exist"

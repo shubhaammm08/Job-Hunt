@@ -1295,7 +1295,9 @@
     }
     .kit-chips-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      /* minmax(0, 1fr) stops long filenames from forcing columns wider
+         than the details pane and pushing the outreach chip off-screen. */
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 12px;
       margin-bottom: 16px;
     }
@@ -1307,6 +1309,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      min-width: 0;
       cursor: pointer;
       transition: all 0.15s ease;
     }
@@ -1345,9 +1348,12 @@
       font-size: 12px;
       font-weight: 600;
       color: var(--text-primary, #0F172A);
-      white-space: nowrap;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
       overflow: hidden;
-      text-overflow: ellipsis;
+      overflow-wrap: anywhere;
+      line-height: 1.25;
     }
     .kit-info .sub {
       font-size: 10.5px;
@@ -1892,7 +1898,8 @@
     .mobile-active-card,
     .mobile-accordion,
     .mobile-docs-row,
-    .mobile-bottom-dock {
+    .mobile-bottom-dock,
+    .mobile-more-menu {
       display: none;
     }
 
@@ -2015,6 +2022,41 @@
         display: flex;
         align-items: center;
         gap: 8px;
+        flex-shrink: 0;
+      }
+      /* Compact overflow menu: only exposed on narrow phones where the
+         six desktop-width icon actions no longer fit beside the brand. */
+      .mobile-more-btn { display: none; }
+      .mobile-more-menu {
+        position: absolute;
+        top: calc(100% - 4px);
+        right: 10px;
+        z-index: 120;
+        min-width: 190px;
+        padding: 6px;
+        background: var(--bg-card);
+        border: 1px solid var(--border-subtle);
+        border-radius: 10px;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.22);
+      }
+      .mobile-more-menu.open { display: block; }
+      .mobile-more-menu button {
+        width: 100%;
+        min-height: 44px;
+        padding: 10px 12px;
+        border: none;
+        border-radius: 6px;
+        background: transparent;
+        color: var(--text-main);
+        font-size: 12.5px;
+        font-weight: 600;
+        text-align: left;
+        cursor: pointer;
+      }
+      .mobile-more-menu button:hover,
+      .mobile-more-menu button:focus-visible {
+        background: var(--bg-surface-subtle);
+        outline: none;
       }
 
       /* Horizontal Scrolling Filter Capsules */
@@ -2271,6 +2313,77 @@
 
     /* Strict Mobile Touch Targets Compliance (max-width: 600px) */
     @media (max-width: 600px) {
+      /* Keep the sticky header inside the viewport on 360-390px phones. */
+      .mobile-top-bar {
+        padding-left: 10px;
+        padding-right: 10px;
+        gap: 8px;
+      }
+      .mobile-brand {
+        gap: 8px;
+        min-width: 0;
+      }
+      .mobile-brand-title {
+        font-size: 13px;
+        max-width: clamp(96px, 28vw, 128px);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .mobile-top-actions { gap: 6px; }
+      .mobile-top-actions > .btn-actions {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        padding: 0;
+        justify-content: center;
+      }
+      .mobile-top-actions > .btn-actions:nth-child(n+4):not(#mobile-more-btn) {
+        display: none;
+      }
+      #mobile-more-btn { display: inline-flex !important; }
+
+      /* One horizontal row of real selects instead of three stacked rows;
+         the quick capsules above already cover the common filters. */
+      .feed-header .filter-selects {
+        display: flex;
+        overflow-x: auto;
+        gap: 6px;
+        margin-top: 6px;
+        scrollbar-width: none;
+      }
+      .feed-header .filter-selects::-webkit-scrollbar { display: none; }
+      .feed-header .select-filter {
+        flex: 0 0 auto;
+        width: auto;
+        min-width: 132px;
+        font-size: 13px;
+      }
+
+      /* All three document chips stay visible in one compact grid row;
+         the old horizontal scroller hid the outreach action offscreen. */
+      .mobile-docs-row {
+        display: grid !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 6px;
+        padding: 0 14px 10px 14px;
+        overflow: visible;
+      }
+      .mobile-doc-chip {
+        min-width: 0;
+        white-space: normal;
+        line-height: 1.2;
+        gap: 4px;
+        padding: 6px 8px;
+        font-size: 10.5px;
+      }
+      .mobile-doc-chip .icon {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+      }
+      .mobile-doc-chip span { overflow-wrap: anywhere; }
+
       .container { padding: 10px; }
       header { padding: max(8px, env(safe-area-inset-top, 8px)) 12px 8px 12px; }
       .select-filter {
@@ -2296,6 +2409,12 @@
       .btn-dock-icon, .btn-dock-apply {
         min-height: 44px;
       }
+    }
+
+    /* When the details pane narrows, give the outreach chip a full row. */
+    @media (min-width: 1024px) and (max-width: 1399px) {
+      .kit-chips-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .kit-chip:last-child { grid-column: 1 / -1; }
     }
 
     /* Force Desktop Override Class (For studio_presentation.html iframe) */
@@ -2538,7 +2657,71 @@
       color: #3730A3;
       box-shadow: none;
     }
-    [data-theme="light"] .mobile-location { color: #CBD5E1; }
+    /* Mobile surfaces were hardcoded to the dark palette. Re-map them so
+       Daylight mode stays light-on-light and keeps AA text contrast. */
+    [data-theme="light"] .mobile-top-bar {
+      background: rgba(248, 250, 252, 0.94);
+    }
+    [data-theme="light"] .mobile-brand-title {
+      color: var(--text-primary);
+    }
+    [data-theme="light"] .mobile-filter-capsules {
+      background: rgba(241, 245, 249, 0.94);
+    }
+    [data-theme="light"] .mobile-active-card {
+      background: var(--bg-card);
+      border-color: var(--border-subtle);
+      border-left-color: var(--accent-indigo);
+      box-shadow: var(--shadow-card);
+    }
+    [data-theme="light"] .mobile-card-title,
+    [data-theme="light"] .mobile-company-name {
+      color: var(--text-primary);
+    }
+    [data-theme="light"] .company-glyph {
+      background: var(--bg-surface-subtle);
+      color: var(--accent-indigo);
+    }
+    [data-theme="light"] .mobile-location {
+      color: var(--text-muted);
+    }
+    [data-theme="light"] .match-badge-emerald {
+      background: #D1FAE5;
+      border-color: #6EE7B7;
+      color: #047857;
+      box-shadow: none;
+    }
+    [data-theme="light"] .mobile-accordion {
+      background: var(--bg-card);
+      border-color: var(--border-subtle);
+    }
+    [data-theme="light"] .accordion-title {
+      color: #6B21A8;
+    }
+    [data-theme="light"] .badge-mini {
+      background: #D1FAE5;
+      color: #047857;
+    }
+    [data-theme="light"] .accordion-content {
+      border-top-color: var(--border-subtle);
+    }
+    [data-theme="light"] .accordion-summary {
+      color: var(--text-secondary);
+    }
+    [data-theme="light"] .mobile-docs-row {
+      background: var(--bg-feed);
+    }
+    [data-theme="light"] .mobile-bottom-dock {
+      background: rgba(241, 245, 249, 0.96);
+      border-top-color: var(--border-subtle);
+    }
+    [data-theme="light"] .btn-dock-icon {
+      background: var(--bg-card);
+      border-color: var(--border-subtle);
+      color: var(--text-main);
+    }
+    /* .btn-dock-apply keeps its indigo gradient in both themes, so its
+       light subtitle must stay pale for contrast. */
 
   </style>
 </head>
@@ -2605,15 +2788,14 @@
       <button class="btn-actions" onclick="openAppliedTrackerModal()" title="Applied Tracker Hub">
         <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
       </button>
-      <button class="btn-actions" onclick="openBookmarkletGuide()" title="Auto-Fill Tool">
-        <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      <button class="btn-actions" id="mobile-more-btn" onclick="toggleMobileMoreMenu(event)" title="More actions" aria-label="More actions" aria-expanded="false" aria-haspopup="true">
+        <svg class="icon icon-sm" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>
       </button>
-      <button class="btn-actions" onclick="openWhatsAppGuide()" title="Phone Alerts">
-        <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-      </button>
-      <button class="btn-actions" onclick="openProfileSettings()" title="Settings &amp; Profile">
-        <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-      </button>
+      <div class="mobile-more-menu" id="mobile-more-menu" role="menu" aria-label="More mobile actions">
+        <button type="button" role="menuitem" onclick="openBookmarkletGuide(); closeMobileMoreMenu();">Auto-Fill Tool</button>
+        <button type="button" role="menuitem" onclick="openWhatsAppGuide(); closeMobileMoreMenu();">Phone Alerts</button>
+        <button type="button" role="menuitem" onclick="openProfileSettings(); closeMobileMoreMenu();">Settings &amp; Profile</button>
+      </div>
     </div>
   </div>
 
@@ -3814,6 +3996,23 @@
 
     function toggleMobileTheme(event) {
       toggleTheme(event);
+    }
+
+    function toggleMobileMoreMenu(event) {
+      if (event && typeof event.stopPropagation === 'function') event.stopPropagation();
+      const menu = document.getElementById('mobile-more-menu');
+      const button = document.getElementById('mobile-more-btn');
+      if (!menu || !button) return;
+      const open = !menu.classList.contains('open');
+      menu.classList.toggle('open', open);
+      button.setAttribute('aria-expanded', String(open));
+    }
+
+    function closeMobileMoreMenu() {
+      const menu = document.getElementById('mobile-more-menu');
+      const button = document.getElementById('mobile-more-btn');
+      if (menu) menu.classList.remove('open');
+      if (button) button.setAttribute('aria-expanded', 'false');
     }
 
     function updateThemeToggleIcons(theme) {
@@ -6336,6 +6535,17 @@ let appData = {
       initPaneResizer();
       initTooltips();
       initAvatarPicker();
+      document.addEventListener('click', (event) => {
+        const menu = document.getElementById('mobile-more-menu');
+        const button = document.getElementById('mobile-more-btn');
+        if (menu && menu.classList.contains('open') &&
+            button && !button.contains(event.target) && !menu.contains(event.target)) {
+          closeMobileMoreMenu();
+        }
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') closeMobileMoreMenu();
+      });
       loadData();
     });
   </script>
