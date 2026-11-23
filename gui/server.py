@@ -37,6 +37,17 @@ LINKEDIN_STATUS = {
     "auth_valid": True,
 }
 
+PIPELINE_STATUS_LOCK = threading.Lock()
+PIPELINE_STATUS: dict[str, Any] = {
+    "status": "idle",
+    "is_running": False,
+    "started_at": None,
+    "finished_at": None,
+    "exit_code": 0,
+    "message": "Ready",
+    "error": None,
+}
+
 
 def reset_linkedin_status():
     """Reset LINKEDIN_STATUS to initial idle state (useful for tests)."""
@@ -216,6 +227,15 @@ class JobHuntHandler(SimpleHTTPRequestHandler):
             self.wfile.write(content.encode("utf-8"))
             return
 
+        if path == "/api/pipeline/status":
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.end_headers()
+            with PIPELINE_STATUS_LOCK:
+                status_copy = dict(PIPELINE_STATUS)
+            self.wfile.write(json.dumps(status_copy, ensure_ascii=False).encode("utf-8"))
+            return
+
         if path == "/api/sources/linkedin/status":
             self.send_response(200)
             self.send_header("Content-Type", "application/json; charset=utf-8")
@@ -295,6 +315,59 @@ class JobHuntHandler(SimpleHTTPRequestHandler):
 
             self.send_response(404)
             self.end_headers()
+            return
+
+        if path == "/api/run-pipeline":
+            with PIPELINE_STATUS_LOCK:
+                if PIPELINE_STATUS.get("is_running"):
+                    self.send_response(409)
+                    self.send_header("Content-Type", "application/json")
+                    self.end_headers()
+                    self.wfile.write(json.dumps({
+                        "success": False,
+                        "status": "already_running",
+                        "message": "Pipeline scan is already running in background."
+                    }).encode("utf-8"))
+                    return
+
+                PIPELINE_STATUS["is_running"] = True
+                PIPELINE_STATUS["status"] = "running"
+                PIPELINE_STATUS["started_at"] = datetime.now(timezone.utc).isoformat()
+                PIPELINE_STATUS["finished_at"] = None
+                PIPELINE_STATUS["error"] = None
+                PIPELINE_STATUS["message"] = "Scanning Naukri, LinkedIn, and ATS boards..."
+
+            def _bg_pipeline_run():
+                cmd = [sys.executable, "-m", "jobhunt", "run"]
+                try:
+                    res = subprocess.run(cmd, cwd=str(ROOT), capture_output=True, text=True)
+                    with PIPELINE_STATUS_LOCK:
+                        PIPELINE_STATUS["is_running"] = False
+                        PIPELINE_STATUS["status"] = "completed" if res.returncode == 0 else "error"
+                        PIPELINE_STATUS["finished_at"] = datetime.now(timezone.utc).isoformat()
+                        PIPELINE_STATUS["exit_code"] = res.returncode
+                        if res.returncode == 0:
+                            PIPELINE_STATUS["message"] = "Scan completed successfully!"
+                        else:
+                            PIPELINE_STATUS["message"] = "Scan finished with errors."
+                            PIPELINE_STATUS["error"] = res.stderr[-400:] if res.stderr else "Unknown error"
+                except Exception as ex:
+                    with PIPELINE_STATUS_LOCK:
+                        PIPELINE_STATUS["is_running"] = False
+                        PIPELINE_STATUS["status"] = "error"
+                        PIPELINE_STATUS["finished_at"] = datetime.now(timezone.utc).isoformat()
+                        PIPELINE_STATUS["error"] = str(ex)
+                        PIPELINE_STATUS["message"] = f"Execution failed: {ex}"
+
+            threading.Thread(target=_bg_pipeline_run, daemon=True).start()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(json.dumps({
+                "success": True,
+                "status": "running",
+                "message": "Full fresh scan started in background."
+            }).encode("utf-8"))
             return
 
         if path == "/api/run-local":

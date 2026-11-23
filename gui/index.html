@@ -502,6 +502,45 @@
       border-color: var(--indigo-500);
       box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.25);
     }
+    .btn-scan-pipeline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 8px;
+      padding: 0 10px;
+      height: 32px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .btn-scan-pipeline:hover:not(:disabled) {
+      background: linear-gradient(135deg, #1d4ed8, #1e40af);
+      box-shadow: 0 3px 10px rgba(37, 99, 235, 0.45);
+      transform: translateY(-1px);
+    }
+    .btn-scan-pipeline:active:not(:disabled) {
+      transform: translateY(0);
+    }
+    .btn-scan-pipeline:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .btn-scan-pipeline .icon-spin {
+      animation: scanSpin 1s linear infinite;
+    }
+    @keyframes scanSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
     .search-icon {
       color: var(--text-muted);
       flex-shrink: 0;
@@ -2778,6 +2817,11 @@
       <span class="mobile-live-dot" title="Pipeline Active"></span>
     </div>
     <div class="mobile-top-actions">
+      <button class="btn-actions" id="mobile-scan-btn" onclick="triggerPipelineScan()" title="Scan Fresh Jobs (Naukri, LinkedIn, ATS)" aria-label="Scan Fresh Jobs">
+        <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+        </svg>
+      </button>
       <button class="btn-actions" id="mobile-theme-toggle-btn" onclick="toggleMobileTheme(event)" title="Toggle Theme" aria-label="Daylight Mode">
         <svg class="icon icon-sm theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
         <svg class="icon icon-sm theme-icon-moon" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -2949,10 +2993,18 @@
     <!-- PANE 2: Middle Master Role Feed (360px fixed) -->
     <section class="master-feed" aria-label="Role Opportunities Feed">
       <div class="feed-header">
-        <div class="feed-search-box">
-          <svg class="icon search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" id="search-input" placeholder="Search 78 opportunities... (⌘K)" oninput="renderJobs()" />
-          <span class="hotkey-badge">⌘K</span>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <div class="feed-search-box" style="flex:1;">
+            <svg class="icon search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="search-input" placeholder="Search opportunities... (⌘K)" oninput="renderJobs()" />
+            <span class="hotkey-badge">⌘K</span>
+          </div>
+          <button id="btn-scan-pipeline" class="btn-scan-pipeline" onclick="triggerPipelineScan()" title="Scan for fresh jobs across Naukri, LinkedIn, ATS & Remote sources">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            </svg>
+            <span id="btn-scan-label">Scan Jobs</span>
+          </button>
         </div>
         <div class="status-ribbon">
           <span id="ribbon-tracked">78 Tracked</span> · <span id="ribbon-recs">10 Recs</span> · <span id="ribbon-applied">1% Applied</span>
@@ -5876,6 +5928,117 @@ let appData = {
           renderSources();
         }
       } catch (e) {}
+    }
+
+    // -------------------------------------------------------------------------
+    // Full Pipeline Autonomous Scan Trigger
+    // -------------------------------------------------------------------------
+    let pipelinePollInterval = null;
+
+    async function triggerPipelineScan() {
+      const btn = document.getElementById('btn-scan-pipeline');
+      const mobileBtn = document.getElementById('mobile-scan-btn');
+      const label = document.getElementById('btn-scan-label');
+      const icon = btn ? btn.querySelector('svg') : null;
+
+      try {
+        if (btn) {
+          btn.disabled = true;
+          if (label) label.innerText = 'Scanning...';
+          if (icon) icon.classList.add('icon-spin');
+        }
+        if (mobileBtn) {
+          mobileBtn.disabled = true;
+          const mobSvg = mobileBtn.querySelector('svg');
+          if (mobSvg) mobSvg.classList.add('icon-spin');
+        }
+
+        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        if (!isLocal) {
+          showToast('Live scan runs via local backend (http://localhost:8080).');
+          resetScanBtn();
+          return;
+        }
+
+        const res = await fetch('/api/run-pipeline', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({})
+        });
+
+        if (res.status === 409) {
+          showToast('JobHunt scan is already in progress.');
+          pollPipelineStatus();
+          return;
+        }
+
+        if (!res.ok) {
+          showToast('Failed to start scan (HTTP ' + res.status + '). Ensure server is running.');
+          resetScanBtn();
+          return;
+        }
+
+        const data = await res.json();
+        showToast('Scan started: fetching Naukri, LinkedIn, and ATS boards in background...');
+        pollPipelineStatus();
+      } catch (err) {
+        showToast('Network error connecting to backend API.');
+        resetScanBtn();
+      }
+    }
+
+    function resetScanBtn() {
+      const btn = document.getElementById('btn-scan-pipeline');
+      const mobileBtn = document.getElementById('mobile-scan-btn');
+      const label = document.getElementById('btn-scan-label');
+      const icon = btn ? btn.querySelector('svg') : null;
+      if (btn) {
+        btn.disabled = false;
+        if (label) label.innerText = 'Scan Jobs';
+        if (icon) icon.classList.remove('icon-spin');
+      }
+      if (mobileBtn) {
+        mobileBtn.disabled = false;
+        const mobSvg = mobileBtn.querySelector('svg');
+        if (mobSvg) mobSvg.classList.remove('icon-spin');
+      }
+    }
+
+    async function pollPipelineStatus() {
+      if (pipelinePollInterval) {
+        clearInterval(pipelinePollInterval);
+        pipelinePollInterval = null;
+      }
+
+      const check = async () => {
+        try {
+          const res = await fetch('/api/pipeline/status');
+          if (!res.ok) return;
+          const st = await res.json();
+          if (!st.is_running) {
+            if (pipelinePollInterval) {
+              clearInterval(pipelinePollInterval);
+              pipelinePollInterval = null;
+            }
+            resetScanBtn();
+
+            if (st.status === 'completed') {
+              showToast('Scan completed! Fresh jobs loaded.');
+              await loadData();
+            } else if (st.status === 'error') {
+              showToast('Scan error: ' + (st.error || 'Check logs'));
+            }
+          }
+        } catch (e) {
+          if (pipelinePollInterval) {
+            clearInterval(pipelinePollInterval);
+            pipelinePollInterval = null;
+          }
+          resetScanBtn();
+        }
+      };
+
+      pipelinePollInterval = setInterval(check, 3000);
     }
 
     let currentSourceFilter = 'active';
