@@ -319,6 +319,16 @@ def cmd_run(args) -> int:
     print(f"subject: {subject}")
     print(f"tracker: {store.stats()}  ({csv_path})")
     print(f"source health: {health_path}")
+
+    # Auto-rebuild dashboard index.html so UI is immediately refreshed
+    try:
+        build_script = ROOT / "build_mobile_gui.py"
+        if build_script.exists():
+            import subprocess
+            subprocess.run([sys.executable, str(build_script)], cwd=str(ROOT), capture_output=True, text=True, timeout=20)
+    except Exception:
+        pass
+
     return 0
 
 

@@ -1,13 +1,24 @@
 @echo off
-title Shubham's JobHunt - Daily Automated Run
+title Shubham's JobHunt - Daily Pipeline
 cd /d "%~dp0"
-call .\.venv\Scripts\activate.bat
-echo Starting Shubham's daily JobHunt pipeline...
-python -m jobhunt run --send
-if exist out\digest.html (
-    echo Opening generated digest in your default browser...
-    start "" out\digest.html
-)
+
+echo ========================================================
+echo   Starting Shubham's Daily JobHunt Pipeline
+echo   (Naukri + LinkedIn + ATS + Remote Boards)
+echo ========================================================
 echo.
-echo Completed!
+
+if exist .venv\Scripts\activate.bat (
+    call .venv\Scripts\activate.bat
+)
+
+python -m jobhunt run
+
+echo.
+echo ========================================================
+echo   Pipeline Completed!
+echo   Dashboard updated at: index.html
+echo   Live GUI available at: http://localhost:8080
+echo ========================================================
+echo.
 pause
