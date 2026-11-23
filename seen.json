@@ -1587,5 +1587,24 @@
     "emailed": true,
     "applied": false,
     "applied_on": null
+  },
+  "himalayas:rss:roupjobsfull-stack-web-developer": {
+    "first_seen": "2026-11-23T06:44:06+00:00",
+    "company": "Remote Employer",
+    "title": "Full-Stack Web Developer",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/luza-group/jobs/full-stack-web-developer",
+    "score": 3.0,
+    "reason": "Job description is extremely vague and lacks necessary details regarding specific tech stack and experience.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [],
+    "matched_roles": [],
+    "fit_score": 3.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
   }
 }

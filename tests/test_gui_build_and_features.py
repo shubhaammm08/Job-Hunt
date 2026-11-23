@@ -471,3 +471,31 @@ def test_all_job_cards_clickable_navigation():
         assert ".tag-applied" in content
 
 
+def test_fresh_first_applied_filter_and_circular_theme_reveal():
+    """Asserts fresh-first ordering, hide-applied controls, and the View Transitions reveal exist in both bundles."""
+    for html_path in [GUI_INDEX, ROOT_INDEX]:
+        with open(html_path, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        # Fresh scan detection and NEW badge
+        assert "isFreshJob" in content, f"isFreshJob helper missing in {html_path}"
+        assert "FRESH_WINDOW_MS" in content, f"fresh scan window missing in {html_path}"
+        assert 'id="chip-fresh"' in content, f"Fresh quick chip missing in {html_path}"
+        assert "tag-fresh" in content, f"Fresh badge style missing in {html_path}"
+
+        # Applied filtering controls and persistence
+        assert "toggleHideApplied" in content, f"toggleHideApplied missing in {html_path}"
+        assert "jobhunt_hide_applied" in content, f"Hide Applied preference key missing in {html_path}"
+        assert "hideAppliedJobs && statusFilter !== 'applied'" in content, (
+            f"Applied filter bypass missing in {html_path}"
+        )
+        assert 'id="chip-hide-applied"' in content, f"Hide Applied chip missing in {html_path}"
+        assert 'id="chip-count-hidden"' in content, f"Hidden applied count missing in {html_path}"
+
+        # Circular View Transitions reveal with reduced-motion fallback
+        assert "document.startViewTransition" in content, f"View Transitions API missing in {html_path}"
+        assert "::view-transition-new(root)" in content, f"View transition pseudo-element missing in {html_path}"
+        assert "clipPath" in content and "circle(0px at" in content, f"Circular reveal keyframes missing in {html_path}"
+        assert "prefers-reduced-motion: reduce" in content, f"Reduced-motion fallback missing in {html_path}"
+
+

@@ -70,6 +70,7 @@
       --accent-green: #059669;
       --accent-emerald: #059669;
       --green-light: #10B981;
+      --positive-text: #047857;
 
       --emerald-500: #059669;
       --emerald-400: #10B981;
@@ -131,6 +132,7 @@
       --accent-green: #A9DC76;
       --accent-emerald: #A9DC76;
       --green-light: #C3E88D;
+      --positive-text: #A9DC76;
 
       --emerald-500: #A9DC76;
       --emerald-400: #C3E88D;
@@ -982,6 +984,14 @@
       background: rgba(99, 102, 241, 0.2);
       color: #A5B4FC;
       border: 1px solid rgba(99, 102, 241, 0.4);
+      font-size: 9.5px;
+      font-weight: 700;
+      padding: 1px 5px;
+    }
+    .tag-fresh {
+      background: rgba(245, 158, 11, 0.16);
+      color: #FBBF24;
+      border: 1px solid rgba(245, 158, 11, 0.4);
       font-size: 9.5px;
       font-weight: 700;
       padding: 1px 5px;
@@ -2385,6 +2395,151 @@
       display: flex !important;
     }
 
+    /* ==========================================================================
+       Circular theme reveal (View Transitions API)
+       Technique inspired by github.com/rudrodip/theme-toggle-effect
+       ========================================================================== */
+    ::view-transition-group(root),
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation: none;
+      mix-blend-mode: normal;
+    }
+    ::view-transition-old(root) { z-index: 0; }
+    ::view-transition-new(root) { z-index: 1; }
+    @media (prefers-reduced-motion: reduce) {
+      ::view-transition-group(root),
+      ::view-transition-old(root),
+      ::view-transition-new(root) { animation: none !important; }
+    }
+
+    /* ==========================================================================
+       Light theme contrast pass
+       Dark-theme badge colors were hardcoded; on Alabaster they fell below
+       4.5:1 (tags ~1.4:1, mobile doc chips ~1:1).
+       ========================================================================== */
+    [data-theme="light"] .tag {
+      background: #F1F5F9;
+      border-color: #E2E8F0;
+      color: #475569;
+    }
+    [data-theme="light"] .tag-source,
+    [data-theme="light"] .tag-src-linkedin,
+    [data-theme="light"] .tag-src-naukri,
+    [data-theme="light"] .tag-src-indeed,
+    [data-theme="light"] .tag-src-direct_ats,
+    [data-theme="light"] .tag-wp-onsite {
+      background: #DBEAFE;
+      border-color: #93C5FD;
+      color: #1D4ED8;
+    }
+    [data-theme="light"] .tag-src-greenhouse,
+    [data-theme="light"] .tag-wp-remote {
+      background: #DCFCE7;
+      border-color: #86EFAC;
+      color: #166534;
+    }
+    [data-theme="light"] .tag-family,
+    [data-theme="light"] .tag-src-ashby,
+    [data-theme="light"] .tag-src-nodesk,
+    [data-theme="light"] .tag-wp-hybrid {
+      background: #F3E8FF;
+      border-color: #D8B4FE;
+      color: #6B21A8;
+    }
+    [data-theme="light"] .tag-src-lever {
+      background: #CFFAFE;
+      border-color: #67E8F9;
+      color: #155E75;
+    }
+    [data-theme="light"] .tag-src-remoteok {
+      background: #FEE2E2;
+      border-color: #FCA5A5;
+      color: #991B1B;
+    }
+    [data-theme="light"] .tag-src-remotive {
+      background: #FCE7F3;
+      border-color: #F9A8D4;
+      color: #9D174D;
+    }
+    [data-theme="light"] .tag-src-workingnomads {
+      background: #CCFBF1;
+      border-color: #5EEAD4;
+      color: #115E59;
+    }
+    [data-theme="light"] .tag-src-hackernews {
+      background: #FFEDD5;
+      border-color: #FDBA74;
+      color: #9A3412;
+    }
+    [data-theme="light"] .tag-src-smartrecruiters {
+      background: #E0E7FF;
+      border-color: #A5B4FC;
+      color: #3730A3;
+    }
+    [data-theme="light"] .tag-src-workable {
+      background: #FEF3C7;
+      border-color: #FCD34D;
+      color: #92400E;
+    }
+    [data-theme="light"] .tag-src-other,
+    [data-theme="light"] .tag-wp-other {
+      background: #F1F5F9;
+      border-color: #CBD5E1;
+      color: #475569;
+    }
+    [data-theme="light"] .tag-applied {
+      background: #E0E7FF;
+      border-color: #A5B4FC;
+      color: #3730A3;
+    }
+    [data-theme="light"] .tag-fresh {
+      background: #FEF3C7;
+      border-color: #FCD34D;
+      color: #92400E;
+    }
+    [data-theme="light"] .score-badge.score-high {
+      background: #D1FAE5;
+      border-color: #6EE7B7;
+      color: #047857;
+      box-shadow: none;
+    }
+    [data-theme="light"] .score-badge.score-mid {
+      background: #E0E7FF;
+      border-color: #A5B4FC;
+      color: #4338CA;
+    }
+    [data-theme="light"] .score-badge.score-low {
+      background: #F1F5F9;
+      border-color: #CBD5E1;
+      color: #475569;
+    }
+    [data-theme="light"] .job-reason {
+      background: #F1F5F9;
+      color: #334155;
+      border-left-color: #059669;
+    }
+    [data-theme="light"] .job-date { color: #475569; }
+    [data-theme="light"] .pill-label-title,
+    [data-theme="light"] .hub-status-tag,
+    [data-theme="light"] .status-healthy { color: #047857; }
+    [data-theme="light"] .btn-applied-hub-pill { color: #1D4ED8; }
+    [data-theme="light"] .hotkey-badge,
+    [data-theme="light"] .sub,
+    [data-theme="light"] .outreach-label { color: #475569; }
+    [data-theme="light"] .mobile-doc-chip {
+      background: var(--bg-card);
+      border-color: var(--border-subtle);
+      color: var(--text-main);
+    }
+    [data-theme="light"] .filter-capsule.active {
+      background: #E0E7FF;
+      border-color: #A5B4FC;
+      color: #3730A3;
+      box-shadow: none;
+    }
+    [data-theme="light"] .mobile-location { color: #CBD5E1; }
+
   </style>
 </head>
 <body>
@@ -2440,7 +2595,7 @@
       <span class="mobile-live-dot" title="Pipeline Active"></span>
     </div>
     <div class="mobile-top-actions">
-      <button class="btn-actions" id="mobile-theme-toggle-btn" onclick="toggleMobileTheme()" title="Toggle Theme" aria-label="Daylight Mode">
+      <button class="btn-actions" id="mobile-theme-toggle-btn" onclick="toggleMobileTheme(event)" title="Toggle Theme" aria-label="Daylight Mode">
         <svg class="icon icon-sm theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
         <svg class="icon icon-sm theme-icon-moon" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       </button>
@@ -2465,6 +2620,10 @@
   <!-- Mobile Horizontal Filter Capsules -->
   <div class="mobile-filter-capsules" role="region" aria-label="Quick mobile filter capsules">
     <button class="filter-capsule active" id="mobile-capsule-all" onclick="setQuickChip('all')">All Jobs (<span id="capsule-count-all">78</span>)</button>
+    <button class="filter-capsule" id="mobile-capsule-fresh" onclick="setQuickChip('fresh')">Fresh (<span id="capsule-count-fresh">0</span>)</button>
+    <button class="filter-capsule active" id="mobile-capsule-hide-applied" onclick="toggleHideApplied()" aria-pressed="true">
+      <span id="mobile-hide-applied-label">Hide Applied</span>
+    </button>
     <button class="filter-capsule" id="mobile-capsule-high" onclick="setQuickChip('high')">High Fit (8+)</button>
     <button class="filter-capsule" id="mobile-capsule-rec" onclick="setQuickChip('rec')">Recommended (10)</button>
     <button class="filter-capsule" id="mobile-capsule-applied" onclick="setQuickChip('applied')">Applied (<span id="capsule-count-applied">1</span>)</button>
@@ -2573,7 +2732,7 @@
         </button>
       </nav>
       <div class="rail-bottom">
-        <button class="rail-item theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Alabaster Daylight / Dark Theme" aria-label="Toggle Alabaster Daylight / Dark Theme">
+        <button class="rail-item theme-toggle" id="theme-toggle-btn" onclick="toggleTheme(event)" title="Toggle Alabaster Daylight / Dark Theme" aria-label="Toggle Alabaster Daylight / Dark Theme">
           <svg class="icon icon-md theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
           </svg>
@@ -2625,7 +2784,7 @@
           </div>
           <div class="metric-card clickable" onclick="setQuickChip('rec')" title="Filter: Recommended (Score ≥ 6.0)" role="button" tabindex="0">
             <span class="metric-label">Recommended</span>
-            <span class="metric-val" id="metric-recommended" style="color: #10B981;">10</span>
+            <span class="metric-val" id="metric-recommended" style="color: var(--positive-text);">10</span>
             <span class="metric-sub">Score ≥ 6.0</span>
           </div>
           <div class="metric-card clickable" id="metric-card-applied" onclick="setQuickChip('applied')" title="Filter: View Applied Jobs" role="button" tabindex="0">
@@ -2645,6 +2804,10 @@
         <!-- 1-Touch Quick Filter Chips -->
         <div class="chips-scroll" role="region" aria-label="Quick filters">
           <button class="filter-chip active" id="chip-all" onclick="setQuickChip('all')">All Jobs</button>
+          <button class="filter-chip" id="chip-fresh" onclick="setQuickChip('fresh')">Fresh (<span id="chip-count-fresh">0</span>)</button>
+          <button class="filter-chip active" id="chip-hide-applied" onclick="toggleHideApplied()" aria-pressed="true" title="Hide applied jobs from the feed">
+            <span id="hide-applied-label">Hide Applied</span> (<span id="chip-count-hidden">0</span>)
+          </button>
           <button class="filter-chip" id="chip-applied" onclick="setQuickChip('applied')">
             <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             Applied (<span id="chip-count-applied">0</span>)
@@ -2679,6 +2842,7 @@
           </select>
           <select class="select-filter" id="filter-status" onchange="syncChipAndRender()" aria-label="Filter by application status">
             <option value="all">Status: All</option>
+            <option value="fresh">Fresh (latest scan)</option>
             <option value="unapplied">Not Applied</option>
             <option value="applied">Applied</option>
           </select>
@@ -3592,15 +3756,64 @@
       } catch(e) {}
     }
 
-    function toggleTheme() {
-      const current = getTheme();
-      const next = current === 'dark' ? 'light' : 'dark';
-      setTheme(next);
-      showToast(`Switched to ${next === 'dark' ? 'Dark' : 'Alabaster Daylight'} theme`);
+    function themeToggleOrigin(event) {
+      let btn = null;
+      if (event) {
+        if (event.currentTarget && event.currentTarget.getBoundingClientRect) {
+          btn = event.currentTarget;
+        } else if (event.target && event.target.closest) {
+          btn = event.target.closest('button');
+        }
+      }
+      if (!btn) {
+        btn = document.getElementById('theme-toggle-btn') || document.getElementById('mobile-theme-toggle-btn');
+      }
+      const rect = btn ? btn.getBoundingClientRect() : null;
+      const x = rect ? rect.left + rect.width / 2 : window.innerWidth / 2;
+      const y = rect ? rect.top + rect.height / 2 : window.innerHeight / 2;
+      return {
+        x,
+        y,
+        radius: Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y))
+      };
     }
 
-    function toggleMobileTheme() {
-      toggleTheme();
+    function toggleTheme(event) {
+      const current = getTheme();
+      const next = current === 'dark' ? 'light' : 'dark';
+      const apply = () => {
+        setTheme(next);
+        showToast(`Switched to ${next === 'dark' ? 'Dark' : 'Alabaster Daylight'} theme`);
+      };
+
+      const reduceMotion = window.matchMedia &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!document.startViewTransition || reduceMotion) {
+        apply();
+        return;
+      }
+
+      const origin = themeToggleOrigin(event);
+      const transition = document.startViewTransition(apply);
+      transition.ready.then(() => {
+        document.documentElement.animate(
+          {
+            clipPath: [
+              `circle(0px at ${origin.x}px ${origin.y}px)`,
+              `circle(${origin.radius}px at ${origin.x}px ${origin.y}px)`
+            ]
+          },
+          {
+            duration: 600,
+            easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+            pseudoElement: '::view-transition-new(root)'
+          }
+        );
+      }).catch(() => {});
+    }
+
+    function toggleMobileTheme(event) {
+      toggleTheme(event);
     }
 
     function updateThemeToggleIcons(theme) {
@@ -4037,6 +4250,60 @@ let appData = {
     };
 
     let activeChip = 'all';
+    let hideAppliedJobs = true;
+    try {
+      const storedHideApplied = localStorage.getItem('jobhunt_hide_applied');
+      if (storedHideApplied !== null) hideAppliedJobs = storedHideApplied !== 'false';
+    } catch (e) {}
+
+    const FRESH_WINDOW_MS = 24 * 60 * 60 * 1000;
+
+    function getNewestFirstSeenMs() {
+      let newest = 0;
+      (appData.jobs || []).forEach(job => {
+        const seen = Date.parse(job.first_seen || '');
+        if (Number.isFinite(seen) && seen > newest) newest = seen;
+      });
+      return newest;
+    }
+
+    function isFreshJob(job) {
+      const seen = Date.parse((job && job.first_seen) || '');
+      if (!Number.isFinite(seen)) return false;
+      const newest = getNewestFirstSeenMs();
+      return newest > 0 && (newest - seen) <= FRESH_WINDOW_MS;
+    }
+
+    function updateHideAppliedUI() {
+      const appliedCount = (appData.jobs || []).filter(j => j.applied).length;
+      const chip = document.getElementById('chip-hide-applied');
+      if (chip) {
+        chip.classList.toggle('active', hideAppliedJobs);
+        chip.setAttribute('aria-pressed', hideAppliedJobs ? 'true' : 'false');
+        chip.title = hideAppliedJobs
+          ? 'Applied jobs are hidden from the feed'
+          : 'Applied jobs are visible in the feed';
+      }
+      const mobileChip = document.getElementById('mobile-capsule-hide-applied');
+      if (mobileChip) {
+        mobileChip.classList.toggle('active', hideAppliedJobs);
+        mobileChip.setAttribute('aria-pressed', hideAppliedJobs ? 'true' : 'false');
+      }
+      const hiddenCount = document.getElementById('chip-count-hidden');
+      if (hiddenCount) hiddenCount.innerText = appliedCount;
+    }
+
+    function toggleHideApplied() {
+      hideAppliedJobs = !hideAppliedJobs;
+      try {
+        localStorage.setItem('jobhunt_hide_applied', hideAppliedJobs ? 'true' : 'false');
+      } catch (e) {}
+      updateHideAppliedUI();
+      renderStats();
+      renderJobs();
+      showToast(hideAppliedJobs ? 'Applied jobs hidden from feed' : 'Applied jobs shown in feed');
+    }
+
     const SOURCES_CATALOG = [{"source": "Greenhouse", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596414+00:00"}, {"source": "Ashby", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596439+00:00"}, {"source": "Lever", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596445+00:00"}, {"source": "SmartRecruiters", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596450+00:00"}, {"source": "Workable", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596456+00:00"}, {"source": "Recruitee", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596459+00:00"}, {"source": "Personio", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596463+00:00"}, {"source": "Breezy HR", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596467+00:00"}, {"source": "BambooHR", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596470+00:00"}, {"source": "Workday", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.workday.feed_url"], "last_scan": "2026-11-17T05:39:45.596475+00:00"}, {"source": "Teamtailor", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.teamtailor.feed_url"], "last_scan": "2026-11-17T05:39:45.596482+00:00"}, {"source": "Rippling", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.rippling.feed_url"], "last_scan": "2026-11-17T05:39:45.596487+00:00"}, {"source": "Gem", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.gem.feed_url"], "last_scan": "2026-11-17T05:39:45.596491+00:00"}, {"source": "Paylocity", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.paylocity.feed_url"], "last_scan": "2026-11-17T05:39:45.596494+00:00"}, {"source": "JazzHR", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.jazzhr.feed_url"], "last_scan": "2026-11-17T05:39:45.596497+00:00"}, {"source": "Manatal", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.manatal.feed_url"], "last_scan": "2026-11-17T05:39:45.596500+00:00"}, {"source": "Jobvite", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.jobvite.feed_url"], "last_scan": "2026-11-17T05:39:45.596503+00:00"}, {"source": "Phenom", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.phenom.feed_url"], "last_scan": "2026-11-17T05:39:45.596509+00:00"}, {"source": "Homerun", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.homerun.feed_url"], "last_scan": "2026-11-17T05:39:45.596512+00:00"}, {"source": "HireHive", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.hirehive.feed_url"], "last_scan": "2026-11-17T05:39:45.596515+00:00"}, {"source": "JobScore", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.jobscore.feed_url"], "last_scan": "2026-11-17T05:39:45.596518+00:00"}, {"source": "Flatchr", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.flatchr.feed_url"], "last_scan": "2026-11-17T05:39:45.596521+00:00"}, {"source": "Talentadore", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.talentadore.feed_url"], "last_scan": "2026-11-17T05:39:45.596524+00:00"}, {"source": "Jobsoid", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.jobsoid.feed_url"], "last_scan": "2026-11-17T05:39:45.596527+00:00"}, {"source": "PyjamaHR", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.pyjamahr.feed_url"], "last_scan": "2026-11-17T05:39:45.596531+00:00"}, {"source": "Gupy", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.gupy.feed_url"], "last_scan": "2026-11-17T05:39:45.596534+00:00"}, {"source": "Oracle Recruiting", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.oracle_recruiting.feed_url"], "last_scan": "2026-11-17T05:39:45.596537+00:00"}, {"source": "SAP SuccessFactors", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.sap_successfactors.feed_url"], "last_scan": "2026-11-17T05:39:45.596540+00:00"}, {"source": "iCIMS", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.icims.feed_url"], "last_scan": "2026-11-17T05:39:45.596544+00:00"}, {"source": "Pinpoint", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.pinpoint.feed_url"], "last_scan": "2026-11-17T05:39:45.596546+00:00"}, {"source": "Remotive", "category": "remote", "tier": 3, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596550+00:00"}, {"source": "Remote OK", "category": "remote", "tier": 3, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596554+00:00"}, {"source": "Himalayas", "category": "remote", "tier": 3, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596564+00:00"}, {"source": "Jobicy", "category": "remote", "tier": 3, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596568+00:00"}, {"source": "Working Nomads", "category": "remote", "tier": 3, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596571+00:00"}, {"source": "NoDesk", "category": "remote", "tier": 3, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596575+00:00"}, {"source": "Remote.co", "category": "remote", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure REMOTECO_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596585+00:00"}, {"source": "Jobspresso", "category": "remote", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure JOBSPRESSO_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596590+00:00"}, {"source": "Dynamite Jobs", "category": "remote", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure DYNAMITEJOBS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596594+00:00"}, {"source": "JustRemote", "category": "remote", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure JUSTREMOTE_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596598+00:00"}, {"source": "Hacker News Who Is Hiring", "category": "startup", "tier": 3, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596602+00:00"}, {"source": "Wellfound", "category": "startup", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure WELLFOUND_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596606+00:00"}, {"source": "Y Combinator Jobs", "category": "startup", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure YC_JOBS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596610+00:00"}, {"source": "Y Combinator Work at a Startup", "category": "startup", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure YC_WORKATASTARTUP_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596615+00:00"}, {"source": "Cutshort", "category": "startup", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure CUTSHORT_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596619+00:00"}, {"source": "Instahyre", "category": "startup", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure INSTAHYRE_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596622+00:00"}, {"source": "Product Hunt Jobs", "category": "startup", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure PRODUCTHUNT_JOBS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596625+00:00"}, {"source": "LinkedIn", "category": "professional_network", "tier": 2, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": null}, {"source": "LinkedIn Jobs India", "category": "india_job_board", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Free activation: Add RAPIDAPI_KEY to GitHub Secrets for 500 free queries/mo across commercial boards."], "last_scan": "2026-11-17T05:39:45.596629+00:00"}, {"source": "Indeed India", "category": "india_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Free activation: Add RAPIDAPI_KEY to GitHub Secrets for 500 free queries/mo across commercial boards."], "last_scan": "2026-11-17T05:39:45.596634+00:00"}, {"source": "Naukri", "category": "india_job_board", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Free activation: Add RAPIDAPI_KEY to GitHub Secrets for 500 free queries/mo across commercial boards."], "last_scan": "2026-11-17T05:39:45.596638+00:00"}, {"source": "Naukri Campus", "category": "india_job_board", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure NAUKRI_CAMPUS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596642+00:00"}, {"source": "Foundit", "category": "india_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure FOUNDIT_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596646+00:00"}, {"source": "Hirist", "category": "india_job_board", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure HIRIST_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596651+00:00"}, {"source": "Shine", "category": "india_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure SHINE_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596654+00:00"}, {"source": "TimesJobs", "category": "india_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure TIMESJOBS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596657+00:00"}, {"source": "Apna", "category": "india_job_board", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure APNA_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596661+00:00"}, {"source": "Internshala", "category": "india_job_board", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure INTERNSHALA_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596665+00:00"}, {"source": "Unstop", "category": "india_job_board", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure UNSTOP_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596669+00:00"}, {"source": "iimjobs", "category": "india_job_board", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure IIMJOBS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596672+00:00"}, {"source": "Indeed", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Free activation: Add RAPIDAPI_KEY to GitHub Secrets for 500 free queries/mo across commercial boards."], "last_scan": "2026-11-17T05:39:45.596676+00:00"}, {"source": "LinkedIn Jobs", "category": "global_job_board", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Free activation: Add RAPIDAPI_KEY to GitHub Secrets for 500 free queries/mo across commercial boards."], "last_scan": "2026-11-17T05:39:45.596679+00:00"}, {"source": "Glassdoor", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Free activation: Add RAPIDAPI_KEY to GitHub Secrets for 500 free queries/mo across commercial boards."], "last_scan": "2026-11-17T05:39:45.596682+00:00"}, {"source": "ZipRecruiter", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Free activation: Add RAPIDAPI_KEY to GitHub Secrets for 500 free queries/mo across commercial boards."], "last_scan": "2026-11-17T05:39:45.596685+00:00"}, {"source": "Monster", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure MONSTER_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596689+00:00"}, {"source": "CareerBuilder", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure CAREERBUILDER_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596692+00:00"}, {"source": "Dice", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure DICE_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596697+00:00"}, {"source": "SimplyHired", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure SIMPLYHIRED_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596700+00:00"}, {"source": "Jooble", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure JOOBLE_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596704+00:00"}, {"source": "Adzuna", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure ADZUNA_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596707+00:00"}, {"source": "Jobrapido", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure JOBRAPIDO_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596710+00:00"}, {"source": "Freshersworld", "category": "fresher", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure FRESHERSWORLD_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596714+00:00"}, {"source": "Superset", "category": "fresher", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure SUPERSET_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596717+00:00"}, {"source": "FirstNaukri", "category": "fresher", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure FIRSTNAUKRI_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596720+00:00"}, {"source": "Prosple", "category": "fresher", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure PROSPLE_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596724+00:00"}, {"source": "Handshake", "category": "fresher", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure HANDSHAKE_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596727+00:00"}, {"source": "AI Jobs", "category": "ai_specific", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure AI_JOBS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596731+00:00"}, {"source": "TopAIJobs", "category": "ai_specific", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure TOP_AI_JOBS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596735+00:00"}, {"source": "AI-Jobs.net", "category": "ai_specific", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure AI_JOBS_NET_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596738+00:00"}, {"source": "Hugging Face Jobs", "category": "ai_specific", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure HUGGINGFACE_JOBS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596741+00:00"}, {"source": "MLOps.community Jobs", "category": "ai_specific", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure MLOPS_COMMUNITY_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596745+00:00"}, {"source": "Data Science Jobs", "category": "ai_specific", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure DATA_SCIENCE_JOBS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596749+00:00"}, {"source": "Kaggle Jobs", "category": "ai_specific", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure KAGGLE_JOBS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596753+00:00"}, {"source": "NVIDIA Careers", "category": "ai_specific", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure NVIDIA_CAREERS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596756+00:00"}, {"source": "OpenAI Careers", "category": "ai_specific", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure OPENAI_CAREERS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596761+00:00"}, {"source": "Anthropic Careers", "category": "ai_specific", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure ANTHROPIC_CAREERS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596765+00:00"}, {"source": "Google DeepMind Careers", "category": "ai_specific", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure DEEPMIND_CAREERS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596768+00:00"}];
 
     const ICONS = {
@@ -4342,6 +4609,7 @@ let appData = {
       platformSel.value = 'all';
 
       switch (chipType) {
+        case 'fresh': statusSel.value = 'fresh'; break;
         case 'applied': statusSel.value = 'applied'; break;
         case 'high': scoreSel.value = '8'; break;
         case 'rec': scoreSel.value = '6'; break;
@@ -4364,16 +4632,31 @@ let appData = {
           break;
       }
 
-      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.filter-chip').forEach(c => {
+        if (c.id !== 'chip-hide-applied') c.classList.remove('active');
+      });
       const activeEl = document.getElementById('chip-' + chipType);
       if (activeEl) activeEl.classList.add('active');
 
+      document.querySelectorAll('.filter-capsule').forEach(c => {
+        if (c.id !== 'mobile-capsule-hide-applied') c.classList.remove('active');
+      });
+      const mobileActiveEl = document.getElementById('mobile-capsule-' + chipType);
+      if (mobileActiveEl) mobileActiveEl.classList.add('active');
+
+      updateHideAppliedUI();
       renderJobs();
     }
 
     function syncChipAndRender() {
-      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.filter-chip').forEach(c => {
+        if (c.id !== 'chip-hide-applied') c.classList.remove('active');
+      });
+      document.querySelectorAll('.filter-capsule').forEach(c => {
+        if (c.id !== 'mobile-capsule-hide-applied') c.classList.remove('active');
+      });
       activeChip = 'custom';
+      updateHideAppliedUI();
       renderJobs();
     }
 
@@ -4523,6 +4806,17 @@ let appData = {
       if (chipCount) chipCount.innerText = appliedCount;
       const modalCount = document.getElementById('applied-tracker-count');
       if (modalCount) modalCount.innerText = `${appliedCount} application${appliedCount === 1 ? '' : 's'}`;
+
+      const freshCount = (appData.jobs || []).filter(j => isFreshJob(j) && (!hideAppliedJobs || !j.applied)).length;
+      const setCount = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) el.innerText = value;
+      };
+      setCount('chip-count-fresh', freshCount);
+      setCount('capsule-count-fresh', freshCount);
+      setCount('capsule-count-all', totalJobs);
+      setCount('capsule-count-applied', appliedCount);
+      updateHideAppliedUI();
     }
 
     function renderJobs() {
@@ -4544,8 +4838,10 @@ let appData = {
         if (scoreFilter === '6' && score < 6.0) return false;
         if (scoreFilter === '4' && score < 4.0) return false;
 
+        if (statusFilter === 'fresh' && !isFreshJob(j)) return false;
         if (statusFilter === 'applied' && !j.applied) return false;
         if (statusFilter === 'unapplied' && j.applied) return false;
+        if (hideAppliedJobs && statusFilter !== 'applied' && j.applied) return false;
 
         if (familyFilter !== 'all') {
           const families = j.role_families || [];
@@ -4563,19 +4859,34 @@ let appData = {
         }
 
         return true;
+      }).sort((a, b) => {
+        const freshDelta = (isFreshJob(b) ? 1 : 0) - (isFreshJob(a) ? 1 : 0);
+        if (freshDelta) return freshDelta;
+        const scoreDelta = (parseFloat(b.score) || 0) - (parseFloat(a.score) || 0);
+        if (scoreDelta) return scoreDelta;
+        const seenDelta = (Date.parse(b.first_seen || '') || 0) - (Date.parse(a.first_seen || '') || 0);
+        if (seenDelta) return seenDelta;
+        return String(a.title || '').localeCompare(String(b.title || ''));
       });
 
-      const statusSuffix = (statusFilter === 'applied') ? ' (Applied Jobs)' : ((statusFilter === 'unapplied') ? ' (Unapplied Jobs)' : '');
-      document.getElementById('results-count').innerText = `Showing ${filtered.length} of ${(appData.jobs || []).length} opportunities${statusSuffix}`;
-      const ribbonTracked = document.getElementById('ribbon-tracked');
-      const ribbonRecs = document.getElementById('ribbon-recs');
-      const ribbonApplied = document.getElementById('ribbon-applied');
-      if (ribbonTracked) ribbonTracked.innerText = `${(appData.jobs || []).length} Tracked`;
-      if (ribbonRecs) ribbonRecs.innerText = `10 Recs`;
-      if (ribbonApplied) ribbonApplied.innerText = `1% Applied`;
+      const totalJobs = (appData.jobs || []).length;
+      const freshVisible = filtered.filter(j => isFreshJob(j)).length;
+      const appliedHidden = (hideAppliedJobs && statusFilter !== 'applied')
+        ? (appData.jobs || []).filter(j => j.applied).length
+        : 0;
+      const statusSuffix = (statusFilter === 'applied')
+        ? ' (Applied Jobs)'
+        : ((statusFilter === 'unapplied') ? ' (Unapplied Jobs)' : ((statusFilter === 'fresh') ? ' (Fresh Jobs)' : ''));
+      document.getElementById('results-count').innerText =
+        `Showing ${filtered.length} of ${totalJobs} opportunities${statusSuffix}` +
+        (freshVisible ? ` · ${freshVisible} fresh` : '') +
+        (appliedHidden ? ` · ${appliedHidden} applied hidden` : '');
 
-      // Select active job if present
-      const activeJob = (appData.jobs || []).find(j => j.job_id === state.activeJobId) || filtered[0] || (appData.jobs || [])[0];
+      // Select active job from the visible feed, never a hidden applied job
+      const fallbackPool = filtered.length
+        ? filtered
+        : (appData.jobs || []).filter(j => !j.applied);
+      const activeJob = filtered.find(j => j.job_id === state.activeJobId) || fallbackPool[0];
       if (activeJob) {
         renderDeck(activeJob);
       }
@@ -4606,6 +4917,7 @@ let appData = {
         const btnAppliedHtml = j.applied ? `${ICONS.check} Applied` : 'Mark Applied';
         const btnAppliedClass = j.applied ? 'btn-applied active' : 'btn-applied';
         const appliedBadgeHtml = j.applied ? `<span class="tag tag-applied">${ICONS.check} APPLIED</span>` : '';
+        const freshBadgeHtml = isFreshJob(j) ? '<span class="tag tag-fresh">NEW</span>' : '';
 
         const inferredPlat = inferPlatformSource(j);
         const platformLabel = getPlatformLabel(inferredPlat);
@@ -4638,6 +4950,7 @@ let appData = {
                 </div>
               </div>
               <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+                ${freshBadgeHtml}
                 ${appliedBadgeHtml}
                 <span class="score-badge ${scoreClass}">${score.toFixed(1)} Match</span>
               </div>

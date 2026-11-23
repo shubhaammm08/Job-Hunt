@@ -12,7 +12,7 @@ Test Methodology: 4-Tier Architecture (TEST_INFRA.md)
 - Tier 2: Boundary & Corner Cases (≥5 tests per feature, 5 categories = ≥25 tests)
 - Tier 3: Pairwise & Cross-Feature Combinations (≥10 interaction tests)
 - Tier 4: Real-World Application Scenarios (≥5 realistic workflows)
-Total tests: 65
+Total tests: 72 (65 original + 7 freshness, applied-visibility, and theme-reveal regressions)
 """
 
 from __future__ import annotations
@@ -342,28 +342,36 @@ class TestTier1FeatureCoverage:
         reset = page.query_selector(".master-feed").bounding_box()["width"]
         assert abs(reset - expected) <= 3, f"Double-click should reset to 50/50, got {reset}"
 
-    def test_f3_active_job_card_capgemini(self, desktop_page: Page):
-        """F3.3: Validates active top card is Capgemini (8.8 match score) with indigo outline and tech pills."""
+    def test_f3_active_job_card_fresh_first(self, desktop_page: Page):
+        """F3.3: Validates the active top card is a fresh (NEW) job with score and tech pills."""
         active_card = desktop_page.query_selector(".job-card.active, .job-card:first-child")
         assert active_card is not None, "At least one active job card must exist in middle feed"
         card_text = active_card.inner_text()
-        assert "Capgemini" in card_text, f"Active job card must feature Capgemini, got: {card_text}"
-        assert "8.8" in card_text, f"Capgemini match score must be 8.8, got: {card_text}"
-        assert "Mumbai" in card_text, f"Capgemini location must mention Mumbai, got: {card_text}"
-
-        # Tech pills inside active card
-        assert "AI CORE" in card_text or "GENAI_AGENTIC" in card_text or "Python" in card_text, (
-            "Capgemini card must display tech pills"
+        assert "NEW" in card_text, f"Fresh job card must display a NEW badge, got: {card_text}"
+        assert active_card.query_selector(".tag-family, .tag") is not None, (
+            "Active card must display tech pills"
         )
+        score_text = active_card.query_selector(".score-badge").inner_text()
+        assert re.search(r"\d+\.\d+ Match", score_text), f"Active card score missing: {score_text}"
 
     def test_f3_details_deck_hero_and_progress_ring(self, desktop_page: Page):
-        """F3.4: Validates details deck hero header displays Capgemini and large circular 8.8 progress ring."""
+        """F3.4: Validates details deck hero and score match the active top card."""
         details = desktop_page.query_selector(".triage-deck, .details-panel, #details-panel, #triage-deck")
         assert details is not None, "Right details deck panel must exist"
 
+        first_card = desktop_page.query_selector("#job-list .job-card:first-child")
+        assert first_card is not None
+        expected_company = first_card.query_selector(".job-company").inner_text().strip()
+        expected_score = first_card.query_selector(".score-badge").inner_text().split()[0]
+
         hero_company = desktop_page.query_selector("#deck-company, .hero-company")
         assert hero_company is not None, "#deck-company hero element must exist"
-        assert "Capgemini" in hero_company.inner_text(), f"Hero company must be Capgemini, got {hero_company.inner_text()}"
+        assert hero_company.inner_text().strip() == expected_company, (
+            f"Hero company must match the active card ({expected_company}), got {hero_company.inner_text()}"
+        )
+        assert desktop_page.inner_text("#deck-score-num").strip() == expected_score, (
+            "Details deck score must match the active card"
+        )
 
         ring = desktop_page.query_selector("#deck-match-ring, .match-ring-wrapper, .match-score-ring, #deck-ring-circle")
         assert ring is not None, "Circular match score progress ring must exist in details deck"
@@ -406,12 +414,17 @@ class TestTier1FeatureCoverage:
         assert "Applied" in caps_text, "Capsules must include 'Applied (1)'"
 
     def test_f4_mobile_active_card_display(self, mobile_page: Page):
-        """F4.3: Validates full-width active job card on mobile with Capgemini 8.8 badge."""
-        active_card = mobile_page.query_selector(".mobile-active-card, .job-card:first-child")
-        assert active_card is not None, "Active job card must be present on mobile"
+        """F4.3: Validates full-width mobile active card mirrors the fresh top feed card."""
+        first_card = mobile_page.query_selector("#job-list .job-card:first-child")
+        assert first_card is not None, "At least one feed card must be present on mobile"
+        expected_company = first_card.query_selector(".job-company").inner_text().strip()
+        expected_score = first_card.query_selector(".score-badge").inner_text().split()[0]
+
+        active_card = mobile_page.query_selector(".mobile-active-card")
+        assert active_card is not None, "Mobile active card must be present"
         text = active_card.inner_text()
-        assert "Capgemini" in text, f"Mobile active card should display Capgemini, got {text}"
-        assert "8.8" in text, f"Mobile active card should display 8.8 match badge, got {text}"
+        assert expected_company in text, f"Mobile active card should display {expected_company}, got {text}"
+        assert expected_score in text, f"Mobile active card should display {expected_score} match badge, got {text}"
 
     def test_f4_mobile_accordion_structure(self, mobile_page: Page):
         """F4.4: Validates mobile AI match breakdown accordion toggle behavior."""
@@ -476,6 +489,157 @@ class TestTier1FeatureCoverage:
             "studio_presentation must listen for postMessage events"
         )
         assert "JOB_SELECTED" in content, "JOB_SELECTED cross-frame sync missing"
+
+
+# =============================================================================
+# FEED FRESHNESS, APPLIED VISIBILITY, AND CIRCULAR THEME REVEAL
+# =============================================================================
+class TestFeedFreshnessAndThemeReveal:
+    """Regression coverage for fresh-first ordering, applied filtering, and the theme reveal."""
+
+    def test_feed_hides_applied_jobs_by_default(self, desktop_page: Page):
+        """Applied jobs are removed from the default feed but remain tracked."""
+        assert desktop_page.query_selector_all(".job-card.is-applied") == []
+        feed_text = desktop_page.inner_text("#job-list")
+        assert "Capgemini" not in feed_text, "Applied Capgemini job must not appear in the default feed"
+        results = desktop_page.inner_text("#results-count")
+        assert "applied hidden" in results, f"Results line should report hidden applied jobs, got: {results}"
+        assert int(desktop_page.inner_text("#chip-count-hidden")) >= 1
+
+    def test_feed_orders_fresh_batch_before_older_jobs(self, desktop_page: Page):
+        """Every fresh (NEW) card appears before the first older card."""
+        order = desktop_page.evaluate("""() => Array.from(document.querySelectorAll('#job-list .job-card'))
+            .map(card => card.querySelector('.tag-fresh') ? 'fresh' : 'old')""")
+        assert "fresh" in order, "The newest scan batch must be represented in the feed"
+        first_old = order.index("old") if "old" in order else len(order)
+        assert all(kind == "fresh" for kind in order[:first_old]), "Fresh jobs must be grouped at the top"
+        assert "fresh" not in order[first_old:], "Older jobs must not appear before fresh jobs"
+        assert desktop_page.query_selector("#job-list .job-card:first-child .tag-fresh") is not None
+
+    def test_fresh_filter_chip_shows_only_new_batch(self, desktop_page: Page):
+        """The Fresh quick chip filters to the newest scan batch."""
+        desktop_page.click("#chip-fresh")
+        desktop_page.wait_for_timeout(250)
+        assert desktop_page.eval_on_selector("#filter-status", "el => el.value") == "fresh"
+        cards = desktop_page.query_selector_all("#job-list .job-card")
+        assert cards, "Fresh filter must return at least one job"
+        assert all(card.query_selector(".tag-fresh") for card in cards), "Fresh filter returned an older job"
+        fresh_count = int(desktop_page.inner_text("#chip-count-fresh"))
+        assert len(cards) == fresh_count, f"Fresh chip count {fresh_count} did not match {len(cards)} cards"
+
+    def test_hide_applied_toggle_persists_and_applied_filter_reveals(self, desktop_page: Page):
+        """The Hide Applied toggle reveals applied jobs, persists, and the Applied filter still works."""
+        desktop_page.click("#chip-hide-applied")
+        desktop_page.wait_for_timeout(250)
+        assert desktop_page.query_selector_all("#job-list .job-card.is-applied"), (
+            "Disabling Hide Applied should reveal the applied job"
+        )
+        assert desktop_page.evaluate("localStorage.getItem('jobhunt_hide_applied')") == "false"
+
+        desktop_page.reload(wait_until="domcontentloaded")
+        desktop_page.wait_for_selector(".job-card", timeout=5000)
+        assert desktop_page.query_selector_all("#job-list .job-card.is-applied"), (
+            "Applied visibility preference must persist across reloads"
+        )
+
+        desktop_page.click("#chip-applied")
+        desktop_page.wait_for_timeout(250)
+        applied_cards = desktop_page.query_selector_all("#job-list .job-card")
+        assert applied_cards and all("is-applied" in (card.get_attribute("class") or "") for card in applied_cards)
+
+        desktop_page.click("#chip-hide-applied")
+        desktop_page.wait_for_timeout(250)
+        assert desktop_page.eval_on_selector("#filter-status", "el => el.value") == "applied"
+        assert desktop_page.query_selector_all("#job-list .job-card.is-applied"), (
+            "Applied filter must reveal tracked jobs even when Hide Applied is on"
+        )
+
+        desktop_page.click("#chip-all")
+        desktop_page.wait_for_timeout(250)
+        assert desktop_page.query_selector_all("#job-list .job-card.is-applied") == []
+
+    def test_theme_toggle_uses_circular_view_transition(self, desktop_page: Page):
+        """The theme toggle reveals the new theme with a circular clip-path animation."""
+        supports_view_transition = desktop_page.evaluate("() => typeof document.startViewTransition === 'function'")
+        if not supports_view_transition:
+            pytest.skip("View Transitions API not available in this browser")
+
+        initial = desktop_page.evaluate("() => document.documentElement.getAttribute('data-theme')")
+        desktop_page.click("#theme-toggle-btn")
+        desktop_page.wait_for_timeout(80)
+
+        animations = desktop_page.evaluate("""() => document.getAnimations()
+            .filter(a => a.effect && a.effect.pseudoElement === '::view-transition-new(root)')
+            .map(a => ({
+                duration: a.effect.getTiming().duration,
+                keyframes: a.effect.getKeyframes().map(k => k.clipPath || '')
+            }))""")
+        assert animations, "Circular theme reveal animation was not created"
+        assert animations[0]["duration"] == 600
+        assert any("circle(" in frame for frame in animations[0]["keyframes"]), animations
+
+        desktop_page.wait_for_timeout(800)
+        toggled = desktop_page.evaluate("() => document.documentElement.getAttribute('data-theme')")
+        assert toggled != initial
+        desktop_page.click("#theme-toggle-btn")
+        desktop_page.wait_for_timeout(800)
+
+    def test_light_theme_key_components_meet_wcag_contrast(self, desktop_page: Page):
+        """Tags, score badges, rationale, and metrics stay at or above 4.5:1 in light mode."""
+        desktop_page.evaluate("localStorage.setItem('jobhunt_theme', 'light')")
+        desktop_page.reload(wait_until="domcontentloaded")
+        desktop_page.wait_for_selector(".job-card", timeout=5000)
+        desktop_page.wait_for_timeout(300)
+
+        ratios = desktop_page.evaluate("""() => {
+            const parse = c => { const m = c.match(/rgba?\\(([^)]+)\\)/); if (!m) return null;
+                const p = m[1].split(',').map(x => parseFloat(x.trim()));
+                return { r: p[0], g: p[1], b: p[2], a: p.length > 3 ? p[3] : 1 }; };
+            const lum = c => { const f = v => { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); };
+                return .2126 * f(c.r) + .7152 * f(c.g) + .0722 * f(c.b); };
+            const ratio = (a, b) => { const x = lum(a), y = lum(b), hi = Math.max(x, y), lo = Math.min(x, y); return (hi + .05) / (lo + .05); };
+            const blend = (f, b) => ({ r: f.r * f.a + b.r * (1 - f.a), g: f.g * f.a + b.g * (1 - f.a), b: f.b * f.a + b.b * (1 - f.a), a: 1 });
+            const bgOf = el => { let n = el, layers = [];
+                while (n && n.nodeType === 1) { const bc = parse(getComputedStyle(n).backgroundColor);
+                    if (bc && bc.a > 0) layers.push(bc); if (bc && bc.a >= .999) break; n = n.parentElement; }
+                let acc = { r: 255, g: 255, b: 255, a: 1 };
+                for (let i = layers.length - 1; i >= 0; i--) acc = blend(layers[i], acc);
+                return acc; };
+            const selectors = ['.tag-source', '.tag-workplace', '.tag-family', '.score-badge.score-high',
+                '.score-badge.score-mid', '.job-reason', '.job-date', '.pill-label-title',
+                '.hub-status-tag', '#metric-recommended'];
+            const out = {};
+            for (const sel of selectors) { const el = document.querySelector(sel); if (!el) continue;
+                const fg = parse(getComputedStyle(el).color); const bg = bgOf(el);
+                out[sel] = ratio(blend(fg, bg), bg); }
+            return out;
+        }""")
+        assert ratios, "No light-theme components were sampled"
+        failures = {sel: round(value, 2) for sel, value in ratios.items() if value < 4.5}
+        assert not failures, f"Light-theme components below WCAG AA: {failures}"
+
+    def test_light_theme_mobile_document_chips_are_legible(self, mobile_page: Page):
+        """Mobile document chips use dark text on a light surface in daylight mode."""
+        mobile_page.evaluate("localStorage.setItem('jobhunt_theme', 'light')")
+        mobile_page.reload(wait_until="domcontentloaded")
+        mobile_page.wait_for_selector(".job-card", timeout=5000)
+        mobile_page.wait_for_timeout(300)
+
+        chip = mobile_page.evaluate("""() => {
+            const el = document.querySelector('.mobile-doc-chip');
+            if (!el) return null;
+            const parse = c => { const m = c.match(/rgba?\\(([^)]+)\\)/);
+                const p = m[1].split(',').map(x => parseFloat(x.trim()));
+                return { r: p[0], g: p[1], b: p[2], a: p.length > 3 ? p[3] : 1 }; };
+            const lum = c => { const f = v => { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); };
+                return .2126 * f(c.r) + .7152 * f(c.g) + .0722 * f(c.b); };
+            const fg = parse(getComputedStyle(el).color);
+            const bg = parse(getComputedStyle(el).backgroundColor);
+            const hi = Math.max(lum(fg), lum(bg)), lo = Math.min(lum(fg), lum(bg));
+            return { ratio: (hi + .05) / (lo + .05), fg: getComputedStyle(el).color, bg: getComputedStyle(el).backgroundColor };
+        }""")
+        assert chip is not None, "Mobile document chip must exist"
+        assert chip["ratio"] >= 4.5, f"Mobile document chip contrast too low: {chip}"
 
 
 # =============================================================================
@@ -685,7 +849,7 @@ class TestTier3CrossFeatureCombinations:
         """C1: Verifies search input filtering works consistently in both daylight and dark themes."""
         search_input = desktop_page.query_selector("#search-input")
         assert search_input is not None
-        search_input.fill("Capgemini")
+        search_input.fill("Deloitte")
         desktop_page.wait_for_timeout(300)
 
         # Toggle theme while search query is active
@@ -694,7 +858,7 @@ class TestTier3CrossFeatureCombinations:
 
         # Verify search filter remains preserved
         current_val = search_input.input_value()
-        assert current_val == "Capgemini", f"Search value was lost on theme toggle: {current_val}"
+        assert current_val == "Deloitte", f"Search value was lost on theme toggle: {current_val}"
 
     def test_c2_theme_toggle_with_active_card_selection(self, desktop_page: Page):
         """C2: Selecting different cards under daylight vs dark theme updates active outline."""
@@ -792,34 +956,34 @@ class TestTier4RealWorldScenarios:
 
     def test_s1_full_desktop_triage_workflow(self, desktop_page: Page):
         """Scenario 1: Full Desktop Triage Workflow Simulation.
-        User loads dashboard in daylight theme, searches for 'Capgemini', verifies filtered cards,
-        clicks active role card, verifies 8.8 circular progress ring, inspects 3 micro-bars
+        User loads dashboard in daylight theme, searches for 'Deloitte', verifies filtered cards,
+        clicks the role card, verifies the 8.5 circular progress ring, inspects 3 micro-bars
         in AI breakdown card, and inspects Document Hub resume attachment.
         """
         # Step 1: Set Daylight theme
         desktop_page.evaluate("() => document.documentElement.setAttribute('data-theme', 'light')")
         desktop_page.wait_for_timeout(200)
 
-        # Step 2: Search for Capgemini
+        # Step 2: Search for Deloitte
         search = desktop_page.query_selector("#search-input")
         assert search is not None
-        search.fill("Capgemini")
+        search.fill("Deloitte")
         desktop_page.wait_for_timeout(300)
 
         # Step 3: Verify filtered card
         first_card = desktop_page.query_selector(".job-card")
         assert first_card is not None
-        assert "Capgemini" in first_card.inner_text()
+        assert "Deloitte" in first_card.inner_text()
 
         # Step 4: Click to activate
         first_card.click()
         desktop_page.wait_for_timeout(200)
 
-        # Step 5: Verify Details Deck hero and 8.8 progress ring
+        # Step 5: Verify Details Deck hero and 8.5 progress ring
         hero_comp = desktop_page.inner_text("#deck-company, .hero-company")
-        assert "Capgemini" in hero_comp
+        assert "Deloitte" in hero_comp
         score_text = desktop_page.inner_text("#deck-score-num, .score-num, .deck-score")
-        assert "8.8" in score_text
+        assert "8.5" in score_text
         deck = desktop_page.query_selector(".triage-deck, .details-panel, #details-panel, #triage-deck")
         assert deck is not None
         deck_text = deck.inner_text()
