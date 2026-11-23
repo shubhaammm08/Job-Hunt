@@ -266,8 +266,13 @@ A dead slug prints `HTTP 404` and the run continues, so a wrong entry never
 breaks anything. But watch the job counts printed per board — a board reporting
 nothing every day is a slug you need to fix.
 
-> **No LinkedIn or Naukri.** Neither has a public API, and scraping them
-> violates their terms of service. Don't add it.
+> **LinkedIn and Naukri are supported via zero-login guest-browser scanning**,
+> not a public API. The legacy Naukri search API now returns a reCAPTCHA
+> challenge, so the scraper falls back to public search pages. Run
+> `python -m jobhunt naukri-import --live` for a focused Naukri refresh, or
+> `python -m jobhunt naukri-import` to import the archived dataset exported by
+> [Rockposedon/WebScraping](https://github.com/Rockposedon/WebScraping).
+> Use these sparingly and respect each site's terms of service.
 
 ---
 

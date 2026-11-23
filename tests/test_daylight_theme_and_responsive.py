@@ -297,11 +297,13 @@ class TestTier1FeatureCoverage:
         search_input = desktop_page.query_selector("#search-input")
         assert search_input is not None, "#search-input must exist"
         placeholder = search_input.get_attribute("placeholder") or ""
-        assert "Search" in placeholder and "78" in placeholder, f"Search placeholder should mention 78 opportunities, got {placeholder}"
+        assert "Search" in placeholder, f"Search input should have a helpful placeholder, got {placeholder}"
 
-        # Status ribbon check
+        # Status ribbon check. The tracked count follows the bundled data,
+        # which changes whenever a source imports new jobs.
+        tracked = desktop_page.evaluate("() => (window.INITIAL_DATA?.jobs || []).length")
         content = desktop_page.content()
-        assert "78 Tracked" in content or "78 opportunities" in content or "Tracked Jobs" in content, (
+        assert "Tracked Jobs" in content or f"{tracked} Tracked" in content or f"{tracked} opportunities" in content, (
             "Status ribbon must report tracked jobs"
         )
 

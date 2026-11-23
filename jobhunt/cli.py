@@ -489,7 +489,65 @@ def cmd_naukri_auth(args) -> int:
     return 0 if success else 1
 
 
+def cmd_naukri_import(args) -> int:
+    """Import Naukri jobs from the Rockposedon dataset or a focused live scan."""
+    from .dedupe import deduplicate_jobs
+    from .llm import keyword_screen
+    from .naukri import (
+        fetch_naukri_dataset,
+        fetch_naukri_jobs,
+        infer_naukri_posted_date,
+        naukri_dataset_jobs,
+    )
+
+    cfg = _cfg(args.config)
+    if args.live:
+        jobs = fetch_naukri_jobs(cfg)
+        historical = False
+        label = "live Naukri scan"
+    else:
+        if args.file:
+            text = Path(args.file).read_text(encoding="utf-8", errors="replace")
+        else:
+            text = fetch_naukri_dataset(args.url)
+        jobs = naukri_dataset_jobs(text, limit=args.limit)
+        historical = True
+        label = "Rockposedon Naukri dataset"
+
+    jobs, dupes = deduplicate_jobs(jobs)
+    store = Store(args.seen or cfg.get("seen_file", "seen.json"))
+    new_jobs = store.unseen(jobs)
+    print(f"\n{label}: {len(jobs)} jobs ({dupes} duplicates merged)")
+    print(f"  new since last run: {len(new_jobs)}")
+    if args.dry_run:
+        print("  dry run - nothing recorded")
+        return 0
+    if not new_jobs:
+        return 0
+
+    if not args.no_score:
+        profile = _load_profile(cfg, allow_sample=True) or {}
+        keyword_screen(new_jobs, profile)
+        for job in new_jobs:
+            if job.reason and job.reason.startswith("[keyword stub]"):
+                job.reason = job.reason.replace("[keyword stub]", "[Naukri import]", 1)
+
+    store.record(new_jobs, emailed=False)
+    if historical:
+        # The upstream export is from 2023. Preserve the listing age so these
+        # jobs do not masquerade as a fresh scan in the dashboard.
+        for job in new_jobs:
+            posted = infer_naukri_posted_date(job.job_id)
+            if posted:
+                store.data[job.job_id]["first_seen"] = f"{posted}T00:00:00+00:00"
+        store.save()
+    print(f"  recorded {len(new_jobs)} Naukri jobs in {store.path}")
+    return 0
+
+
 def main(argv=None) -> int:
+    from .naukri import NAUKRI_DATASET_URL
+
     _load_env()
     p = argparse.ArgumentParser(
         prog="jobhunt",
@@ -553,6 +611,19 @@ def main(argv=None) -> int:
     snaukri.add_argument("--timeout", type=int, default=300, help="login timeout in seconds (default: 300)")
     snaukri.add_argument("--cookie", help="direct Naukri cookie header string")
     snaukri.set_defaults(func=cmd_naukri_auth)
+
+    simp = sub.add_parser(
+        "naukri-import",
+        help="import Naukri jobs from the Rockposedon dataset or a live scan",
+    )
+    simp.add_argument("--file", help="local Rockposedon dataset .txt (default: download)")
+    simp.add_argument("--url", default=NAUKRI_DATASET_URL, help="dataset URL")
+    simp.add_argument("--live", action="store_true", help="run a focused live guest-browser scan instead")
+    simp.add_argument("--limit", type=int, help="cap imported jobs for a quick trial")
+    simp.add_argument("--seen", help="override seen.json path")
+    simp.add_argument("--dry-run", action="store_true", help="preview without writing")
+    simp.add_argument("--no-score", action="store_true", help="skip offline keyword scoring")
+    simp.set_defaults(func=cmd_naukri_import)
 
     args = p.parse_args(argv)
     return args.func(args)

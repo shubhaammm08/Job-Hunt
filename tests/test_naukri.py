@@ -15,6 +15,9 @@ from jobhunt.naukri import (
     load_naukri_cookies,
     save_naukri_cookie_session,
     fetch_naukri_jobs,
+    parse_naukri_dataset,
+    naukri_dataset_jobs,
+    infer_naukri_posted_date,
 )
 from jobhunt.sources import SourceRegistry, NaukriAdapter
 
@@ -207,4 +210,77 @@ def test_fetch_naukri_jobs_mock_api(monkeypatch, tmp_path):
         assert len(jobs) == 1
         assert jobs[0].job_id == "naukri:061123006487"
         assert jobs[0].title == "Junior Python Developer"
+
+
+DATASET_SAMPLE = """Job ID: 061123006487
+Job Title: Databricks Developer :: Full Time :: Work from Office
+Company Name: AXIS DIRECT
+Footer Placeholder Label: 1 Day Ago
+Tags and Skills: Pyspark,Azure Databricks,Data Bricks
+Experience: 7-9 Yrs
+Salary: Not disclosed
+Location: Bangalore/ Bengaluru, Karnataka(Shivaji Nagar)
+Job Description: Looking for a <b>Databricks</b> developer with Pyspark.
+
+Job ID: 021123500486
+Job Title: Google Workspace Developer
+Company Name: Tracxn
+Footer Placeholder Label: 1 Day Ago
+Tags and Skills: JavaScript,Google Workspace
+Experience: 1-3 Yrs
+Salary: 6-8 Lacs PA
+Location: Bangalore/Bengaluru
+Job Description: Build Google Workspace add-ons.
+
+"""
+
+
+def test_parse_naukri_dataset_maps_fields_and_dedupes():
+    records = parse_naukri_dataset(DATASET_SAMPLE + DATASET_SAMPLE)
+    assert len(records) == 2
+    assert records[0]["Job ID"] == "061123006487"
+    assert records[0]["Tags and Skills"].startswith("Pyspark")
+    assert records[1]["Company Name"] == "Tracxn"
+
+
+def test_naukri_dataset_jobs_normalize_to_canonical_jobs():
+    jobs = naukri_dataset_jobs(DATASET_SAMPLE)
+    assert len(jobs) == 2
+    first = jobs[0]
+    assert first.job_id == "naukri:061123006487"
+    assert first.source == "naukri"
+    assert "<b>" not in first.description
+    assert "Databricks" in first.description
+    assert first.salary is None
+    assert first.experience_required == "7-9 Yrs"
+
+
+def test_infer_naukri_posted_date():
+    assert infer_naukri_posted_date("naukri:061123006487") == "2023-11-06"
+    assert infer_naukri_posted_date("naukri:250823010280") == "2023-08-25"
+    assert infer_naukri_posted_date("naukri:061126009576") == "2026-11-06"
+    assert infer_naukri_posted_date("not-a-naukri-id") is None
+
+
+def test_cli_naukri_import_dataset_records_historical_jobs(tmp_path):
+    from jobhunt.cli import main as cli_main
+
+    dataset = tmp_path / "naukri.txt"
+    dataset.write_text(DATASET_SAMPLE, encoding="utf-8")
+    config = tmp_path / "config.yaml"
+    config.write_text("seen_file: seen.json\n", encoding="utf-8")
+    seen = tmp_path / "seen.json"
+    base = ["--config", str(config), "naukri-import", "--file", str(dataset),
+            "--seen", str(seen), "--no-score"]
+
+    assert cli_main(base + ["--dry-run"]) == 0
+    assert not seen.exists()
+
+    assert cli_main(base) == 0
+    data = json.loads(seen.read_text(encoding="utf-8"))
+    assert len(data) == 2
+    assert data["naukri:061123006487"]["first_seen"].startswith("2023-11-06")
+
+    assert cli_main(base) == 0
+    assert len(json.loads(seen.read_text(encoding="utf-8"))) == 2
 

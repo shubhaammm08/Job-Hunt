@@ -193,6 +193,120 @@ def extract_naukri_api_response(data: dict[str, Any]) -> list[Job]:
 
 
 # -----------------------------------------------------------------------------
+# Rockposedon/WebScraping dataset import
+#
+# The upstream scraper writes one plain-text block per job in
+# `naukri_jobs_data_lakhs.txt`. Its own live API path is now challenge-blocked,
+# but the exported dataset is still a useful source of real Naukri listings.
+# These helpers turn that export into the same canonical Job objects produced by
+# the API/JSON path, so the rest of the pipeline does not need to care.
+# -----------------------------------------------------------------------------
+NAUKRI_DATASET_URL = (
+    "https://raw.githubusercontent.com/Rockposedon/WebScraping/main/"
+    "naukri_jobs_data_lakhs.txt"
+)
+
+DATASET_FIELD_LABELS = (
+    "Job Title",
+    "Company Name",
+    "Footer Placeholder Label",
+    "Tags and Skills",
+    "Experience",
+    "Salary",
+    "Location",
+    "Job Description",
+)
+_DATASET_FIELD_RE = re.compile(
+    r"^(" + "|".join(re.escape(label) for label in DATASET_FIELD_LABELS) + r"):\s*(.*)$"
+)
+
+
+def parse_naukri_dataset(text: str) -> list[dict[str, Any]]:
+    """Parse the Rockposedon text export into raw Naukri records.
+
+    Returns at most one record per clean Naukri job ID. The upstream script
+    fetches page 1 repeatedly, so the published file contains thousands of
+    duplicate blocks; deduplication here keeps the import tractable.
+    """
+    records: list[dict[str, Any]] = []
+    by_id: dict[str, dict[str, Any]] = {}
+    current: dict[str, str] = {}
+    current_field: str | None = None
+
+    def flush() -> None:
+        nonlocal current, current_field
+        job_id = clean_naukri_id(current.get("Job ID", ""))
+        title = (current.get("Job Title") or "").strip()
+        if job_id and title and title.lower() != "n/a":
+            raw = {"Job ID": job_id}
+            for label in DATASET_FIELD_LABELS:
+                raw[label] = (current.get(label) or "").strip()
+            existing = by_id.get(job_id)
+            if existing is None:
+                by_id[job_id] = raw
+                records.append(raw)
+            elif len(raw.get("Job Description", "")) > len(existing.get("Job Description", "")):
+                # Keep the most informative copy when the same ID repeats.
+                existing.update(raw)
+        current = {}
+        current_field = None
+
+    for line in (text or "").splitlines():
+        stripped = line.strip()
+        if stripped.startswith("Job ID:"):
+            if current:
+                flush()
+            current_field = "Job ID"
+            current["Job ID"] = stripped.split(":", 1)[1].strip()
+            continue
+        if not current:
+            continue
+        match = _DATASET_FIELD_RE.match(stripped)
+        if match:
+            current_field = match.group(1)
+            current[current_field] = match.group(2).strip()
+        elif current_field and stripped:
+            current[current_field] += " " + stripped
+    if current:
+        flush()
+
+    return records
+
+
+def naukri_dataset_jobs(text: str, limit: int | None = None) -> list[Job]:
+    """Normalize the Rockposedon text export into canonical Job objects."""
+    jobs: list[Job] = []
+    seen_ids: set[str] = set()
+    for raw in parse_naukri_dataset(text):
+        job = normalize_naukri_job(raw)
+        if not job.title or job.job_id in seen_ids:
+            continue
+        seen_ids.add(job.job_id)
+        jobs.append(job)
+        if limit and len(jobs) >= limit:
+            break
+    return jobs
+
+
+def fetch_naukri_dataset(url: str = NAUKRI_DATASET_URL, timeout: int = 60) -> str:
+    """Download the upstream Naukri dataset export as text."""
+    resp = requests.get(url, timeout=timeout, headers={"User-Agent": DEFAULT_USER_AGENT})
+    resp.raise_for_status()
+    return resp.text
+
+
+def infer_naukri_posted_date(job_id: str) -> str | None:
+    """Infer an ISO date from Naukri IDs whose first six digits are DDMMYY."""
+    digits = re.sub(r"\D", "", str(job_id or "").split(":")[-1])
+    if len(digits) < 6:
+        return None
+    try:
+        return datetime(2000 + int(digits[4:6]), int(digits[2:4]), int(digits[0:2])).date().isoformat()
+    except ValueError:
+        return None
+
+
+# -----------------------------------------------------------------------------
 # Cookie & Session Management
 # -----------------------------------------------------------------------------
 def parse_cookie_string(cookie_str: str) -> dict[str, str]:

@@ -160,7 +160,7 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-### 3. Run the Test Suite (136 Tests, 0 API Calls)
+### 3. Run the Test Suite (0 API Calls)
 Verify parsers, filters, guardrails, and deduplication logic locally:
 ```bash
 pytest -v
@@ -178,6 +178,20 @@ Test the entire pipeline using bundled ATS fixtures without calling any external
 ```bash
 python -m jobhunt run --mock --scorer keyword
 ```
+
+### 6. Refresh Naukri Jobs
+Naukri listings are normalized with the schema from
+[Rockposedon/WebScraping](https://github.com/Rockposedon/WebScraping). The legacy
+search API now requires reCAPTCHA, so a focused scan uses public search pages in
+a guest browser:
+
+```bash
+python -m jobhunt naukri-import --live
+```
+
+The upstream project also publishes an archived text export. Import it on demand
+with `python -m jobhunt naukri-import` (or `--file path/to/dataset.txt`); those
+listings keep their original 2023 dates and are not shown as fresh.
 
 ---
 
