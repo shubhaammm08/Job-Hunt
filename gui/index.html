@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-type="software">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
@@ -7,6 +7,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#F8FAFC">
+  <meta name="page-type" content="software">
+  <meta name="site-kind" content="software">
   <title>JobHunt — Career Intelligence</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%234F46E5%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><circle cx=%2212%22 cy=%2212%22 r=%2210%22/><circle cx=%2212%22 cy=%2212%22 r=%226%22/><circle cx=%2212%22 cy=%2212%22 r=%222%22/></svg>">
   <script>
@@ -661,12 +663,17 @@
       border-radius: 8px;
       padding: 9px 10px;
       box-shadow: var(--shadow-card);
-      transition: all 0.15s ease;
+      transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
       position: relative;
     }
     .job-card:hover {
       background: var(--bg-card-hover);
       border-color: var(--border-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+    }
+    .job-card:active {
+      transform: translateY(0);
     }
     .job-card.active {
       border: 1px solid var(--accent-indigo, #4F46E5) !important;
@@ -1295,6 +1302,121 @@
       box-shadow: none;
     }
 
+    /* taste-skill Telemetry Flow Diagram */
+    .pipeline-telemetry-flow {
+      margin-top: 14px;
+      padding: 12px 14px;
+      background: var(--bg-surface-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+    }
+    .telemetry-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .telemetry-title {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    .telemetry-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--positive-text);
+      font-weight: 600;
+    }
+    .status-pulse-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-emerald, #059669);
+      animation: pulseLiveDot 2s infinite ease-in-out;
+    }
+    @keyframes pulseLiveDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+    .telemetry-steps-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+    }
+    .telemetry-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      flex: 1;
+      min-width: 0;
+    }
+    .telemetry-step-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 4px;
+      transition: border-color 0.15s ease, transform 0.15s ease;
+    }
+    .telemetry-step:hover .telemetry-step-icon {
+      border-color: var(--accent-indigo, #4F46E5);
+      transform: translateY(-1px);
+    }
+    .telemetry-step-highlight .telemetry-step-icon {
+      border-color: var(--indigo-border);
+      background: var(--indigo-bg);
+      color: var(--accent-indigo, #4F46E5);
+    }
+    .telemetry-step-label {
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      white-space: nowrap;
+      line-height: 1.2;
+    }
+    .telemetry-step-sub {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      margin-top: 1px;
+    }
+    .telemetry-connector {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      opacity: 0.7;
+    }
+
+    /* taste-skill Subtle Hero Entrance */
+    @keyframes tasteFadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .deck-hero {
+      animation: tasteFadeUp 0.18s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    }
+
     /* Document Hub / 'Kit' Section */
     .document-hub-section {
       background: var(--bg-card, #FFFFFF);
@@ -1519,6 +1641,14 @@
       background: var(--indigo-600, #4338CA);
       border-color: var(--indigo-600, #4338CA);
       transform: translateY(-1px);
+    }
+    .btn-action-primary:active {
+      transform: translateY(1px) scale(0.98);
+      box-shadow: 0 0 1px rgba(15, 23, 42, 0.1);
+    }
+    .btn-action-secondary:active,
+    .btn-action-ghost:active {
+      transform: translateY(1px) scale(0.98);
     }
     .btn-action-primary.glow {
       box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
@@ -3204,6 +3334,64 @@
                 <span class="pill-label-val mono" id="pill-val-3">92%</span>
               </div>
               <div class="pill-bar-track"><div class="pill-bar-fill emerald" id="pill-bar-3" style="width: 92%;"></div></div>
+            </div>
+          </div>
+          <!-- taste-skill Pipeline Telemetry Flow -->
+          <div class="pipeline-telemetry-flow" aria-label="Pipeline Architecture Flow">
+            <div class="telemetry-header">
+              <span class="telemetry-title">Pipeline Architecture</span>
+              <span class="telemetry-status">
+                <span class="status-pulse-dot"></span>
+                <span>Live Feed</span>
+              </span>
+            </div>
+            <div class="telemetry-steps-row">
+              <div class="telemetry-step">
+                <div class="telemetry-step-icon" title="86+ Supported Sources">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                </div>
+                <div class="telemetry-step-label">Intake</div>
+                <div class="telemetry-step-sub">86+ Sources</div>
+              </div>
+              <div class="telemetry-connector">
+                <svg width="20" height="8" viewBox="0 0 20 8" fill="none">
+                  <line x1="0" y1="4" x2="16" y2="4" stroke="var(--border-hover)" stroke-width="1.5" stroke-dasharray="2 2"/>
+                  <polyline points="14,1 18,4 14,7" stroke="var(--border-hover)" stroke-width="1.5" fill="none"/>
+                </svg>
+              </div>
+              <div class="telemetry-step">
+                <div class="telemetry-step-icon" title="Location &amp; Role Prefilter">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                </div>
+                <div class="telemetry-step-label">Prefilter</div>
+                <div class="telemetry-step-sub">Taxonomy</div>
+              </div>
+              <div class="telemetry-connector">
+                <svg width="20" height="8" viewBox="0 0 20 8" fill="none">
+                  <line x1="0" y1="4" x2="16" y2="4" stroke="var(--border-hover)" stroke-width="1.5" stroke-dasharray="2 2"/>
+                  <polyline points="14,1 18,4 14,7" stroke="var(--border-hover)" stroke-width="1.5" fill="none"/>
+                </svg>
+              </div>
+              <div class="telemetry-step telemetry-step-highlight">
+                <div class="telemetry-step-icon" title="Gemini Match Scoring">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8z"/></svg>
+                </div>
+                <div class="telemetry-step-label">AI Score</div>
+                <div class="telemetry-step-sub">&ge; 6.0 Match</div>
+              </div>
+              <div class="telemetry-connector">
+                <svg width="20" height="8" viewBox="0 0 20 8" fill="none">
+                  <line x1="0" y1="4" x2="16" y2="4" stroke="var(--border-hover)" stroke-width="1.5" stroke-dasharray="2 2"/>
+                  <polyline points="14,1 18,4 14,7" stroke="var(--border-hover)" stroke-width="1.5" fill="none"/>
+                </svg>
+              </div>
+              <div class="telemetry-step">
+                <div class="telemetry-step-icon" title="Tailored Application Kit">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
+                <div class="telemetry-step-label">Dossier</div>
+                <div class="telemetry-step-sub">Auto-Kit</div>
+              </div>
             </div>
           </div>
         </section>

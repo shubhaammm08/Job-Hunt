@@ -3831,5 +3831,279 @@
     "emailed": false,
     "applied": false,
     "applied_on": null
+  },
+  "greenhouse:airbnb:8274152": {
+    "first_seen": "2026-11-24T05:37:05+00:00",
+    "company": "Airbnb",
+    "title": "Software Engineer, Payments",
+    "location": "Remote, USA",
+    "url": "https://careers.airbnb.com/positions/8274152?gh_jid=8274152",
+    "score": 2.0,
+    "reason": "The role requires US remote work eligibility which the candidate does not have.",
+    "canonical_source": "greenhouse",
+    "sources": [
+      "greenhouse"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Engineer"
+    ],
+    "fit_score": 2.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:ytics-systems-engineer-mid-level": {
+    "first_seen": "2026-11-24T05:37:05+00:00",
+    "company": "Remote Employer",
+    "title": "Orchestration & Analytics Systems Engineer – Mid-Level",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/leidos/jobs/orchestration-analytics-systems-engineer-mid-level",
+    "score": 3.0,
+    "reason": "The role is a mid-level systems engineering position requiring specific clearance or defense context.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "OTHER_TECH"
+    ],
+    "matched_roles": [
+      "Systems Engineer"
+    ],
+    "fit_score": 3.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:jobssoftware-engineer-7607894274": {
+    "first_seen": "2026-11-24T05:37:05+00:00",
+    "company": "Remote Employer",
+    "title": "Software Engineer",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/leidos/jobs/software-engineer-7607894274",
+    "score": 3.0,
+    "reason": "The job specifies a UK mobile worker requirement which mismatches the candidate location.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Engineer"
+    ],
+    "fit_score": 3.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:sbusiness-intelligence-analyst-i": {
+    "first_seen": "2026-11-24T05:37:05+00:00",
+    "company": "Remote Employer",
+    "title": "Business Intelligence Analyst I",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/kfc-global-careers/jobs/business-intelligence-analyst-i",
+    "score": 5.0,
+    "reason": "Plausible entry-level BI role, but lacks specific details and location eligibility may be restricted.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Business Intelligence Analyst"
+    ],
+    "fit_score": 5.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:private-limitedjobsetl-developer": {
+    "first_seen": "2026-11-24T05:37:05+00:00",
+    "company": "Remote Employer",
+    "title": "ETL Developer",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/edgeq-technologies-private-limited/jobs/etl-developer",
+    "score": 3.0,
+    "reason": "The role requires 3 to 9 years of experience and Java/Spring Boot which the candidate lacks.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [],
+    "matched_roles": [],
+    "fit_score": 3.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:ull-stack-developer-ai-113216089": {
+    "first_seen": "2026-11-24T05:37:05+00:00",
+    "company": "Remote Employer",
+    "title": "Full Stack Developer (AI)",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/edgeq-technologies-private-limited/jobs/full-stack-developer-ai-113216089",
+    "score": 2.0,
+    "reason": "The position specifies United States location restrictions.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Full Stack Developer"
+    ],
+    "fit_score": 2.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:private-limitedjobsdata-engineer": {
+    "first_seen": "2026-11-24T05:37:05+00:00",
+    "company": "Remote Employer",
+    "title": "Data Engineer",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/edgeq-technologies-private-limited/jobs/data-engineer",
+    "score": 3.0,
+    "reason": "The job is tied to Seattle, United States location requirements.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Engineer"
+    ],
+    "fit_score": 3.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:vate-limitedjobssystems-engineer": {
+    "first_seen": "2026-11-24T05:37:05+00:00",
+    "company": "Remote Employer",
+    "title": "Systems Engineer",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/edgeq-technologies-private-limited/jobs/systems-engineer",
+    "score": 2.0,
+    "reason": "The role requires 2-7 years experience and is restricted to the United States.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "OTHER_TECH"
+    ],
+    "matched_roles": [
+      "Systems Engineer"
+    ],
+    "fit_score": 2.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:jobsfull-stack-software-engineer": {
+    "first_seen": "2026-11-24T05:37:05+00:00",
+    "company": "Remote Employer",
+    "title": "Full Stack Software Engineer",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/edgeq-technologies-private-limited/jobs/full-stack-software-engineer",
+    "score": 3.0,
+    "reason": "Requires US-based candidates only, which the candidate does not meet.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Engineer"
+    ],
+    "fit_score": 3.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:te-limitedjobsanalytics-engineer": {
+    "first_seen": "2026-11-24T05:37:05+00:00",
+    "company": "Remote Employer",
+    "title": "Analytics Engineer",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/edgeq-technologies-private-limited/jobs/analytics-engineer",
+    "score": 2.0,
+    "reason": "Requires 3-8 years of experience, exceeding the candidate's 1 year.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Analytics Engineer"
+    ],
+    "fit_score": 2.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:iajobscloud-engineer-full-remote": {
+    "first_seen": "2026-11-24T05:37:05+00:00",
+    "company": "Remote Employer",
+    "title": "Cloud Engineer | Full Remote",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/claranet-italia/jobs/cloud-engineer-full-remote",
+    "score": 2.0,
+    "reason": "Job description is entirely in Italian and lacks clear stack requirements.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "PLATFORM",
+      "CLOUD_DEVOPS"
+    ],
+    "matched_roles": [
+      "Cloud Engineer",
+      "Cloud Engineer"
+    ],
+    "fit_score": 2.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:191126502427": {
+    "first_seen": "2026-11-24T05:37:05+00:00",
+    "company": "Magic Infomedia",
+    "title": "Data Analyst",
+    "location": "New Delhi",
+    "url": "https://www.naukri.com/job-listings-data-analyst-magic-infomedia-new-delhi-0-to-2-years-191126502427",
+    "score": 6.0,
+    "reason": "Matches junior experience level and data background, but location is New Delhi.",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 6.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
   }
 }
