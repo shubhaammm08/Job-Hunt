@@ -1562,5 +1562,282 @@
     "emailed": true,
     "applied": false,
     "applied_on": null
+  },
+  "greenhouse:airbnb:8274152": {
+    "first_seen": "2026-11-24T14:11:22+00:00",
+    "company": "Airbnb",
+    "title": "Software Engineer, Payments",
+    "location": "Remote, USA",
+    "url": "https://careers.airbnb.com/positions/8274152?gh_jid=8274152",
+    "score": null,
+    "reason": null,
+    "canonical_source": "greenhouse",
+    "sources": [
+      "greenhouse"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Engineer"
+    ],
+    "fit_score": null,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:t-dashboard-developer-8255820469": {
+    "first_seen": "2026-11-24T14:11:22+00:00",
+    "company": "Remote Employer",
+    "title": "Data Analyst (Dashboard Developer)",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/guidehouse/jobs/data-analyst-dashboard-developer-8255820469",
+    "score": null,
+    "reason": null,
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": null,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:sbusiness-intelligence-analyst-i": {
+    "first_seen": "2026-11-24T14:11:22+00:00",
+    "company": "Remote Employer",
+    "title": "Business Intelligence Analyst I",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/yum-brands/jobs/business-intelligence-analyst-i",
+    "score": null,
+    "reason": null,
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Business Intelligence Analyst"
+    ],
+    "fit_score": null,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:ingjobsaws-cloud-devops-engineer": {
+    "first_seen": "2026-11-24T14:11:22+00:00",
+    "company": "Remote Employer",
+    "title": "AWS Cloud DevOps Engineer",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/tecdata-engineering/jobs/aws-cloud-devops-engineer",
+    "score": null,
+    "reason": null,
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "CLOUD_DEVOPS"
+    ],
+    "matched_roles": [
+      "DevOps Engineer"
+    ],
+    "fit_score": null,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:gineer-m-w-d-full-remote-moglich": {
+    "first_seen": "2026-11-24T14:11:22+00:00",
+    "company": "Remote Employer",
+    "title": "DevOps / Platform Engineer (m/w/d) – (full remote möglich)",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/zollsoft-gmbh/jobs/devops-platform-engineer-m-w-d-full-remote-moglich",
+    "score": null,
+    "reason": null,
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "PLATFORM"
+    ],
+    "matched_roles": [
+      "Platform Engineer"
+    ],
+    "fit_score": null,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:are-engineer-full-stack-back-end": {
+    "first_seen": "2026-11-24T14:11:22+00:00",
+    "company": "Remote Employer",
+    "title": "Summer Internship | Software Engineer Full Stack | Back-End",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/lifeway-christian-resources/jobs/summer-internship-software-engineer-full-stack-back-end",
+    "score": null,
+    "reason": null,
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Engineer"
+    ],
+    "fit_score": null,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4483738409": {
+    "first_seen": "2026-11-24T14:11:22+00:00",
+    "company": "Gabeo.ai",
+    "title": "Machine Learning Engineer",
+    "location": "Delhi, India",
+    "url": "https://www.linkedin.com/jobs/view/4483738409",
+    "score": null,
+    "reason": null,
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "Machine Learning Engineer"
+    ],
+    "fit_score": null,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4485921205": {
+    "first_seen": "2026-11-24T14:11:22+00:00",
+    "company": "Tark Innovation Private Limited",
+    "title": "AI/ML Engineer",
+    "location": "Hyderabad, Telangana, India",
+    "url": "https://www.linkedin.com/jobs/view/4485921205",
+    "score": null,
+    "reason": null,
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "AI/ML Engineer",
+      "ML Engineer"
+    ],
+    "fit_score": null,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4488224616": {
+    "first_seen": "2026-11-24T14:11:22+00:00",
+    "company": "EXL",
+    "title": "Data Analyst",
+    "location": "Chennai, Tamil Nadu, India",
+    "url": "https://www.linkedin.com/jobs/view/4488224616",
+    "score": 3.0,
+    "reason": "Role focuses on data analysis rather than the candidate's target AI and software engineering roles.",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 3.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4485925349": {
+    "first_seen": "2026-11-24T14:11:22+00:00",
+    "company": "Wipro",
+    "title": "DATA ANALYST L3",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4485925349",
+    "score": 3.0,
+    "reason": "Mismatch in job function, as the candidate targets AI and software development instead of data analysis.",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 3.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4483513254": {
+    "first_seen": "2026-11-24T14:11:22+00:00",
+    "company": "Wipro",
+    "title": "DATA ANALYST L4",
+    "location": "Pune Division, Maharashtra, India",
+    "url": "https://www.linkedin.com/jobs/view/4483513254",
+    "score": 3.0,
+    "reason": "Candidate is an AI and software engineer, not a dedicated data analyst.",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 3.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4492564172": {
+    "first_seen": "2026-11-24T14:11:22+00:00",
+    "company": "TerraTern",
+    "title": "Data Analyst",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4492564172",
+    "score": 3.0,
+    "reason": "Role requires data analyst profile instead of the candidate's software and GenAI engineering skillset.",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 3.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
   }
 }
