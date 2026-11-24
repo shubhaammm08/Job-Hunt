@@ -7,15 +7,20 @@ import pytest
 
 from jobhunt.store import Store
 from jobhunt.telegram_bot import (
+    DEFAULT_SCREENING_QA,
     answer_callback,
     analyze_jd_with_ai,
+    format_autofill_kit,
+    format_screening_qa_bank,
     generate_pitch_note,
     get_updates,
     handle_applied,
     handle_callback_query,
     handle_hunt,
+    handle_qa,
     handle_reminders,
     handle_remote,
+    handle_search,
     handle_start_help,
     handle_stats,
     handle_top,
@@ -270,3 +275,117 @@ def test_poll_updates_once(mock_store, sample_profile):
          patch("jobhunt.telegram_bot.process_update") as mock_proc:
         poll_updates("token", mock_store, sample_profile, once=True)
         mock_proc.assert_called_once()
+
+
+def test_handle_search_with_matches(mock_store):
+    with patch("jobhunt.telegram_bot.send_telegram") as mock_send:
+        handle_search(12345, "token", mock_store, "Data")
+        assert mock_send.call_count >= 2
+        sent_texts = [call[0][0] for call in mock_send.call_args_list]
+        assert any("Found" in t and "matching role" in t for t in sent_texts)
+
+
+def test_handle_search_empty_and_no_match(mock_store):
+    with patch("jobhunt.telegram_bot.send_telegram") as mock_send:
+        # Empty query
+        handle_search(12345, "token", mock_store, "")
+        assert mock_send.call_count == 1
+        assert "How to search" in mock_send.call_args[0][0]
+
+    with patch("jobhunt.telegram_bot.send_telegram") as mock_send:
+        # Non-matching query
+        handle_search(12345, "token", mock_store, "NonExistentCompanyOrSkill999")
+        assert mock_send.call_count == 1
+        assert "No tracked jobs matched" in mock_send.call_args[0][0]
+
+
+def test_handle_qa():
+    with patch("jobhunt.telegram_bot.send_telegram") as mock_send:
+        handle_qa(12345, "token")
+        mock_send.assert_called_once()
+        text = mock_send.call_args[0][0]
+        assert "Screening Q&A Bank" in text
+        assert "Python & SQL Experience" in text
+        assert "GenAI & LLM Stack" in text
+        assert "Notice Period" in text
+
+
+def test_format_screening_qa_bank():
+    text = format_screening_qa_bank()
+    assert "Screening Q&A Bank" in text
+    for q, a in DEFAULT_SCREENING_QA:
+        assert q in text
+        assert a in text
+
+
+def test_format_autofill_kit_synced_fields(sample_profile):
+    job_data = {"company": "Acme", "title": "Data Engineer"}
+    kit = format_autofill_kit(job_data, sample_profile)
+    assert "https://www.linkedin.com/in/shubham-kadam-data/" in kit
+    assert "Shubham Sunil Kadam" in kit
+    assert "ssk080204@gmail.com" in kit
+    assert "Current CTC" in kit
+    assert "Expected CTC" in kit
+    assert "Gender Identity" in kit
+
+
+def test_callback_query_screening_qa(mock_store, sample_profile):
+    cb = {
+        "id": "cb_004",
+        "data": "qa:greenhouse:stripe:101",
+        "message": {"chat": {"id": 12345}},
+    }
+    with patch("jobhunt.telegram_bot.answer_callback") as mock_ans, patch("jobhunt.telegram_bot.send_telegram") as mock_send:
+        handle_callback_query("token", cb, mock_store, sample_profile)
+        mock_ans.assert_called_once()
+        mock_send.assert_called_once()
+        text = mock_send.call_args[0][0]
+        assert "Screening Q&A Bank" in text
+
+
+def test_callback_query_cmd_search_and_qa(mock_store, sample_profile):
+    cb_search = {
+        "id": "cb_005",
+        "data": "cmd:search",
+        "message": {"chat": {"id": 12345}},
+    }
+    with patch("jobhunt.telegram_bot.answer_callback") as mock_ans, patch("jobhunt.telegram_bot.send_telegram") as mock_send:
+        handle_callback_query("token", cb_search, mock_store, sample_profile)
+        mock_ans.assert_called_once()
+        mock_send.assert_called_once()
+        assert "How to search" in mock_send.call_args[0][0]
+
+    cb_qa = {
+        "id": "cb_006",
+        "data": "cmd:qa",
+        "message": {"chat": {"id": 12345}},
+    }
+    with patch("jobhunt.telegram_bot.answer_callback") as mock_ans, patch("jobhunt.telegram_bot.send_telegram") as mock_send:
+        handle_callback_query("token", cb_qa, mock_store, sample_profile)
+        mock_ans.assert_called_once()
+        mock_send.assert_called_once()
+        assert "Screening Q&A Bank" in mock_send.call_args[0][0]
+
+
+def test_process_update_search_and_qa(mock_store, sample_profile):
+    update_search = {
+        "update_id": 102,
+        "message": {
+            "text": "/search Python",
+            "chat": {"id": 12345},
+        },
+    }
+    with patch("jobhunt.telegram_bot.handle_search") as mock_hs:
+        process_update(update_search, "token", mock_store, sample_profile)
+        mock_hs.assert_called_once_with(12345, "token", mock_store, "Python")
+
+    update_qa = {
+        "update_id": 103,
+        "message": {
+            "text": "/qa",
+            "chat": {"id": 12345},
+        },
+    }
+    with patch("jobhunt.telegram_bot.handle_qa") as mock_hq:
+        process_update(update_qa, "token", mock_store, sample_profile)
+        mock_hq.assert_called_once_with(12345, "token")

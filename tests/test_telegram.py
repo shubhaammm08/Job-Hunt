@@ -7,6 +7,7 @@ import pytest
 from jobhunt.fetch import Job
 from jobhunt.telegram import (
     format_telegram_alert,
+    make_job_buttons,
     send_telegram,
     send_telegram_digest,
 )
@@ -72,3 +73,21 @@ def test_send_telegram_missing_credentials(monkeypatch):
     monkeypatch.delenv("TELEGRAM_CHAT_ID", raising=False)
     with pytest.raises(RuntimeError, match="Missing Telegram credentials"):
         send_telegram("Hello")
+
+
+def test_make_job_buttons():
+    buttons = make_job_buttons("greenhouse:stripe:123", "https://stripe.com/jobs/123")
+    assert "inline_keyboard" in buttons
+    rows = buttons["inline_keyboard"]
+    all_texts = [btn["text"] for row in rows for btn in row]
+    assert any("1-Click Apply" in t for t in all_texts)
+    assert any("AutoFill Kit" in t for t in all_texts)
+    assert any("Pitch Note" in t for t in all_texts)
+    assert any("Screening Q&A" in t for t in all_texts)
+    assert any("Mark Applied" in t for t in all_texts)
+
+    # Validate Telegram callback_data length limit (64 bytes max)
+    for row in rows:
+        for btn in row:
+            if "callback_data" in btn:
+                assert len(btn["callback_data"].encode("utf-8")) <= 64

@@ -24,6 +24,7 @@ def make_job_buttons(job_id: str, apply_url: str) -> dict[str, Any]:
     cb_applied = f"app:{job_id}"[:64]
     cb_pitch = f"pitch:{job_id}"[:64]
     cb_kit = f"kit:{job_id}"[:64]
+    cb_qa = f"qa:{job_id}"[:64]
 
     keyboard = [
         [
@@ -32,9 +33,10 @@ def make_job_buttons(job_id: str, apply_url: str) -> dict[str, Any]:
         ],
         [
             {"text": "📋 Pitch Note", "callback_data": cb_pitch},
-            {"text": "✅ Mark Applied", "callback_data": cb_applied},
+            {"text": "❓ Screening Q&A", "callback_data": cb_qa},
         ],
         [
+            {"text": "✅ Mark Applied", "callback_data": cb_applied},
             {"text": "🌐 Dashboard", "url": DEFAULT_DASHBOARD_URL},
         ],
     ]

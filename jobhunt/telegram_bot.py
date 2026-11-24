@@ -76,6 +76,8 @@ def set_bot_commands(token: str) -> bool:
     commands = [
         {"command": "top", "description": "🔥 View top recommended job matches"},
         {"command": "remote", "description": "🌐 Browse high-match remote roles"},
+        {"command": "search", "description": "🔍 Search jobs by keyword (/search <query>)"},
+        {"command": "qa", "description": "❓ Screening Q&A Bank (tap-to-copy answers)"},
         {"command": "stats", "description": "📊 View application funnel & metrics"},
         {"command": "kit", "description": "⚡ Tap-to-Copy AutoFill Kit (/kit <company>)"},
         {"command": "applied", "description": "✅ Mark a job as applied (/applied <name>)"},
@@ -98,6 +100,10 @@ def make_quick_menu() -> dict[str, Any]:
             [
                 {"text": "🔥 Top Matches", "callback_data": "cmd:top"},
                 {"text": "🌐 Remote Roles", "callback_data": "cmd:remote"},
+            ],
+            [
+                {"text": "🔍 Search Jobs", "callback_data": "cmd:search"},
+                {"text": "❓ Screening Q&A", "callback_data": "cmd:qa"},
             ],
             [
                 {"text": "📊 Funnel Stats", "callback_data": "cmd:stats"},
@@ -123,7 +129,10 @@ def handle_start_help(chat_id: str | int, token: str, profile: dict[str, Any]) -
         f"📌 *Available Commands:*\n"
         f"• `/top` — Review top recommended roles (score >= 7.0)\n"
         f"• `/remote` — Browse high-match remote jobs\n"
+        f"• `/search <keyword>` — Search jobs by title, company, or tech stack\n"
+        f"• `/qa` — Instant tap-to-copy Screening Q&A Bank\n"
         f"• `/stats` — Funnel & conversion tracking\n"
+        f"• `/kit <company>` — Tap-to-copy complete applicant kit\n"
         f"• `/applied <company>` — Mark a role as applied\n"
         f"• `/reminders` — Recruiter follow-up templates\n"
         f"• `/hunt` — Pipeline status & sync info\n\n"
@@ -187,6 +196,58 @@ def handle_remote(chat_id: str | int, token: str, store: Store, limit: int = 5) 
             reason=d.get("reason", ""),
             salary=d.get("salary", ""),
             remote=True,
+        )
+        card_text = format_job_card(job_obj)
+        buttons = make_job_buttons(jid, job_obj.url)
+        send_telegram(card_text, bot_token=token, chat_id=str(chat_id), reply_markup=buttons)
+
+
+def handle_search(chat_id: str | int, token: str, store: Store, query: str = "", limit: int = 3) -> None:
+    """Search tracked jobs by keyword (company, role, title, skill, location)."""
+    q = query.strip()
+    if not q:
+        send_telegram(
+            "🔍 *How to search:*\nUse `/search <keyword>` (e.g. `/search Python`, `/search Capgemini`, `/search Remote`).",
+            bot_token=token,
+            chat_id=str(chat_id),
+        )
+        return
+
+    tokens = q.lower().split()
+    matches = []
+    for jid, d in store.data.items():
+        searchable = f"{d.get('company', '')} {d.get('title', '')} {d.get('location', '')} {d.get('description', '')}".lower()
+        if all(t in searchable for t in tokens):
+            matches.append((jid, d))
+
+    if not matches:
+        send_telegram(
+            f"🔍 No tracked jobs matched '*{q}*'.\nTry checking `/top` or `/remote` to see all active opportunities!",
+            bot_token=token,
+            chat_id=str(chat_id),
+        )
+        return
+
+    matches.sort(key=lambda x: float(x[1].get("score") or x[1].get("fit_score") or 0.0), reverse=True)
+    send_telegram(
+        f"🔍 *Found {len(matches)} matching role(s) for '{q}':*",
+        bot_token=token,
+        chat_id=str(chat_id),
+    )
+
+    for jid, d in matches[:limit]:
+        job_obj = Job(
+            job_id=jid,
+            ats=d.get("canonical_source", ""),
+            company=d.get("company", "Company"),
+            title=d.get("title", "Role"),
+            location=d.get("location", ""),
+            url=d.get("url", ""),
+            description=d.get("description", ""),
+            score=float(d.get("score") or d.get("fit_score") or 0.0),
+            reason=d.get("reason", ""),
+            salary=d.get("salary", ""),
+            remote=bool(d.get("remote")),
         )
         card_text = format_job_card(job_obj)
         buttons = make_job_buttons(jid, job_obj.url)
@@ -378,20 +439,51 @@ def generate_pitch_note(job_data: dict[str, Any], profile: dict[str, Any]) -> st
     return pitch
 
 
+DEFAULT_SCREENING_QA = [
+    ("Python & SQL Experience", "2+ years building automated ETL pipelines, analytical dashboards, and backend services with Python, SQL, FastAPI, and Pandas."),
+    ("GenAI & LLM Stack", "Hands-on experience with Gemini API, OpenAI SDK, LangChain, prompt engineering, RAG, and AI agent automation."),
+    ("Relocation & Work Mode", "Based in Mumbai Metropolitan Region; open to on-site in Mumbai/Pune, hybrid, or 100% remote worldwide."),
+    ("Notice Period & Availability", "Immediate joiner (available within 0 to 15 days)."),
+    ("Current & Expected CTC", "Current CTC: ₹4,50,000 (4.5 LPA) | Expected CTC: ₹6,00,000 - ₹8,00,000 (6-8 LPA, negotiable)."),
+    ("Work Authorization & Sponsorship", "Authorized to work in India (Citizen). No sponsorship required for India; open to employer-sponsored international visas or remote contracts."),
+]
+
+
+def format_screening_qa_bank() -> str:
+    """Format pre-drafted screening answers into tap-to-copy Telegram blocks."""
+    lines = [
+        "❓ *Screening Q&A Bank*",
+        "_Tap any response block below to instantly copy it for your ATS application:_\n",
+    ]
+    for q, a in DEFAULT_SCREENING_QA:
+        lines.append(f"📌 *{q}:*\n```\n{a}\n```\n")
+    return "\n".join(lines)
+
+
+def handle_qa(chat_id: str | int, token: str) -> None:
+    """Deliver the complete screening Q&A bank."""
+    text = format_screening_qa_bank()
+    send_telegram(text, bot_token=token, chat_id=str(chat_id))
+
+
 def format_autofill_kit(job_data: dict[str, Any], profile: dict[str, Any]) -> str:
     """Format a 1-click tap-to-copy application kit for mobile / desktop Telegram."""
     name = profile.get("name", "Shubham Sunil Kadam")
     email = profile.get("email", "ssk080204@gmail.com")
     phone = profile.get("phone", "+918169832448")
-    linkedin = "https://www.linkedin.com/in/shubham-kadam"
-    github = "https://github.com/shubhaammm08"
-    portfolio = DEFAULT_DASHBOARD_URL
+    linkedin = profile.get("linkedin", "https://www.linkedin.com/in/shubham-kadam-data/")
+    github = profile.get("github", "https://github.com/shubhaammm08")
+    portfolio = profile.get("portfolio", DEFAULT_DASHBOARD_URL)
+    experience = profile.get("years_experience", "2+ years")
+    current_ctc = profile.get("current_ctc", "450000 / INR 4.5 LPA")
+    expected_ctc = profile.get("expected_ctc", "700000 / INR 7 LPA")
+    gender = profile.get("gender", "Male")
     company = job_data.get("company", "Company")
     title = job_data.get("title", "Developer")
 
     cover_note = (
         f"Hi {company} Hiring Team,\n\n"
-        f"I am writing to express my strong interest in the {title} position. With 1 year of practical "
+        f"I am writing to express my strong interest in the {title} position. With hands-on "
         f"experience in Python, SQL, Power BI, and data pipeline automation, I have built production "
         f"workflows that reduced reporting latency by 80% and engineered end-to-end data pipelines.\n\n"
         f"I am excited to bring my problem-solving skills to {company}.\n\n"
@@ -409,6 +501,10 @@ def format_autofill_kit(job_data: dict[str, Any], profile: dict[str, Any]) -> st
         f"🔗 *LinkedIn:*\n`{linkedin}`\n\n"
         f"💻 *GitHub:*\n`{github}`\n\n"
         f"🌐 *Portfolio / Website:*\n`{portfolio}`\n\n"
+        f"⏳ *Total Experience:*\n`{experience}`\n\n"
+        f"💰 *Current CTC:*\n`{current_ctc}`\n\n"
+        f"🎯 *Expected CTC:*\n`{expected_ctc}`\n\n"
+        f"⚧ *Gender Identity:*\n`{gender}`\n\n"
         f"⏳ *Notice Period:*\n`Immediate (0-15 days)`\n\n"
         f"📍 *Location:*\n`Mumbai, India (Open to Remote / Relocation)`\n\n"
         f"📝 *Tailored Cover Note (Tap to copy):*\n"
@@ -456,6 +552,14 @@ def handle_callback_query(token: str, cb: dict[str, Any], store: Store, profile:
             handle_stats(chat_id, token, store)
         elif cmd == "reminders":
             handle_reminders(chat_id, token, store, profile)
+        elif cmd == "search":
+            send_telegram(
+                "🔍 *How to search:*\nUse `/search <keyword>` (e.g. `/search Python`, `/search Remote`, `/search Mumbai`) to find tracked jobs instantly.",
+                bot_token=token,
+                chat_id=str(chat_id),
+            )
+        elif cmd == "qa":
+            handle_qa(chat_id, token)
         return
 
     if data.startswith("app:"):
@@ -516,6 +620,11 @@ def handle_callback_query(token: str, cb: dict[str, Any], store: Store, profile:
             answer_callback(token, cb_id, text="⚡ AutoFill Kit generated below!", show_alert=False)
             sample_kit = format_autofill_kit({"company": "Target Company", "title": "Developer"}, profile)
             send_telegram(sample_kit, bot_token=token, chat_id=str(chat_id))
+        return
+
+    if data.startswith("qa:"):
+        answer_callback(token, cb_id, text="❓ Screening Q&A Bank sent below!", show_alert=False)
+        handle_qa(chat_id, token)
         return
 
     answer_callback(token, cb_id)
@@ -635,6 +744,12 @@ def process_update(
         handle_applied(chat_id, token, store, query)
     elif lower_text.startswith("/reminders") or lower_text.startswith("/followup"):
         handle_reminders(chat_id, token, store, profile)
+    elif lower_text.startswith("/search") or lower_text.startswith("/find"):
+        parts = text.split(maxsplit=1)
+        query = parts[1] if len(parts) > 1 else ""
+        handle_search(chat_id, token, store, query)
+    elif lower_text.startswith("/qa") or lower_text.startswith("/screening"):
+        handle_qa(chat_id, token)
     elif lower_text.startswith("/hunt"):
         handle_hunt(chat_id, token, store)
     else:
