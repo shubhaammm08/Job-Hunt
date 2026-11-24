@@ -1795,30 +1795,32 @@
     /* Modal Backdrop & Cards */
     .modal-backdrop {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.75);
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
       backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       display: none;
       align-items: center;
       justify-content: center;
       z-index: 2000;
       padding: 16px;
+      opacity: 0;
+      transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .modal-backdrop.open {
       display: flex;
+      opacity: 1;
     }
     .modal-card {
-      background: #14171F;
+      background: var(--bg-card);
+      color: var(--text-main);
       border: 1px solid var(--border-subtle);
       border-radius: 12px;
       width: 100%;
       max-width: 600px;
       max-height: 90vh;
       overflow-y: auto;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 48px rgba(15, 23, 42, 0.16), 0 1px 3px rgba(15, 23, 42, 0.05);
       padding: 24px;
       position: relative;
     }
@@ -1835,15 +1837,181 @@
       border: none;
       color: var(--text-muted);
       cursor: pointer;
-      padding: 4px;
+      padding: 6px;
       border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: all 0.15s ease;
     }
     .modal-close-btn:hover {
+      color: var(--text-primary);
+      background: var(--bg-surface-hover);
+    }
+
+    /* Modal Sub-Components & Content Sections */
+    .bookmarklet-box {
+      background: var(--bg-surface-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    .bookmarklet-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: var(--indigo-bg, rgba(79,70,229,0.08));
+      color: var(--accent-indigo, #4F46E5);
+      border: 1px dashed var(--accent-indigo, #4F46E5);
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      text-decoration: none;
+      cursor: grab;
+      transition: all 0.15s ease;
+    }
+    .bookmarklet-link:hover {
+      background: var(--accent-indigo, #4F46E5);
       color: #FFFFFF;
-      background: rgba(255, 255, 255, 0.06);
+      border-style: solid;
+    }
+    .btn-copy-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      min-height: 34px;
+      white-space: nowrap;
+    }
+    .btn-copy-chip:hover {
+      background: var(--bg-surface-hover);
+      color: var(--text-primary);
+      border-color: var(--border-hover);
+    }
+    .btn-copy-chip.copied {
+      background: var(--emerald-bg, rgba(5, 150, 105, 0.08));
+      color: var(--accent-emerald, #059669);
+      border-color: var(--accent-emerald, #059669);
+    }
+    .btn-applied-export {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .btn-applied-export:hover {
+      background: var(--bg-surface-hover);
+      color: var(--text-primary);
+      border-color: var(--border-hover);
+    }
+    .kit-section {
+      background: var(--bg-surface-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+    .kit-sec-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .kit-textarea {
+      width: 100%;
+      background: var(--bg-card);
+      color: var(--text-primary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 12px;
+      line-height: 1.5;
+      resize: vertical;
+      font-family: var(--font-mono, monospace);
+      box-sizing: border-box;
+      transition: border-color 0.15s ease;
+    }
+    .kit-textarea:focus {
+      outline: none;
+      border-color: var(--accent-indigo);
+      box-shadow: 0 0 0 2px var(--indigo-bg);
+    }
+    .screening-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 8px;
+    }
+    .screening-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 11.5px;
+      gap: 6px;
+    }
+    .screening-val {
+      color: var(--text-secondary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 11.5px;
+    }
+    .screening-val strong {
+      color: var(--text-main);
+    }
+    .autofill-profile-section {
+      background: var(--bg-surface-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .autofill-field-group {
+      display: flex;
+      flex-direction: column;
+    }
+    .autofill-input {
+      width: 100%;
+      min-height: 34px;
+      padding: 6px 10px;
+      font-size: 12.5px;
+      background: var(--bg-card);
+      color: var(--text-primary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      box-sizing: border-box;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .autofill-input:focus {
+      outline: none;
+      border-color: var(--accent-indigo);
+      box-shadow: 0 0 0 2px var(--indigo-bg);
     }
 
     /* =========================================================================
@@ -3686,7 +3854,7 @@
                 <span class="metric-sub">Connected</span>
               </div>
             </div>
-            <div style="text-align:center;padding:30px;background:#14171F;border:1px solid var(--border-subtle);border-radius:12px;">
+            <div style="text-align:center;padding:30px;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;">
               <h3 style="font-size:16px;margin-bottom:8px;">Pipeline Conversion Analytics</h3>
               <p style="color:var(--text-secondary);font-size:13px;max-width:500px;margin:0 auto 16px auto;">
                 78 opportunities tracked across 87 sources. 10 high-priority recommended roles.
@@ -3789,7 +3957,7 @@
 
               <div class="p-group">
                 <div class="p-title">Pipeline Automation Schedules</div>
-                <div style="font-size:12.5px;color:#c9d1d9;line-height:1.8;">
+                <div style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">
                   <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
@@ -3813,7 +3981,7 @@
 
               <div class="p-group">
                 <div class="p-title">Phone Alerts &amp; Notification Gateways (Free Tier)</div>
-                <div style="font-size:12.5px;color:#c9d1d9;line-height:1.8;">
+                <div style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">
                   <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#58a6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/>
@@ -3985,7 +4153,7 @@
           <label for="kit-browser-select" style="font-size:12px;font-weight:600;color:var(--text-muted);display:flex;align-items:center;gap:4px;">
             Target Browser:
           </label>
-          <select id="kit-browser-select" class="select-filter" style="padding:6px 12px;font-size:12.5px;border-radius:6px;background:#0d1117;color:#e6edf3;border:1px solid var(--card-border);color-scheme:dark;min-height:36px;cursor:pointer;" onchange="savePreferredBrowser(this.value)">
+          <select id="kit-browser-select" class="select-filter" style="padding:6px 12px;font-size:12.5px;border-radius:6px;background:var(--bg-card);color:var(--text-primary);border:1px solid var(--border-subtle);min-height:36px;cursor:pointer;" onchange="savePreferredBrowser(this.value)">
             <option value="edge">Microsoft Edge (Separate App)</option>
             <option value="brave">Brave Browser (Local)</option>
             <option value="window">Side-by-Side Companion Window</option>
@@ -4012,7 +4180,7 @@
         </button>
       </div>
 
-      <div style="font-size:13px;color:#c9d1d9;line-height:1.6;display:flex;flex-direction:column;gap:14px;">
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.6;display:flex;flex-direction:column;gap:14px;">
         <p>
           Apply to any job in <strong>under 5 seconds</strong>. This tool detects form fields on <strong>Greenhouse, Lever, Ashby, Workable, SmartRecruiters, and BambooHR</strong> and populates your name, email, phone, location, LinkedIn, GitHub, portfolio, and standard screening answers instantly.
         </p>
@@ -4033,7 +4201,7 @@
         </div>
 
         <!-- Inline Editable Candidate Profile Section -->
-        <div class="autofill-profile-section" style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:10px;padding:16px;">
+        <div class="autofill-profile-section">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
             <div>
               <div style="font-weight:700;font-size:13.5px;color:var(--text-main);display:flex;align-items:center;gap:6px;">
@@ -4045,11 +4213,11 @@
               </div>
             </div>
             <div style="display:flex;align-items:center;gap:8px;">
-              <button type="button" class="btn-copy-chip" id="btn-autofill-reset" onclick="resetAutofillProfile()" style="background:rgba(248,81,73,0.12);border-color:rgba(248,81,73,0.35);color:#f85149;" title="Reset all fields to candidate defaults">
+              <button type="button" class="btn-copy-chip" id="btn-autofill-reset" onclick="resetAutofillProfile()" style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);color:#DC2626;" title="Reset all fields to candidate defaults">
                 <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
                 Reset to Defaults
               </button>
-              <button type="button" class="btn-apply-link" id="btn-autofill-save" onclick="saveAutofillProfile()" style="padding:6px 14px;font-size:12px;cursor:pointer;">
+              <button type="button" class="btn-apply-link" id="btn-autofill-save" onclick="saveAutofillProfile()" style="padding:6px 14px;font-size:12px;cursor:pointer;background:var(--accent-emerald, #059669);color:#FFFFFF;border:none;border-radius:6px;font-weight:600;">
                 <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
                 Save
               </button>
@@ -4062,7 +4230,7 @@
             <div class="autofill-field-group">
               <label for="autofill-first-name" style="font-size:11.5px;font-weight:600;color:var(--text-muted);margin-bottom:3px;display:block;">First Name</label>
               <div style="display:flex;gap:6px;">
-                <input type="text" id="autofill-first-name" class="select-filter" style="width:100%;min-height:34px;padding:6px 10px;font-size:12.5px;background:#0d1117;color:#e6edf3;border:1px solid var(--card-border);border-radius:6px;" placeholder="First Name">
+                <input type="text" id="autofill-first-name" class="autofill-input" placeholder="First Name">
                 <button type="button" class="btn-copy-chip" onclick="copyAutofillField('autofill-first-name', this)" title="Copy First Name" aria-label="Copy First Name">
                   <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
                 </button>
@@ -4073,7 +4241,7 @@
             <div class="autofill-field-group">
               <label for="autofill-last-name" style="font-size:11.5px;font-weight:600;color:var(--text-muted);margin-bottom:3px;display:block;">Last Name</label>
               <div style="display:flex;gap:6px;">
-                <input type="text" id="autofill-last-name" class="select-filter" style="width:100%;min-height:34px;padding:6px 10px;font-size:12.5px;background:#0d1117;color:#e6edf3;border:1px solid var(--card-border);border-radius:6px;" placeholder="Last Name">
+                <input type="text" id="autofill-last-name" class="autofill-input" placeholder="Last Name">
                 <button type="button" class="btn-copy-chip" onclick="copyAutofillField('autofill-last-name', this)" title="Copy Last Name" aria-label="Copy Last Name">
                   <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
                 </button>
@@ -4084,7 +4252,7 @@
             <div class="autofill-field-group">
               <label for="autofill-full-name" style="font-size:11.5px;font-weight:600;color:var(--text-muted);margin-bottom:3px;display:block;">Full Name</label>
               <div style="display:flex;gap:6px;">
-                <input type="text" id="autofill-full-name" class="select-filter" style="width:100%;min-height:34px;padding:6px 10px;font-size:12.5px;background:#0d1117;color:#e6edf3;border:1px solid var(--card-border);border-radius:6px;" placeholder="Full Name">
+                <input type="text" id="autofill-full-name" class="autofill-input" placeholder="Full Name">
                 <button type="button" class="btn-copy-chip" onclick="copyAutofillField('autofill-full-name', this)" title="Copy Full Name" aria-label="Copy Full Name">
                   <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
                 </button>
@@ -4095,7 +4263,7 @@
             <div class="autofill-field-group">
               <label for="autofill-email" style="font-size:11.5px;font-weight:600;color:var(--text-muted);margin-bottom:3px;display:block;">Email</label>
               <div style="display:flex;gap:6px;">
-                <input type="email" id="autofill-email" class="select-filter" style="width:100%;min-height:34px;padding:6px 10px;font-size:12.5px;background:#0d1117;color:#e6edf3;border:1px solid var(--card-border);border-radius:6px;" placeholder="Email">
+                <input type="email" id="autofill-email" class="autofill-input" placeholder="Email">
                 <button type="button" class="btn-copy-chip" onclick="copyAutofillField('autofill-email', this)" title="Copy Email" aria-label="Copy Email">
                   <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
                 </button>
@@ -4106,7 +4274,7 @@
             <div class="autofill-field-group">
               <label for="autofill-phone" style="font-size:11.5px;font-weight:600;color:var(--text-muted);margin-bottom:3px;display:block;">Phone</label>
               <div style="display:flex;gap:6px;">
-                <input type="text" id="autofill-phone" class="select-filter" style="width:100%;min-height:34px;padding:6px 10px;font-size:12.5px;background:#0d1117;color:#e6edf3;border:1px solid var(--card-border);border-radius:6px;" placeholder="Phone">
+                <input type="text" id="autofill-phone" class="autofill-input" placeholder="Phone">
                 <button type="button" class="btn-copy-chip" onclick="copyAutofillField('autofill-phone', this)" title="Copy Phone" aria-label="Copy Phone">
                   <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
                 </button>
@@ -4117,7 +4285,7 @@
             <div class="autofill-field-group">
               <label for="autofill-location" style="font-size:11.5px;font-weight:600;color:var(--text-muted);margin-bottom:3px;display:block;">Location</label>
               <div style="display:flex;gap:6px;">
-                <input type="text" id="autofill-location" class="select-filter" style="width:100%;min-height:34px;padding:6px 10px;font-size:12.5px;background:#0d1117;color:#e6edf3;border:1px solid var(--card-border);border-radius:6px;" placeholder="City, State, Country">
+                <input type="text" id="autofill-location" class="autofill-input" placeholder="City, State, Country">
                 <button type="button" class="btn-copy-chip" onclick="copyAutofillField('autofill-location', this)" title="Copy Location" aria-label="Copy Location">
                   <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
                 </button>
@@ -4128,7 +4296,7 @@
             <div class="autofill-field-group">
               <label for="autofill-linkedin" style="font-size:11.5px;font-weight:600;color:var(--text-muted);margin-bottom:3px;display:block;">LinkedIn</label>
               <div style="display:flex;gap:6px;">
-                <input type="url" id="autofill-linkedin" class="select-filter" style="width:100%;min-height:34px;padding:6px 10px;font-size:12.5px;background:#0d1117;color:#e6edf3;border:1px solid var(--card-border);border-radius:6px;" placeholder="LinkedIn Profile URL">
+                <input type="url" id="autofill-linkedin" class="autofill-input" placeholder="LinkedIn Profile URL">
                 <button type="button" class="btn-copy-chip" onclick="copyAutofillField('autofill-linkedin', this)" title="Copy LinkedIn" aria-label="Copy LinkedIn">
                   <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
                 </button>
@@ -4139,7 +4307,7 @@
             <div class="autofill-field-group">
               <label for="autofill-github" style="font-size:11.5px;font-weight:600;color:var(--text-muted);margin-bottom:3px;display:block;">GitHub</label>
               <div style="display:flex;gap:6px;">
-                <input type="url" id="autofill-github" class="select-filter" style="width:100%;min-height:34px;padding:6px 10px;font-size:12.5px;background:#0d1117;color:#e6edf3;border:1px solid var(--card-border);border-radius:6px;" placeholder="GitHub Profile URL">
+                <input type="url" id="autofill-github" class="autofill-input" placeholder="GitHub Profile URL">
                 <button type="button" class="btn-copy-chip" onclick="copyAutofillField('autofill-github', this)" title="Copy GitHub" aria-label="Copy GitHub">
                   <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
                 </button>
@@ -4150,7 +4318,7 @@
             <div class="autofill-field-group">
               <label for="autofill-portfolio" style="font-size:11.5px;font-weight:600;color:var(--text-muted);margin-bottom:3px;display:block;">Portfolio URL</label>
               <div style="display:flex;gap:6px;">
-                <input type="url" id="autofill-portfolio" class="select-filter" style="width:100%;min-height:34px;padding:6px 10px;font-size:12.5px;background:#0d1117;color:#e6edf3;border:1px solid var(--card-border);border-radius:6px;" placeholder="Portfolio URL">
+                <input type="url" id="autofill-portfolio" class="autofill-input" placeholder="Portfolio URL">
                 <button type="button" class="btn-copy-chip" onclick="copyAutofillField('autofill-portfolio', this)" title="Copy Portfolio" aria-label="Copy Portfolio">
                   <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
                 </button>
@@ -4161,7 +4329,7 @@
             <div class="autofill-field-group">
               <label for="autofill-notice-period" style="font-size:11.5px;font-weight:600;color:var(--text-muted);margin-bottom:3px;display:block;">Notice Period</label>
               <div style="display:flex;gap:6px;">
-                <input type="text" id="autofill-notice-period" class="select-filter" style="width:100%;min-height:34px;padding:6px 10px;font-size:12.5px;background:#0d1117;color:#e6edf3;border:1px solid var(--card-border);border-radius:6px;" placeholder="Notice Period">
+                <input type="text" id="autofill-notice-period" class="autofill-input" placeholder="Notice Period">
                 <button type="button" class="btn-copy-chip" onclick="copyAutofillField('autofill-notice-period', this)" title="Copy Notice Period" aria-label="Copy Notice Period">
                   <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
                 </button>
@@ -4172,7 +4340,7 @@
             <div class="autofill-field-group" style="grid-column: 1 / -1;">
               <label for="autofill-work-auth" style="font-size:11.5px;font-weight:600;color:var(--text-muted);margin-bottom:3px;display:block;">Work Auth</label>
               <div style="display:flex;gap:6px;">
-                <input type="text" id="autofill-work-auth" class="select-filter" style="width:100%;min-height:34px;padding:6px 10px;font-size:12.5px;background:#0d1117;color:#e6edf3;border:1px solid var(--card-border);border-radius:6px;" placeholder="Work Authorization (e.g. Yes / Citizen)">
+                <input type="text" id="autofill-work-auth" class="autofill-input" placeholder="Work Authorization (e.g. Yes / Citizen)">
                 <button type="button" class="btn-copy-chip" onclick="copyAutofillField('autofill-work-auth', this)" title="Copy Work Auth" aria-label="Copy Work Auth">
                   <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
                 </button>
@@ -4187,7 +4355,7 @@
                   <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
                 </button>
               </div>
-              <textarea id="autofill-summary" class="kit-textarea" rows="3" style="width:100%;background:#0d1117;color:#e6edf3;border:1px solid var(--card-border);border-radius:6px;padding:8px 10px;font-size:12px;line-height:1.5;resize:vertical;" placeholder="Professional summary or screening pitch"></textarea>
+              <textarea id="autofill-summary" class="autofill-input kit-textarea" rows="3" placeholder="Professional summary or screening pitch"></textarea>
             </div>
           </div>
         </div>
@@ -4224,10 +4392,10 @@
         </button>
       </div>
 
-      <div style="font-size:13px;color:#c9d1d9;line-height:1.6;display:flex;flex-direction:column;gap:12px;">
-        <div style="background:rgba(35,134,54,0.15);border:1px solid #2ea043;border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:10px;">
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.6;display:flex;flex-direction:column;gap:12px;">
+        <div style="background:var(--emerald-bg, rgba(5,150,105,0.08));border:1px solid rgba(5,150,105,0.25);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:10px;">
           <div>
-            <strong style="color:#7ee787;display:block;margin-bottom:4px;">Telegram Bot Connected: @ShubhamJobHunt_Bot</strong>
+            <strong style="color:var(--positive-text, #047857);display:block;margin-bottom:4px;">Telegram Bot Connected: @ShubhamJobHunt_Bot</strong>
             <span>Instant alerts deliver with 1-click apply links and match scores to your phone in &lt;1 second.</span>
           </div>
           <div>
@@ -4243,7 +4411,7 @@
           </div>
         </div>
 
-        <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:8px;padding:14px;">
+        <div style="background:var(--bg-surface-subtle);border:1px solid var(--border-subtle);border-radius:8px;padding:14px;">
           <strong style="color:var(--text-main);display:block;margin-bottom:6px;">GitHub Actions Repository Secrets:</strong>
           <p style="margin:0 0 10px 0;font-size:12.5px;color:var(--text-muted);line-height:1.5;">
             To enable automated job alerts, configure your <code>TELEGRAM_BOT_TOKEN</code> and <code>TELEGRAM_CHAT_ID</code> credentials in your repository's GitHub Secrets. Values remain encrypted and are never exposed in client builds or public logs.
@@ -4264,7 +4432,7 @@
         </div>
       </div>
 
-      <div style="display:flex;justify-content:flex-end;padding-top:10px;border-top:1px solid var(--card-border);">
+      <div style="display:flex;justify-content:flex-end;padding-top:10px;border-top:1px solid var(--border-subtle);">
         <button class="btn-applied" onclick="closeWhatsAppGuide()">Done</button>
       </div>
     </div>
@@ -4288,7 +4456,7 @@
         </button>
       </div>
 
-      <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;padding:10px 14px;background:rgba(0,0,0,0.25);border-radius:8px;border:1px solid var(--card-border);">
+      <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--bg-surface-subtle);border-radius:8px;border:1px solid var(--border-subtle);">
         <span style="font-size:12.5px;color:var(--text-muted);">Manage your submitted applications and export records:</span>
         <div style="display:flex;gap:8px;">
           <button class="btn-applied-export" onclick="exportAppliedJobsCsv()" title="Download CSV export">
@@ -5023,6 +5191,7 @@ let appData = {
       bolt: `<svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`,
       copy: `<svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`,
       close: `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
+      clock: `<svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
       searchEmpty: `<svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`
     };
 
@@ -5855,7 +6024,7 @@ let appData = {
         const targetUrl = isLinkedInJob(j) ? (getLinkedInPostUrl(j) || j.url || '#') : (j.url || '#');
 
         return `
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;background:rgba(255,255,255,0.02);border:1px solid var(--card-border);border-radius:10px;flex-wrap:wrap;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:10px;box-shadow:0 1px 3px rgba(15,23,42,0.05);flex-wrap:wrap;">
             <div style="min-width:0;flex:1;">
               <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;flex-wrap:wrap;">
                 <span class="tag tag-source tag-src-${inferredPlat}">${escapeHtml(platformLabel)}</span>
@@ -5866,7 +6035,7 @@ let appData = {
               <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">${escapeHtml(j.company || 'Unknown')} · ${escapeHtml(j.location || 'Remote')}</div>
             </div>
             <div style="display:flex;gap:6px;align-items:center;flex-shrink:0;">
-              <a href="${escapeHtml(targetUrl)}" target="_blank" rel="noopener noreferrer" class="btn-applied-export" style="background:var(--accent-green);color:#fff;border-color:transparent;" title="Open Job Application">
+              <a href="${escapeHtml(targetUrl)}" target="_blank" rel="noopener noreferrer" class="btn-applied-export" style="background:var(--accent-emerald, #059669);color:#fff;border-color:transparent;" title="Open Job Application">
                 Open ${ICONS.external}
               </a>
               <button class="btn-applied-export" onclick="toggleApplied('${j.job_id}'); renderAppliedTrackerList();" title="Remove from applied">
