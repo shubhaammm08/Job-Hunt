@@ -220,6 +220,78 @@ class GroqProvider(OpenAICompatProvider):
     name = "groq"
 
 
+class OpenRouterFreeProvider(OpenAICompatProvider):
+    name = "openrouter"
+    required_env = "OPENROUTER_API_KEY"
+    default_base = "https://openrouter.ai/api/v1"
+    key_env = "OPENROUTER_API_KEY"
+
+
+class ResilientFailoverProvider(Provider):
+    """Orchestrates multi-provider zero-cost LLM fallback.
+
+    Cascade:
+      1. Primary: Google AI Studio Gemini (gemini-flash-lite-latest)
+      2. Secondary: Groq Cloud LPU (llama-3.3-70b-versatile, 500+ tok/sec)
+      3. Tertiary: OpenRouter Free (:free tier models)
+    """
+
+    name = "failover"
+
+    def __init__(self) -> None:
+        self.gemini = GeminiProvider()
+        self.groq = GroqProvider()
+        self.openrouter = OpenRouterFreeProvider()
+
+    def preflight(self) -> None:
+        keys = [
+            os.getenv("GEMINI_API_KEY"),
+            os.getenv("GROQ_API_KEY"),
+            os.getenv("OPENROUTER_API_KEY"),
+        ]
+        if not any(k and k.strip() for k in keys):
+            raise LLMError("FailoverProvider requires at least one API key: set GEMINI_API_KEY or GROQ_API_KEY")
+
+    def complete(self, model: str, system: str, user: str, max_tokens: int,
+                 json_mode: bool = False) -> str:
+        errors: list[str] = []
+
+        # Tier 1: Gemini
+        if (os.getenv("GEMINI_API_KEY") or "").strip():
+            try:
+                m = (model if "gemini" in (model or "").lower() else None) or os.getenv("GEMINI_MODEL") or "gemini-flash-lite-latest"
+                return self.gemini.complete(m, system, user, max_tokens, json_mode)
+            except Exception as e:
+                errors.append(f"Gemini: {e}")
+
+        # Tier 2: Groq Cloud LPU (Llama 3.3 70B)
+        if (os.getenv("GROQ_API_KEY") or "").strip():
+            try:
+                m = (model if "llama" in (model or "").lower() else None) or os.getenv("GROQ_MODEL") or "llama-3.3-70b-versatile"
+                return self.groq.complete(m, system, user, max_tokens, json_mode)
+            except Exception as e:
+                errors.append(f"Groq: {e}")
+
+        # Tier 3: OpenRouter Free
+        if (os.getenv("OPENROUTER_API_KEY") or "").strip():
+            try:
+                m = os.getenv("OPENROUTER_MODEL") or "meta-llama/llama-3.3-70b-instruct:free"
+                return self.openrouter.complete(m, system, user, max_tokens, json_mode)
+            except Exception as e:
+                errors.append(f"OpenRouter: {e}")
+
+        if not errors:
+            raise LLMError("No API keys found for Gemini, Groq, or OpenRouter.")
+        raise LLMError(f"All zero-cost LLM failover tiers failed: {'; '.join(errors)}")
+
+    def complete_document(self, model: str, prompt: str, pdf: bytes,
+                          max_tokens: int) -> str:
+        if (os.getenv("GEMINI_API_KEY") or "").strip():
+            m = os.getenv("GEMINI_MODEL") or "gemini-flash-lite-latest"
+            return self.gemini.complete_document(m, prompt, pdf, max_tokens)
+        raise UnsupportedDocument("PDF analysis requires GEMINI_API_KEY; pass plain text for Groq/Llama")
+
+
 class OllamaProvider(Provider):
     """Fully local. No key, no cost, no rate limit - just a slower model."""
 
@@ -255,8 +327,12 @@ PROVIDERS = {
     "anthropic": AnthropicProvider,
     "gemini": GeminiProvider,
     "groq": GroqProvider,
+    "openrouter": OpenRouterFreeProvider,
     "openai-compatible": OpenAICompatProvider,
     "ollama": OllamaProvider,
+    "failover": ResilientFailoverProvider,
+    "auto": ResilientFailoverProvider,
+    "resilient": ResilientFailoverProvider,
 }
 
 # What each provider gets if you do not name a model, so `--scorer llm` works
@@ -265,8 +341,12 @@ DEFAULT_MODELS = {
     "anthropic": {"screen": "claude-haiku-4-5-20251001", "draft": "claude-sonnet-5"},
     "gemini": {"screen": "gemini-flash-lite-latest", "draft": "gemini-flash-lite-latest"},
     "groq": {"screen": "llama-3.3-70b-versatile", "draft": "llama-3.3-70b-versatile"},
+    "openrouter": {"screen": "meta-llama/llama-3.3-70b-instruct:free", "draft": "meta-llama/llama-3.3-70b-instruct:free"},
     "openai-compatible": {"screen": "gpt-4o-mini", "draft": "gpt-4o"},
     "ollama": {"screen": "llama3.1", "draft": "llama3.1"},
+    "failover": {"screen": "gemini-flash-lite-latest", "draft": "gemini-flash-lite-latest"},
+    "auto": {"screen": "gemini-flash-lite-latest", "draft": "gemini-flash-lite-latest"},
+    "resilient": {"screen": "gemini-flash-lite-latest", "draft": "gemini-flash-lite-latest"},
 }
 
 
@@ -282,15 +362,23 @@ def get_provider(name: str) -> Provider:
 def resolve(stage: str, check: bool = True) -> tuple[Provider, str]:
     """Which provider + model handles this stage ("screen" or "draft")?
 
-    Precedence: stage-specific env var -> global env var -> built-in default.
+    Precedence: stage-specific env var -> global env var -> automatic multi-provider fallback -> built-in default.
     Raises LLMError if the provider's credentials are missing, so the caller
     can bail before spending anything.
     """
-    name = (os.getenv(f"{stage.upper()}_PROVIDER")
-            or os.getenv("LLM_PROVIDER")
-            or "anthropic").strip().lower()
-    # Resolve the provider first: a typo'd name should say "unknown provider",
-    # not send you hunting for a model id it was never going to use.
+    raw_name = os.getenv(f"{stage.upper()}_PROVIDER") or os.getenv("LLM_PROVIDER")
+    if not raw_name:
+        if os.getenv("GEMINI_API_KEY") and os.getenv("GROQ_API_KEY"):
+            name = "failover"
+        elif os.getenv("GEMINI_API_KEY"):
+            name = "gemini"
+        elif os.getenv("GROQ_API_KEY"):
+            name = "groq"
+        else:
+            name = "anthropic"
+    else:
+        name = raw_name.strip().lower()
+
     provider = get_provider(name)
     model = (os.getenv(f"{stage.upper()}_MODEL") or "").strip() \
         or DEFAULT_MODELS.get(name, {}).get(stage)

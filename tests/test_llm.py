@@ -352,3 +352,41 @@ def test_both_stages_ask_for_json_mode_and_leave_room_for_thinking():
 def test_providers_without_document_support_say_so():
     with pytest.raises(providers.UnsupportedDocument):
         providers.GroqProvider().complete_document("m", "prompt", b"%PDF", 100)
+
+
+def test_failover_provider_preflight(clean_env):
+    clean_env.delenv("GEMINI_API_KEY", raising=False)
+    clean_env.delenv("GROQ_API_KEY", raising=False)
+    clean_env.delenv("OPENROUTER_API_KEY", raising=False)
+    clean_env.setenv("LLM_PROVIDER", "failover")
+    with pytest.raises(LLMError, match="at least one API key"):
+        providers.resolve("screen")
+
+
+def test_resolve_auto_selects_failover_when_both_keys_present(clean_env):
+    clean_env.delenv("LLM_PROVIDER", raising=False)
+    clean_env.delenv("SCREEN_PROVIDER", raising=False)
+    clean_env.setenv("GEMINI_API_KEY", "test-gemini-key")
+    clean_env.setenv("GROQ_API_KEY", "test-groq-key")
+    p, m = providers.resolve("screen", check=False)
+    assert p.name == "failover"
+
+
+def test_resilient_failover_falls_back_to_groq_when_gemini_fails(clean_env, monkeypatch):
+    clean_env.setenv("GEMINI_API_KEY", "test-gemini-key")
+    clean_env.setenv("GROQ_API_KEY", "test-groq-key")
+    failover = providers.ResilientFailoverProvider()
+
+    # Mock gemini to raise LLMError (e.g. rate limit 429)
+    def mock_gemini_fail(*args, **kwargs):
+        raise LLMError("gemini HTTP 429: rate limit exceeded")
+
+    # Mock groq to succeed
+    def mock_groq_success(*args, **kwargs):
+        return '{"status": "ok", "provider": "groq"}'
+
+    monkeypatch.setattr(failover.gemini, "complete", mock_gemini_fail)
+    monkeypatch.setattr(failover.groq, "complete", mock_groq_success)
+
+    result = failover.complete(model="auto", system="sys", user="user", max_tokens=100)
+    assert result == '{"status": "ok", "provider": "groq"}'
