@@ -46,7 +46,7 @@ def test_autofill_inputs_use_theme_classes():
         assert ".autofill-input" in content
         assert "var(--bg-card)" in content
 
-        # Verify the 12 fields have class="autofill-input"
+        # Verify the 16 fields have class="autofill-input"
         for field_id in [
             "autofill-first-name",
             "autofill-last-name",
@@ -58,11 +58,35 @@ def test_autofill_inputs_use_theme_classes():
             "autofill-github",
             "autofill-portfolio",
             "autofill-notice-period",
+            "autofill-experience",
+            "autofill-current-ctc",
+            "autofill-expected-ctc",
+            "autofill-gender",
             "autofill-work-auth",
             "autofill-summary"
         ]:
             field_pattern = rf'id="{field_id}"[^>]*class="[^"]*autofill-input[^"]*"'
             assert re.search(field_pattern, content), f"Field {field_id} must have class autofill-input"
+
+
+def test_bookmarklet_engine_platform_support_and_manual_review():
+    """Asserts that Bookmarklet engine supports Workday, LinkedIn, Naukri, and enforces manual review."""
+    for html_path in [GUI_INDEX, ROOT_INDEX]:
+        with open(html_path, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        assert "generateBookmarkletScript" in content
+        # Workday data-automation-id coverage
+        assert "data-automation-id" in content
+        # Visual manual review outline in emerald
+        assert "#10b981" in content
+        # Toast copy specifying manual review before submission
+        assert "Review details before submitting" in content
+        # Platform badges in modal
+        assert "Workday" in content
+        assert "LinkedIn Easy Apply" in content
+        assert "Naukri" in content
+        assert "Manual Review Safe" in content
 
 
 def test_no_hardcoded_dark_inputs_in_modals():
@@ -102,3 +126,4 @@ def test_modals_zero_emojis():
 
         matches = EMOJI_PATTERN.findall(content)
         assert len(matches) == 0, f"Found {len(matches)} emojis in {html_path}"
+

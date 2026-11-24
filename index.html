@@ -4126,7 +4126,7 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
               Universal ATS 1-Click Form AutoFiller
             </div>
             <div style="font-size:11.5px;color:var(--text-muted);margin-top:2px;">
-              Drag the button to your browser bookmarks bar to autofill Greenhouse, Lever, Ashby &amp; Workable in 1 click!
+              Drag to bookmarks bar to autofill Workday, LinkedIn, Naukri, Greenhouse, Lever &amp; Ashby with manual review!
             </div>
           </div>
           <button class="btn-copy-chip" onclick="copyBookmarkletCode(this)">Copy Script</button>
@@ -4221,8 +4221,19 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
 
       <div style="font-size:13px;color:var(--text-secondary);line-height:1.6;display:flex;flex-direction:column;gap:14px;">
         <p>
-          Apply to any job in <strong>under 5 seconds</strong>. This tool detects form fields on <strong>Greenhouse, Lever, Ashby, Workable, SmartRecruiters, and BambooHR</strong> and populates your name, email, phone, location, LinkedIn, GitHub, portfolio, and standard screening answers instantly.
+          Apply to any job in <strong>under 5 seconds</strong> with guaranteed <strong>manual review before submission</strong>. This bookmarklet automatically detects and populates candidate profile fields, screening questions, notice periods, and compensation expectations across <strong>Workday, LinkedIn Easy Apply, Naukri, Greenhouse, Lever, Ashby, Workable, SmartRecruiters, and BambooHR</strong>.
         </p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
+          <span style="font-size:11px;font-weight:600;padding:2px 8px;border-radius:12px;background:rgba(5,150,105,0.12);color:var(--accent-emerald,#059669);border:1px solid rgba(5,150,105,0.25);">Manual Review Safe</span>
+          <span style="font-size:11px;padding:2px 8px;border-radius:12px;background:var(--bg-card);color:var(--text-secondary);border:1px solid var(--border-subtle);">Workday</span>
+          <span style="font-size:11px;padding:2px 8px;border-radius:12px;background:var(--bg-card);color:var(--text-secondary);border:1px solid var(--border-subtle);">LinkedIn Easy Apply</span>
+          <span style="font-size:11px;padding:2px 8px;border-radius:12px;background:var(--bg-card);color:var(--text-secondary);border:1px solid var(--border-subtle);">Naukri</span>
+          <span style="font-size:11px;padding:2px 8px;border-radius:12px;background:var(--bg-card);color:var(--text-secondary);border:1px solid var(--border-subtle);">Greenhouse</span>
+          <span style="font-size:11px;padding:2px 8px;border-radius:12px;background:var(--bg-card);color:var(--text-secondary);border:1px solid var(--border-subtle);">Lever</span>
+          <span style="font-size:11px;padding:2px 8px;border-radius:12px;background:var(--bg-card);color:var(--text-secondary);border:1px solid var(--border-subtle);">Ashby</span>
+          <span style="font-size:11px;padding:2px 8px;border-radius:12px;background:var(--bg-card);color:var(--text-secondary);border:1px solid var(--border-subtle);">Workable</span>
+          <span style="font-size:11px;padding:2px 8px;border-radius:12px;background:var(--bg-card);color:var(--text-secondary);border:1px solid var(--border-subtle);">SmartRecruiters</span>
+        </div>
 
         <!-- Drag Link & Bookmarklet Box -->
         <div class="bookmarklet-box" style="align-items:center;text-align:center;padding:16px;">
@@ -4370,6 +4381,50 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
               <div style="display:flex;gap:6px;">
                 <input type="text" id="autofill-notice-period" class="autofill-input" placeholder="Notice Period">
                 <button type="button" class="btn-copy-chip" onclick="copyAutofillField('autofill-notice-period', this)" title="Copy Notice Period" aria-label="Copy Notice Period">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
+                </button>
+              </div>
+            </div>
+
+            <!-- Total Experience -->
+            <div class="autofill-field-group">
+              <label for="autofill-experience" style="font-size:11.5px;font-weight:600;color:var(--text-muted);margin-bottom:3px;display:block;">Total Experience (Years)</label>
+              <div style="display:flex;gap:6px;">
+                <input type="text" id="autofill-experience" class="autofill-input" placeholder="e.g. 2+ years / 2">
+                <button type="button" class="btn-copy-chip" onclick="copyAutofillField('autofill-experience', this)" title="Copy Total Experience" aria-label="Copy Total Experience">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
+                </button>
+              </div>
+            </div>
+
+            <!-- Current CTC -->
+            <div class="autofill-field-group">
+              <label for="autofill-current-ctc" style="font-size:11.5px;font-weight:600;color:var(--text-muted);margin-bottom:3px;display:block;">Current CTC / Salary</label>
+              <div style="display:flex;gap:6px;">
+                <input type="text" id="autofill-current-ctc" class="autofill-input" placeholder="e.g. 450000 or 4.5 LPA">
+                <button type="button" class="btn-copy-chip" onclick="copyAutofillField('autofill-current-ctc', this)" title="Copy Current CTC" aria-label="Copy Current CTC">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
+                </button>
+              </div>
+            </div>
+
+            <!-- Expected CTC -->
+            <div class="autofill-field-group">
+              <label for="autofill-expected-ctc" style="font-size:11.5px;font-weight:600;color:var(--text-muted);margin-bottom:3px;display:block;">Expected CTC / Salary</label>
+              <div style="display:flex;gap:6px;">
+                <input type="text" id="autofill-expected-ctc" class="autofill-input" placeholder="e.g. 700000 or 7 LPA">
+                <button type="button" class="btn-copy-chip" onclick="copyAutofillField('autofill-expected-ctc', this)" title="Copy Expected CTC" aria-label="Copy Expected CTC">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
+                </button>
+              </div>
+            </div>
+
+            <!-- Gender Identity -->
+            <div class="autofill-field-group">
+              <label for="autofill-gender" style="font-size:11.5px;font-weight:600;color:var(--text-muted);margin-bottom:3px;display:block;">Gender (Optional)</label>
+              <div style="display:flex;gap:6px;">
+                <input type="text" id="autofill-gender" class="autofill-input" placeholder="e.g. Male / Decline">
+                <button type="button" class="btn-copy-chip" onclick="copyAutofillField('autofill-gender', this)" title="Copy Gender" aria-label="Copy Gender">
                   <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
                 </button>
               </div>
@@ -6362,6 +6417,10 @@ let appData = {
       portfolio: "https://shubhaammm08.github.io/Job-Hunt/",
       noticePeriod: "Immediate / 0-15 days",
       workAuth: "Yes",
+      experience: "2+",
+      currentCtc: "450000",
+      expectedCtc: "700000",
+      gender: "Male",
       summary: "AI & Software Engineer specializing in GenAI/LLMs, API & backend development (FastAPI, Flask, Node.js), Full-Stack (React), Mobile (Flutter), workflow automation (n8n, Docker, CI/CD), and ML."
     };
 
@@ -6394,11 +6453,15 @@ let appData = {
         w: profile.portfolio || '',
         np: profile.noticePeriod || '',
         wa: profile.workAuth || '',
+        exp: profile.experience || '',
+        cctc: profile.currentCtc || '',
+        ectc: profile.expectedCtc || '',
+        g: profile.gender || '',
         c: profile.summary || ''
       };
       const pJson = JSON.stringify(p);
 
-      return `javascript:(function(){const p=${pJson};function t(el,v){if(!el||el.disabled||el.readOnly||!v)return;el.focus();el.value=v;el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}));el.dispatchEvent(new Event('blur',{bubbles:true}));}let c=0;document.querySelectorAll('input,textarea,select').forEach(i=>{if(i.type==='hidden'||i.type==='file'||i.type==='submit')return;const k=(i.name+' '+i.id+' '+(i.placeholder||'')+' '+(i.getAttribute('aria-label')||'')+' '+(i.autocomplete||'')).toLowerCase();if(k.includes('first')&&k.includes('name')){t(i,p.f);c++;}else if(k.includes('last')&&k.includes('name')){t(i,p.l);c++;}else if((k.includes('full')&&k.includes('name'))||(k.includes('name')&&!k.includes('user')&&!k.includes('company')&&!k.includes('file'))){t(i,p.n);c++;}else if(k.includes('email')||i.type==='email'){t(i,p.e);c++;}else if(k.includes('phone')||k.includes('mobile')||i.type==='tel'){t(i,p.p);c++;}else if(k.includes('linkedin')){t(i,p.li);c++;}else if(k.includes('github')||k.includes('git')){t(i,p.gh);c++;}else if(k.includes('portfolio')||k.includes('website')||k.includes('url')){t(i,p.w);c++;}else if(k.includes('city')||k.includes('location')||k.includes('address')){t(i,p.loc);c++;}else if(k.includes('notice')||k.includes('availability')||k.includes('start date')){t(i,p.np);c++;}else if((k.includes('authorized')||k.includes('eligibility')||k.includes('work auth'))&&i.tagName!=='SELECT'){t(i,p.wa);c++;}else if(i.tagName==='TEXTAREA'&&(k.includes('cover')||k.includes('pitch')||k.includes('note')||k.includes('summary'))){t(i,p.c);c++;}});document.querySelectorAll('input[type="radio"],input[type="checkbox"]').forEach(b=>{const txt=(b.parentElement?b.parentElement.innerText:'').toLowerCase();if(txt.includes('authorized')&&(txt.includes('yes')||b.value.toLowerCase()==='yes'||(p.wa&&p.wa.toLowerCase().includes('yes')))){b.checked=true;b.dispatchEvent(new Event('change',{bubbles:true}));c++;}if(txt.includes('sponsorship')&&(txt.includes('no')||b.value.toLowerCase()==='no')){b.checked=true;b.dispatchEvent(new Event('change',{bubbles:true}));c++;}});const toast=document.createElement('div');toast.innerText='JobHunt: Auto-filled '+c+' fields!';toast.style.cssText='position:fixed;top:20px;right:20px;background:#1f6feb;color:#fff;padding:12px 18px;border-radius:8px;font-family:sans-serif;font-size:13px;font-weight:600;z-index:999999;box-shadow:0 8px 24px rgba(0,0,0,0.5);';document.body.appendChild(toast);setTimeout(()=>toast.remove(),3500);})();`;
+      return `javascript:(function(){const p=${pJson};function t(el,v){if(!el||el.disabled||el.readOnly||v===undefined||v===null||v==='')return false;try{el.focus();const proto=(el instanceof HTMLTextAreaElement)?window.HTMLTextAreaElement.prototype:((el instanceof HTMLSelectElement)?window.HTMLSelectElement.prototype:window.HTMLInputElement.prototype);const s=Object.getOwnPropertyDescriptor(proto,'value')?.set;if(s){s.call(el,v);}else{el.value=v;}el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}));el.dispatchEvent(new Event('blur',{bubbles:true}));el.style.outline='2px solid #10b981';el.style.outlineOffset='1px';return true;}catch(_){try{el.value=v;return true;}catch(__){return false;}}}function gk(el){return[el.name||'',el.id||'',el.placeholder||'',el.getAttribute('aria-label')||'',el.getAttribute('data-automation-id')||'',el.getAttribute('data-test-id')||'',el.autocomplete||'',el.parentElement?el.parentElement.innerText.slice(0,80):''].join(' ').toLowerCase();}let c=0;document.querySelectorAll('input,textarea,select').forEach(i=>{if(i.type==='hidden'||i.type==='file'||i.type==='submit'||i.type==='button')return;const k=gk(i);if(i.tagName==='SELECT'){let m=false;for(let opt of i.options){const ot=(opt.text+' '+opt.value).toLowerCase();if(k.includes('gender')&&p.g&&ot.includes(p.g.toLowerCase())){i.value=opt.value;m=true;break;}else if((k.includes('authorized')||k.includes('eligibility')||k.includes('work auth'))&&ot.includes('yes')){i.value=opt.value;m=true;break;}else if((k.includes('sponsorship')||k.includes('sponsor'))&&ot.includes('no')){i.value=opt.value;m=true;break;}else if((k.includes('notice')||k.includes('availability'))&&p.np&&(ot.includes('immediate')||ot.includes('15')||ot.includes('month'))){i.value=opt.value;m=true;break;}}if(m){i.dispatchEvent(new Event('change',{bubbles:true}));i.style.outline='2px solid #10b981';c++;}return;}if(k.includes('first')&&k.includes('name')){if(t(i,p.f))c++;}else if(k.includes('last')&&k.includes('name')){if(t(i,p.l))c++;}else if((k.includes('full')&&k.includes('name'))||(k.includes('name')&&!k.includes('user')&&!k.includes('company')&&!k.includes('file')&&!k.includes('middle'))){if(t(i,p.n))c++;}else if(k.includes('email')||i.type==='email'){if(t(i,p.e))c++;}else if(k.includes('phone')||k.includes('mobile')||k.includes('contact')||i.type==='tel'){if(t(i,p.p))c++;}else if(k.includes('linkedin')){if(t(i,p.li))c++;}else if(k.includes('github')||k.includes('git')){if(t(i,p.gh))c++;}else if(k.includes('portfolio')||k.includes('website')||k.includes('url')){if(t(i,p.w))c++;}else if(k.includes('city')||k.includes('location')||k.includes('address')){if(t(i,p.loc))c++;}else if(k.includes('notice')||k.includes('availability')||k.includes('start date')){if(t(i,p.np))c++;}else if((k.includes('year')&&k.includes('exp'))||k.includes('totalexp')||k.includes('total exp')){if(t(i,p.exp))c++;}else if((k.includes('current')||k.includes('curr'))&&(k.includes('ctc')||k.includes('salary')||k.includes('compensation')||k.includes('pay'))){if(t(i,p.cctc))c++;}else if((k.includes('expect')||k.includes('exp'))&&(k.includes('ctc')||k.includes('salary')||k.includes('compensation')||k.includes('pay'))){if(t(i,p.ectc))c++;}else if((k.includes('authorized')||k.includes('eligibility')||k.includes('work auth'))&&i.tagName!=='SELECT'){if(t(i,p.wa))c++;}else if(k.includes('gender')){if(t(i,p.g))c++;}else if(i.tagName==='TEXTAREA'&&(k.includes('cover')||k.includes('pitch')||k.includes('note')||k.includes('summary')||k.includes('additional')||k.includes('letter'))){if(t(i,p.c))c++;}});document.querySelectorAll('input[type=\"radio\"],input[type=\"checkbox\"]').forEach(b=>{const txt=((b.parentElement?b.parentElement.innerText:'')+' '+(b.getAttribute('aria-label')||'')).toLowerCase();if((txt.includes('authorized')||txt.includes('legally authorized'))&&(txt.includes('yes')||b.value.toLowerCase()==='yes'||(p.wa&&p.wa.toLowerCase().includes('yes')))){if(!b.checked){b.checked=true;b.dispatchEvent(new Event('change',{bubbles:true}));c++;}}if((txt.includes('sponsorship')||txt.includes('require visa')||txt.includes('future sponsorship'))&&(txt.includes('no')||b.value.toLowerCase()==='no')){if(!b.checked){b.checked=true;b.dispatchEvent(new Event('change',{bubbles:true}));c++;}}if(txt.includes('terms')||txt.includes('privacy')||txt.includes('consent')||txt.includes('acknowledge')){if(!b.checked&&b.type==='checkbox'){b.checked=true;b.dispatchEvent(new Event('change',{bubbles:true}));c++;}}});const toast=document.createElement('div');toast.innerText='JobHunt AutoFill: '+c+' fields populated! Review details before submitting.';toast.style.cssText='position:fixed;top:20px;right:20px;background:#059669;color:#ffffff;padding:12px 18px;border-radius:8px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;font-size:13px;font-weight:600;z-index:9999999;box-shadow:0 10px 25px rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.2);';document.body.appendChild(toast);setTimeout(()=>{if(toast.parentNode)toast.remove();},4000);})();`;
     }
 
     function updateBookmarkletCode(profile) {
@@ -6432,6 +6495,10 @@ let appData = {
         'autofill-portfolio': profile.portfolio,
         'autofill-notice-period': profile.noticePeriod,
         'autofill-work-auth': profile.workAuth,
+        'autofill-experience': profile.experience,
+        'autofill-current-ctc': profile.currentCtc,
+        'autofill-expected-ctc': profile.expectedCtc,
+        'autofill-gender': profile.gender,
         'autofill-summary': profile.summary
       };
       for (const [id, val] of Object.entries(map)) {
@@ -6453,6 +6520,10 @@ let appData = {
         portfolio: (document.getElementById('autofill-portfolio')?.value || '').trim(),
         noticePeriod: (document.getElementById('autofill-notice-period')?.value || '').trim(),
         workAuth: (document.getElementById('autofill-work-auth')?.value || '').trim(),
+        experience: (document.getElementById('autofill-experience')?.value || '').trim(),
+        currentCtc: (document.getElementById('autofill-current-ctc')?.value || '').trim(),
+        expectedCtc: (document.getElementById('autofill-expected-ctc')?.value || '').trim(),
+        gender: (document.getElementById('autofill-gender')?.value || '').trim(),
         summary: (document.getElementById('autofill-summary')?.value || '').trim()
       };
 
