@@ -264,10 +264,10 @@ class ResilientFailoverProvider(Provider):
             except Exception as e:
                 errors.append(f"Gemini: {e}")
 
-        # Tier 2: Groq Cloud LPU (Llama 3.3 70B)
+        # Tier 2: Groq Cloud LPU (Llama 3.3 70B / Qwen 27B)
         if (os.getenv("GROQ_API_KEY") or "").strip():
             try:
-                m = (model if "llama" in (model or "").lower() else None) or os.getenv("GROQ_MODEL") or "llama-3.3-70b-versatile"
+                m = (model if ("llama" in (model or "").lower() or "qwen" in (model or "").lower()) else None) or os.getenv("GROQ_MODEL") or "qwen/qwen3.8-27b"
                 return self.groq.complete(m, system, user, max_tokens, json_mode)
             except Exception as e:
                 errors.append(f"Groq: {e}")
@@ -381,6 +381,7 @@ def resolve(stage: str, check: bool = True) -> tuple[Provider, str]:
 
     provider = get_provider(name)
     model = (os.getenv(f"{stage.upper()}_MODEL") or "").strip() \
+        or (os.getenv("GROQ_MODEL") if name == "groq" else None) \
         or DEFAULT_MODELS.get(name, {}).get(stage)
     if not model:
         raise LLMError(f"set {stage.upper()}_MODEL for provider {name!r}")
