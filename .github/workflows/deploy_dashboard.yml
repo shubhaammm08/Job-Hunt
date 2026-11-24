@@ -42,6 +42,7 @@ jobs:
         run: |
           mkdir -p _site
           cp -r gui/* _site/
+          cp CNAME _site/ 2>/dev/null || cp gui/CNAME _site/ 2>/dev/null || true
           cp digest.html _site/ 2>/dev/null || cp gui/digest.html _site/ 2>/dev/null || true
           cp studio_presentation.html _site/ 2>/dev/null || cp gui/studio_presentation.html _site/ 2>/dev/null || true
           
