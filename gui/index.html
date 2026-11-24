@@ -4118,32 +4118,15 @@
 
       <!-- Section D: Standard ATS Screening Answers -->
       <div class="kit-section">
-        <div class="kit-sec-title">Standard Screening Responses</div>
-        <div class="screening-grid">
-          <div class="screening-item">
-            <span class="screening-val"><strong>Notice:</strong> Immediate (0-15d)</span>
-            <button class="btn-copy-chip" onclick="copyFieldValue('Immediate / 0-15 days', this)">Copy</button>
-          </div>
-          <div class="screening-item">
-            <span class="screening-val"><strong>Work Auth:</strong> India (Citizen)</span>
-            <button class="btn-copy-chip" onclick="copyFieldValue('Authorized to work in India (Citizen) / Open to Remote', this)">Copy</button>
-          </div>
-          <div class="screening-item">
-            <span class="screening-val"><strong>Location:</strong> Mumbai, India</span>
-            <button class="btn-copy-chip" onclick="copyFieldValue('Mumbai, Maharashtra, India', this)">Copy</button>
-          </div>
-          <div class="screening-item">
-            <span class="screening-val"><strong>Sponsorship:</strong> Not Needed</span>
-            <button class="btn-copy-chip" onclick="copyFieldValue('No sponsorship required', this)">Copy</button>
-          </div>
-          <div class="screening-item">
-            <span class="screening-val"><strong>LinkedIn:</strong> linkedin.com/in/...</span>
-            <button class="btn-copy-chip" onclick="copyFieldValue('https://www.linkedin.com/in/shubham-kadam', this)">Copy</button>
-          </div>
-          <div class="screening-item">
-            <span class="screening-val"><strong>GitHub:</strong> github.com/shubhaammm08</span>
-            <button class="btn-copy-chip" onclick="copyFieldValue('https://github.com/shubhaammm08', this)">Copy</button>
-          </div>
+        <div class="kit-sec-title">
+          <span>Standard Screening Responses</span>
+          <button type="button" class="btn-copy-chip" onclick="openBookmarkletGuide()" style="font-size:11px;" title="Manage in Q&A Bank">
+            <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            Manage Q&amp;A Bank
+          </button>
+        </div>
+        <div class="screening-grid" id="kit-screening-grid">
+          <!-- Dynamically rendered from Screening Q&A Bank -->
         </div>
       </div>
 
@@ -4411,6 +4394,43 @@
                 </button>
               </div>
               <textarea id="autofill-summary" class="autofill-input kit-textarea" rows="3" placeholder="Professional summary or screening pitch"></textarea>
+            </div>
+          </div>
+
+          <!-- Screening Q&A Bank Section -->
+          <div style="margin-top:18px;border-top:1px solid var(--border-subtle);padding-top:14px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
+              <div>
+                <div style="font-weight:700;font-size:13px;color:var(--text-main);display:flex;align-items:center;gap:6px;">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                  Screening Q&amp;A Bank
+                </div>
+                <div style="font-size:11.5px;color:var(--text-muted);margin-top:2px;">
+                  1-click answers for screening questions (tech stack experience, relocation, notice period, CTC).
+                </div>
+              </div>
+              <button type="button" class="btn-copy-chip" onclick="toggleAddQaForm()" style="color:var(--accent-emerald,#059669);border-color:rgba(5,150,105,0.3);">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add Custom Q&amp;A
+              </button>
+            </div>
+
+            <!-- Add Custom Q&A Inline Drawer Form -->
+            <div id="qa-add-form" style="display:none;background:var(--bg-surface-subtle);border:1px solid var(--border-subtle);border-radius:8px;padding:12px;margin-bottom:12px;">
+              <div style="font-size:12px;font-weight:700;color:var(--text-main);margin-bottom:8px;">Add New Screening Response</div>
+              <div style="display:flex;flex-direction:column;gap:8px;">
+                <input type="text" id="qa-new-key" class="autofill-input" placeholder="Question / Topic (e.g. AWS Cloud / System Design)">
+                <textarea id="qa-new-val" class="autofill-input" rows="2" placeholder="Your pre-drafted screening answer"></textarea>
+                <div style="display:flex;justify-content:flex-end;gap:8px;">
+                  <button type="button" class="btn-copy-chip" onclick="toggleAddQaForm()">Cancel</button>
+                  <button type="button" class="btn-apply-link" onclick="saveNewQaItem()" style="padding:4px 12px;font-size:12px;background:var(--accent-emerald,#059669);color:#fff;border:none;border-radius:6px;font-weight:600;">Save Q&amp;A</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Q&A Bank Grid -->
+            <div id="screening-qa-bank-grid" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));gap:8px;">
+              <!-- Dynamically rendered items -->
             </div>
           </div>
         </div>
@@ -6225,6 +6245,7 @@ let appData = {
         showToast(`Job opened in ${bName}! Cover note copied to clipboard.`);
       };
 
+      renderScreeningQABank();
       document.getElementById('modal-apply-kit').classList.add('open');
     }
 
@@ -6509,10 +6530,135 @@ let appData = {
       showToast('Applicant profile reset to defaults.');
     }
 
+    const DEFAULT_SCREENING_QA = [
+      {
+        q: "Python & SQL Experience",
+        a: "2+ years building automated ETL pipelines, analytical dashboards, and backend services with Python, SQL, FastAPI, and Pandas."
+      },
+      {
+        q: "GenAI & LLM Stack",
+        a: "Hands-on experience with Gemini API, OpenAI SDK, LangChain, prompt engineering, RAG, and AI agent automation."
+      },
+      {
+        q: "Relocation & Work Mode",
+        a: "Based in Mumbai Metropolitan Region; open to on-site in Mumbai/Pune, hybrid, or 100% remote worldwide."
+      },
+      {
+        q: "Notice Period & Availability",
+        a: "Immediate joiner (available within 0 to 15 days)."
+      },
+      {
+        q: "Current & Expected CTC",
+        a: "Current CTC: ₹4,50,000 | Expected CTC: ₹6,00,000 - ₹8,00,000 (negotiable based on role and learning opportunities)."
+      },
+      {
+        q: "Work Authorization & Sponsorship",
+        a: "Authorized to work in India (Citizen). No sponsorship required for India; open to employer-sponsored international visas."
+      }
+    ];
+
+    const SCREENING_QA_STORAGE_KEY = 'jobhunt_screening_bank';
+
+    function getScreeningQABank() {
+      try {
+        const saved = localStorage.getItem(SCREENING_QA_STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch (e) {
+        console.error('Error loading screening Q&A bank:', e);
+      }
+      return [...DEFAULT_SCREENING_QA];
+    }
+
+    function renderScreeningQABank() {
+      const bank = getScreeningQABank();
+      const guideGrid = document.getElementById('screening-qa-bank-grid');
+      if (guideGrid) {
+        guideGrid.innerHTML = bank.map((item, index) => {
+          const isCustom = index >= DEFAULT_SCREENING_QA.length;
+          const escapedA = escapeHtml(item.a).replace(/'/g, "\\'");
+          return `
+            <div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;justify-content:space-between;gap:8px;">
+              <div>
+                <div style="font-weight:700;font-size:12px;color:var(--text-main);margin-bottom:3px;">${escapeHtml(item.q)}</div>
+                <div style="font-size:11.5px;color:var(--text-secondary);line-height:1.4;">${escapeHtml(item.a)}</div>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border-subtle);padding-top:6px;margin-top:2px;">
+                <button type="button" class="btn-copy-chip" onclick="copyFieldValue('${escapedA}', this)" title="Copy Answer" aria-label="Copy Answer">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy
+                </button>
+                ${isCustom ? `
+                  <button type="button" class="btn-copy-chip" onclick="deleteQaItem(${index})" style="color:#ef4444;font-size:11px;" title="Delete Custom Q&A">Delete</button>
+                ` : '<span style="font-size:10.5px;color:var(--text-muted);">Standard</span>'}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      const kitGrid = document.getElementById('kit-screening-grid');
+      if (kitGrid) {
+        kitGrid.innerHTML = bank.map(item => {
+          const escapedA = escapeHtml(item.a).replace(/'/g, "\\'");
+          return `
+            <div class="screening-item">
+              <span class="screening-val"><strong>${escapeHtml(item.q)}:</strong> ${escapeHtml(item.a.length > 40 ? item.a.slice(0, 37) + '...' : item.a)}</span>
+              <button class="btn-copy-chip" onclick="copyFieldValue('${escapedA}', this)">Copy</button>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    function toggleAddQaForm() {
+      const form = document.getElementById('qa-add-form');
+      if (!form) return;
+      form.style.display = form.style.display === 'none' ? 'block' : 'none';
+      if (form.style.display === 'block') {
+        document.getElementById('qa-new-key')?.focus();
+      }
+    }
+
+    function saveNewQaItem() {
+      const q = (document.getElementById('qa-new-key')?.value || '').trim();
+      const a = (document.getElementById('qa-new-val')?.value || '').trim();
+      if (!q || !a) {
+        showToast('Please enter both a topic and answer.');
+        return;
+      }
+      const bank = getScreeningQABank();
+      bank.push({ q, a });
+      try {
+        localStorage.setItem(SCREENING_QA_STORAGE_KEY, JSON.stringify(bank));
+      } catch (e) {
+        console.error('Failed to save Q&A bank:', e);
+      }
+      document.getElementById('qa-new-key').value = '';
+      document.getElementById('qa-new-val').value = '';
+      toggleAddQaForm();
+      renderScreeningQABank();
+      showToast('Custom screening response saved!');
+    }
+
+    function deleteQaItem(index) {
+      const bank = getScreeningQABank();
+      if (index >= 0 && index < bank.length) {
+        bank.splice(index, 1);
+        try {
+          localStorage.setItem(SCREENING_QA_STORAGE_KEY, JSON.stringify(bank));
+        } catch (e) {}
+        renderScreeningQABank();
+        showToast('Screening item removed.');
+      }
+    }
+
     function initBookmarkletLink() {
       const profile = getApplicantProfile();
       loadAutofillForm(profile);
       updateBookmarkletCode(profile);
+      renderScreeningQABank();
     }
 
     let linkedInScrapeState = {

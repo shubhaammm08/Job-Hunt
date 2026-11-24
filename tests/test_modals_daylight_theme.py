@@ -127,3 +127,28 @@ def test_modals_zero_emojis():
         matches = EMOJI_PATTERN.findall(content)
         assert len(matches) == 0, f"Found {len(matches)} emojis in {html_path}"
 
+
+def test_screening_qa_bank_features():
+    """Asserts that the Screening Q&A Bank is wired across guide and apply kit."""
+    for html_path in [GUI_INDEX, ROOT_INDEX]:
+        with open(html_path, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        assert 'id="screening-qa-bank-grid"' in content
+        assert 'id="kit-screening-grid"' in content
+        assert "DEFAULT_SCREENING_QA" in content
+        assert "renderScreeningQABank" in content
+        assert "saveNewQaItem" in content
+        assert "Python & SQL Experience" in content
+
+
+def test_applied_tracker_csv_export():
+    """Asserts that Applied Jobs Hub has CSV export function and button."""
+    for html_path in [GUI_INDEX, ROOT_INDEX]:
+        with open(html_path, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        assert "exportAppliedJobsCsv" in content
+        assert 'onclick="exportAppliedJobsCsv()"' in content
+        assert "Export CSV" in content
+
