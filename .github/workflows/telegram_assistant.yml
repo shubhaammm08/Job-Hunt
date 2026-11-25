@@ -82,9 +82,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if [ -f seen.json ] && [ -s seen.json ]; then
+            SRC_SEEN="$GITHUB_WORKSPACE/seen.json"
+            SRC_TRACKER="$GITHUB_WORKSPACE/out/tracker.csv"
             STATE_DIR=$(mktemp -d)
-            cp seen.json "$STATE_DIR/seen.json"
-            [ -f out/tracker.csv ] && cp out/tracker.csv "$STATE_DIR/tracker.csv"
             
             cd "$STATE_DIR"
             git init
@@ -97,6 +97,9 @@ jobs:
             else
               git checkout --orphan state/jobhunter
             fi
+            
+            cp "$SRC_SEEN" seen.json
+            [ -f "$SRC_TRACKER" ] && cp "$SRC_TRACKER" tracker.csv
             
             git add seen.json
             [ -f tracker.csv ] && git add tracker.csv

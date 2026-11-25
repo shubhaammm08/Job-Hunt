@@ -4105,5 +4105,143 @@
     "emailed": false,
     "applied": false,
     "applied_on": null
+  },
+  "himalayas:rss:t-fincrime-focus-contract-remote": {
+    "first_seen": "2026-11-25T04:51:15+00:00",
+    "company": "Remote Employer",
+    "title": "Data Analyst (FinCrime Focus - Contract) Remote",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/capitex/jobs/data-analyst-fincrime-focus-contract-remote",
+    "score": 3.0,
+    "reason": "Requires an experienced data analyst with specialized financial crime domain expertise, which the junior candidate lacks.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 3.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:iesjobsmachine-learning-engineer": {
+    "first_seen": "2026-11-25T04:51:15+00:00",
+    "company": "Remote Employer",
+    "title": "Machine Learning Engineer",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/bright-vision-technologies/jobs/machine-learning-engineer",
+    "score": 4.0,
+    "reason": "Role expects an experienced machine learning engineer for consulting, while candidate is at the junior level.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "Machine Learning Engineer"
+    ],
+    "fit_score": 4.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4483042552": {
+    "first_seen": "2026-11-25T04:51:15+00:00",
+    "company": "Bridgestone Americas",
+    "title": "Data Analyst - NMFC",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4483042552",
+    "score": 2.0,
+    "reason": "Location is Bengaluru while candidate targets Mumbai or remote, and lacks specific freight/NMFC data experience.",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 2.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4491283039": {
+    "first_seen": "2026-11-25T04:51:15+00:00",
+    "company": "Wipro",
+    "title": "DATA ANALYST L4",
+    "location": "Pune Division, Maharashtra, India",
+    "url": "https://www.linkedin.com/jobs/view/4491283039",
+    "score": 4.0,
+    "reason": "Wipro L4 data analyst role generally requires more corporate experience than the candidate's one year.",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 4.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:241126030083": {
+    "first_seen": "2026-11-25T04:51:15+00:00",
+    "company": "Spartan Infosoft",
+    "title": "Python Developer",
+    "location": "Remote",
+    "url": "https://www.naukri.com/job-listings-python-developer-spartan-infosoft-mumbai-all-areas-0-to-1-years-241126030083",
+    "score": 9.0,
+    "reason": "Strong match for a junior python developer position asking for 0-1 years of experience.",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Python Developer"
+    ],
+    "fit_score": 9.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:281026502103": {
+    "first_seen": "2026-11-25T04:51:15+00:00",
+    "company": "Softlabs Technologies And Development",
+    "title": "AI Engineer Trainee / Intern",
+    "location": "Mumbai",
+    "url": "https://www.naukri.com/job-listings-ai-engineer-trainee-intern-softlabs-group-mumbai-0-to-3-years-281026502103",
+    "score": 9.0,
+    "reason": "Excellent local match for an AI engineer trainee position matching junior seniority and Mumbai location.",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "AI Engineer"
+    ],
+    "fit_score": 9.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
   }
 }

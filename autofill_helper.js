@@ -14,7 +14,7 @@
     email: "ssk080204@gmail.com",
     phone: "+918169832448",
     location: "Mumbai Metropolitan Region / Remote",
-    linkedin: "https://www.linkedin.com/in/shubham-kadam",
+    linkedin: "https://www.linkedin.com/in/shubham-kadam-data/",
     github: "https://github.com/shubhaammm08",
     portfolio: "https://shubhaammm08.github.io/Job-Hunt/",
     summary: "Computer Engineering graduate with hands-on expertise in Python, SQL, Power BI, ETL pipelines, and AI agent automation. Built end-to-end data processing pipelines for Honda motorcycle sales analytics, reducing reporting effort by 80%. Excited to contribute high-impact engineering solutions.",

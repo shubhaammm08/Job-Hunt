@@ -53,14 +53,21 @@ jobs:
           python -c "
           import json, os
           try:
-              seen = json.load(open('_site/seen.json', encoding='utf-8'))
+              seen = json.load(open('_site/seen.json', encoding='utf-8-sig'))
           except Exception:
               seen = {}
+          if not seen or len(seen) < 50:
+              try:
+                  main_seen = json.load(open('seen.json', encoding='utf-8-sig'))
+                  if len(main_seen) > len(seen):
+                      seen = main_seen
+              except Exception:
+                  pass
           try:
-              profile = json.load(open('profile.json', encoding='utf-8'))
+              profile = json.load(open('profile.json', encoding='utf-8-sig'))
           except Exception:
               try:
-                  profile = json.load(open('profile.example.json', encoding='utf-8'))
+                  profile = json.load(open('profile.example.json', encoding='utf-8-sig'))
               except Exception:
                   profile = {}
           health = []
@@ -117,6 +124,9 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: "_site"
+
+      - name: "Stabilize Artifact Indexing"
+        run: sleep 5
 
       - name: "Deploy to GitHub Pages"
         id: deployment
