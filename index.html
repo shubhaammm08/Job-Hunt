@@ -3878,11 +3878,11 @@
           <line x1="21" y1="21" x2="16.65" y2="16.65" />
         </svg>
       </button>
-      <button class="btn-actions" onclick="openAppliedTrackerModal()" title="Sync Applied Jobs between Phone & Laptop" style="display:inline-flex;align-items:center;gap:4px;color:var(--accent-indigo, #4F46E5);font-weight:700;font-size:12px;padding:4px 8px;border-radius:6px;border:1px solid var(--indigo-border, rgba(79,70,229,0.3));">
+      <button class="btn-actions" onclick="openAppliedTrackerModal()" title="Applied Tracker Hub">
         <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+          <polyline points="22 4 12 14.01 9 11.01" />
         </svg>
-        <span>Sync</span>
       </button>
       <button class="btn-actions" id="mobile-more-btn" onclick="toggleMobileMoreMenu(event)" title="More actions"
         aria-label="More actions" aria-expanded="false" aria-haspopup="true">
@@ -3893,7 +3893,6 @@
         </svg>
       </button>
       <div class="mobile-more-menu" id="mobile-more-menu" role="menu" aria-label="More mobile actions">
-        <button type="button" role="menuitem" onclick="openAppliedTrackerModal(); closeMobileMoreMenu();" style="font-weight:700;color:var(--accent-indigo, #4F46E5);">Device Sync (Phone / Laptop)</button>
         <button type="button" role="menuitem" onclick="openBookmarkletGuide(); closeMobileMoreMenu();">Auto-Fill
           Tool</button>
         <button type="button" role="menuitem" onclick="openWhatsAppGuide(); closeMobileMoreMenu();">Phone
@@ -4256,13 +4255,6 @@
             <span id="cloud-sync-status" class="tag" style="font-size:11px;padding:3px 8px;background:var(--bg-surface-subtle);border:1px solid var(--border-subtle);display:inline-flex;align-items:center;gap:5px;cursor:pointer;" onclick="pullCloudSync(false)" title="Real-time Firebase Cloud Sync active. Click to refresh.">
               <span class="status-pulse-dot" style="background:#10b981;box-shadow:0 0 6px #10b981;"></span> Cloud Synced
             </span>
-            <button class="btn-applied-export" onclick="openAppliedTrackerModal()"
-              title="Sync applied jobs between phone and laptop" style="background:var(--accent-indigo, #4F46E5);color:#fff;border-color:transparent;font-weight:700;">
-              <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
-              </svg>
-              <span>Sync Devices</span>
-            </button>
             <button class="btn-applied-export" onclick="openAppliedTrackerModal()"
               title="View and manage all applied jobs">
               <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -5576,23 +5568,6 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
         </button>
       </div>
 
-      <!-- Prominent Cross-Device Sync Banner -->
-      <div style="background:var(--indigo-bg, rgba(79,70,229,0.08));border:1px solid var(--indigo-border, rgba(79,70,229,0.3));border-radius:10px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
-        <div>
-          <div style="font-weight:700;font-size:13.5px;color:var(--text-main);">Cross-Device Sync (Phone &amp; Laptop)</div>
-          <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Transfer your applied jobs between devices in 1 click:</div>
-        </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <button class="btn-applied-export" onclick="copyAppliedSyncCode()" title="Copy sync code to paste on other devices" style="background:var(--accent-indigo, #4F46E5);color:#fff;border-color:transparent;font-weight:700;">
-            <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-            <span>1. Copy Sync Code</span>
-          </button>
-          <button class="btn-applied-export" onclick="importAppliedSyncCode()" title="Import sync code from other device" style="background:var(--accent-emerald, #059669);color:#fff;border-color:transparent;font-weight:700;">
-            <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            <span>2. Import Sync</span>
-          </button>
-        </div>
-      </div>
 
       <div
         style="display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--bg-surface-subtle);border-radius:8px;border:1px solid var(--border-subtle);">
@@ -7436,6 +7411,26 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
           });
         }
 
+        if (fields.avatar && fields.avatar.stringValue) {
+          const cloudAvatar = fields.avatar.stringValue;
+          let currentAvatar = '';
+          try {
+            currentAvatar = localStorage.getItem('jobhunt_avatar') || (typeof avatarState !== 'undefined' ? avatarState.current : '') || '';
+          } catch (e) { }
+          if (!currentAvatar) {
+            currentAvatar = (typeof preferredAvatar === 'function' ? preferredAvatar() : '') || 'initials';
+          }
+          if (cloudAvatar && cloudAvatar !== currentAvatar) {
+            if (cloudAvatar === 'initials') {
+              try { localStorage.setItem('jobhunt_avatar', 'initials'); } catch (e) { }
+              if (typeof applyAvatar === 'function') applyAvatar('');
+            } else if (typeof isValidAvatar === 'function' ? isValidAvatar(cloudAvatar) : /^([a-z0-9]+)_(\d+)$/.test(cloudAvatar)) {
+              try { localStorage.setItem('jobhunt_avatar', cloudAvatar); } catch (e) { }
+              if (typeof applyAvatar === 'function') applyAvatar(cloudAvatar);
+            }
+          }
+        }
+
         const storedMeta = JSON.parse(localStorage.getItem('jobhunt_applied_jobs') || '{}');
         const legacyList = JSON.parse(localStorage.getItem('jobhunt_applied') || '[]');
 
@@ -7538,6 +7533,14 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
           }
         };
 
+        let curAvatar = '';
+        try {
+          curAvatar = localStorage.getItem('jobhunt_avatar') || (typeof avatarState !== 'undefined' ? avatarState.current : '') || '';
+        } catch (e) { }
+        if (!curAvatar) {
+          curAvatar = (typeof preferredAvatar === 'function' ? preferredAvatar() : '') || 'vibrent_1';
+        }
+
         const payload = {
           fields: {
             applied_jobs: {
@@ -7546,6 +7549,7 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
               }
             },
             applied_ids: firestoreAppliedIds,
+            avatar: { stringValue: String(curAvatar) },
             updated_at: { stringValue: new Date().toISOString() },
             version: { integerValue: "1" }
           }
@@ -8916,8 +8920,8 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
       const note = document.getElementById('avatar-picker-note');
       if (!note) return;
       note.textContent = avatarState.current
-        ? `Selected: ${avatarState.current.replace('_', ' #')} · saved in this browser.`
-        : 'Using initials · your choice is saved in this browser.';
+        ? `Selected: ${avatarState.current.replace('_', ' #')} · synced across devices.`
+        : 'Using initials · synced across devices.';
     }
     function updateAvatarSelection() {
       document.querySelectorAll('.avatar-option').forEach(btn => {
@@ -8988,14 +8992,20 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
       renderAvatarGrid(styleId);
       updateAvatarTabs();
     }
-    function selectAvatar(name) {
+    function selectAvatar(name, fromCloud = false) {
       if (!isValidAvatar(name)) return;
       try { localStorage.setItem(AVATAR_STORAGE_KEY, name); } catch (e) { }
       applyAvatar(name);
+      if (!fromCloud) {
+        try { pushCloudSync(true); } catch (e) { }
+      }
     }
-    function resetAvatar() {
+    function resetAvatar(fromCloud = false) {
       try { localStorage.setItem(AVATAR_STORAGE_KEY, 'initials'); } catch (e) { }
       applyAvatar('');
+      if (!fromCloud) {
+        try { pushCloudSync(true); } catch (e) { }
+      }
     }
     function openAvatarPicker() {
       const modal = document.getElementById('avatar-picker-modal');

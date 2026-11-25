@@ -70,16 +70,21 @@ service cloud.firestore {
       return (val is int || val is float) && val >= 0;
     }
 
+    function isValidAvatarField(val) {
+      return val is string && val.size() <= 64;
+    }
+
     // ===============================================================
     // Domain Validator (Validator Function Pattern)
     // Used in BOTH create and update operations to eliminate Update Bypass
     // ===============================================================
 
     function isValidSyncDoc(data) {
-      return hasOnlyAllowedFields(data, ['applied_jobs', 'applied_ids', 'updated_at', 'version']) &&
+      return hasOnlyAllowedFields(data, ['applied_jobs', 'applied_ids', 'avatar', 'updated_at', 'version']) &&
              hasRequiredFields(data, ['applied_jobs', 'applied_ids']) &&
              isValidAppliedJobs(data.applied_jobs) &&
              isValidAppliedIds(data.applied_ids) &&
+             (!('avatar' in data) || isValidAvatarField(data.avatar)) &&
              (!('updated_at' in data) || isValidUpdatedAt(data.updated_at)) &&
              (!('version' in data) || isValidVersion(data.version));
     }
