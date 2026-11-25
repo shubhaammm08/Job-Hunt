@@ -17,7 +17,7 @@ import webbrowser
 
 ROOT = Path(__file__).resolve().parent.parent
 GUI_DIR = Path(__file__).resolve().parent
-HOST = "127.0.0.1"
+HOST = os.environ.get("JOBHUNT_HOST", "0.0.0.0")
 PORT = 8080
 
 LINKEDIN_STATUS_LOCK = threading.Lock()
@@ -469,10 +469,21 @@ class JobHuntHandler(SimpleHTTPRequestHandler):
 
 def start_server(port: int = PORT, open_browser: bool = True):
     server = HTTPServer((HOST, port), JobHuntHandler)
-    url = f"http://{HOST}:{port}"
+    url = f"http://localhost:{port}"
+    local_ip = "127.0.0.1"
+    try:
+        import socket
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        local_ip = s.getsockname()[0]
+        s.close()
+    except Exception:
+        pass
     print(f"\n==================================================")
     print(f"  Shubham's JobHunt GUI Dashboard")
-    print(f"  Running at: {url}")
+    print(f"  Local (Laptop):   http://localhost:{port}")
+    if local_ip != "127.0.0.1":
+        print(f"  Network (Mobile): http://{local_ip}:{port}")
     print(f"  Press Ctrl+C to stop.")
     print(f"==================================================\n")
     if open_browser:
