@@ -86,6 +86,8 @@ def test_make_job_buttons():
     assert any("Pitch Note" in t for t in all_texts)
     assert any("Cover Letter" in t for t in all_texts)
     assert any("Screening Q&A" in t for t in all_texts)
+    assert any("Salary Guide" in t for t in all_texts)
+    assert any("Find Recruiters" in t for t in all_texts)
     assert any("Mark Applied" in t for t in all_texts)
 
     # Validate Telegram callback_data length limit (64 bytes max)
@@ -124,3 +126,28 @@ def test_default_dashboard_url_fallback(monkeypatch):
     finally:
         monkeypatch.undo()
         importlib.reload(telegram_mod)
+
+
+def test_cleanup_expired_messages(tmp_path):
+    from jobhunt.telegram import cleanup_expired_messages, track_sent_message
+    import json
+    import time
+    store_file = tmp_path / "test_messages.json"
+    now = time.time()
+
+    track_sent_message("12345", 101, kind="alert", store_file=store_file)
+    track_sent_message("12345", 102, kind="alert", store_file=store_file)
+
+    entries = json.loads(store_file.read_text(encoding="utf-8"))
+    entries[0]["sent_at"] = now - 90000
+    entries[1]["sent_at"] = now - 3600
+    store_file.write_text(json.dumps(entries), encoding="utf-8")
+
+    with patch("jobhunt.telegram.delete_telegram_message", return_value=True) as mock_del:
+        deleted = cleanup_expired_messages("token", max_age_seconds=86400, store_file=store_file)
+        assert deleted == 1
+        mock_del.assert_called_once_with("12345", 101, bot_token="token")
+
+    remaining = json.loads(store_file.read_text(encoding="utf-8"))
+    assert len(remaining) == 1
+    assert remaining[0]["message_id"] == 102

@@ -8,7 +8,9 @@ from __future__ import annotations
 import datetime
 import json
 import os
+from pathlib import Path
 import re
+import time
 import urllib.parse
 import urllib.request
 from typing import TYPE_CHECKING, Any
@@ -17,6 +19,128 @@ if TYPE_CHECKING:
     from .fetch import Job
 
 DEFAULT_DASHBOARD_URL = (os.environ.get("DASHBOARD_URL") or "").strip() or "https://shubhaammm08.github.io/Job-Hunt/"
+TRACKED_MESSAGES_FILE = Path("out/telegram_messages.json")
+
+
+def track_sent_message(chat_id: str | int, message_id: int, kind: str = "alert", store_file: Path | str | None = None) -> None:
+    """Record sent Telegram message IDs for 24-hour auto-delete lifecycle management."""
+    fpath = Path(store_file or TRACKED_MESSAGES_FILE)
+    try:
+        fpath.parent.mkdir(parents=True, exist_ok=True)
+        entries: list[dict[str, Any]] = []
+        if fpath.exists():
+            try:
+                entries = json.loads(fpath.read_text(encoding="utf-8"))
+            except Exception:
+                entries = []
+        entries.append({
+            "chat_id": str(chat_id),
+            "message_id": int(message_id),
+            "sent_at": time.time(),
+            "kind": kind,
+        })
+        fpath.write_text(json.dumps(entries, indent=2), encoding="utf-8")
+    except Exception:
+        pass
+
+
+def delete_telegram_message(chat_id: str | int, message_id: int, bot_token: str | None = None) -> bool:
+    """Delete a Telegram message via official deleteMessage API."""
+    token = bot_token or os.environ.get("TELEGRAM_BOT_TOKEN")
+    if not token:
+        return False
+    url = f"https://api.telegram.org/bot{token.strip()}/deleteMessage"
+    body = {"chat_id": str(chat_id).strip(), "message_id": int(message_id)}
+    req = urllib.request.Request(
+        url,
+        data=json.dumps(body).encode("utf-8"),
+        headers={"Content-Type": "application/json", "User-Agent": "JobHunt-Telegram-Bot/2.0"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            return 200 <= resp.status < 300
+    except Exception:
+        return False
+
+
+def pin_telegram_message(chat_id: str | int, message_id: int, bot_token: str | None = None, disable_notification: bool = True) -> bool:
+    """Pin a message to the top of the Telegram chat."""
+    token = bot_token or os.environ.get("TELEGRAM_BOT_TOKEN")
+    if not token:
+        return False
+    url = f"https://api.telegram.org/bot{token.strip()}/pinChatMessage"
+    body = {
+        "chat_id": str(chat_id).strip(),
+        "message_id": int(message_id),
+        "disable_notification": disable_notification,
+    }
+    req = urllib.request.Request(
+        url,
+        data=json.dumps(body).encode("utf-8"),
+        headers={"Content-Type": "application/json", "User-Agent": "JobHunt-Telegram-Bot/2.0"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            return 200 <= resp.status < 300
+    except Exception:
+        return False
+
+
+def unpin_telegram_message(chat_id: str | int, message_id: int | None = None, bot_token: str | None = None) -> bool:
+    """Unpin a previously pinned message."""
+    token = bot_token or os.environ.get("TELEGRAM_BOT_TOKEN")
+    if not token:
+        return False
+    method = "unpinChatMessage" if message_id else "unpinAllChatMessages"
+    url = f"https://api.telegram.org/bot{token.strip()}/{method}"
+    body: dict[str, Any] = {"chat_id": str(chat_id).strip()}
+    if message_id:
+        body["message_id"] = int(message_id)
+    req = urllib.request.Request(
+        url,
+        data=json.dumps(body).encode("utf-8"),
+        headers={"Content-Type": "application/json", "User-Agent": "JobHunt-Telegram-Bot/2.0"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            return 200 <= resp.status < 300
+    except Exception:
+        return False
+
+
+def cleanup_expired_messages(bot_token: str | None = None, max_age_seconds: int = 86400, store_file: Path | str | None = None) -> int:
+    """Delete all tracked Telegram messages older than max_age_seconds (default 24 hours)."""
+    fpath = Path(store_file or TRACKED_MESSAGES_FILE)
+    if not fpath.exists():
+        return 0
+    try:
+        entries: list[dict[str, Any]] = json.loads(fpath.read_text(encoding="utf-8"))
+    except Exception:
+        return 0
+
+    now = time.time()
+    retained: list[dict[str, Any]] = []
+    deleted_count = 0
+
+    for item in entries:
+        sent_at = float(item.get("sent_at", 0))
+        cid = item.get("chat_id")
+        mid = item.get("message_id")
+        if (now - sent_at) >= max_age_seconds and cid and mid:
+            delete_telegram_message(cid, mid, bot_token=bot_token)
+            deleted_count += 1
+        else:
+            retained.append(item)
+
+    try:
+        fpath.write_text(json.dumps(retained, indent=2), encoding="utf-8")
+    except Exception:
+        pass
+
+    return deleted_count
 
 
 def extract_tech_tags(text: str) -> list[str]:
@@ -46,6 +170,8 @@ def make_job_buttons(job_id: str, apply_url: str) -> dict[str, Any]:
     cb_cl = f"cl:{job_id}"[:64]
     cb_kit = f"kit:{job_id}"[:64]
     cb_qa = f"qa:{job_id}"[:64]
+    cb_sal = f"sal:{job_id}"[:64]
+    cb_rec = f"rec:{job_id}"[:64]
 
     keyboard = [
         [
@@ -58,6 +184,10 @@ def make_job_buttons(job_id: str, apply_url: str) -> dict[str, Any]:
         ],
         [
             {"text": "❓ Screening Q&A", "callback_data": cb_qa},
+            {"text": "💼 Salary Guide", "callback_data": cb_sal},
+        ],
+        [
+            {"text": "🔍 Find Recruiters", "callback_data": cb_rec},
             {"text": "✅ Mark Applied", "callback_data": cb_applied},
         ],
     ]
@@ -188,6 +318,7 @@ def send_telegram(
     bot_token: str | None = None,
     chat_id: str | None = None,
     reply_markup: dict[str, Any] | None = None,
+    kind: str = "alert",
 ) -> bool:
     """Deliver a message via official Telegram Bot API with optional inline keyboard buttons."""
     token = bot_token or os.environ.get("TELEGRAM_BOT_TOKEN")
@@ -213,13 +344,23 @@ def send_telegram(
     req = urllib.request.Request(
         url,
         data=payload,
-        headers={"Content-Type": "application/json", "User-Agent": "JobHunt-Telegram-Bot/1.0"},
+        headers={"Content-Type": "application/json", "User-Agent": "JobHunt-Telegram-Bot/2.0"},
         method="POST",
     )
 
     try:
         with urllib.request.urlopen(req, timeout=15) as resp:
-            return 200 <= resp.status < 300
+            ok = 200 <= getattr(resp, "status", 200) < 300
+            try:
+                raw = resp.read()
+                if raw:
+                    data = json.loads(raw.decode("utf-8", errors="ignore"))
+                    msg_id = data.get("result", {}).get("message_id")
+                    if msg_id and cid:
+                        track_sent_message(str(cid).strip(), msg_id, kind=kind)
+            except Exception:
+                pass
+            return ok
     except urllib.error.HTTPError as e:
         if e.code == 400 and body.get("parse_mode"):
             # Markdown formatting fallback: retry without markdown to guarantee delivery
@@ -228,11 +369,21 @@ def send_telegram(
             req2 = urllib.request.Request(
                 url,
                 data=payload2,
-                headers={"Content-Type": "application/json", "User-Agent": "JobHunt-Telegram-Bot/1.0"},
+                headers={"Content-Type": "application/json", "User-Agent": "JobHunt-Telegram-Bot/2.0"},
                 method="POST",
             )
             with urllib.request.urlopen(req2, timeout=15) as resp2:
-                return 200 <= resp2.status < 300
+                ok = 200 <= getattr(resp2, "status", 200) < 300
+                try:
+                    raw = resp2.read()
+                    if raw:
+                        data = json.loads(raw.decode("utf-8", errors="ignore"))
+                        msg_id = data.get("result", {}).get("message_id")
+                        if msg_id and cid:
+                            track_sent_message(str(cid).strip(), msg_id, kind=kind)
+                except Exception:
+                    pass
+                return ok
         raise
 
 
@@ -244,7 +395,7 @@ def send_job_card(
     """Send an individual high-match job card with interactive 1-click action buttons."""
     card_text = format_job_card(job)
     buttons = make_job_buttons(job.job_id, job.apply_url or job.url)
-    return send_telegram(card_text, bot_token=bot_token, chat_id=chat_id, reply_markup=buttons)
+    return send_telegram(card_text, bot_token=bot_token, chat_id=chat_id, reply_markup=buttons, kind="job_card")
 
 
 def send_telegram_digest(
@@ -255,8 +406,10 @@ def send_telegram_digest(
     cfg: dict[str, Any] | None = None,
     profile: dict[str, Any] | None = None,
     send_interactive_cards: bool = True,
+    bot_token: str | None = None,
+    chat_id: str | None = None,
 ) -> bool:
-    """Format and send the Telegram digest based on configuration, with optional interactive cards."""
+    """Format and send the Telegram digest with 24h auto-delete cleanup, pinning, and interactive cards."""
     cfg = cfg or {}
     profile = profile or {}
     tg_cfg = cfg.get("notifications", {}).get("telegram", {}) if isinstance(cfg.get("notifications"), dict) else {}
@@ -264,6 +417,9 @@ def send_telegram_digest(
     min_score = float(tg_cfg.get("min_score", 6.0))
     max_jobs = int(tg_cfg.get("max_jobs_per_alert", 5))
     candidate_name = profile.get("name", "Shubham")
+
+    # 0. Clean up any expired messages older than 24 hours
+    cleanup_expired_messages(bot_token=bot_token, max_age_seconds=86400)
 
     # 1. Send the primary executive digest summary
     text = format_telegram_alert(
@@ -290,16 +446,27 @@ def send_telegram_digest(
     }
 
     try:
-        ok = send_telegram(text, reply_markup=quick_menu)
+        ok = send_telegram(text, bot_token=bot_token, chat_id=chat_id, reply_markup=quick_menu, kind="briefing")
         if not ok:
             return False
+
+        # Attempt to pin the new daily briefing
+        cid = chat_id or os.environ.get("TELEGRAM_CHAT_ID")
+        if cid and TRACKED_MESSAGES_FILE.exists():
+            try:
+                tracked = json.loads(TRACKED_MESSAGES_FILE.read_text(encoding="utf-8"))
+                briefings = [m for m in tracked if m.get("kind") == "briefing"]
+                if briefings:
+                    pin_telegram_message(cid, briefings[-1]["message_id"], bot_token=bot_token)
+            except Exception:
+                pass
 
         # 2. For top high-match jobs (score >= 7.0), send interactive cards with 1-click buttons
         if send_interactive_cards:
             top_actionable = [j for j in jobs if (j.score or 0.0) >= 7.0]
             top_actionable.sort(key=lambda j: (j.score or 0.0), reverse=True)
             for j in top_actionable[:3]:
-                send_job_card(j)
+                send_job_card(j, bot_token=bot_token, chat_id=chat_id)
 
         return True
     except Exception as e:

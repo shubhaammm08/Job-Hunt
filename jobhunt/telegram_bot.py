@@ -23,7 +23,13 @@ from typing import Any
 
 from .fetch import Job
 from .store import Store
-from .telegram import DEFAULT_DASHBOARD_URL, format_job_card, make_job_buttons, send_telegram
+from .telegram import (
+    DEFAULT_DASHBOARD_URL,
+    cleanup_expired_messages,
+    format_job_card,
+    make_job_buttons,
+    send_telegram,
+)
 
 TELEGRAM_API_BASE = "https://api.telegram.org/bot"
 
@@ -82,6 +88,7 @@ def set_bot_commands(token: str) -> bool:
         {"command": "kit", "description": "⚡ Tap-to-Copy AutoFill Kit (/kit <company>)"},
         {"command": "applied", "description": "✅ Mark a job as applied (/applied <name>)"},
         {"command": "reminders", "description": "⏰ Recruiter follow-up alerts & notes"},
+        {"command": "cleanup", "description": "🧹 Purge chat messages older than 24h"},
         {"command": "hunt", "description": "⚡ Pipeline status & manual scan trigger"},
         {"command": "help", "description": "💡 Command cheat sheet & quick actions"},
     ]
@@ -135,6 +142,7 @@ def handle_start_help(chat_id: str | int, token: str, profile: dict[str, Any]) -
         f"• `/kit <company>` — Tap-to-copy complete applicant kit\n"
         f"• `/applied <company>` — Mark a role as applied\n"
         f"• `/reminders` — Recruiter follow-up templates\n"
+        f"• `/cleanup` — Purge chat messages older than 24h\n"
         f"• `/hunt` — Pipeline status & sync info\n\n"
         f"💡 *Pro Tip:* Paste any Job Description or LinkedIn job post here, "
         f"and I'll score your fit and generate a cold outreach pitch on demand!"
@@ -619,14 +627,121 @@ def handle_callback_query(token: str, cb: dict[str, Any], store: Store, profile:
             comp = d.get("company", "Company")
             title = d.get("title", "Role")
             answer_callback(token, cb_id, text=f"✅ Marked {comp} as Applied!", show_alert=False)
+            stage_buttons = {
+                "inline_keyboard": [
+                    [
+                        {"text": "📞 Screen Scheduled", "callback_data": f"st:screen:{jid}"[:64]},
+                        {"text": "💻 Tech Round", "callback_data": f"st:tech:{jid}"[:64]},
+                    ],
+                    [
+                        {"text": "🏆 Offer Received", "callback_data": f"st:offer:{jid}"[:64]},
+                        {"text": "❌ Not Selected", "callback_data": f"st:rej:{jid}"[:64]},
+                    ],
+                ]
+            }
             send_telegram(
-                f"✅ *Marked Applied:* **{comp}** — *{title}*\n"
-                f"Reminder scheduled for 5 days. Check `/reminders` anytime!",
+                f"✅ *Marked Applied:* **{comp}** — *{title}*\n\n"
+                f"📅 Status: `Applied` | Follow-up reminder active for 5 days.\n"
+                f"Tap a button below anytime to update your interview progress:",
                 bot_token=token,
                 chat_id=str(chat_id),
+                reply_markup=stage_buttons,
             )
         else:
             answer_callback(token, cb_id, text="Job marked as applied!", show_alert=False)
+        return
+
+    if data.startswith("st:"):
+        parts = data.split(":", 2)
+        if len(parts) >= 3:
+            stage_key = parts[1]
+            jid_prefix = parts[2]
+            match = store.find_job(jid_prefix)
+            if match:
+                jid, d = match
+                comp = d.get("company", "Company")
+                stage_names = {
+                    "screen": "📞 Recruiter Screen Scheduled",
+                    "tech": "💻 Technical Round Active",
+                    "offer": "🏆 Offer Received 🎉",
+                    "rej": "❌ Archived / Not Selected",
+                }
+                stage_display = stage_names.get(stage_key, stage_key.title())
+                d["status"] = stage_display
+                d["stage_updated_at"] = datetime.datetime.now(timezone.utc).isoformat()
+                store.save()
+                store.export_csv()
+                answer_callback(token, cb_id, text=f"Stage updated: {stage_display}", show_alert=False)
+                send_telegram(
+                    f"🎯 *Stage Updated for {comp}:*\n"
+                    f"Status: *{stage_display}*\n"
+                    f"Tracker CSV and analytics dashboard synchronized!",
+                    bot_token=token,
+                    chat_id=str(chat_id),
+                )
+                return
+
+    if data.startswith("rec:"):
+        jid_prefix = data[4:]
+        match = store.find_job(jid_prefix)
+        job_data = match[1] if match else {"company": "Target Company", "title": "Software Engineer"}
+        comp = job_data.get("company", "Company")
+        title = job_data.get("title", "Role")
+        answer_callback(token, cb_id, text=f"🔍 Recruiter Search for {comp}", show_alert=False)
+
+        comp_encoded = urllib.parse.quote(comp)
+        recruiter_url = f"https://www.linkedin.com/search/results/people/?keywords=recruiter%20{comp_encoded}"
+        em_url = f"https://www.linkedin.com/search/results/people/?keywords=engineering%20manager%20{comp_encoded}"
+
+        conn_note = (
+            f"Hi [Name], I noticed the {title} opening at {comp} and wanted to reach out. "
+            f"With hands-on experience in Python, SQL, and data automation, I would love to connect and explore how my skills align with {comp}'s initiatives. Best, Shubham"
+        )
+
+        rec_card = (
+            f"🔍 *Recruiter & Hiring Team Finder: {comp}*\n\n"
+            f"🎯 *Direct LinkedIn People Searches:*\n"
+            f"• [Find Technical Recruiters at {comp}]({recruiter_url})\n"
+            f"• [Find Engineering Managers at {comp}]({em_url})\n\n"
+            f"💬 *LinkedIn Connection Note (<300 chars, tap to copy):*\n"
+            f"```\n{conn_note}\n```\n"
+            f"_Paste into connection request note on LinkedIn for 3x higher response rate!_"
+        )
+        send_telegram(rec_card, bot_token=token, chat_id=str(chat_id))
+        return
+
+    if data.startswith("sal:"):
+        jid_prefix = data[4:]
+        match = store.find_job(jid_prefix)
+        job_data = match[1] if match else {"company": "Target Company", "title": "Developer"}
+        comp = job_data.get("company", "Company")
+        title = job_data.get("title", "Role")
+        sal = job_data.get("salary", "").strip() or "Market Standard"
+        answer_callback(token, cb_id, text=f"💼 Salary Guide for {comp}", show_alert=False)
+
+        guide = (
+            f"💼 *Compensation & Negotiation Guide*\n"
+            f"🏢 *{comp}* — *{title}*\n\n"
+            f"💰 *Expected Industry Range (1-3 yrs):*\n"
+            f"• India On-site / Hybrid: `₹6,50,000 - ₹11,00,000 INR (6.5 - 11 LPA)`\n"
+            f"• Remote Worldwide: `$45,000 - $75,000 USD / year`\n"
+            f"• Detected Posting Salary: `{sal}`\n\n"
+            f"🎯 *Your Baseline (Synced Profile):*\n"
+            f"• Current CTC: `₹4,50,000 (4.5 LPA)`\n"
+            f"• Target CTC: `₹7,00,000 - ₹8,50,000 (7 - 8.5 LPA, 55%+ uplift)`\n\n"
+            f"🗣️ *Counter-Offer Script (Tap to copy):*\n"
+            f"```\n"
+            f"\"Based on my hands-on production experience in Python ETL pipelines, SQL automation, "
+            f"and the technical responsibilities of this {title} position, I am targeting compensation "
+            f"in the range of 7.5 to 8.5 LPA. However, alignment with team culture and engineering impact "
+            f"is equally important to me, and I am open to discussing the complete package.\"\n"
+            f"```\n\n"
+            f"💡 *Top Questions to Ask the Recruiter:*\n"
+            f"1. What is the budgeted salary band for this specific seniority level?\n"
+            f"2. How are annual performance bonuses or appraisals structured?\n"
+            f"3. Does this role include remote work stipends or learning allowances?"
+        )
+        send_telegram(guide, bot_token=token, chat_id=str(chat_id))
         return
 
     if data.startswith("pitch:"):
@@ -815,6 +930,16 @@ def process_update(
         handle_search(chat_id, token, store, query)
     elif lower_text.startswith("/qa") or lower_text.startswith("/screening"):
         handle_qa(chat_id, token)
+    elif lower_text.startswith("/cleanup") or lower_text.startswith("/purge"):
+        count = cleanup_expired_messages(token, max_age_seconds=86400)
+        send_telegram(
+            f"🧹 *Chat Auto-Cleanup Complete*\n\n"
+            f"Purged `{count}` messages older than 24 hours.\n\n"
+            f"💡 *Tip for Native Auto-Delete:*\n"
+            f"Open this chat in Telegram $\to$ Tap Chat Header $\to$ `...` $\to$ **Auto-Delete** $\to$ Select **24 hours** to have Telegram automatically vanish every message seamlessly!",
+            bot_token=token,
+            chat_id=str(chat_id),
+        )
     elif lower_text.startswith("/hunt"):
         handle_hunt(chat_id, token, store)
     else:
@@ -837,6 +962,7 @@ def poll_updates(
 ) -> None:
     """Run update processing loop. When once=True, processes pending updates and exits."""
     set_bot_commands(token)
+    cleanup_expired_messages(token, max_age_seconds=86400)
     offset = 0
 
     # Read latest state or getUpdates with limit

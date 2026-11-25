@@ -413,3 +413,72 @@ def test_callback_query_cover_letter(mock_store, sample_profile):
         assert mock_send.call_count >= 2
         sent_texts = [call[0][0] for call in mock_send.call_args_list]
         assert any("Cover Letter" in t and "Stripe" in t for t in sent_texts)
+
+
+def test_callback_query_recruiter_finder(mock_store, sample_profile):
+    cb = {
+        "id": "cb_rec_001",
+        "data": "rec:greenhouse:stripe:101",
+        "message": {"chat": {"id": 12345}},
+    }
+    with patch("jobhunt.telegram_bot.answer_callback") as mock_ans, patch("jobhunt.telegram_bot.send_telegram") as mock_send:
+        handle_callback_query("token", cb, mock_store, sample_profile)
+        mock_ans.assert_called_once()
+        mock_send.assert_called_once()
+        text = mock_send.call_args[0][0]
+        assert "Recruiter & Hiring Team Finder" in text
+        assert "Stripe" in text
+        assert "LinkedIn People Searches" in text
+        assert "Connection Note" in text
+
+
+def test_callback_query_salary_guide(mock_store, sample_profile):
+    cb = {
+        "id": "cb_sal_001",
+        "data": "sal:greenhouse:stripe:101",
+        "message": {"chat": {"id": 12345}},
+    }
+    with patch("jobhunt.telegram_bot.answer_callback") as mock_ans, patch("jobhunt.telegram_bot.send_telegram") as mock_send:
+        handle_callback_query("token", cb, mock_store, sample_profile)
+        mock_ans.assert_called_once()
+        mock_send.assert_called_once()
+        text = mock_send.call_args[0][0]
+        assert "Compensation & Negotiation Guide" in text
+        assert "Stripe" in text
+        assert "Target CTC" in text
+        assert "Counter-Offer Script" in text
+
+
+def test_callback_query_stage_updater(mock_store, sample_profile):
+    cb = {
+        "id": "cb_st_001",
+        "data": "st:screen:greenhouse:stripe:101",
+        "message": {"chat": {"id": 12345}},
+    }
+    with patch("jobhunt.telegram_bot.answer_callback") as mock_ans, patch("jobhunt.telegram_bot.send_telegram") as mock_send:
+        handle_callback_query("token", cb, mock_store, sample_profile)
+        mock_ans.assert_called_once()
+        assert mock_store.data["greenhouse:stripe:101"]["status"] == "📞 Recruiter Screen Scheduled"
+        mock_send.assert_called_once()
+        text = mock_send.call_args[0][0]
+        assert "Stage Updated for Stripe" in text
+        assert "Recruiter Screen Scheduled" in text
+
+
+def test_process_update_cleanup(mock_store, sample_profile):
+    update = {
+        "update_id": 999,
+        "message": {
+            "text": "/cleanup",
+            "chat": {"id": 12345},
+        },
+    }
+    with patch("jobhunt.telegram_bot.cleanup_expired_messages", return_value=5) as mock_cleanup, patch("jobhunt.telegram_bot.send_telegram") as mock_send:
+        process_update(update, "token", mock_store, sample_profile)
+        mock_cleanup.assert_called_once_with("token", max_age_seconds=86400)
+        mock_send.assert_called_once()
+        text = mock_send.call_args[0][0]
+        assert "Chat Auto-Cleanup Complete" in text
+        assert "Purged `5` messages" in text
+        assert "Native Auto-Delete" in text
+
