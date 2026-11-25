@@ -1040,13 +1040,13 @@
     "applied_on": null
   },
   "greenhouse:airbnb:7826337": {
-    "first_seen": "2026-11-19T12:03:27+00:00",
+    "first_seen": "2026-11-19T06:44:50+00:00",
     "company": "Airbnb",
     "title": "Machine Learning Engineer, Assistance Engineering",
     "location": "Remote-USA",
     "url": "https://careers.airbnb.com/positions/7826337?gh_jid=7826337",
-    "score": 2.0,
-    "reason": "Wrong stack and role domain; this is a Machine Learning Engineer role focused on LLMs and agentic AI.",
+    "score": 3.0,
+    "reason": "Role requires advanced ML systems and SOTA agentic architecture expertise beyond a junior developer's background.",
     "canonical_source": "greenhouse",
     "sources": [
       "greenhouse"
@@ -1057,19 +1057,19 @@
     "matched_roles": [
       "Machine Learning Engineer"
     ],
-    "fit_score": 2.0,
-    "emailed": true,
+    "fit_score": 3.0,
+    "emailed": false,
     "applied": false,
     "applied_on": null
   },
   "greenhouse:stripe:8130876": {
-    "first_seen": "2026-11-19T12:03:27+00:00",
+    "first_seen": "2026-11-19T06:44:50+00:00",
     "company": "Stripe",
     "title": "Software Engineer, New Grad",
     "location": "Bangalore",
     "url": "https://stripe.com/jobs/search?gh_jid=8130876",
-    "score": 3.0,
-    "reason": "Junior/New Grad seniority mismatch for a candidate with three years of professional experience.",
+    "score": 8.0,
+    "reason": "Good match for a new grad with software engineering skills, matching the 0-1 years experience requirement.",
     "canonical_source": "greenhouse",
     "sources": [
       "greenhouse"
@@ -1080,8 +1080,8 @@
     "matched_roles": [
       "Software Engineer"
     ],
-    "fit_score": 3.0,
-    "emailed": true,
+    "fit_score": 8.0,
+    "emailed": false,
     "applied": false,
     "applied_on": null
   },
@@ -1109,13 +1109,13 @@
     "applied_on": null
   },
   "ashby:ramp:f90d32c1-7c10-4161-8913-075e1b423697": {
-    "first_seen": "2026-11-19T12:03:27+00:00",
+    "first_seen": "2026-11-19T06:44:50+00:00",
     "company": "Ramp",
     "title": "Research Engineer, Agentic Systems",
     "location": "Remote (US)",
     "url": "https://jobs.ashbyhq.com/ramp/f90d32c1-7c10-4161-8913-075e1b423697",
     "score": 2.0,
-    "reason": "Wrong domain; this is an AI/LLM research engineering role rather than a backend or platform engineering position.",
+    "reason": "Advanced research engineer role for agentic systems requiring senior-level AI research and infrastructure experience.",
     "canonical_source": "ashby",
     "sources": [
       "ashby"
@@ -1123,7 +1123,7 @@
     "role_families": [],
     "matched_roles": [],
     "fit_score": 2.0,
-    "emailed": true,
+    "emailed": false,
     "applied": false,
     "applied_on": null
   },
@@ -1151,13 +1151,13 @@
     "applied_on": null
   },
   "greenhouse:reddit:7131932": {
-    "first_seen": "2026-11-20T12:06:59+00:00",
+    "first_seen": "2026-11-19T06:44:50+00:00",
     "company": "Reddit",
     "title": "Machine Learning Engineer",
     "location": "Remote - United States",
     "url": "https://job-boards.greenhouse.io/reddit/jobs/7131932",
-    "score": 4.0,
-    "reason": "The role requires extensive scale and experience beyond a junior candidate with one year of experience.",
+    "score": 2.0,
+    "reason": "Senior ML engineer position requiring large-scale distributed systems experience unsuitable for a junior profile.",
     "canonical_source": "greenhouse",
     "sources": [
       "greenhouse"
@@ -1168,19 +1168,19 @@
     "matched_roles": [
       "Machine Learning Engineer"
     ],
-    "fit_score": 4.0,
-    "emailed": true,
+    "fit_score": 2.0,
+    "emailed": false,
     "applied": false,
     "applied_on": null
   },
   "ashby:elevenlabs:3abf96ca-2937-4290-9d23-5208aece08b2": {
-    "first_seen": "2026-11-20T12:06:59+00:00",
+    "first_seen": "2026-11-21T05:31:11+00:00",
     "company": "ElevenLabs",
     "title": "Full-Stack Engineer - Ads Engine",
     "location": "Remote",
     "url": "https://jobs.ashbyhq.com/ElevenLabs/3abf96ca-2937-4290-9d23-5208aece08b2",
-    "score": 4.0,
-    "reason": "ElevenLabs targets top-tier senior builders and founders, making this a reach for a junior engineer.",
+    "score": 5.0,
+    "reason": "ElevenLabs is a top-tier AI company, but the full-stack role likely requires more senior software engineering experience.",
     "canonical_source": "ashby",
     "sources": [
       "ashby"
@@ -1191,19 +1191,19 @@
     "matched_roles": [
       "Full-Stack Engineer"
     ],
-    "fit_score": 4.0,
+    "fit_score": 5.0,
     "emailed": true,
     "applied": false,
     "applied_on": null
   },
   "ashby:elevenlabs:108c99e6-ba2b-44a0-b830-7d535e14a152": {
-    "first_seen": "2026-11-20T12:06:59+00:00",
+    "first_seen": "2026-11-21T05:31:11+00:00",
     "company": "ElevenLabs",
     "title": "Full-Stack Engineer - ElevenAPI",
     "location": "Remote",
     "url": "https://jobs.ashbyhq.com/ElevenLabs/108c99e6-ba2b-44a0-b830-7d535e14a152",
-    "score": 4.0,
-    "reason": "ElevenLabs roles typically require senior engineering pedigree exceeding a junior candidate's profile.",
+    "score": 5.0,
+    "reason": "A junior full-stack profile aligns with the tech stack, but ElevenLabs typically hires highly experienced engineers.",
     "canonical_source": "ashby",
     "sources": [
       "ashby"
@@ -1214,19 +1214,19 @@
     "matched_roles": [
       "Full-Stack Engineer"
     ],
-    "fit_score": 4.0,
+    "fit_score": 5.0,
     "emailed": true,
     "applied": false,
     "applied_on": null
   },
   "ashby:elevenlabs:34dbe44c-9815-40b2-81f4-91c607fd84b2": {
-    "first_seen": "2026-11-20T12:06:59+00:00",
+    "first_seen": "2026-11-21T05:31:11+00:00",
     "company": "ElevenLabs",
     "title": "Full-Stack Engineer - ElevenCreative Enterprise",
     "location": "Remote",
     "url": "https://jobs.ashbyhq.com/ElevenLabs/34dbe44c-9815-40b2-81f4-91c607fd84b2",
-    "score": 4.0,
-    "reason": "Seniority mismatch; ElevenLabs engineering positions demand extensive industry experience.",
+    "score": 5.0,
+    "reason": "Enterprise full-stack engineering at ElevenLabs requires robust production experience beyond a junior level.",
     "canonical_source": "ashby",
     "sources": [
       "ashby"
@@ -1237,19 +1237,19 @@
     "matched_roles": [
       "Full-Stack Engineer"
     ],
-    "fit_score": 4.0,
+    "fit_score": 5.0,
     "emailed": true,
     "applied": false,
     "applied_on": null
   },
   "ashby:elevenlabs:10e6475e-67ef-4621-8718-7b087c354651": {
-    "first_seen": "2026-11-20T12:06:59+00:00",
+    "first_seen": "2026-11-21T05:31:11+00:00",
     "company": "ElevenLabs",
     "title": "Full-Stack Engineer - Productions",
     "location": "Remote",
     "url": "https://jobs.ashbyhq.com/ElevenLabs/10e6475e-67ef-4621-8718-7b087c354651",
-    "score": 4.0,
-    "reason": "The company expects seasoned engineers and industry veterans rather than entry-level applicants.",
+    "score": 5.0,
+    "reason": "Strong alignment with AI and full-stack interests, but seniority expectations at ElevenLabs are high.",
     "canonical_source": "ashby",
     "sources": [
       "ashby"
@@ -1260,19 +1260,19 @@
     "matched_roles": [
       "Full-Stack Engineer"
     ],
-    "fit_score": 4.0,
+    "fit_score": 5.0,
     "emailed": true,
     "applied": false,
     "applied_on": null
   },
   "ashby:elevenlabs:1b90a2b2-1352-458d-b2b7-3900f6e02df5": {
-    "first_seen": "2026-11-20T12:06:59+00:00",
+    "first_seen": "2026-11-21T05:31:11+00:00",
     "company": "ElevenLabs",
     "title": "Mobile Engineer - ElevenMusic",
     "location": "Remote",
     "url": "https://jobs.ashbyhq.com/ElevenLabs/1b90a2b2-1352-458d-b2b7-3900f6e02df5",
     "score": 4.0,
-    "reason": "Mobile engineering at ElevenLabs requires higher seniority than a junior background provides.",
+    "reason": "Candidate has some Flutter experience, but specialized mobile engineering at ElevenLabs demands deeper expertise.",
     "canonical_source": "ashby",
     "sources": [
       "ashby"
@@ -1289,13 +1289,13 @@
     "applied_on": null
   },
   "ashby:elevenlabs:0547cf3a-856f-4db2-8307-73db634c4096": {
-    "first_seen": "2026-11-20T12:06:59+00:00",
+    "first_seen": "2026-11-21T05:31:11+00:00",
     "company": "ElevenLabs",
     "title": "Full-Stack Engineer - ElevenMusic",
     "location": "Remote",
     "url": "https://jobs.ashbyhq.com/ElevenLabs/0547cf3a-856f-4db2-8307-73db634c4096",
-    "score": 4.0,
-    "reason": "This position requires advanced systems experience that a 1-year junior engineer lacks.",
+    "score": 5.0,
+    "reason": "Matches the candidate's full-stack background, though company seniority bar presents a significant hurdle.",
     "canonical_source": "ashby",
     "sources": [
       "ashby"
@@ -1306,19 +1306,19 @@
     "matched_roles": [
       "Full-Stack Engineer"
     ],
-    "fit_score": 4.0,
+    "fit_score": 5.0,
     "emailed": true,
     "applied": false,
     "applied_on": null
   },
   "remotive:global:2091165": {
-    "first_seen": "2026-11-20T12:06:59+00:00",
+    "first_seen": "2026-11-21T05:31:11+00:00",
     "company": "Fluence International, Inc.",
     "title": "Full-Stack Developer",
     "location": "Worldwide",
     "url": "https://remotive.com/remote-jobs/software-development/full-stack-developer-2091165",
-    "score": 6.0,
-    "reason": "Good tech stack match with React and LLMs, but reports to a senior lead and requires deep AWS proficiency.",
+    "score": 7.0,
+    "reason": "The stack and LLM/automation requirements align well with the candidate's skills and junior-to-mid profile.",
     "canonical_source": "remotive",
     "sources": [
       "remotive"
@@ -1329,19 +1329,19 @@
     "matched_roles": [
       "Full-Stack Developer"
     ],
-    "fit_score": 6.0,
+    "fit_score": 7.0,
     "emailed": true,
     "applied": false,
     "applied_on": null
   },
   "nodesk:rss:olygon-labs-ai-platform-engineer": {
-    "first_seen": "2026-11-20T12:06:59+00:00",
+    "first_seen": "2026-11-20T06:10:14+00:00",
     "company": "Polygon Labs",
     "title": "AI Platform Engineer",
     "location": "Remote",
     "url": "https://nodesk.co/remote-jobs/polygon-labs-ai-platform-engineer/",
     "score": 3.0,
-    "reason": "Platform engineer role at a global blockchain company is too senior and lacks explicit requirement matches.",
+    "reason": "Seniority mismatch; this platform engineering role requires advanced infrastructure experience beyond a junior developer.",
     "canonical_source": "nodesk",
     "sources": [
       "nodesk"
@@ -1359,17 +1359,16 @@
     "applied_on": null
   },
   "nodesk:rss:oftware-engineer-ai-coding-tasks": {
-    "first_seen": "2026-11-20T12:06:59+00:00",
+    "first_seen": "2026-11-20T06:10:14+00:00",
     "company": "Askable",
     "title": "Software Engineer, AI Coding Tasks",
     "location": "Remote",
     "url": "https://nodesk.co/remote-jobs/askable-software-engineer-ai-coding-tasks/",
-    "score": 5.0,
-    "reason": "Requires 2+ years of professional software engineering experience, while candidate has 1 year.",
+    "score": 4.0,
+    "reason": "Requires experienced software engineers to create difficult tasks from established codebases, unsuited for a junior.",
     "canonical_source": "nodesk",
     "sources": [
-      "nodesk",
-      "remoteok"
+      "nodesk"
     ],
     "role_families": [
       "SOFTWARE"
@@ -1377,7 +1376,7 @@
     "matched_roles": [
       "Software Engineer"
     ],
-    "fit_score": 5.0,
+    "fit_score": 4.0,
     "emailed": true,
     "applied": false,
     "applied_on": null
@@ -1407,13 +1406,13 @@
     "applied_on": null
   },
   "greenhouse:airbnb:8396777": {
-    "first_seen": "2026-11-21T11:41:24+00:00",
+    "first_seen": "2026-11-21T05:31:11+00:00",
     "company": "Airbnb",
     "title": "Data Engineer Tech Foundations",
     "location": "US - Remote",
     "url": "https://careers.airbnb.com/positions/8396777?gh_jid=8396777",
-    "score": 3.0,
-    "reason": "Wrong geography (US remote) and senior data engineering role requiring Spark and enterprise dataset experience.",
+    "score": 4.0,
+    "reason": "The role is for a Data Engineer focused on core datasets, whereas the candidate is a junior AI and software engineer.",
     "canonical_source": "greenhouse",
     "sources": [
       "greenhouse"
@@ -1424,7 +1423,7 @@
     "matched_roles": [
       "Data Engineer"
     ],
-    "fit_score": 3.0,
+    "fit_score": 4.0,
     "emailed": true,
     "applied": false,
     "applied_on": null
@@ -1518,13 +1517,13 @@
     "applied_on": null
   },
   "linkedin:4492573591": {
-    "first_seen": "2026-11-23T13:33:04+00:00",
+    "first_seen": "2026-11-23T10:22:54+00:00",
     "company": "V2 Retail Ltd",
     "title": "Python Developer",
     "location": "Gurugram, Haryana, India",
     "url": "https://www.linkedin.com/jobs/view/4492573591",
-    "score": 6.0,
-    "reason": "Plausible Python Developer role, though located in Gurugram rather than Mumbai or Remote.",
+    "score": 3.1,
+    "reason": "[keyword stub] matched: python",
     "canonical_source": "linkedin",
     "sources": [
       "linkedin"
@@ -1535,19 +1534,19 @@
     "matched_roles": [
       "Python Developer"
     ],
-    "fit_score": 6.0,
-    "emailed": true,
+    "fit_score": 3.1,
+    "emailed": false,
     "applied": false,
     "applied_on": null
   },
   "linkedin:4468058393": {
-    "first_seen": "2026-11-23T13:33:04+00:00",
+    "first_seen": "2026-11-23T10:22:54+00:00",
     "company": "Infosys",
     "title": "Python Developer",
     "location": "Bengaluru East, Karnataka, India",
     "url": "https://www.linkedin.com/jobs/view/4468058393",
-    "score": 5.0,
-    "reason": "Python Developer role matching skills, but location in Bengaluru does not match target locations.",
+    "score": 3.1,
+    "reason": "[keyword stub] matched: python",
     "canonical_source": "linkedin",
     "sources": [
       "linkedin"
@@ -1558,19 +1557,19 @@
     "matched_roles": [
       "Python Developer"
     ],
-    "fit_score": 5.0,
-    "emailed": true,
+    "fit_score": 3.1,
+    "emailed": false,
     "applied": false,
     "applied_on": null
   },
   "greenhouse:airbnb:8274152": {
-    "first_seen": "2026-11-24T14:11:22+00:00",
+    "first_seen": "2026-11-24T05:37:05+00:00",
     "company": "Airbnb",
     "title": "Software Engineer, Payments",
     "location": "Remote, USA",
     "url": "https://careers.airbnb.com/positions/8274152?gh_jid=8274152",
-    "score": null,
-    "reason": null,
+    "score": 2.0,
+    "reason": "The role requires US remote work eligibility which the candidate does not have.",
     "canonical_source": "greenhouse",
     "sources": [
       "greenhouse"
@@ -1581,8 +1580,8 @@
     "matched_roles": [
       "Software Engineer"
     ],
-    "fit_score": null,
-    "emailed": true,
+    "fit_score": 2.0,
+    "emailed": false,
     "applied": false,
     "applied_on": null
   },
@@ -1610,13 +1609,13 @@
     "applied_on": null
   },
   "himalayas:rss:sbusiness-intelligence-analyst-i": {
-    "first_seen": "2026-11-24T14:11:22+00:00",
+    "first_seen": "2026-11-24T05:37:05+00:00",
     "company": "Remote Employer",
     "title": "Business Intelligence Analyst I",
     "location": "Remote",
-    "url": "https://himalayas.app/companies/yum-brands/jobs/business-intelligence-analyst-i",
-    "score": null,
-    "reason": null,
+    "url": "https://himalayas.app/companies/kfc-global-careers/jobs/business-intelligence-analyst-i",
+    "score": 5.0,
+    "reason": "Plausible entry-level BI role, but lacks specific details and location eligibility may be restricted.",
     "canonical_source": "himalayas",
     "sources": [
       "himalayas"
@@ -1627,8 +1626,8 @@
     "matched_roles": [
       "Business Intelligence Analyst"
     ],
-    "fit_score": null,
-    "emailed": true,
+    "fit_score": 5.0,
+    "emailed": false,
     "applied": false,
     "applied_on": null
   },
@@ -1702,13 +1701,13 @@
     "applied_on": null
   },
   "linkedin:4483738409": {
-    "first_seen": "2026-11-24T14:11:22+00:00",
+    "first_seen": "2026-11-23T10:22:54+00:00",
     "company": "Gabeo.ai",
     "title": "Machine Learning Engineer",
     "location": "Delhi, India",
     "url": "https://www.linkedin.com/jobs/view/4483738409",
-    "score": null,
-    "reason": null,
+    "score": 3.1,
+    "reason": "[keyword stub] matched: machine learning",
     "canonical_source": "linkedin",
     "sources": [
       "linkedin"
@@ -1719,19 +1718,19 @@
     "matched_roles": [
       "Machine Learning Engineer"
     ],
-    "fit_score": null,
-    "emailed": true,
+    "fit_score": 3.1,
+    "emailed": false,
     "applied": false,
     "applied_on": null
   },
   "linkedin:4485921205": {
-    "first_seen": "2026-11-24T14:11:22+00:00",
+    "first_seen": "2026-11-23T10:22:54+00:00",
     "company": "Tark Innovation Private Limited",
     "title": "AI/ML Engineer",
     "location": "Hyderabad, Telangana, India",
     "url": "https://www.linkedin.com/jobs/view/4485921205",
-    "score": null,
-    "reason": null,
+    "score": 0.0,
+    "reason": "[keyword stub] no skill overlap",
     "canonical_source": "linkedin",
     "sources": [
       "linkedin"
@@ -1743,22 +1742,1008 @@
       "AI/ML Engineer",
       "ML Engineer"
     ],
+    "fit_score": 0.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4488224616": {
+    "first_seen": "2026-11-23T10:22:54+00:00",
+    "company": "EXL",
+    "title": "Data Analyst",
+    "location": "Chennai, Tamil Nadu, India",
+    "url": "https://www.linkedin.com/jobs/view/4488224616",
+    "score": 2.5,
+    "reason": "[keyword stub] no skill overlap",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4485925349": {
+    "first_seen": "2026-11-23T10:22:54+00:00",
+    "company": "Wipro",
+    "title": "DATA ANALYST L3",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4485925349",
+    "score": 2.5,
+    "reason": "[keyword stub] no skill overlap",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4483513254": {
+    "first_seen": "2026-11-23T10:22:54+00:00",
+    "company": "Wipro",
+    "title": "DATA ANALYST L4",
+    "location": "Pune Division, Maharashtra, India",
+    "url": "https://www.linkedin.com/jobs/view/4483513254",
+    "score": 2.5,
+    "reason": "[keyword stub] no skill overlap",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4492564172": {
+    "first_seen": "2026-11-23T10:22:54+00:00",
+    "company": "TerraTern",
+    "title": "Data Analyst",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4492564172",
+    "score": 2.5,
+    "reason": "[keyword stub] no skill overlap",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:orationjobsbusiness-data-analyst": {
+    "first_seen": "2026-11-19T06:44:50+00:00",
+    "company": "Remote Employer",
+    "title": "Business Data Analyst",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/gp-strategies-corporation/jobs/business-data-analyst",
+    "score": 5.0,
+    "reason": "Plausible data analyst role, but lacks specific technical stack details and alignment with candidate's BI focus.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 5.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4488891299": {
+    "first_seen": "2026-11-19T06:46:57+00:00",
+    "company": "Accenture in India",
+    "title": "AI / ML Engineer",
+    "location": "Navi Mumbai, Maharashtra, India",
+    "url": "https://www.linkedin.com/jobs/view/4488891299",
+    "score": 8.2,
+    "reason": "Strong match for AI/ML Engineer in Navi Mumbai with alignment on Machine Learning and Cloud AI services.",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "ML Engineer"
+    ],
+    "fit_score": 8.2,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4480510917": {
+    "first_seen": "2026-11-19T06:46:57+00:00",
+    "company": "Capgemini",
+    "title": "Python Gen AI Engineer",
+    "location": "Navi Mumbai, Maharashtra, India",
+    "url": "https://www.linkedin.com/jobs/view/4480510917",
+    "score": 8.8,
+    "reason": "Outstanding match for Python and Generative AI engineer in Navi Mumbai with direct alignment on AI agent workflows.",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "AI_CORE",
+      "GENAI_AGENTIC"
+    ],
+    "matched_roles": [
+      "AI Engineer",
+      "Generative AI Engineer"
+    ],
+    "fit_score": 8.8,
+    "emailed": false,
+    "applied": true,
+    "applied_on": null
+  },
+  "linkedin:4481408789": {
+    "first_seen": "2026-11-19T06:48:29+00:00",
+    "company": "Deloitte",
+    "title": "Power BI Developer",
+    "location": "Mumbai, Maharashtra, India",
+    "url": "https://www.linkedin.com/jobs/view/4481408789",
+    "score": 8.5,
+    "reason": "Direct match for Power BI and SQL data dashboarding and analytics developer profile.",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "BI Developer"
+    ],
+    "fit_score": 8.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:neer-ai-finance-agent-6982251167": {
+    "first_seen": "2026-11-20T06:10:14+00:00",
+    "company": "Remote Employer",
+    "title": "Backend Software Engineer - AI Finance Agent",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/bjak/jobs/backend-software-engineer-ai-finance-agent-6982251167",
+    "score": 4.0,
+    "reason": "Backend engineering role requiring strong production experience exceeding the candidate's one year.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Engineer",
+      "Backend Software Engineer"
+    ],
+    "fit_score": 4.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4448393291": {
+    "first_seen": "2026-11-20T06:10:14+00:00",
+    "company": "Accenture in India",
+    "title": "AI / ML Engineer",
+    "location": "Navi Mumbai, Maharashtra, India",
+    "url": "https://www.linkedin.com/jobs/view/4448393291",
+    "score": 2.0,
+    "reason": "Hard requirement of minimum 5 years of experience, failing the candidate's 1 year profile.",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "ML Engineer",
+      "Machine Learning Engineer"
+    ],
+    "fit_score": 2.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:coding-tasks-contract-5812118603": {
+    "first_seen": "2026-11-21T05:31:11+00:00",
+    "company": "Remote Employer",
+    "title": "Software Engineer, AI Coding Tasks (Contract)",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/askable/jobs/software-engineer-ai-coding-tasks-contract-5812118603",
+    "score": null,
+    "reason": null,
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Engineer"
+    ],
     "fit_score": null,
     "emailed": true,
     "applied": false,
     "applied_on": null
   },
-  "linkedin:4488224616": {
-    "first_seen": "2026-11-24T14:11:22+00:00",
-    "company": "EXL",
+  "linkedin:4448398197": {
+    "first_seen": "2026-11-21T05:31:11+00:00",
+    "company": "Accenture in India",
+    "title": "AI / ML Engineer",
+    "location": "Navi Mumbai, Maharashtra, India",
+    "url": "https://www.linkedin.com/jobs/view/4448398197",
+    "score": null,
+    "reason": null,
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "ML Engineer"
+    ],
+    "fit_score": null,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4485688619": {
+    "first_seen": "2026-11-21T05:31:11+00:00",
+    "company": "JPMorganChase",
+    "title": "Data Analytics Associate",
+    "location": "Mumbai, Maharashtra, India",
+    "url": "https://www.linkedin.com/jobs/view/4485688619",
+    "score": null,
+    "reason": null,
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [],
+    "matched_roles": [],
+    "fit_score": null,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4490851206": {
+    "first_seen": "2026-11-21T05:31:11+00:00",
+    "company": "JPMorganChase",
+    "title": "Analyst - Python Developer",
+    "location": "Mumbai, Maharashtra, India",
+    "url": "https://www.linkedin.com/jobs/view/4490851206",
+    "score": null,
+    "reason": null,
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Python Developer"
+    ],
+    "fit_score": null,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:roupjobsfull-stack-web-developer": {
+    "first_seen": "2026-11-23T06:44:06+00:00",
+    "company": "Remote Employer",
+    "title": "Full-Stack Web Developer",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/luza-group/jobs/full-stack-web-developer",
+    "score": 3.0,
+    "reason": "Job description is extremely vague and lacks necessary details regarding specific tech stack and experience.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [],
+    "matched_roles": [],
+    "fit_score": 3.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "jobicy:api:156583": {
+    "first_seen": "2026-11-23T09:44:23+00:00",
+    "company": "Supabase",
+    "title": "Cloud Platform Engineer",
+    "location": "Anywhere",
+    "url": "https://jobicy.com/jobs/156583-cloud-platform-engineer",
+    "score": 3.0,
+    "reason": "This is a senior Cloud Platform role requiring deep AWS/GCP operations, whereas the candidate is a junior engineer.",
+    "canonical_source": "jobicy",
+    "sources": [
+      "jobicy"
+    ],
+    "role_families": [
+      "PLATFORM",
+      "CLOUD_DEVOPS"
+    ],
+    "matched_roles": [
+      "Platform Engineer",
+      "Cloud Platform Engineer"
+    ],
+    "fit_score": 3.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:al-incjobsai-engineer-4470507330": {
+    "first_seen": "2026-11-23T09:44:23+00:00",
+    "company": "Remote Employer",
+    "title": "AI Engineer",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/caci-international-inc/jobs/ai-engineer-4470507330",
+    "score": 2.0,
+    "reason": "The role requires a secret security clearance which the candidate does not have.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "AI Engineer"
+    ],
+    "fit_score": 2.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:bric-data-engineer-freelance-kan": {
+    "first_seen": "2026-11-23T09:44:23+00:00",
+    "company": "Remote Employer",
+    "title": "Microsoft Fabric Data Engineer (Freelance kan)",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/engiflex/jobs/microsoft-fabric-data-engineer-freelance-kan",
+    "score": 3.0,
+    "reason": "The job description is in French and focuses on Microsoft Fabric data engineering, which is outside the candidate's stack.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Engineer"
+    ],
+    "fit_score": 3.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:niesmenlo-aijobsbackend-engineer": {
+    "first_seen": "2026-11-23T09:44:23+00:00",
+    "company": "Remote Employer",
+    "title": "Backend Engineer",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/menlo-ai/jobs/backend-engineer",
+    "score": 5.0,
+    "reason": "While backend matches the candidate's interests, the seniority expectation for open-source AI assistants is too high.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Backend Engineer"
+    ],
+    "fit_score": 5.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:racloudjobssre-security-engineer": {
+    "first_seen": "2026-11-23T09:44:23+00:00",
+    "company": "Remote Employer",
+    "title": "SRE - Security Engineer",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/infracloud/jobs/sre-security-engineer",
+    "score": 2.0,
+    "reason": "This is an SRE and Security Engineering role managing massive Kubernetes clusters, which is a senior-level mismatch.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "CLOUD_DEVOPS",
+      "SECURITY"
+    ],
+    "matched_roles": [
+      "SRE",
+      "Security Engineer"
+    ],
+    "fit_score": 2.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:gagejobsdata-engineer-7824687803": {
+    "first_seen": "2026-11-23T09:44:23+00:00",
+    "company": "Remote Employer",
+    "title": "Data Engineer",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/webengage/jobs/data-engineer-7824687803",
+    "score": 4.0,
+    "reason": "Enterprise Data Engineer roles typically require more than one year of experience and specialized big data tooling.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Engineer"
+    ],
+    "fit_score": 4.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:130125504731": {
+    "first_seen": "2026-11-23T10:22:54+00:00",
+    "company": "Conneqt",
+    "title": "Python Developer",
+    "location": "Bengaluru",
+    "url": "https://www.naukri.com/job-listings-python-developer-conneqtbusinesssolutions-bengaluru-0-to-3-years-130125504731",
+    "score": 3.1,
+    "reason": "[keyword stub] matched: python",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Python Developer"
+    ],
+    "fit_score": 3.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:250725500803": {
+    "first_seen": "2026-11-23T10:22:54+00:00",
+    "company": "Billions United",
+    "title": "Python Developer",
+    "location": "Bengaluru",
+    "url": "https://www.naukri.com/job-listings-python-developer-billions-united-bengaluru-0-to-2-years-250725500803",
+    "score": 3.1,
+    "reason": "[keyword stub] matched: python",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Python Developer"
+    ],
+    "fit_score": 3.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:131126503288": {
+    "first_seen": "2026-11-23T10:22:54+00:00",
+    "company": "Techkshetra Info Solutions",
+    "title": "PYTHON DEVELOPER",
+    "location": "Bengaluru",
+    "url": "https://www.naukri.com/job-listings-python-developer-techkshetra-info-solutions-pvt-ltd-bengaluru-0-to-1-years-131126503288",
+    "score": 3.1,
+    "reason": "[keyword stub] matched: python",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Python Developer"
+    ],
+    "fit_score": 3.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:100725505184": {
+    "first_seen": "2026-11-23T10:22:54+00:00",
+    "company": "ewallsolutions",
+    "title": "Python Developer",
+    "location": "Madurai, Tiruppur, Salem, Chennai, Tiruchirappalli, Coimbatore",
+    "url": "https://www.naukri.com/job-listings-python-developer-ewallsolutions-madurai-tiruppur-salem-chennai-tiruchirapalli-coimbatore-0-to-3-years-100725505184",
+    "score": 3.1,
+    "reason": "[keyword stub] matched: python",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Python Developer"
+    ],
+    "fit_score": 3.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:181126033973": {
+    "first_seen": "2026-11-23T10:22:54+00:00",
+    "company": "Talentzo Delhi",
+    "title": "Python Developer at A FinTech Company",
+    "location": "Remote",
+    "url": "https://www.naukri.com/job-listings-python-developer-at-a-fintech-company-talentzo-delhi-bengaluru-0-to-4-years-181126033973",
+    "score": 3.1,
+    "reason": "[keyword stub] matched: python",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Python Developer"
+    ],
+    "fit_score": 3.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:191126505372": {
+    "first_seen": "2026-11-23T10:22:54+00:00",
+    "company": "Associative",
+    "title": "Python Developer",
+    "location": "Pune",
+    "url": "https://www.naukri.com/job-listings-python-developer-associative-pune-0-to-1-years-191126505372",
+    "score": 3.1,
+    "reason": "[keyword stub] matched: python",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Python Developer"
+    ],
+    "fit_score": 3.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:020726501414": {
+    "first_seen": "2026-11-23T10:22:54+00:00",
+    "company": "Smart Analytica",
+    "title": "Python developer (SA_ID_MUM_000028)",
+    "location": "Mumbai",
+    "url": "https://www.naukri.com/job-listings-python-developer-sa-id-mum-000028-smart-analytica-mumbai-0-to-3-years-020726501414",
+    "score": 3.1,
+    "reason": "[keyword stub] matched: python",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Python Developer"
+    ],
+    "fit_score": 3.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:210722501350": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Tower Research Capital",
+    "title": "Low Latency Developer",
+    "location": "Gurugram",
+    "url": "https://www.naukri.com/job-listings-low-latency-developer-tower-research-capital-gurugram-0-to-3-years-210722501350",
+    "score": 0.0,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [],
+    "matched_roles": [],
+    "fit_score": 0.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:260326503787": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Mastercard",
+    "title": "Senior Software Engineer (Java Backend Developer)",
+    "location": "Pune",
+    "url": "https://www.naukri.com/job-listings-senior-software-engineer-java-backend-developer-mastercard-pune-0-to-6-years-260326503787",
+    "score": 0.0,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Engineer",
+      "Backend Developer"
+    ],
+    "fit_score": 0.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:061126009576": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Nxtwave Disruptive Technologies",
+    "title": "Python Software Developer",
+    "location": "Indore",
+    "url": "https://www.naukri.com/job-listings-python-software-developer-nxtwave-disruptive-technologies-indore-0-to-1-years-061126009576",
+    "score": 0.6,
+    "reason": "[Naukri import] matched: python",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Developer"
+    ],
+    "fit_score": 0.6,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:221126002139": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Bonzer Business Solutions(BBS)",
+    "title": "Python Software Developer",
+    "location": "Delhi / NCR, Mumbai (All Areas)",
+    "url": "https://www.naukri.com/job-listings-python-software-developer-bonzer-business-solutions-bbs-delhi-ncr-mumbai-all-areas-0-to-1-years-221126002139",
+    "score": 0.6,
+    "reason": "[Naukri import] matched: python",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Developer"
+    ],
+    "fit_score": 0.6,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:181126501718": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Bitwise Infotech",
+    "title": "Python / AI-ML Developer",
+    "location": "Rajkot",
+    "url": "https://www.naukri.com/job-listings-python-ai-ml-developer-bitwise-infotech-rajkot-0-to-4-years-181126501718",
+    "score": 0.6,
+    "reason": "[Naukri import] matched: python",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "ML Developer"
+    ],
+    "fit_score": 0.6,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:050526006845": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Drishti Lifesaving",
+    "title": "Software Developer (In Python)",
+    "location": "Mumbai(Mumbai Central)",
+    "url": "https://www.naukri.com/job-listings-software-developer-in-python-drishti-lifesaving-mumbai-0-to-2-years-050526006845",
+    "score": 0.6,
+    "reason": "[Naukri import] matched: python",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Developer"
+    ],
+    "fit_score": 0.6,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:191126501964": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Rajyug It Solutions",
+    "title": "Python AI / ML Developer",
+    "location": "Pune",
+    "url": "https://www.naukri.com/job-listings-python-ai-ml-developer-rajyug-solutions-pune-0-to-5-years-191126501964",
+    "score": 0.6,
+    "reason": "[Naukri import] matched: python",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "ML Developer"
+    ],
+    "fit_score": 0.6,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:301025505720": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Godigi Infotech",
+    "title": "PYTHON DEVELOPER",
+    "location": "Pune",
+    "url": "https://www.naukri.com/job-listings-python-developer-godigi-infotech-pune-0-to-1-years-301025505720",
+    "score": 3.1,
+    "reason": "[Naukri import] matched: python",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Python Developer"
+    ],
+    "fit_score": 3.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:081026506556": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Techasoft",
+    "title": "Python Developer",
+    "location": "Bengaluru",
+    "url": "https://www.naukri.com/job-listings-python-developer-techasoft-bengaluru-0-to-2-years-081026506556",
+    "score": 3.1,
+    "reason": "[Naukri import] matched: python",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Python Developer"
+    ],
+    "fit_score": 3.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:090726500369": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Ocean Software Technologies",
+    "title": "Python Developer",
+    "location": "Bengaluru",
+    "url": "https://www.naukri.com/job-listings-python-developer-ocean-software-technologies-bengaluru-0-to-1-years-090726500369",
+    "score": 3.1,
+    "reason": "[Naukri import] matched: python",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Python Developer"
+    ],
+    "fit_score": 3.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:310326501927": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Legalease Solutions",
+    "title": "Python Developer",
+    "location": "Kochi",
+    "url": "https://www.naukri.com/job-listings-python-developer-legal-ease-solutions-india-private-limited-kochi-0-to-2-years-310326501927",
+    "score": 3.1,
+    "reason": "[Naukri import] matched: python",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Python Developer"
+    ],
+    "fit_score": 3.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:111126503218": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Umang Software Technologies",
+    "title": "Python Developer",
+    "location": "Margao",
+    "url": "https://www.naukri.com/job-listings-python-developer-umang-software-technologies-margao-0-to-3-years-111126503218",
+    "score": 3.1,
+    "reason": "[Naukri import] matched: python",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Python Developer"
+    ],
+    "fit_score": 3.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:270726500368": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "47billion",
+    "title": "Python Developer",
+    "location": "Bengaluru",
+    "url": "https://www.naukri.com/job-listings-python-developer-47-billion-information-technologies-private-limited-bengaluru-0-to-3-years-270726500368",
+    "score": 3.1,
+    "reason": "[Naukri import] matched: python",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Python Developer"
+    ],
+    "fit_score": 3.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:121124502854": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Appzlogic",
+    "title": "Python Developer",
+    "location": "Kolkata, Mumbai, New Delhi, Hyderabad, Pune, Chennai, Bengaluru",
+    "url": "https://www.naukri.com/job-listings-python-developer-appzlogic-mobility-solutions-pvt-ltd-kolkata-mumbai-new-delhi-hyderabad-pune-chennai-bengaluru-0-to-3-years-121124502854",
+    "score": 3.1,
+    "reason": "[Naukri import] matched: python",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Python Developer"
+    ],
+    "fit_score": 3.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:070926503536": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Startek",
+    "title": "Senior Executive - Data Analyst",
+    "location": "Bengaluru",
+    "url": "https://www.naukri.com/job-listings-senior-executive-data-analyst-startek-bengaluru-0-to-3-years-070926503536",
+    "score": 2.5,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:201126017511": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Jobaaj com",
     "title": "Data Analyst",
-    "location": "Chennai, Tamil Nadu, India",
-    "url": "https://www.linkedin.com/jobs/view/4488224616",
-    "score": 3.0,
-    "reason": "Role focuses on data analysis rather than the candidate's target AI and software engineering roles.",
-    "canonical_source": "linkedin",
+    "location": "Hyderabad, Pune, Bengaluru",
+    "url": "https://www.naukri.com/job-listings-data-analyst-jobaaj-com-hyderabad-pune-bengaluru-0-to-2-years-201126017511",
+    "score": 2.5,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
     "sources": [
-      "linkedin"
+      "naukri"
     ],
     "role_families": [
       "DATA"
@@ -1766,19 +2751,1665 @@
     "matched_roles": [
       "Data Analyst"
     ],
-    "fit_score": 3.0,
-    "emailed": true,
+    "fit_score": 2.5,
+    "emailed": false,
     "applied": false,
     "applied_on": null
   },
-  "linkedin:4485925349": {
-    "first_seen": "2026-11-24T14:11:22+00:00",
-    "company": "Wipro",
-    "title": "DATA ANALYST L3",
+  "naukri:211126013678": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Sphinxhire Ai",
+    "title": "Data Analyst",
+    "location": "Remote",
+    "url": "https://www.naukri.com/job-listings-data-analyst-sphinxhire-ai-hyderabad-0-to-2-years-211126013678",
+    "score": 2.5,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:201126920121": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Job Excel",
+    "title": "AI Data Analyst",
+    "location": "Hyderabad",
+    "url": "https://www.naukri.com/job-listings-ai-data-analyst-excel-hyderabad-0-to-3-years-201126920121",
+    "score": 2.5,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:231126009134": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Golden Management Services",
+    "title": "Data Analyst",
+    "location": "Hybrid - Hyderabad, Pune, Bengaluru",
+    "url": "https://www.naukri.com/job-listings-data-analyst-golden-management-services-hyderabad-pune-bengaluru-0-to-2-years-231126009134",
+    "score": 2.5,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:211126500196": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "DHL Supply Chain",
+    "title": "Data Analyst",
+    "location": "Mumbai",
+    "url": "https://www.naukri.com/job-listings-data-analyst-dhl-mumbai-0-to-4-years-211126500196",
+    "score": 2.5,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:031126021521": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Zema Global Data Corporation",
+    "title": "Data Analyst",
+    "location": "Hybrid - Navi Mumbai",
+    "url": "https://www.naukri.com/job-listings-data-analyst-zema-global-data-corporation-navi-mumbai-0-to-2-years-031126021521",
+    "score": 2.5,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:201126920120": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Job Excel",
+    "title": "AI Data Analyst",
+    "location": "Mumbai",
+    "url": "https://www.naukri.com/job-listings-ai-data-analyst-excel-mumbai-0-to-3-years-201126920120",
+    "score": 2.5,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:201126920119": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Job Excel",
+    "title": "AI Data Analyst",
+    "location": "Delhi / NCR",
+    "url": "https://www.naukri.com/job-listings-ai-data-analyst-excel-delhi-ncr-0-to-3-years-201126920119",
+    "score": 2.5,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:181126034195": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Talentzo Delhi",
+    "title": "Data Analyst at A FinTech Company",
+    "location": "Remote",
+    "url": "https://www.naukri.com/job-listings-data-analyst-at-a-fintech-company-talentzo-delhi-bengaluru-0-to-2-years-181126034195",
+    "score": 3.6,
+    "reason": "[Naukri import] matched: python, sql",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 3.6,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:201126920124": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Job Excel",
+    "title": "AI Data Analyst",
+    "location": "Ahmedabad",
+    "url": "https://www.naukri.com/job-listings-ai-data-analyst-excel-ahmedabad-0-to-3-years-201126920124",
+    "score": 2.5,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:141126012127": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Manpowergroup Services India",
+    "title": "Data Analyst",
+    "location": "Chennai",
+    "url": "https://www.naukri.com/job-listings-data-analyst-manpowergroup-services-india-chennai-0-to-4-years-141126012127",
+    "score": 2.5,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:201126920123": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Job Excel",
+    "title": "AI Data Analyst",
+    "location": "Kolkata",
+    "url": "https://www.naukri.com/job-listings-ai-data-analyst-excel-kolkata-0-to-3-years-201126920123",
+    "score": 2.5,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:271026018499": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Renaissance Academy Of Wisdom",
+    "title": "Data Analyst",
+    "location": "Hybrid - Bengaluru",
+    "url": "https://www.naukri.com/job-listings-data-analyst-renaissance-academy-of-wisdom-bengaluru-0-to-3-years-271026018499",
+    "score": 2.5,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:161126009380": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Akova Fintech Solutions",
+    "title": "Data Analyst",
+    "location": "Kolkata(Lal Bazar)",
+    "url": "https://www.naukri.com/job-listings-data-analyst-akova-fintech-solutions-kolkata-0-to-3-years-161126009380",
+    "score": 2.5,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:221026921503": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "EY",
+    "title": "Platform Infrastructure Data Analyst",
+    "location": "Kochi, Kochi",
+    "url": "https://www.naukri.com/job-listings-platform-infrastructure-data-analyst-ernst-young-llp-kochi-kochi-0-to-5-years-221026921503",
+    "score": 2.5,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:160626032383": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Client of Markmakers",
+    "title": "Data Analyst",
+    "location": "Remote",
+    "url": "https://www.naukri.com/job-listings-data-analyst-mark-makers-consultancy-services-gurugram-0-to-3-years-160626032383",
+    "score": 2.5,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:191126927410": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "RSM's India Global Capability Center",
+    "title": "SMI Data Analyst",
+    "location": "Bengaluru",
+    "url": "https://www.naukri.com/job-listings-smi-data-analyst-rsm-delivery-center-india-private-limited-bengaluru-0-to-3-years-191126927410",
+    "score": 2.5,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:191126025322": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Epsilon Logistics",
+    "title": "Data Analyst",
+    "location": "Rajkot(Kalavad Road)",
+    "url": "https://www.naukri.com/job-listings-data-analyst-epsilon-logistics-rajkot-0-to-5-years-191126025322",
+    "score": 2.5,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:071025501415": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Valeo",
+    "title": "Artificial Intelligence Engineer",
+    "location": "Chennai",
+    "url": "https://www.naukri.com/job-listings-artificial-intelligence-engineer-valeo-india-pvt-ltd-chennai-0-to-5-years-071025501415",
+    "score": 0.0,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "Artificial Intelligence Engineer"
+    ],
+    "fit_score": 0.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:121126917063": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Ecordon Solutions",
+    "title": "AI Engineer",
+    "location": "Noida, Sector 63",
+    "url": "https://www.naukri.com/job-listings-ai-engineer-ecordon-solutions-noida-sector-63-0-to-1-years-121126917063",
+    "score": 2.5,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "AI Engineer"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:211026502318": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "AMETEK",
+    "title": "AI Engineer/ Developer",
+    "location": "Bengaluru",
+    "url": "https://www.naukri.com/job-listings-ai-engineer-developer-ametek-instruments-india-bengaluru-0-to-2-years-211026502318",
+    "score": 2.5,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "AI Engineer"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:230926504064": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Tekclan",
+    "title": "Jr AI Engineer",
+    "location": "Chennai",
+    "url": "https://www.naukri.com/job-listings-jr-ai-engineer-tekclan-chennai-0-to-3-years-230926504064",
+    "score": 2.5,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "AI Engineer"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:171126934034": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Evnek",
+    "title": "Junior Generative AI Engineer",
+    "location": "Bengaluru, Bengaluru",
+    "url": "https://www.naukri.com/job-listings-junior-generative-ai-engineer-evnek-bengaluru-bengaluru-0-to-2-years-171126934034",
+    "score": 3.1,
+    "reason": "[Naukri import] matched: genai",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE",
+      "GENAI_AGENTIC"
+    ],
+    "matched_roles": [
+      "AI Engineer",
+      "Generative AI Engineer"
+    ],
+    "fit_score": 3.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:171126934004": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Sone India",
+    "title": "Junior Generative AI Engineer",
+    "location": "Bengaluru, Bengaluru",
+    "url": "https://www.naukri.com/job-listings-junior-generative-ai-engineer-sone-india-group-of-industries-bengaluru-bengaluru-0-to-2-years-171126934004",
+    "score": 3.1,
+    "reason": "[Naukri import] matched: genai",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE",
+      "GENAI_AGENTIC"
+    ],
+    "matched_roles": [
+      "AI Engineer",
+      "Generative AI Engineer"
+    ],
+    "fit_score": 3.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:261026000146": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Jobaaj com",
+    "title": "AI Engineer / AI Agent Developer",
+    "location": "Pune, Gurugram, Bengaluru",
+    "url": "https://www.naukri.com/job-listings-ai-engineer-ai-agent-developer-jobaaj-com-pune-gurugram-bengaluru-0-to-2-years-261026000146",
+    "score": 2.5,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE",
+      "GENAI_AGENTIC"
+    ],
+    "matched_roles": [
+      "AI Engineer",
+      "AI Agent Developer",
+      "Agent Developer"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:271026501000": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Iqvia Biotech",
+    "title": "AI Engineer",
+    "location": "Kochi",
+    "url": "https://www.naukri.com/job-listings-ai-engineer-iqvia-biotech-kochi-0-to-2-years-271026501000",
+    "score": 3.1,
+    "reason": "[Naukri import] matched: machine learning",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "AI Engineer"
+    ],
+    "fit_score": 3.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:080125506691": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Viga Entertainment Technology",
+    "title": "Internship- AI Engineer",
+    "location": "Bengaluru",
+    "url": "https://www.naukri.com/job-listings-internship-ai-engineer-viga-entertainment-technology-private-limited-bengaluru-0-to-1-years-080125506691",
+    "score": 2.5,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "AI Engineer"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:020226501661": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Appzoy Technologies",
+    "title": "AI Engineer",
+    "location": "Bengaluru",
+    "url": "https://www.naukri.com/job-listings-ai-engineer-appzoy-bengaluru-0-to-3-years-020226501661",
+    "score": 2.5,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "AI Engineer"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:020725504926": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Discover Dollar Technologies",
+    "title": "Analytics/AI Engineer Intern",
+    "location": "Bengaluru",
+    "url": "https://www.naukri.com/job-listings-analytics-ai-engineer-intern-discover-dollar-technologies-pvt-ltd-bengaluru-0-to-1-years-020725504926",
+    "score": 2.5,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "AI Engineer"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:181126501942": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Lintel Technologies",
+    "title": "AI Engineer (LLM)",
+    "location": "Ahmedabad",
+    "url": "https://www.naukri.com/job-listings-ai-engineer-llm-lintel-technologies-pvt-ltd-ahmedabad-0-to-4-years-181126501942",
+    "score": 2.5,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "AI Engineer"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:111126910244": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Bajaj Finance",
+    "title": "AI Engineer",
+    "location": "Pune",
+    "url": "https://www.naukri.com/job-listings-ai-engineer-bajaj-finance-limited-pune-0-to-3-years-111126910244",
+    "score": 2.5,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "AI Engineer"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:181126501421": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "onified.ai",
+    "title": "Artificial Intelligence Engineer",
+    "location": "Gurugram",
+    "url": "https://www.naukri.com/job-listings-artificial-intelligence-engineer-onified-ai-gurugram-0-to-3-years-181126501421",
+    "score": 0.0,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "Artificial Intelligence Engineer"
+    ],
+    "fit_score": 0.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:170925501695": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Algorizz",
+    "title": "AI Engineer",
+    "location": "Bengaluru",
+    "url": "https://www.naukri.com/job-listings-ai-engineer-algo-rizz-technologies-bengaluru-0-to-4-years-170925501695",
+    "score": 2.5,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "AI Engineer"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:121126503904": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Venpep Solutions",
+    "title": "AI Engineer",
+    "location": "Coimbatore",
+    "url": "https://www.naukri.com/job-listings-ai-engineer-venpep-solutions-private-limited-coimbatore-0-to-1-years-121126503904",
+    "score": 2.5,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "AI Engineer"
+    ],
+    "fit_score": 2.5,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:171126503641": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Glomax Info Tech",
+    "title": "AI Agent Engineer",
+    "location": "Chennai",
+    "url": "https://www.naukri.com/job-listings-ai-agent-engineer-glomax-info-tech-chennai-0-to-3-years-171126503641",
+    "score": 0.0,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "GENAI_AGENTIC"
+    ],
+    "matched_roles": [
+      "AI Agent Engineer",
+      "Agent Engineer"
+    ],
+    "fit_score": 0.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:291026500644": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Training Basket",
+    "title": "AI Engineer",
+    "location": "Noida",
+    "url": "https://www.naukri.com/job-listings-ai-engineer-training-basket-noida-0-to-3-years-291026500644",
+    "score": 3.1,
+    "reason": "[Naukri import] matched: machine learning",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "AI Engineer"
+    ],
+    "fit_score": 3.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:291026502602": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Kristalball Smart Solutions",
+    "title": "AI Engineer",
+    "location": "Bengaluru",
+    "url": "https://www.naukri.com/job-listings-ai-engineer-kristalball-bengaluru-0-to-4-years-291026502602",
+    "score": 3.1,
+    "reason": "[Naukri import] matched: machine learning",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "AI Engineer"
+    ],
+    "fit_score": 3.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:171126505775": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Vorosoft",
+    "title": "Founding Conversational AI & RAG Engineer",
+    "location": "Remote",
+    "url": "https://www.naukri.com/job-listings-founding-conversational-ai-rag-engineer-vorosoft-remote-0-to-3-years-171126505775",
+    "score": 0.0,
+    "reason": "[Naukri import] no skill overlap",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "GENAI_AGENTIC"
+    ],
+    "matched_roles": [
+      "RAG Engineer"
+    ],
+    "fit_score": 0.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:131126012193": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Baseel Partners",
+    "title": "AI / Machine Learning Engineer: Freshers and Experienced Home based",
+    "location": "Hybrid - Pune, Bengaluru, Mumbai (All Areas)",
+    "url": "https://www.naukri.com/job-listings-ai-machine-learning-engineer-freshers-and-experienced-home-based-baseel-partners-pune-bengaluru-mumbai-all-areas-0-to-5-years-131126012193",
+    "score": 3.1,
+    "reason": "[Naukri import] matched: machine learning",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "Machine Learning Engineer"
+    ],
+    "fit_score": 3.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:111126503934": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Cleartrip",
+    "title": "Associate Machine Learning Engineer",
+    "location": "Nagercoil",
+    "url": "https://www.naukri.com/job-listings-associate-machine-learning-engineer-cleartrip-private-limited-nagercoil-0-to-2-years-111126503934",
+    "score": 3.6,
+    "reason": "[Naukri import] matched: machine learning, python",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "Machine Learning Engineer"
+    ],
+    "fit_score": 3.6,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:111126504679": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Codemonk",
+    "title": "Machine Learning Intern (AI/ML)",
+    "location": "Bengaluru",
+    "url": "https://www.naukri.com/job-listings-machine-learning-intern-ai-ml-codemonk-bengaluru-0-to-1-years-111126504679",
+    "score": 0.6,
+    "reason": "[Naukri import] matched: machine learning",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [],
+    "matched_roles": [],
+    "fit_score": 0.6,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:111126503760": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "CapeStart",
+    "title": "Associate Machine Learning Engineer",
+    "location": "Nagercoil",
+    "url": "https://www.naukri.com/job-listings-associate-machine-learning-engineer-capestart-software-private-limited-nagercoil-0-to-2-years-111126503760",
+    "score": 3.6,
+    "reason": "[Naukri import] matched: machine learning, python",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "Machine Learning Engineer"
+    ],
+    "fit_score": 3.6,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:140526503435": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Rudra Research And Analytics",
+    "title": "Machine Learning Intern )",
+    "location": "Pune",
+    "url": "https://www.naukri.com/job-listings-machine-learning-intern-rudra-anlytics-pune-0-to-1-years-140526503435",
+    "score": 0.6,
+    "reason": "[Naukri import] matched: machine learning",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [],
+    "matched_roles": [],
+    "fit_score": 0.6,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:121126501040": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Samadhaan Credit Consultancy",
+    "title": "Machine Learning Engineer",
+    "location": "Chennai",
+    "url": "https://www.naukri.com/job-listings-machine-learning-engineer-credit-samadhaan-chennai-0-to-2-years-121126501040",
+    "score": 3.1,
+    "reason": "[Naukri import] matched: machine learning",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE",
+      "DATA"
+    ],
+    "matched_roles": [
+      "Machine Learning Engineer",
+      "Data Engineering"
+    ],
+    "fit_score": 3.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:171126503885": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Createbytes",
+    "title": "Machine Learning Intern",
+    "location": "Gurugram",
+    "url": "https://www.naukri.com/job-listings-machine-learning-intern-createbytes-gurugram-0-to-1-years-171126503885",
+    "score": 0.6,
+    "reason": "[Naukri import] matched: machine learning",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [],
+    "matched_roles": [],
+    "fit_score": 0.6,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:121126501042": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Samadhaan Credit Consultancy",
+    "title": "Machine Learning Engineer",
+    "location": "Mumbai",
+    "url": "https://www.naukri.com/job-listings-machine-learning-engineer-credit-samadhaan-mumbai-0-to-2-years-121126501042",
+    "score": 3.1,
+    "reason": "[Naukri import] matched: machine learning",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE",
+      "DATA"
+    ],
+    "matched_roles": [
+      "Machine Learning Engineer",
+      "Data Engineering"
+    ],
+    "fit_score": 3.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:121126501044": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Samadhaan Credit Consultancy",
+    "title": "Machine Learning Engineer",
+    "location": "Bengaluru",
+    "url": "https://www.naukri.com/job-listings-machine-learning-engineer-credit-samadhaan-bengaluru-0-to-2-years-121126501044",
+    "score": 3.1,
+    "reason": "[Naukri import] matched: machine learning",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE",
+      "DATA"
+    ],
+    "matched_roles": [
+      "Machine Learning Engineer",
+      "Data Engineering"
+    ],
+    "fit_score": 3.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:121126501043": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Samadhaan Credit Consultancy",
+    "title": "Machine Learning Engineer",
+    "location": "Ahmedabad",
+    "url": "https://www.naukri.com/job-listings-machine-learning-engineer-credit-samadhaan-ahmedabad-0-to-2-years-121126501043",
+    "score": 3.1,
+    "reason": "[Naukri import] matched: machine learning",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE",
+      "DATA"
+    ],
+    "matched_roles": [
+      "Machine Learning Engineer",
+      "Data Engineering"
+    ],
+    "fit_score": 3.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:121126501041": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Samadhaan Credit Consultancy",
+    "title": "Machine Learning Engineer",
+    "location": "Indore",
+    "url": "https://www.naukri.com/job-listings-machine-learning-engineer-credit-samadhaan-indore-0-to-2-years-121126501041",
+    "score": 3.1,
+    "reason": "[Naukri import] matched: machine learning",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE",
+      "DATA"
+    ],
+    "matched_roles": [
+      "Machine Learning Engineer",
+      "Data Engineering"
+    ],
+    "fit_score": 3.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:121126501039": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Samadhaan Credit Consultancy",
+    "title": "Machine Learning Engineer",
+    "location": "Pune",
+    "url": "https://www.naukri.com/job-listings-machine-learning-engineer-credit-samadhaan-pune-0-to-2-years-121126501039",
+    "score": 3.1,
+    "reason": "[Naukri import] matched: machine learning",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE",
+      "DATA"
+    ],
+    "matched_roles": [
+      "Machine Learning Engineer",
+      "Data Engineering"
+    ],
+    "fit_score": 3.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:171126504168": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Createabyte Engineering Solutions",
+    "title": "Machine Learning Intern",
+    "location": "Gurugram",
+    "url": "https://www.naukri.com/job-listings-machine-learning-intern-createabyte-engineering-solutions-private-limited-gurugram-0-to-1-years-171126504168",
+    "score": 0.6,
+    "reason": "[Naukri import] matched: machine learning",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [],
+    "matched_roles": [],
+    "fit_score": 0.6,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:230726504612": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Hyperverge",
+    "title": "Deep Learning / Machine Learning Intern",
+    "location": "Bengaluru",
+    "url": "https://www.naukri.com/job-listings-deep-learning-machine-learning-intern-hyperverge-technologies-pvt-ltd-bengaluru-0-to-2-years-230726504612",
+    "score": 0.6,
+    "reason": "[Naukri import] matched: machine learning",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [],
+    "matched_roles": [],
+    "fit_score": 0.6,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:251026004695": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Perfect Containers",
+    "title": "Machine Learning Intern",
+    "location": "Palghar(Palghar West +3)",
+    "url": "https://www.naukri.com/job-listings-machine-learning-intern-perfect-containers-palghar-0-to-1-years-251026004695",
+    "score": 0.6,
+    "reason": "[Naukri import] matched: machine learning",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [],
+    "matched_roles": [],
+    "fit_score": 0.6,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:201126502911": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Upflairs",
+    "title": "Machine Learning Engineer",
+    "location": "Jaipur",
+    "url": "https://www.naukri.com/job-listings-machine-learning-engineer-upflairs-private-limited-jaipur-0-to-1-years-201126502911",
+    "score": 3.1,
+    "reason": "[Naukri import] matched: machine learning",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "Machine Learning Engineer"
+    ],
+    "fit_score": 3.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:290926501516": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Bitblue Technology",
+    "title": "Machine Learning Engineer",
+    "location": "Palghar",
+    "url": "https://www.naukri.com/job-listings-machine-learning-engineer-bitblue-technology-palghar-0-to-1-years-290926501516",
+    "score": 3.1,
+    "reason": "[Naukri import] matched: machine learning",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "Machine Learning Engineer"
+    ],
+    "fit_score": 3.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:231126913511": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Benovymed Healthcare Private Limited",
+    "title": "Principal Data Scientist - NLP/Machine Learning",
+    "location": "Gurugram",
+    "url": "https://www.naukri.com/job-listings-principal-data-scientist-nlp-machine-learning-benovymed-healthcare-private-limited-gurugram-0-to-5-years-231126913511",
+    "score": 1.1,
+    "reason": "[Naukri import] matched: machine learning, nlp",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Scientist"
+    ],
+    "fit_score": 1.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:231126913998": {
+    "first_seen": "2026-11-23T10:56:48+00:00",
+    "company": "Benovymed Healthcare Private Limited",
+    "title": "Principal Data Scientist/Sr Data Scientist - NLP/Machine Learning",
+    "location": "Pune",
+    "url": "https://www.naukri.com/job-listings-231126913998",
+    "score": 1.1,
+    "reason": "[Naukri import] matched: machine learning, nlp",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Scientist"
+    ],
+    "fit_score": 1.1,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4476809019": {
+    "first_seen": "2026-11-23T11:03:16+00:00",
+    "company": "Brightstar Lottery",
+    "title": "Machine Learning Engineer III",
+    "location": "Hyderabad, Telangana, India",
+    "url": "https://www.linkedin.com/jobs/view/4476809019",
+    "score": 2.0,
+    "reason": "Level III indicates a senior role, mismatching the candidate's one year of experience.",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "Machine Learning Engineer"
+    ],
+    "fit_score": 2.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:240326506685": {
+    "first_seen": "2026-11-23T11:03:16+00:00",
+    "company": "Voltas",
+    "title": "Data Analytics Executive",
+    "location": "Mumbai",
+    "url": "https://www.naukri.com/job-listings-data-analytics-executive-voltas-limited-mumbai-0-to-4-years-240326506685",
+    "score": 6.0,
+    "reason": "Data analytics executive role in Mumbai matching junior experience level, though slightly tangential.",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [],
+    "matched_roles": [],
+    "fit_score": 6.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:130126506831": {
+    "first_seen": "2026-11-23T11:03:16+00:00",
+    "company": "Godigi Infotech",
+    "title": "DATA ANALYST",
+    "location": "Pune",
+    "url": "https://www.naukri.com/job-listings-data-analyst-godigi-infotech-pune-0-to-1-years-130126506831",
+    "score": 5.0,
+    "reason": "Data Analyst role in Pune, but lacks description and requires relocation from Mumbai.",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 5.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4492543971": {
+    "first_seen": "2026-11-23T11:05:58+00:00",
+    "company": "TerraTern",
+    "title": "AI Engineer",
     "location": "Bengaluru, Karnataka, India",
-    "url": "https://www.linkedin.com/jobs/view/4485925349",
+    "url": "https://www.linkedin.com/jobs/view/4492543971",
+    "score": 6.0,
+    "reason": "Junior AI Engineer role matches stack, but requires relocation to Bengaluru.",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "AI Engineer"
+    ],
+    "fit_score": 6.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:ytics-systems-engineer-mid-level": {
+    "first_seen": "2026-11-24T05:37:05+00:00",
+    "company": "Remote Employer",
+    "title": "Orchestration & Analytics Systems Engineer – Mid-Level",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/leidos/jobs/orchestration-analytics-systems-engineer-mid-level",
     "score": 3.0,
-    "reason": "Mismatch in job function, as the candidate targets AI and software development instead of data analysis.",
+    "reason": "The role is a mid-level systems engineering position requiring specific clearance or defense context.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "OTHER_TECH"
+    ],
+    "matched_roles": [
+      "Systems Engineer"
+    ],
+    "fit_score": 3.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:jobssoftware-engineer-7607894274": {
+    "first_seen": "2026-11-24T05:37:05+00:00",
+    "company": "Remote Employer",
+    "title": "Software Engineer",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/leidos/jobs/software-engineer-7607894274",
+    "score": 3.0,
+    "reason": "The job specifies a UK mobile worker requirement which mismatches the candidate location.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Engineer"
+    ],
+    "fit_score": 3.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:private-limitedjobsetl-developer": {
+    "first_seen": "2026-11-24T05:37:05+00:00",
+    "company": "Remote Employer",
+    "title": "ETL Developer",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/edgeq-technologies-private-limited/jobs/etl-developer",
+    "score": 3.0,
+    "reason": "The role requires 3 to 9 years of experience and Java/Spring Boot which the candidate lacks.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [],
+    "matched_roles": [],
+    "fit_score": 3.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:ull-stack-developer-ai-113216089": {
+    "first_seen": "2026-11-24T05:37:05+00:00",
+    "company": "Remote Employer",
+    "title": "Full Stack Developer (AI)",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/edgeq-technologies-private-limited/jobs/full-stack-developer-ai-113216089",
+    "score": 2.0,
+    "reason": "The position specifies United States location restrictions.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Full Stack Developer"
+    ],
+    "fit_score": 2.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:private-limitedjobsdata-engineer": {
+    "first_seen": "2026-11-24T05:37:05+00:00",
+    "company": "Remote Employer",
+    "title": "Data Engineer",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/edgeq-technologies-private-limited/jobs/data-engineer",
+    "score": 3.0,
+    "reason": "The job is tied to Seattle, United States location requirements.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Engineer"
+    ],
+    "fit_score": 3.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:vate-limitedjobssystems-engineer": {
+    "first_seen": "2026-11-24T05:37:05+00:00",
+    "company": "Remote Employer",
+    "title": "Systems Engineer",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/edgeq-technologies-private-limited/jobs/systems-engineer",
+    "score": 2.0,
+    "reason": "The role requires 2-7 years experience and is restricted to the United States.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "OTHER_TECH"
+    ],
+    "matched_roles": [
+      "Systems Engineer"
+    ],
+    "fit_score": 2.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:jobsfull-stack-software-engineer": {
+    "first_seen": "2026-11-24T05:37:05+00:00",
+    "company": "Remote Employer",
+    "title": "Full Stack Software Engineer",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/edgeq-technologies-private-limited/jobs/full-stack-software-engineer",
+    "score": 3.0,
+    "reason": "Requires US-based candidates only, which the candidate does not meet.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Engineer"
+    ],
+    "fit_score": 3.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:te-limitedjobsanalytics-engineer": {
+    "first_seen": "2026-11-24T05:37:05+00:00",
+    "company": "Remote Employer",
+    "title": "Analytics Engineer",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/edgeq-technologies-private-limited/jobs/analytics-engineer",
+    "score": 2.0,
+    "reason": "Requires 3-8 years of experience, exceeding the candidate's 1 year.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Analytics Engineer"
+    ],
+    "fit_score": 2.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:iajobscloud-engineer-full-remote": {
+    "first_seen": "2026-11-24T05:37:05+00:00",
+    "company": "Remote Employer",
+    "title": "Cloud Engineer | Full Remote",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/claranet-italia/jobs/cloud-engineer-full-remote",
+    "score": 2.0,
+    "reason": "Job description is entirely in Italian and lacks clear stack requirements.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "PLATFORM",
+      "CLOUD_DEVOPS"
+    ],
+    "matched_roles": [
+      "Cloud Engineer",
+      "Cloud Engineer"
+    ],
+    "fit_score": 2.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:191126502427": {
+    "first_seen": "2026-11-24T05:37:05+00:00",
+    "company": "Magic Infomedia",
+    "title": "Data Analyst",
+    "location": "New Delhi",
+    "url": "https://www.naukri.com/job-listings-data-analyst-magic-infomedia-new-delhi-0-to-2-years-191126502427",
+    "score": 6.0,
+    "reason": "Matches junior experience level and data background, but location is New Delhi.",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 6.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:t-fincrime-focus-contract-remote": {
+    "first_seen": "2026-11-25T04:51:15+00:00",
+    "company": "Remote Employer",
+    "title": "Data Analyst (FinCrime Focus - Contract) Remote",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/capitex/jobs/data-analyst-fincrime-focus-contract-remote",
+    "score": 3.0,
+    "reason": "Requires an experienced data analyst with specialized financial crime domain expertise, which the junior candidate lacks.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 3.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:iesjobsmachine-learning-engineer": {
+    "first_seen": "2026-11-25T04:51:15+00:00",
+    "company": "Remote Employer",
+    "title": "Machine Learning Engineer",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/bright-vision-technologies/jobs/machine-learning-engineer",
+    "score": 4.0,
+    "reason": "Role expects an experienced machine learning engineer for consulting, while candidate is at the junior level.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "Machine Learning Engineer"
+    ],
+    "fit_score": 4.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4483042552": {
+    "first_seen": "2026-11-25T04:51:15+00:00",
+    "company": "Bridgestone Americas",
+    "title": "Data Analyst - NMFC",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4483042552",
+    "score": 2.0,
+    "reason": "Location is Bengaluru while candidate targets Mumbai or remote, and lacks specific freight/NMFC data experience.",
     "canonical_source": "linkedin",
     "sources": [
       "linkedin"
@@ -1789,19 +4420,19 @@
     "matched_roles": [
       "Data Analyst"
     ],
-    "fit_score": 3.0,
-    "emailed": true,
+    "fit_score": 2.0,
+    "emailed": false,
     "applied": false,
     "applied_on": null
   },
-  "linkedin:4483513254": {
-    "first_seen": "2026-11-24T14:11:22+00:00",
+  "linkedin:4491283039": {
+    "first_seen": "2026-11-25T04:51:15+00:00",
     "company": "Wipro",
     "title": "DATA ANALYST L4",
     "location": "Pune Division, Maharashtra, India",
-    "url": "https://www.linkedin.com/jobs/view/4483513254",
-    "score": 3.0,
-    "reason": "Candidate is an AI and software engineer, not a dedicated data analyst.",
+    "url": "https://www.linkedin.com/jobs/view/4491283039",
+    "score": 4.0,
+    "reason": "Wipro L4 data analyst role generally requires more corporate experience than the candidate's one year.",
     "canonical_source": "linkedin",
     "sources": [
       "linkedin"
@@ -1812,31 +4443,54 @@
     "matched_roles": [
       "Data Analyst"
     ],
-    "fit_score": 3.0,
-    "emailed": true,
+    "fit_score": 4.0,
+    "emailed": false,
     "applied": false,
     "applied_on": null
   },
-  "linkedin:4492564172": {
-    "first_seen": "2026-11-24T14:11:22+00:00",
-    "company": "TerraTern",
-    "title": "Data Analyst",
-    "location": "Bengaluru, Karnataka, India",
-    "url": "https://www.linkedin.com/jobs/view/4492564172",
-    "score": 3.0,
-    "reason": "Role requires data analyst profile instead of the candidate's software and GenAI engineering skillset.",
-    "canonical_source": "linkedin",
+  "naukri:241126030083": {
+    "first_seen": "2026-11-25T04:51:15+00:00",
+    "company": "Spartan Infosoft",
+    "title": "Python Developer",
+    "location": "Remote",
+    "url": "https://www.naukri.com/job-listings-python-developer-spartan-infosoft-mumbai-all-areas-0-to-1-years-241126030083",
+    "score": 9.0,
+    "reason": "Strong match for a junior python developer position asking for 0-1 years of experience.",
+    "canonical_source": "naukri",
     "sources": [
-      "linkedin"
+      "naukri"
     ],
     "role_families": [
-      "DATA"
+      "SOFTWARE"
     ],
     "matched_roles": [
-      "Data Analyst"
+      "Python Developer"
     ],
-    "fit_score": 3.0,
-    "emailed": true,
+    "fit_score": 9.0,
+    "emailed": false,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:281026502103": {
+    "first_seen": "2026-11-25T04:51:15+00:00",
+    "company": "Softlabs Technologies And Development",
+    "title": "AI Engineer Trainee / Intern",
+    "location": "Mumbai",
+    "url": "https://www.naukri.com/job-listings-ai-engineer-trainee-intern-softlabs-group-mumbai-0-to-3-years-281026502103",
+    "score": 9.0,
+    "reason": "Excellent local match for an AI engineer trainee position matching junior seniority and Mumbai location.",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "AI Engineer"
+    ],
+    "fit_score": 9.0,
+    "emailed": false,
     "applied": false,
     "applied_on": null
   }
