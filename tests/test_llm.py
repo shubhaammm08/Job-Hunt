@@ -273,7 +273,8 @@ def test_keyword_screen_stays_in_range_with_an_empty_profile():
 
 ENV_KEYS = ["LLM_PROVIDER", "SCREEN_PROVIDER", "DRAFT_PROVIDER",
             "SCREEN_MODEL", "DRAFT_MODEL", "ANTHROPIC_API_KEY",
-            "GEMINI_API_KEY", "GROQ_API_KEY"]
+            "GEMINI_API_KEY", "GROQ_API_KEY", "GROQ_MODEL",
+            "GEMINI_MODEL", "OPENROUTER_API_KEY", "OPENROUTER_MODEL"]
 
 
 @pytest.fixture

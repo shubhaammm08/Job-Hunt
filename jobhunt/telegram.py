@@ -16,7 +16,7 @@ from typing import TYPE_CHECKING, Any
 if TYPE_CHECKING:
     from .fetch import Job
 
-DEFAULT_DASHBOARD_URL = os.environ.get("DASHBOARD_URL", "https://shubhaammm08.github.io/Job-Hunt/")
+DEFAULT_DASHBOARD_URL = (os.environ.get("DASHBOARD_URL") or "").strip() or "https://shubhaammm08.github.io/Job-Hunt/"
 
 
 def make_job_buttons(job_id: str, apply_url: str) -> dict[str, Any]:

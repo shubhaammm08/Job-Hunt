@@ -91,3 +91,23 @@ def test_make_job_buttons():
         for btn in row:
             if "callback_data" in btn:
                 assert len(btn["callback_data"].encode("utf-8")) <= 64
+
+
+def test_default_dashboard_url_fallback(monkeypatch):
+    import importlib
+    import jobhunt.telegram as telegram_mod
+
+    expected_default = "https://shubhaammm08.github.io/Job-Hunt/"
+    try:
+        monkeypatch.delenv("DASHBOARD_URL", raising=False)
+        assert importlib.reload(telegram_mod).DEFAULT_DASHBOARD_URL == expected_default
+
+        for blank in ("", "   ", "\t\n"):
+            monkeypatch.setenv("DASHBOARD_URL", blank)
+            assert importlib.reload(telegram_mod).DEFAULT_DASHBOARD_URL == expected_default
+
+        monkeypatch.setenv("DASHBOARD_URL", "  https://example.com/jobs/  ")
+        assert importlib.reload(telegram_mod).DEFAULT_DASHBOARD_URL == "https://example.com/jobs/"
+    finally:
+        monkeypatch.undo()
+        importlib.reload(telegram_mod)

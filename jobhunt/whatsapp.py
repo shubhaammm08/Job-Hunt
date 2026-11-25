@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from .fetch import Job
 
 
-DEFAULT_DASHBOARD_URL = os.environ.get("DASHBOARD_URL", "https://shubhaammm08.github.io/Job-Hunt/")
+DEFAULT_DASHBOARD_URL = (os.environ.get("DASHBOARD_URL") or "").strip() or "https://shubhaammm08.github.io/Job-Hunt/"
 
 
 def clean_phone_number(phone: str) -> str:
