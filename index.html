@@ -4252,7 +4252,10 @@
         </div>
         <div class="results-count-bar">
           <span id="results-count">Showing 78 opportunities</span>
-          <div style="display:flex;gap:8px;">
+          <div style="display:flex;gap:8px;align-items:center;">
+            <span id="cloud-sync-status" class="tag" style="font-size:11px;padding:3px 8px;background:var(--bg-surface-subtle);border:1px solid var(--border-subtle);display:inline-flex;align-items:center;gap:5px;cursor:pointer;" onclick="pullCloudSync(false)" title="Real-time Firebase Cloud Sync active. Click to refresh.">
+              <span class="status-pulse-dot" style="background:#10b981;box-shadow:0 0 6px #10b981;"></span> Cloud Synced
+            </span>
             <button class="btn-applied-export" onclick="openAppliedTrackerModal()"
               title="Sync applied jobs between phone and laptop" style="background:var(--accent-indigo, #4F46E5);color:#fff;border-color:transparent;font-weight:700;">
               <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -6793,6 +6796,7 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
         }
       }
       fetchLinkedInStatus();
+      try { pullCloudSync(true); } catch (e) { }
     }
 
     function syncPlatformFilterOptions() {
@@ -7162,6 +7166,11 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
           }).catch(() => { });
         }
       } catch (err) { }
+
+      // Real-time Cloud Push to Firebase Firestore
+      try {
+        pushCloudSync(true);
+      } catch (err) { }
     }
 
     function openAppliedTrackerModal() {
@@ -7360,7 +7369,7 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({ job_id: j.job_id })
-                }).catch(() => {});
+                }).catch(() => { });
               }
             }
           });
@@ -7372,8 +7381,204 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
         renderJobs();
         renderAppliedTrackerList();
         showToast(`Successfully synchronized ${incomingIds.length} applied jobs!`);
+        try { pushCloudSync(true); } catch (e) { }
       } catch (err) {
         alert('Invalid Sync Code. Please ensure you copied the complete code from your mobile device.');
+      }
+    }
+
+    // =========================================================================
+    // Real-Time Cloud Firestore Sync Engine (Zero CDN, Native REST)
+    // =========================================================================
+    const FIREBASE_SYNC_CONFIG = {
+      projectId: "jobhunt-sync-shubham",
+      apiKey: "AIzaSyDWHsOFEIi6lZ1oB7r4Z43_S1l7UhQB1lY",
+      docUrl: "https://firestore.googleapis.com/v1/projects/jobhunt-sync-shubham/databases/(default)/documents/jobhunt_sync/applied_state?key=AIzaSyDWHsOFEIi6lZ1oB7r4Z43_S1l7UhQB1lY"
+    };
+
+    let cloudSyncInProgress = false;
+
+    async function pullCloudSync(quiet = true) {
+      if (cloudSyncInProgress) return;
+      cloudSyncInProgress = true;
+      try {
+        const res = await fetch(FIREBASE_SYNC_CONFIG.docUrl);
+        if (!res.ok) {
+          if (res.status === 404) {
+            await pushCloudSync(true);
+          }
+          cloudSyncInProgress = false;
+          return;
+        }
+        const data = await res.json();
+        const fields = data.fields || {};
+
+        let cloudIds = [];
+        if (fields.applied_ids && fields.applied_ids.arrayValue && Array.isArray(fields.applied_ids.arrayValue.values)) {
+          cloudIds = fields.applied_ids.arrayValue.values.map(v => v.stringValue).filter(Boolean);
+        }
+
+        const cloudJobs = {};
+        if (fields.applied_jobs && fields.applied_jobs.mapValue && fields.applied_jobs.mapValue.fields) {
+          const mFields = fields.applied_jobs.mapValue.fields;
+          Object.keys(mFields).forEach(jid => {
+            const jf = (mFields[jid].mapValue && mFields[jid].mapValue.fields) || {};
+            cloudJobs[jid] = {
+              job_id: (jf.job_id && jf.job_id.stringValue) || jid,
+              applied_at: (jf.applied_at && jf.applied_at.stringValue) || new Date().toISOString(),
+              title: (jf.title && jf.title.stringValue) || '',
+              company: (jf.company && jf.company.stringValue) || '',
+              location: (jf.location && jf.location.stringValue) || '',
+              url: (jf.url && jf.url.stringValue) || '',
+              score: (jf.score && (jf.score.doubleValue || jf.score.integerValue)) || 0.0,
+              platform: (jf.platform && jf.platform.stringValue) || ''
+            };
+          });
+        }
+
+        const storedMeta = JSON.parse(localStorage.getItem('jobhunt_applied_jobs') || '{}');
+        const legacyList = JSON.parse(localStorage.getItem('jobhunt_applied') || '[]');
+
+        let changed = false;
+        cloudIds.forEach(id => {
+          if (!storedMeta[id]) {
+            storedMeta[id] = cloudJobs[id] || { job_id: id, applied_at: new Date().toISOString() };
+            changed = true;
+          }
+          if (!legacyList.includes(id)) {
+            legacyList.push(id);
+            changed = true;
+          }
+        });
+
+        const localIds = Object.keys(storedMeta);
+        const hasUnsyncedLocal = localIds.some(id => !cloudIds.includes(id));
+
+        if (changed) {
+          localStorage.setItem('jobhunt_applied_jobs', JSON.stringify(storedMeta));
+          localStorage.setItem('jobhunt_applied', JSON.stringify(legacyList));
+
+          if (appData && Array.isArray(appData.jobs)) {
+            appData.jobs.forEach(j => {
+              if (storedMeta[j.job_id] || legacyList.includes(j.job_id)) {
+                j.applied = true;
+              }
+            });
+            if (appData.stats) {
+              appData.stats.applied = appData.jobs.filter(j => j.applied).length;
+            }
+          }
+          renderStats();
+          renderJobs();
+          renderAppliedTrackerList();
+          updateSyncIndicator('synced');
+          if (!quiet) showToast(`Cloud Synced: ${legacyList.length} applied jobs up-to-date!`);
+        } else {
+          updateSyncIndicator('synced');
+        }
+
+        if (hasUnsyncedLocal) {
+          await pushCloudSync(true);
+        }
+      } catch (err) {
+        console.warn('Cloud sync pull failed:', err);
+        updateSyncIndicator('offline');
+      } finally {
+        cloudSyncInProgress = false;
+      }
+    }
+
+    async function pushCloudSync(quiet = false) {
+      try {
+        updateSyncIndicator('syncing');
+        const storedMeta = JSON.parse(localStorage.getItem('jobhunt_applied_jobs') || '{}');
+        const legacyList = JSON.parse(localStorage.getItem('jobhunt_applied') || '[]');
+
+        if (appData && Array.isArray(appData.jobs)) {
+          appData.jobs.forEach(j => {
+            if (j.applied && !storedMeta[j.job_id]) {
+              storedMeta[j.job_id] = {
+                job_id: j.job_id,
+                applied_at: new Date().toISOString(),
+                title: j.title || '',
+                company: j.company || '',
+                location: j.location || '',
+                url: isLinkedInJob(j) ? (getLinkedInPostUrl(j) || j.url || '') : (j.url || ''),
+                score: j.score || 0.0,
+                platform: inferPlatformSource(j)
+              };
+            }
+          });
+        }
+
+        const allIds = Array.from(new Set([...Object.keys(storedMeta), ...legacyList]));
+
+        const firestoreAppliedJobs = {};
+        allIds.forEach(id => {
+          const m = storedMeta[id] || {};
+          firestoreAppliedJobs[id] = {
+            mapValue: {
+              fields: {
+                job_id: { stringValue: String(m.job_id || id) },
+                applied_at: { stringValue: String(m.applied_at || new Date().toISOString()) },
+                title: { stringValue: String(m.title || '') },
+                company: { stringValue: String(m.company || '') },
+                location: { stringValue: String(m.location || '') },
+                url: { stringValue: String(m.url || '') },
+                score: { doubleValue: parseFloat(m.score || 0.0) },
+                platform: { stringValue: String(m.platform || '') }
+              }
+            }
+          };
+        });
+
+        const firestoreAppliedIds = {
+          arrayValue: {
+            values: allIds.map(id => ({ stringValue: String(id) }))
+          }
+        };
+
+        const payload = {
+          fields: {
+            applied_jobs: {
+              mapValue: {
+                fields: firestoreAppliedJobs
+              }
+            },
+            applied_ids: firestoreAppliedIds,
+            updated_at: { stringValue: new Date().toISOString() },
+            version: { integerValue: "1" }
+          }
+        };
+
+        const res = await fetch(FIREBASE_SYNC_CONFIG.docUrl, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          updateSyncIndicator('synced');
+          if (!quiet) showToast(`Cloud Synced: Saved ${allIds.length} applications across devices!`);
+        } else {
+          updateSyncIndicator('error');
+        }
+      } catch (err) {
+        console.warn('Cloud sync push failed:', err);
+        updateSyncIndicator('offline');
+      }
+    }
+
+    function updateSyncIndicator(status) {
+      const el = document.getElementById('cloud-sync-status');
+      if (!el) return;
+      if (status === 'synced') {
+        el.innerHTML = '<span class="status-pulse-dot" style="background:#10b981;box-shadow:0 0 6px #10b981;"></span> Cloud Synced';
+        el.title = 'Real-time Firebase Cloud Sync active';
+      } else if (status === 'syncing') {
+        el.innerHTML = '<span class="status-pulse-dot" style="background:#f59e0b;"></span> Syncing...';
+      } else if (status === 'offline') {
+        el.innerHTML = '<span class="status-pulse-dot" style="background:#64748b;"></span> Local Offline';
       }
     }
 
@@ -8851,6 +9056,20 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
         }
       });
       loadData();
+      try {
+        pullCloudSync(true);
+        window.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'visible') {
+            pullCloudSync(true);
+          }
+        });
+        window.addEventListener('focus', () => {
+          pullCloudSync(true);
+        });
+        setInterval(() => {
+          pullCloudSync(true);
+        }, 15000);
+      } catch (e) { }
     });
   </script>
 </body>

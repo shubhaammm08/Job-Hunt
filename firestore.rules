@@ -1,0 +1,111 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // This security rules file assumes the following data structures:
+    //
+    // Collection: jobhunt_sync
+    // Document ID: {syncDoc} (string, 1 to 128 characters)
+    // Fields:
+    //   - applied_jobs: map (required, max 5000 entries)
+    //       Map of applied job metadata keyed by job ID strings.
+    //       Each value is a map of job metadata (e.g. job_id, applied_at,
+    //       title, company, url, score, platform).
+    //   - applied_ids: list (required, max 5000 items)
+    //       List of applied job ID strings for quick membership tests.
+    //   - updated_at: string or timestamp (optional, string length <= 100)
+    //       ISO 8601 date string or Firestore timestamp of last synchronization.
+    //   - version: int or float (optional, >= 0)
+    //       Schema or client version number.
+    //
+    // Root & Other Collections:
+    //   - Deny all reads and writes by default to prevent unauthorized access.
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+
+    // Validate document ID length and constraints
+    function isValidDocId(docId) {
+      return docId is string &&
+             docId.size() >= 1 &&
+             docId.size() <= 128;
+    }
+
+    // Validate that document contains only allowed fields
+    function hasOnlyAllowedFields(data, fields) {
+      return data.keys().hasOnly(fields);
+    }
+
+    // Validate that required fields exist in document
+    function hasRequiredFields(data, fields) {
+      return data.keys().hasAll(fields);
+    }
+
+    // Validate applied_jobs map type and size bounds (DoS & denial-of-wallet protection)
+    function isValidAppliedJobs(jobs) {
+      return jobs is map && jobs.size() <= 5000;
+    }
+
+    // Validate applied_ids list type and size bounds (DoS & denial-of-wallet protection)
+    function isValidAppliedIds(ids) {
+      return ids is list && ids.size() <= 5000;
+    }
+
+    // Validate updated_at timestamp or bounded ISO date string
+    function isValidUpdatedAt(val) {
+      return val is timestamp ||
+             (val is string && val.size() > 0 && val.size() <= 100);
+    }
+
+    // Validate version numeric type and non-negative value
+    function isValidVersion(val) {
+      return (val is int || val is float) && val >= 0;
+    }
+
+    // ===============================================================
+    // Domain Validator (Validator Function Pattern)
+    // Used in BOTH create and update operations to eliminate Update Bypass
+    // ===============================================================
+
+    function isValidSyncDoc(data) {
+      return hasOnlyAllowedFields(data, ['applied_jobs', 'applied_ids', 'updated_at', 'version']) &&
+             hasRequiredFields(data, ['applied_jobs', 'applied_ids']) &&
+             isValidAppliedJobs(data.applied_jobs) &&
+             isValidAppliedIds(data.applied_ids) &&
+             (!('updated_at' in data) || isValidUpdatedAt(data.updated_at)) &&
+             (!('version' in data) || isValidVersion(data.version));
+    }
+
+    // ===============================================================
+    // Rules Definition
+    // ===============================================================
+
+    // JobHunt cross-device synchronization collection
+    match /jobhunt_sync/{syncDoc} {
+      // Allow read operations when document ID meets length constraints
+      allow read: if isValidDocId(syncDoc);
+
+      // Validate schema, types, and resource limits on create
+      allow create: if isValidDocId(syncDoc) && isValidSyncDoc(request.resource.data);
+
+      // Enforce identical domain validation on update to prevent update bypasses
+      allow update: if isValidDocId(syncDoc) && isValidSyncDoc(request.resource.data);
+
+      // Deny delete to protect against malicious data wipes or DoS attacks
+      allow delete: if false;
+    }
+
+    // Default Deny: Disallow all operations on any other collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
