@@ -47,20 +47,18 @@ jobs:
           pip install -r requirements.txt
 
       - name: "Verify Secrets Configured"
+        id: check_secrets
         run: |
-          echo "=== Verifying GitHub Secrets ==="
-          MISSING=""
-          [ -z "${{ secrets.GEMINI_API_KEY }}" ] && MISSING="$MISSING GEMINI_API_KEY"
-          [ -z "${{ secrets.GMAIL_EMAIL || secrets.SMTP_USER }}" ] && MISSING="$MISSING GMAIL_EMAIL"
-          [ -z "${{ secrets.GMAIL_APP_PASSWORD || secrets.SMTP_PASS }}" ] && MISSING="$MISSING GMAIL_APP_PASSWORD"
-          if [ -n "$MISSING" ]; then
-            echo "::error::Missing required GitHub Secrets: $MISSING"
-            echo "Please configure the missing secrets in Settings -> Secrets and variables -> Actions"
-            exit 1
+          echo "=== Verifying Secrets ==="
+          if [ -z "${{ secrets.GMAIL_EMAIL || secrets.SMTP_USER }}" ] || [ -z "${{ secrets.GMAIL_APP_PASSWORD || secrets.SMTP_PASS }}" ]; then
+            echo "Gmail secrets not configured. Inbox Assistant skipped (Email disabled)."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
           fi
-          echo "All required secrets are present."
 
       - name: "Restore State from state/inbox branch"
+        if: steps.check_secrets.outputs.skip != 'true'
         run: |
           mkdir -p out
           echo "=== Fetching persistent state from state/inbox branch ==="
@@ -90,6 +88,7 @@ jobs:
           fi
 
       - name: "Execute Inbox Assistant"
+        if: steps.check_secrets.outputs.skip != 'true'
         env:
           SMTP_HOST: ${{ vars.SMTP_HOST || 'smtp.gmail.com' }}
           SMTP_PORT: ${{ vars.SMTP_PORT || '587' }}
@@ -110,7 +109,7 @@ jobs:
           eval $CMD
 
       - name: "Commit & Push State to state/inbox"
-        if: success()
+        if: success() && steps.check_secrets.outputs.skip != 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |

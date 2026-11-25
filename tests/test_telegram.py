@@ -6,6 +6,7 @@ import pytest
 
 from jobhunt.fetch import Job
 from jobhunt.telegram import (
+    format_job_card,
     format_telegram_alert,
     make_job_buttons,
     send_telegram,
@@ -83,6 +84,7 @@ def test_make_job_buttons():
     assert any("1-Click Apply" in t for t in all_texts)
     assert any("AutoFill Kit" in t for t in all_texts)
     assert any("Pitch Note" in t for t in all_texts)
+    assert any("Cover Letter" in t for t in all_texts)
     assert any("Screening Q&A" in t for t in all_texts)
     assert any("Mark Applied" in t for t in all_texts)
 
@@ -91,6 +93,17 @@ def test_make_job_buttons():
         for btn in row:
             if "callback_data" in btn:
                 assert len(btn["callback_data"].encode("utf-8")) <= 64
+
+
+def test_format_job_card():
+    jobs = _sample_jobs()
+    card = format_job_card(jobs[0])
+    assert "Stripe" in card
+    assert "Software Engineer, Intern" in card
+    assert "TOP MATCH" in card or "STRONG MATCH" in card
+    assert "Compensation" in card
+    assert "Why You Match" in card
+    assert "#Python" in card
 
 
 def test_default_dashboard_url_fallback(monkeypatch):

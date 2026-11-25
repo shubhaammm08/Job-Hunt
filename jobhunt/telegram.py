@@ -19,25 +19,46 @@ if TYPE_CHECKING:
 DEFAULT_DASHBOARD_URL = (os.environ.get("DASHBOARD_URL") or "").strip() or "https://shubhaammm08.github.io/Job-Hunt/"
 
 
+def extract_tech_tags(text: str) -> list[str]:
+    """Extract relevant technology hashtags from job metadata."""
+    keywords = [
+        "Python", "SQL", "FastAPI", "Pandas", "ETL", "AWS", "GCP", "Azure",
+        "Docker", "Power BI", "Tableau", "GenAI", "LLM", "React", "PostgreSQL",
+        "Kafka", "Airflow", "Spark", "Machine Learning", "Git",
+    ]
+    found: list[str] = []
+    text_lower = text.lower()
+    for kw in keywords:
+        pattern = r"\b" + re.escape(kw.lower()) + r"\b"
+        if re.search(pattern, text_lower):
+            tag = "#" + kw.replace(" ", "")
+            if tag not in found:
+                found.append(tag)
+        if len(found) >= 5:
+            break
+    return found
+
+
 def make_job_buttons(job_id: str, apply_url: str) -> dict[str, Any]:
-    """Create interactive Telegram inline keyboard buttons for a job."""
+    """Create modern interactive Telegram inline keyboard buttons for a job."""
     cb_applied = f"app:{job_id}"[:64]
     cb_pitch = f"pitch:{job_id}"[:64]
+    cb_cl = f"cl:{job_id}"[:64]
     cb_kit = f"kit:{job_id}"[:64]
     cb_qa = f"qa:{job_id}"[:64]
 
     keyboard = [
         [
-            {"text": "🚀 1-Click Apply", "url": apply_url or DEFAULT_DASHBOARD_URL},
+            {"text": "🚀 1-Click Apply", "url": (apply_url or "").strip() or DEFAULT_DASHBOARD_URL},
             {"text": "⚡ AutoFill Kit", "callback_data": cb_kit},
         ],
         [
             {"text": "📋 Pitch Note", "callback_data": cb_pitch},
-            {"text": "❓ Screening Q&A", "callback_data": cb_qa},
+            {"text": "📝 Cover Letter", "callback_data": cb_cl},
         ],
         [
+            {"text": "❓ Screening Q&A", "callback_data": cb_qa},
             {"text": "✅ Mark Applied", "callback_data": cb_applied},
-            {"text": "🌐 Dashboard", "url": DEFAULT_DASHBOARD_URL},
         ],
     ]
     return {"inline_keyboard": keyboard}
@@ -46,23 +67,44 @@ def make_job_buttons(job_id: str, apply_url: str) -> dict[str, Any]:
 def format_job_card(job: Job) -> str:
     """Format a single job into an executive interactive Telegram card."""
     score = job.score or 0.0
-    score_icon = "🔥" if score >= 8.0 else "⭐"
+    if score >= 8.5:
+        score_pill = f"🔥 *{score:.1f}/10 · TOP MATCH*"
+    elif score >= 7.0:
+        score_pill = f"⭐ *{score:.1f}/10 · STRONG MATCH*"
+    else:
+        score_pill = f"🎯 *{score:.1f}/10 · RECOMMENDED*"
+
     loc = (job.location or "").strip()
-    loc_badge = "🌐 Remote" if (job.remote or "remote" in loc.lower()) else (f"📍 {loc}" if loc else "📍 Direct ATS")
+    if job.remote or "remote" in loc.lower():
+        loc_badge = "🌐 100% Remote"
+    elif loc:
+        loc_badge = f"📍 {loc}"
+    else:
+        loc_badge = "📍 Direct ATS"
 
     lines = [
-        f"{score_icon} *{job.company}* — *{job.title}*",
-        f"🎯 Fit Score: *{score:.1f}/10* | {loc_badge}",
+        f"{score_pill} | {loc_badge}",
+        f"🏢 *{job.company}* — *{job.title}*",
     ]
-    if job.salary and job.salary.strip():
-        lines.append(f"💰 {job.salary.strip()}")
+
+    sal = (job.salary or "").strip()
+    if sal:
+        lines.append(f"💰 *Compensation:* `{sal}`")
+
     if job.reason and job.reason.strip():
         reason_clean = re.sub(r"\s+", " ", job.reason).strip()
-        lines.append(f"💡 _{reason_clean[:140]}..._" if len(reason_clean) > 140 else f"💡 _{reason_clean}_")
+        if len(reason_clean) > 160:
+            reason_clean = reason_clean[:157] + "..."
+        lines.append(f"💡 *Why You Match:* _{reason_clean}_")
+
+    tags = extract_tech_tags(f"{job.title} {job.description} {job.reason}")
+    if tags:
+        lines.append(f"🏷️ {' '.join(tags)}")
 
     apply_link = (job.apply_url or job.url or "").strip()
     if apply_link:
         lines.append(f"🔗 [Direct Application Link]({apply_link})")
+
     return "\n".join(lines)
 
 
@@ -237,9 +279,13 @@ def send_telegram_digest(
     quick_menu = {
         "inline_keyboard": [
             [
-                {"text": "📊 View Dashboard", "url": DEFAULT_DASHBOARD_URL},
+                {"text": "📊 Web Dashboard", "url": DEFAULT_DASHBOARD_URL},
                 {"text": "⚡ AutoFill Kit", "url": f"{DEFAULT_DASHBOARD_URL}#kit"},
-            ]
+            ],
+            [
+                {"text": "🔍 Search Jobs", "callback_data": "cmd:search"},
+                {"text": "❓ Screening Q&A", "callback_data": "cmd:qa"},
+            ],
         ]
     }
 

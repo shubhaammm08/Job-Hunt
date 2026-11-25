@@ -12,6 +12,7 @@ from jobhunt.telegram_bot import (
     analyze_jd_with_ai,
     format_autofill_kit,
     format_screening_qa_bank,
+    generate_cover_letter,
     generate_pitch_note,
     get_updates,
     handle_applied,
@@ -389,3 +390,26 @@ def test_process_update_search_and_qa(mock_store, sample_profile):
     with patch("jobhunt.telegram_bot.handle_qa") as mock_hq:
         process_update(update_qa, "token", mock_store, sample_profile)
         mock_hq.assert_called_once_with(12345, "token")
+
+
+def test_generate_cover_letter(sample_profile):
+    job_data = {"company": "Stripe", "title": "Backend Engineer", "reason": "Python and SQL match"}
+    letter = generate_cover_letter(job_data, sample_profile)
+    assert "Stripe" in letter
+    assert "Backend Engineer" in letter
+    assert "Shubham" in letter
+
+
+def test_callback_query_cover_letter(mock_store, sample_profile):
+    cb = {
+        "id": "cb_cl_001",
+        "data": "cl:greenhouse:stripe:101",
+        "message": {"chat": {"id": 12345}},
+    }
+    with patch("jobhunt.telegram_bot.answer_callback") as mock_ans, patch("jobhunt.telegram_bot.send_telegram") as mock_send:
+        handle_callback_query("token", cb, mock_store, sample_profile)
+        mock_ans.assert_called_once()
+        # Should send status message + cover letter
+        assert mock_send.call_count >= 2
+        sent_texts = [call[0][0] for call in mock_send.call_args_list]
+        assert any("Cover Letter" in t and "Stripe" in t for t in sent_texts)

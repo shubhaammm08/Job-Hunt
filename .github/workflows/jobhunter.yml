@@ -80,9 +80,9 @@ jobs:
         run: |
           echo "=== Verifying GitHub Secrets ==="
           MISSING=""
-          [ -z "${{ secrets.GEMINI_API_KEY }}" ] && MISSING="$MISSING GEMINI_API_KEY"
-          [ -z "${{ secrets.GMAIL_EMAIL || secrets.SMTP_USER }}" ] && MISSING="$MISSING GMAIL_EMAIL"
-          [ -z "${{ secrets.GMAIL_APP_PASSWORD || secrets.SMTP_PASS }}" ] && MISSING="$MISSING GMAIL_APP_PASSWORD"
+          [ -z "${{ secrets.GEMINI_API_KEY || secrets.GROQ_API_KEY }}" ] && MISSING="$MISSING GEMINI_API_KEY_or_GROQ_API_KEY"
+          [ -z "${{ secrets.TELEGRAM_BOT_TOKEN }}" ] && MISSING="$MISSING TELEGRAM_BOT_TOKEN"
+          [ -z "${{ secrets.TELEGRAM_CHAT_ID }}" ] && MISSING="$MISSING TELEGRAM_CHAT_ID"
           if [ -n "$MISSING" ]; then
             echo "::error::Missing required GitHub Secrets: $MISSING"
             echo "Please configure the missing secrets in Settings -> Secrets and variables -> Actions"
@@ -141,11 +141,6 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-          SMTP_HOST: ${{ vars.SMTP_HOST || 'smtp.gmail.com' }}
-          SMTP_PORT: ${{ vars.SMTP_PORT || '587' }}
-          SMTP_USER: ${{ secrets.GMAIL_EMAIL || secrets.SMTP_USER }}
-          SMTP_PASS: ${{ secrets.GMAIL_APP_PASSWORD || secrets.SMTP_PASS }}
-          MAIL_TO: ${{ secrets.MAIL_TO || secrets.GMAIL_EMAIL || secrets.SMTP_USER }}
           WHATSAPP_PHONE: ${{ secrets.WHATSAPP_PHONE }}
           WHATSAPP_APIKEY: ${{ secrets.WHATSAPP_APIKEY }}
           WHATSAPP_PROVIDER: ${{ vars.WHATSAPP_PROVIDER || 'callmebot' }}

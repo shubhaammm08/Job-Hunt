@@ -439,6 +439,53 @@ def generate_pitch_note(job_data: dict[str, Any], profile: dict[str, Any]) -> st
     return pitch
 
 
+def generate_cover_letter(job_data: dict[str, Any], profile: dict[str, Any]) -> str:
+    """Generate a tailored, high-converting 3-paragraph executive cover letter."""
+    name = profile.get("name", "Shubham Sunil Kadam")
+    company = job_data.get("company", "Target Company")
+    title = job_data.get("title", "Software Engineer")
+    portfolio = profile.get("portfolio", DEFAULT_DASHBOARD_URL)
+    skills = ", ".join(profile.get("core_skills", ["Python", "SQL", "Data Analysis", "FastAPI"])[:4])
+
+    prompt = (
+        f"You are a professional executive career strategist writing a tailored, compelling cover letter for {name}.\n\n"
+        f"CANDIDATE PROFILE:\n"
+        f"Name: {name}\n"
+        f"Skills: {skills}\n"
+        f"Experience: {profile.get('years_experience', '2+ years')}\n\n"
+        f"TARGET ROLE:\n"
+        f"Company: {company}\n"
+        f"Title: {title}\n"
+        f"Reason matched: {job_data.get('reason', '')}\n\n"
+        f"REQUIREMENTS:\n"
+        f"Write a polished 3-paragraph cover letter:\n"
+        f"1. Hook & Interest: Strong opening expressing enthusiasm for {company} and the {title} role.\n"
+        f"2. Core Impact & Alignment: Detail achievements in building scalable data pipelines, ETL workflows, and Python services that drove measurable outcomes.\n"
+        f"3. Call to Action: Professional closing requesting a brief introductory conversation, with link to portfolio {portfolio}.\n\n"
+        f"Return ONLY the cover letter text, no preamble or quotes."
+    )
+
+    try:
+        from .providers import resolve
+        provider, model = resolve("draft")
+        letter = provider.complete(model, "You are a professional executive cover letter writer.", prompt, max_tokens=600)
+        return letter.strip()
+    except Exception:
+        return (
+            f"Dear {company} Hiring Team,\n\n"
+            f"I am writing to express my strong interest in the {title} position. "
+            f"With hands-on experience in {skills}, I specialize in architecting high-throughput data pipelines, "
+            f"automating workflows, and building reliable backend services that accelerate analytical decision-making.\n\n"
+            f"In my recent projects, I developed end-to-end data processing workflows that reduced reporting latency "
+            f"by 80% and improved data ingestion reliability. My technical foundation across Python and SQL, combined with "
+            f"a proactive problem-solving mindset, enables me to deliver immediate value to {company}'s engineering objectives.\n\n"
+            f"I would welcome the opportunity to discuss how my technical skills and background align with your team's goals. "
+            f"You can review my interactive portfolio and project artifacts at {portfolio}.\n\n"
+            f"Thank you for your time and consideration.\n\n"
+            f"Sincerely,\n{name}"
+        )
+
+
 DEFAULT_SCREENING_QA = [
     ("Python & SQL Experience", "2+ years building automated ETL pipelines, analytical dashboards, and backend services with Python, SQL, FastAPI, and Pandas."),
     ("GenAI & LLM Stack", "Hands-on experience with Gemini API, OpenAI SDK, LangChain, prompt engineering, RAG, and AI agent automation."),
@@ -620,6 +667,24 @@ def handle_callback_query(token: str, cb: dict[str, Any], store: Store, profile:
             answer_callback(token, cb_id, text="⚡ AutoFill Kit generated below!", show_alert=False)
             sample_kit = format_autofill_kit({"company": "Target Company", "title": "Developer"}, profile)
             send_telegram(sample_kit, bot_token=token, chat_id=str(chat_id))
+        return
+
+    if data.startswith("cl:"):
+        jid_prefix = data[3:]
+        match = store.find_job(jid_prefix)
+        job_data = match[1] if match else {"company": "Target Company", "title": "Developer"}
+        comp = job_data.get("company", "Company")
+        title = job_data.get("title", "Role")
+        answer_callback(token, cb_id, text=f"📝 Generating cover letter for {comp}...", show_alert=False)
+        send_telegram(f"⏳ *Drafting tailored executive cover letter for {comp} — {title}...*", bot_token=token, chat_id=str(chat_id))
+        letter = generate_cover_letter(job_data, profile)
+        send_telegram(
+            f"📝 *Tailored Executive Cover Letter: {comp} — {title}*\n\n"
+            f"```\n{letter}\n```\n"
+            f"_Tap text above to copy and paste directly into your ATS application!_",
+            bot_token=token,
+            chat_id=str(chat_id),
+        )
         return
 
     if data.startswith("qa:"):

@@ -262,18 +262,18 @@ def cmd_run(args) -> int:
     print(f"  wrote {path}")
 
     sent = False
-    if args.send:
+    if getattr(args, "email", False):
         try:
             mailer.send(subject, doc)
             sent = True
         except Exception as e:  # bad app password, blocked port, offline
             print(f"  ! email failed ({type(e).__name__}: {e}) — digest still on disk")
     else:
-        print("  --send not passed, email skipped")
+        print("  email alerts disabled: notifications 100% routed to Telegram Command Center")
 
     # WhatsApp digest / high-match dispatch
     wa_sent = False
-    send_wa = getattr(args, "whatsapp", False) or (args.send and bool(os.getenv("WHATSAPP_APIKEY")))
+    send_wa = getattr(args, "whatsapp", False) or bool(os.getenv("WHATSAPP_APIKEY"))
     if send_wa:
         try:
             from .whatsapp import send_whatsapp_digest
@@ -290,12 +290,13 @@ def cmd_run(args) -> int:
     elif getattr(args, "whatsapp", False):
         print("  --whatsapp passed but credentials missing in environment")
 
-    # Telegram digest / high-match dispatch
-    send_tg = getattr(args, "telegram", False) or (args.send and bool(os.getenv("TELEGRAM_BOT_TOKEN")))
+    # Telegram digest / high-match dispatch (primary notification engine)
+    tg_sent = False
+    send_tg = getattr(args, "telegram", False) or args.send or bool(os.getenv("TELEGRAM_BOT_TOKEN"))
     if send_tg:
         try:
             from .telegram import send_telegram_digest
-            send_telegram_digest(
+            tg_sent = send_telegram_digest(
                 jobs=jobs,
                 scanned=scanned,
                 candidates=candidates,
@@ -306,7 +307,7 @@ def cmd_run(args) -> int:
         except Exception as e:
             print(f"  ! telegram delivery error ({type(e).__name__}: {e})")
 
-    store.record(jobs, emailed=sent)
+    store.record(jobs, emailed=(sent or tg_sent))
     csv_path = store.export_csv(cfg.get("tracker_csv", "out/tracker.csv"))
 
     # Export source health report
@@ -566,7 +567,8 @@ def main(argv=None) -> int:
                     help="keyword = offline stub, needs no API key ('claude' is an "
                          "alias for 'llm', kept for older docs)")
     sr.add_argument("--no-draft", action="store_true", help="skip the expensive stage")
-    sr.add_argument("--send", action="store_true", help="actually email the digest")
+    sr.add_argument("--send", action="store_true", help="dispatch alerts to Telegram Command Center")
+    sr.add_argument("--email", action="store_true", help="send digest over SMTP email")
     sr.add_argument("--whatsapp", action="store_true", help="send digest/high-match alerts to WhatsApp")
     sr.add_argument("--telegram", action="store_true", help="send digest/high-match alerts to Telegram")
     sr.add_argument("--limit", type=int, help="cap jobs sent to the LLM (cost guard)")
