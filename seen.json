@@ -4243,5 +4243,214 @@
     "emailed": false,
     "applied": true,
     "applied_on": "2026-11-25T10:22:23+00:00"
+  },
+  "himalayas:rss:ntegration-engineer-mx-711407913": {
+    "first_seen": "2026-11-26T05:03:13+00:00",
+    "company": "Remote Employer",
+    "title": "Cloud Integration Engineer - MX",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/whitestack/jobs/cloud-integration-engineer-mx-711407913",
+    "score": 2.0,
+    "reason": "The role requires Spanish language fluency and cloud telecom integration experience outside candidate background.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "SOFTWARE",
+      "PRODUCT_TECH"
+    ],
+    "matched_roles": [
+      "Integration Engineer",
+      "Integration Engineer"
+    ],
+    "fit_score": 2.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:neral-motorsjobshr-data-engineer": {
+    "first_seen": "2026-11-26T05:03:13+00:00",
+    "company": "Remote Employer",
+    "title": "HR Data Engineer",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/general-motors/jobs/hr-data-engineer",
+    "score": 3.0,
+    "reason": "Data Engineering role requiring specialized BI analytics systems experience beyond junior candidate profile.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Engineer"
+    ],
+    "fit_score": 3.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:tegration-engineer-co-3703009634": {
+    "first_seen": "2026-11-26T05:03:13+00:00",
+    "company": "Remote Employer",
+    "title": "Cloud Integration Engineer - CO",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/whitestack/jobs/cloud-integration-engineer-co-3703009634",
+    "score": 2.0,
+    "reason": "The role requires Spanish language fluency and cloud telecom integration experience outside candidate background.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "SOFTWARE",
+      "PRODUCT_TECH"
+    ],
+    "matched_roles": [
+      "Integration Engineer",
+      "Integration Engineer"
+    ],
+    "fit_score": 2.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:sarrollador-a-liferay-full-stack": {
+    "first_seen": "2026-11-26T05:03:13+00:00",
+    "company": "Remote Employer",
+    "title": "DESARROLLADOR /A LIFERAY FULL STACK",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/buzzmn/jobs/desarrollador-a-liferay-full-stack",
+    "score": 2.0,
+    "reason": "The job description is in Spanish and focuses on Liferay enterprise portal stack.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [],
+    "matched_roles": [],
+    "fit_score": 2.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:iesreservjobsfull-stack-engineer": {
+    "first_seen": "2026-11-26T05:03:13+00:00",
+    "company": "Remote Employer",
+    "title": "Full Stack Engineer",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/reserv/jobs/full-stack-engineer",
+    "score": 4.0,
+    "reason": "Full stack engineer role at an InsurTech company requiring more senior web application experience.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Full Stack Engineer"
+    ],
+    "fit_score": 4.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4493410592": {
+    "first_seen": "2026-11-26T05:03:13+00:00",
+    "company": "Intellectual Capital HR Consulting Pvt. Ltd.",
+    "title": "Python Developer",
+    "location": "Mumbai, Maharashtra, India",
+    "url": "https://www.linkedin.com/jobs/view/4493410592",
+    "score": 8.0,
+    "reason": "Matches candidate's Python and backend skill set directly in their target location of Mumbai.",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Python Developer"
+    ],
+    "fit_score": 8.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:251126014662": {
+    "first_seen": "2026-11-26T05:03:13+00:00",
+    "company": "GIST Management Solutions",
+    "title": "Hiring Python Developer Freshers | Immediate Joiners | Entry-Level IT",
+    "location": "Hyderabad, Bengaluru",
+    "url": "https://www.naukri.com/job-listings-hiring-python-developer-freshers-immediate-joiners-entry-level-it-gist-management-solutions-hyderabad-bengaluru-0-to-1-years-251126014662",
+    "score": 4.0,
+    "reason": "Target locations are Mumbai and Remote, but this junior position is based in Hyderabad and Bengaluru.",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Python Developer"
+    ],
+    "fit_score": 4.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:251126504505": {
+    "first_seen": "2026-11-26T05:03:13+00:00",
+    "company": "Knowledgesprint Technologies",
+    "title": "Python Developer",
+    "location": "Hyderabad",
+    "url": "https://www.naukri.com/job-listings-python-developer-knowledgesprint-technologies-india-pvt-ltd-hyderabad-0-to-3-years-251126504505",
+    "score": 4.0,
+    "reason": "Target locations are Mumbai and Remote, but this Python developer opening is located in Hyderabad.",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Python Developer"
+    ],
+    "fit_score": 4.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "naukri:251126032398": {
+    "first_seen": "2026-11-26T05:03:13+00:00",
+    "company": "Sanvima Solutions",
+    "title": "Generative AI Engineer",
+    "location": "Hyderabad(Uppal)",
+    "url": "https://www.naukri.com/job-listings-generative-ai-engineer-sanvima-solutions-hyderabad-0-to-1-years-251126032398",
+    "score": 8.0,
+    "reason": "Good match for a junior candidate with matching stack, though located in Hyderabad against target locations.",
+    "canonical_source": "naukri",
+    "sources": [
+      "naukri"
+    ],
+    "role_families": [
+      "AI_CORE",
+      "GENAI_AGENTIC"
+    ],
+    "matched_roles": [
+      "AI Engineer",
+      "Generative AI Engineer"
+    ],
+    "fit_score": 8.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
   }
 }
