@@ -3847,11 +3847,13 @@
     </div>
     <div class="mobile-top-actions">
       <button class="btn-actions" id="mobile-scan-btn" onclick="triggerPipelineScan()"
-        title="Scan Fresh Jobs (Naukri, LinkedIn, ATS)" aria-label="Scan Fresh Jobs">
+        title="Scan Fresh Jobs (Early Morning Cloud &amp; Local)" aria-label="Scan Fresh Jobs"
+        style="display:inline-flex;align-items:center;gap:4px;color:var(--accent-amber,#d97706);font-weight:700;font-size:12px;padding:4px 8px;border-radius:6px;border:1px solid rgba(217,119,6,0.3);background:rgba(217,119,6,0.08);">
         <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
           stroke-linecap="round" stroke-linejoin="round">
           <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
         </svg>
+        <span>Scan</span>
       </button>
       <button class="btn-actions" id="mobile-theme-toggle-btn" onclick="toggleMobileTheme(event)" title="Toggle Theme"
         aria-label="Daylight Mode">
@@ -3892,6 +3894,7 @@
         </svg>
       </button>
       <div class="mobile-more-menu" id="mobile-more-menu" role="menu" aria-label="More mobile actions">
+        <button type="button" role="menuitem" onclick="triggerPipelineScan(); closeMobileMoreMenu();" style="font-weight:700;color:var(--accent-amber,#d97706);">Scan Jobs Now (Cloud &amp; Local)</button>
         <button type="button" role="menuitem" onclick="openBookmarkletGuide(); closeMobileMoreMenu();">Auto-Fill
           Tool</button>
         <button type="button" role="menuitem" onclick="openWhatsAppGuide(); closeMobileMoreMenu();">Phone
@@ -5537,6 +5540,55 @@
       <div id="applied-tracker-list"
         style="display:flex;flex-direction:column;gap:10px;max-height:55vh;overflow-y:auto;padding-right:4px;">
         <!-- Dynamically rendered applied jobs -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Early Morning On-Demand Cloud Scan -->
+  <div class="modal-backdrop" id="modal-cloud-scan" onclick="if(event.target===this)closeCloudScanModal()">
+    <div class="modal-card" style="max-width:540px;" role="dialog" aria-modal="true" aria-labelledby="cloud-scan-title">
+      <div class="modal-header">
+        <div>
+          <h2 id="cloud-scan-title" style="font-size:16px;font-weight:800;color:var(--text-main);">Early Morning Cloud Scan</h2>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Trigger fresh autonomous job ingestion before the 9:00 AM schedule</div>
+        </div>
+        <button class="modal-close-btn" onclick="closeCloudScanModal()" aria-label="Close modal">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
+      <div style="font-size:13px;color:var(--text-secondary);display:flex;flex-direction:column;gap:12px;line-height:1.5;">
+        <div id="cloud-scan-msg" style="display:none;padding:8px 12px;border-radius:8px;background:rgba(239,68,68,0.1);color:var(--accent-red,#ef4444);font-size:12px;border:1px solid rgba(239,68,68,0.25);"></div>
+        
+        <!-- Direct 1-Click Option -->
+        <div style="background:var(--bg-surface-subtle);border:1px solid var(--border-subtle);border-radius:10px;padding:12px 14px;">
+          <div style="font-weight:700;font-size:13px;color:var(--text-main);margin-bottom:4px;">1-Click Launch on GitHub Actions</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">Launch directly on GitHub's cloud without saving any tokens on this device:</div>
+          <a href="https://github.com/shubhaammm08/Job-Hunt/actions/workflows/jobhunter.yml" target="_blank" rel="noopener noreferrer" class="btn-applied-export" style="background:var(--accent-indigo,#4F46E5);color:#fff;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:6px;">
+            <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg>
+            <span>Open GitHub Actions &amp; Run</span>
+          </a>
+        </div>
+
+        <!-- 1-Tap Dashboard Trigger (With Saved PAT) -->
+        <div style="background:var(--bg-surface-subtle);border:1px solid var(--border-subtle);border-radius:10px;padding:12px 14px;">
+          <div style="font-weight:700;font-size:13px;color:var(--text-main);margin-bottom:4px;">1-Tap In-Dashboard Trigger (1-Time Setup)</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">Save a GitHub Personal Access Token (classic or fine-grained with Actions write permission) to trigger scans directly from this button without leaving the dashboard:</div>
+          <input type="password" id="github-pat-input" placeholder="github_pat_... or ghp_..." style="width:100%;box-sizing:border-box;padding:8px 10px;border-radius:6px;border:1px solid var(--border-subtle);background:var(--bg-card);color:var(--text-main);font-family:var(--font-mono);font-size:12px;margin-bottom:8px;" />
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            <button onclick="saveGitHubPatAndTrigger()" class="btn-applied-export" style="background:var(--accent-emerald,#059669);color:#fff;font-weight:700;padding:6px 14px;border-radius:6px;">
+              <span>Save &amp; Trigger Cloud Scan</span>
+            </button>
+            <button id="btn-clear-pat" onclick="clearGitHubPat()" class="btn-applied-export" style="display:none;background:transparent;border:1px solid var(--border-subtle);color:var(--text-muted);padding:6px 12px;border-radius:6px;">
+              <span>Remove Saved Token</span>
+            </button>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">Stored securely only in this browser's localStorage. Never sent to any third party.</div>
+        </div>
       </div>
     </div>
   </div>
@@ -8188,24 +8240,60 @@
 
         const isLocal = isLocalHostOrLan();
         if (!isLocal) {
+          const pat = (localStorage.getItem('jobhunt_github_pat') || '').trim();
+          if (!pat) {
+            resetScanBtn();
+            openCloudScanModal();
+            return;
+          }
+
           openBinLoaderModal(
-            'Ingesting Opportunities',
-            'Synchronizing verified job postings from ATS boards & aggregators...',
-            35,
-            'Aggregating listings across 30+ ATS sources...'
+            'Triggering Cloud Scan',
+            'Dispatching GitHub Actions cloud runner for fresh job ingestion...',
+            25,
+            'Authenticating with GitHub Actions API...'
           );
-          setTimeout(() => {
-            updateBinLoaderProgress(75, 'Synchronizing cache & verified listings...');
-            setTimeout(() => {
-              updateBinLoaderProgress(100, 'Catalog synchronized!');
+
+          try {
+            const res = await fetch('https://api.github.com/repos/shubhaammm08/Job-Hunt/actions/workflows/jobhunter.yml/dispatches', {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${pat}`,
+                'Accept': 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ ref: 'main' })
+            });
+
+            if (res.status === 204 || res.ok) {
+              updateBinLoaderProgress(80, 'GitHub Actions cloud runner started! Scrapes live in ~2-3 mins.');
               setTimeout(() => {
-                closeBinLoaderModal();
-                resetScanBtn();
-                showToast('Live scraper daemon runs locally (Desktop icon or localhost:8080) and auto-deploys here daily.');
-              }, 600);
-            }, 600);
-          }, 800);
-          return;
+                updateBinLoaderProgress(100, 'Cloud scan initiated successfully!');
+                setTimeout(() => {
+                  closeBinLoaderModal();
+                  resetScanBtn();
+                  showToast('Cloud scan triggered! New jobs will appear on this dashboard in 2-3 mins.');
+                }, 800);
+              }, 800);
+              return;
+            } else if (res.status === 401 || res.status === 403) {
+              closeBinLoaderModal();
+              resetScanBtn();
+              localStorage.removeItem('jobhunt_github_pat');
+              openCloudScanModal('Invalid or expired GitHub Token. Please re-enter your Personal Access Token.');
+              return;
+            } else {
+              closeBinLoaderModal();
+              resetScanBtn();
+              openCloudScanModal('GitHub API returned status ' + res.status + '. You can launch directly below:');
+              return;
+            }
+          } catch (e) {
+            closeBinLoaderModal();
+            resetScanBtn();
+            openCloudScanModal('Failed to trigger GitHub Actions (' + (e.message || 'error') + '). You can launch directly below:');
+            return;
+          }
         }
 
         openBinLoaderModal(
@@ -8261,6 +8349,59 @@
         const mobSvg = mobileBtn.querySelector('svg');
         if (mobSvg) mobSvg.classList.remove('icon-spin');
       }
+    }
+
+    function openCloudScanModal(errorMsg = '') {
+      const modal = document.getElementById('modal-cloud-scan');
+      if (!modal) return;
+      const msgEl = document.getElementById('cloud-scan-msg');
+      if (msgEl) {
+        if (errorMsg) {
+          msgEl.textContent = errorMsg;
+          msgEl.style.display = 'block';
+        } else {
+          msgEl.style.display = 'none';
+        }
+      }
+      const patInput = document.getElementById('github-pat-input');
+      const clearBtn = document.getElementById('btn-clear-pat');
+      const savedPat = localStorage.getItem('jobhunt_github_pat') || '';
+      if (patInput) patInput.value = savedPat ? '••••••••••••••••' : '';
+      if (clearBtn) clearBtn.style.display = savedPat ? 'inline-block' : 'none';
+      modal.classList.add('open');
+    }
+
+    function closeCloudScanModal() {
+      const modal = document.getElementById('modal-cloud-scan');
+      if (modal) modal.classList.remove('open');
+    }
+
+    async function saveGitHubPatAndTrigger() {
+      const input = document.getElementById('github-pat-input');
+      if (!input) return;
+      const val = input.value.trim();
+      if (!val || val === '••••••••••••••••') {
+        if (localStorage.getItem('jobhunt_github_pat')) {
+          closeCloudScanModal();
+          triggerPipelineScan();
+          return;
+        }
+        showToast('Please enter a GitHub Personal Access Token.');
+        return;
+      }
+      localStorage.setItem('jobhunt_github_pat', val);
+      showToast('Token saved! Triggering cloud scan...');
+      closeCloudScanModal();
+      triggerPipelineScan();
+    }
+
+    function clearGitHubPat() {
+      localStorage.removeItem('jobhunt_github_pat');
+      const input = document.getElementById('github-pat-input');
+      if (input) input.value = '';
+      const clearBtn = document.getElementById('btn-clear-pat');
+      if (clearBtn) clearBtn.style.display = 'none';
+      showToast('GitHub token removed.');
     }
 
     async function pollPipelineStatus() {

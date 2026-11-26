@@ -80,6 +80,7 @@ def answer_callback(token: str, callback_id: str, text: str = "", show_alert: bo
 def set_bot_commands(token: str) -> bool:
     """Register slash commands in Telegram menu for quick auto-complete on mobile/desktop."""
     commands = [
+        {"command": "scan", "description": "⚡ Trigger early morning cloud scan now"},
         {"command": "top", "description": "🔥 View top recommended job matches"},
         {"command": "remote", "description": "🌐 Browse high-match remote roles"},
         {"command": "search", "description": "🔍 Search jobs by keyword (/search <query>)"},
@@ -105,20 +106,20 @@ def make_quick_menu() -> dict[str, Any]:
     return {
         "inline_keyboard": [
             [
+                {"text": "⚡ Scan Jobs Now", "callback_data": "cmd:scan"},
                 {"text": "🔥 Top Matches", "callback_data": "cmd:top"},
+            ],
+            [
                 {"text": "🌐 Remote Roles", "callback_data": "cmd:remote"},
-            ],
-            [
                 {"text": "🔍 Search Jobs", "callback_data": "cmd:search"},
+            ],
+            [
                 {"text": "❓ Screening Q&A", "callback_data": "cmd:qa"},
-            ],
-            [
                 {"text": "📊 Funnel Stats", "callback_data": "cmd:stats"},
-                {"text": "⏰ Follow-ups", "callback_data": "cmd:reminders"},
             ],
             [
+                {"text": "⏰ Follow-ups", "callback_data": "cmd:reminders"},
                 {"text": "🌐 Open Dashboard", "url": DEFAULT_DASHBOARD_URL},
-                {"text": "⚡ AutoFill Kit", "url": f"{DEFAULT_DASHBOARD_URL}#kit"},
             ],
         ]
     }
@@ -402,21 +403,52 @@ def handle_hunt(chat_id: str | int, token: str, store: Store) -> None:
         if first_seens:
             latest_time = max(first_seens).replace("T", " ")[:19]
 
-    msg = (
-        f"⚡ *JobHunter Live Status*\n\n"
-        f"• *Pipeline:* Operational (GitHub Actions Cron & Webhook active)\n"
-        f"• *Tracked Roles:* `{tracked}` in state\n"
-        f"• *Applied Roles:* `{applied}`\n"
-        f"• *Last Record Added:* `{latest_time} UTC`\n\n"
-        f"To trigger a fresh scrape on GitHub:\n"
-        f"1. Open [GitHub Actions Workflows](https://github.com/shubhaammm08/Job-Hunt/actions)\n"
-        f"2. Select *JobHunter Daily Autonomous Pipeline*\n"
-        f"3. Click *Run workflow* 🚀"
-    )
+    # Try triggering GitHub Actions if token available
+    gh_token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
+    triggered = False
+    if gh_token:
+        try:
+            url = "https://api.github.com/repos/shubhaammm08/Job-Hunt/actions/workflows/jobhunter.yml/dispatches"
+            headers = {
+                "Authorization": f"Bearer {gh_token.strip()}",
+                "Accept": "application/vnd.github.v3+json",
+                "Content-Type": "application/json",
+                "User-Agent": "JobHunt-Telegram-Bot/2.0"
+            }
+            req = urllib.request.Request(url, data=json.dumps({"ref": "main"}).encode("utf-8"), headers=headers, method="POST")
+            with urllib.request.urlopen(req, timeout=15) as resp:
+                if resp.status in (200, 204):
+                    triggered = True
+        except Exception:
+            pass
+
+    if triggered:
+        msg = (
+            f"⚡ *JobHunter Live Status*\n\n"
+            f"🚀 *Early Morning Cloud Scan Triggered!*\n"
+            f"• *Runner:* GitHub Actions Cloud Runner active\n"
+            f"• *Tracked Roles:* `{tracked}` in state\n"
+            f"• *Applied Roles:* `{applied}`\n"
+            f"• *Status:* Ingesting & scoring new jobs in the cloud\n"
+            f"• *ETA:* Updated on dashboard in ~2-3 mins\n\n"
+            f"Dashboard: {DEFAULT_DASHBOARD_URL}"
+        )
+    else:
+        msg = (
+            f"⚡ *JobHunter Live Status*\n\n"
+            f"• *Pipeline:* Operational (GitHub Actions Cron & Webhook active)\n"
+            f"• *Tracked Roles:* `{tracked}` in state\n"
+            f"• *Applied Roles:* `{applied}`\n"
+            f"• *Last Record Added:* `{latest_time} UTC`\n\n"
+            f"To trigger a fresh scrape on GitHub:\n"
+            f"1. Open [GitHub Actions Workflows](https://github.com/shubhaammm08/Job-Hunt/actions/workflows/jobhunter.yml)\n"
+            f"2. Select *JobHunter Daily Autonomous Pipeline*\n"
+            f"3. Click *Run workflow* 🚀"
+        )
     buttons = {
         "inline_keyboard": [
             [
-                {"text": "🚀 Open GitHub Actions", "url": "https://github.com/shubhaammm08/Job-Hunt/actions"},
+                {"text": "⚡ Run on GitHub Actions ↗", "url": "https://github.com/shubhaammm08/Job-Hunt/actions/workflows/jobhunter.yml"},
                 {"text": "🌐 View Dashboard", "url": DEFAULT_DASHBOARD_URL},
             ]
         ]
@@ -615,6 +647,8 @@ def handle_callback_query(token: str, cb: dict[str, Any], store: Store, profile:
             )
         elif cmd == "qa":
             handle_qa(chat_id, token)
+        elif cmd in ("scan", "hunt"):
+            handle_hunt(chat_id, token, store)
         return
 
     if data.startswith("app:"):
@@ -940,7 +974,7 @@ def process_update(
             bot_token=token,
             chat_id=str(chat_id),
         )
-    elif lower_text.startswith("/hunt"):
+    elif lower_text.startswith(("/hunt", "/scan")):
         handle_hunt(chat_id, token, store)
     else:
         # Freeform message: greeting or on-demand JD analysis
