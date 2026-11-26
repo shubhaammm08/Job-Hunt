@@ -4493,5 +4493,169 @@
     "emailed": false,
     "applied": false,
     "applied_on": null
+  },
+  "nodesk:rss:jobslaunchdarkly-gtm-ai-engineer": {
+    "first_seen": "2026-11-26T13:02:51+00:00",
+    "company": "LaunchDarkly",
+    "title": "GTM AI Engineer",
+    "location": "Remote",
+    "url": "https://nodesk.co/remote-jobs/launchdarkly-gtm-ai-engineer/",
+    "score": 4.0,
+    "reason": "This is a senior AI engineering role requiring extensive production experience beyond a junior's level.",
+    "canonical_source": "nodesk",
+    "sources": [
+      "nodesk"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "AI Engineer"
+    ],
+    "fit_score": 4.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:are-engineer-l5-machine-learning": {
+    "first_seen": "2026-11-26T13:02:51+00:00",
+    "company": "Remote Employer",
+    "title": "AI Software Engineer (L5) - Machine Learning",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/netflix/jobs/ai-software-engineer-l5-machine-learning",
+    "score": 2.0,
+    "reason": "L5 is a senior/lead level role, which is too senior for a junior candidate with 1 year experience.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "AI_CORE",
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "AI Software Engineer",
+      "Software Engineer",
+      "AI Software Engineer"
+    ],
+    "fit_score": 2.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4495025162": {
+    "first_seen": "2026-11-26T13:02:51+00:00",
+    "company": "IQVIA",
+    "title": "AI Engineer",
+    "location": "Kochi, Kerala, India",
+    "url": "https://www.linkedin.com/jobs/view/4495025162",
+    "score": 5.0,
+    "reason": "Plausible AI Engineer match, but lacks location preference and detailed experience requirements.",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "AI Engineer"
+    ],
+    "fit_score": 5.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4495009399": {
+    "first_seen": "2026-11-26T13:02:51+00:00",
+    "company": "Scoutit",
+    "title": "Data Analyst",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4495009399",
+    "score": 3.0,
+    "reason": "Data Analyst is outside the candidate's primary target engineering and AI roles.",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 3.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4493497833": {
+    "first_seen": "2026-11-26T13:02:51+00:00",
+    "company": "TalentRabbit",
+    "title": "Python Developer",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4493497833",
+    "score": 5.0,
+    "reason": "Python Developer matches skills, but location is Bengaluru while candidate targets Mumbai or remote.",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Python Developer"
+    ],
+    "fit_score": 5.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4495019544": {
+    "first_seen": "2026-11-26T13:02:51+00:00",
+    "company": "Arise TechGlobal",
+    "title": "Python Developer",
+    "location": "Mumbai, Maharashtra, India",
+    "url": "https://www.linkedin.com/jobs/view/4495019544",
+    "score": 7.0,
+    "reason": "Good match for a Python Developer located in Mumbai matching the candidate's target stack.",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Python Developer"
+    ],
+    "fit_score": 7.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4493410592": {
+    "first_seen": "2026-11-26T13:02:51+00:00",
+    "company": "Intellectual Capital HR Consulting Pvt. Ltd.",
+    "title": "Python Developer",
+    "location": "Mumbai, Maharashtra, India",
+    "url": "https://www.linkedin.com/jobs/view/4493410592",
+    "score": 7.0,
+    "reason": "Good match for a Python Developer role based in Mumbai matching candidate's location and skills.",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Python Developer"
+    ],
+    "fit_score": 7.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
   }
 }
