@@ -1167,6 +1167,91 @@
       margin-bottom: 10px;
     }
 
+    .profile-tags-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 8px 0;
+    }
+
+    .profile-skills-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .profile-skill-category {
+      background: var(--bg-surface-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 10px 14px;
+    }
+
+    .profile-skill-category-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--accent-indigo, #4F46E5);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .profile-skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .profile-skill-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: var(--bg-card);
+      color: var(--text-primary);
+      border: 1px solid var(--border-subtle);
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .profile-settings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-top: 8px;
+      margin-bottom: 20px;
+    }
+
+    .profile-setting-card {
+      background: var(--bg-surface-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .profile-setting-card-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .profile-setting-card-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
     .tag-applied {
       background: rgba(99, 102, 241, 0.2);
       color: #A5B4FC;
@@ -4627,9 +4712,76 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
                 </div>
               </div>
 
+              <!-- Application & Device Settings Controls -->
+              <div class="p-group">
+                <div class="p-title">Application &amp; Device Controls</div>
+                <div class="profile-settings-grid">
+                  <div class="profile-setting-card">
+                    <div>
+                      <div class="profile-setting-card-title">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <circle cx="12" cy="12" r="5"/>
+                          <line x1="12" y1="1" x2="12" y2="3"/>
+                          <line x1="12" y1="21" x2="12" y2="23"/>
+                          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                          <line x1="1" y1="12" x2="3" y2="12"/>
+                          <line x1="21" y1="12" x2="23" y2="12"/>
+                          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                        </svg>
+                        <span>Theme Appearance</span>
+                      </div>
+                      <div class="profile-setting-card-desc">Switch between Alabaster Daylight (Light) and High-Contrast Dark mode.</div>
+                    </div>
+                    <button class="btn-applied-export" onclick="toggleTheme(event)" style="width:100%;justify-content:center;font-weight:700;">
+                      <span class="profile-theme-label">Toggle Theme</span>
+                    </button>
+                  </div>
+
+                  <div class="profile-setting-card">
+                    <div>
+                      <div class="profile-setting-card-title">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
+                        </svg>
+                        <span>Cloud Firestore Sync</span>
+                      </div>
+                      <div class="profile-setting-card-desc">Real-time bi-directional synchronization across phone and laptop.</div>
+                    </div>
+                    <button class="btn-applied-export" onclick="pullCloudSync(false)" style="width:100%;justify-content:center;background:var(--accent-emerald, #059669);color:#fff;border-color:transparent;font-weight:700;">
+                      <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="23 4 23 10 17 10"/>
+                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                      </svg>
+                      <span>Sync Now</span>
+                    </button>
+                  </div>
+
+                  <div class="profile-setting-card">
+                    <div>
+                      <div class="profile-setting-card-title">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <circle cx="11" cy="11" r="8"/>
+                          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                        <span>Early Morning Job Scan</span>
+                      </div>
+                      <div class="profile-setting-card-desc">Trigger fresh scrape across 87+ sources before the 09:00 IST schedule.</div>
+                    </div>
+                    <button class="btn-applied-export" onclick="triggerPipelineScan()" style="width:100%;justify-content:center;background:var(--accent-indigo, #4F46E5);color:#fff;border-color:transparent;font-weight:700;">
+                      <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="5 3 19 12 5 21 5 3"/>
+                      </svg>
+                      <span>Trigger Scan</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
               <div class="p-group">
                 <div class="p-title">Target Career Tracks</div>
-                <div class="job-tags" id="profile-target-roles">
+                <div class="profile-tags-wrap" id="profile-target-roles">
                   <span class="tag tag-family">AI Engineer</span>
                   <span class="tag tag-family">GenAI &amp; LLM Engineer / Developer (GenAI, LLMs, NLP, LangChain)</span>
                   <span class="tag tag-family">API Development / Backend Engineer (FastAPI, Flask, REST APIs)</span>
@@ -4642,63 +4794,68 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
 
               <div class="p-group">
                 <div class="p-title">Core Technical Stack &amp; Skills</div>
-                <div class="job-tags" id="profile-skills">
-                  <div style="width:100%;margin-top:6px;margin-bottom:3px;"><strong
-                      style="font-size:12px;color:var(--accent-blue);">AI &amp; ML:</strong></div>
-                  <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;">
-                    <span class="tag" style="background:#1f242d;color:#79c0ff;">Machine Learning</span>
-                    <span class="tag" style="background:#1f242d;color:#79c0ff;">GenAI</span>
-                    <span class="tag" style="background:#1f242d;color:#79c0ff;">LLMs</span>
-                    <span class="tag" style="background:#1f242d;color:#79c0ff;">NLP</span>
-                    <span class="tag" style="background:#1f242d;color:#79c0ff;">LangChain</span>
-                    <span class="tag" style="background:#1f242d;color:#79c0ff;">Python</span>
+                <div id="profile-skills" class="profile-skills-grid">
+                  <div class="profile-skill-category">
+                    <div class="profile-skill-category-title">AI &amp; ML:</div>
+                    <div class="profile-skill-tags">
+                      <span class="profile-skill-badge">Machine Learning</span>
+                      <span class="profile-skill-badge">GenAI</span>
+                      <span class="profile-skill-badge">LLMs</span>
+                      <span class="profile-skill-badge">NLP</span>
+                      <span class="profile-skill-badge">LangChain</span>
+                      <span class="profile-skill-badge">Python</span>
+                    </div>
                   </div>
-                  <div style="width:100%;margin-top:6px;margin-bottom:3px;"><strong
-                      style="font-size:12px;color:var(--accent-blue);">API &amp; Backend:</strong></div>
-                  <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;">
-                    <span class="tag" style="background:#1f242d;color:#79c0ff;">FastAPI</span>
-                    <span class="tag" style="background:#1f242d;color:#79c0ff;">Flask</span>
-                    <span class="tag" style="background:#1f242d;color:#79c0ff;">REST APIs</span>
-                    <span class="tag" style="background:#1f242d;color:#79c0ff;">Node.js</span>
-                    <span class="tag" style="background:#1f242d;color:#79c0ff;">Python</span>
+                  <div class="profile-skill-category">
+                    <div class="profile-skill-category-title">API &amp; Backend:</div>
+                    <div class="profile-skill-tags">
+                      <span class="profile-skill-badge">FastAPI</span>
+                      <span class="profile-skill-badge">Flask</span>
+                      <span class="profile-skill-badge">REST APIs</span>
+                      <span class="profile-skill-badge">Node.js</span>
+                      <span class="profile-skill-badge">Python</span>
+                    </div>
                   </div>
-                  <div style="width:100%;margin-top:6px;margin-bottom:3px;"><strong
-                      style="font-size:12px;color:var(--accent-blue);">Full-Stack &amp; Frontend:</strong></div>
-                  <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;">
-                    <span class="tag" style="background:#1f242d;color:#79c0ff;">React</span>
-                    <span class="tag" style="background:#1f242d;color:#79c0ff;">Node.js</span>
+                  <div class="profile-skill-category">
+                    <div class="profile-skill-category-title">Full-Stack &amp; Frontend:</div>
+                    <div class="profile-skill-tags">
+                      <span class="profile-skill-badge">React</span>
+                      <span class="profile-skill-badge">Node.js</span>
+                    </div>
                   </div>
-                  <div style="width:100%;margin-top:6px;margin-bottom:3px;"><strong
-                      style="font-size:12px;color:var(--accent-blue);">Mobile:</strong></div>
-                  <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;">
-                    <span class="tag" style="background:#1f242d;color:#79c0ff;">Flutter</span>
+                  <div class="profile-skill-category">
+                    <div class="profile-skill-category-title">Mobile:</div>
+                    <div class="profile-skill-tags">
+                      <span class="profile-skill-badge">Flutter</span>
+                    </div>
                   </div>
-                  <div style="width:100%;margin-top:6px;margin-bottom:3px;"><strong
-                      style="font-size:12px;color:var(--accent-blue);">Automation &amp; DevOps:</strong></div>
-                  <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;">
-                    <span class="tag" style="background:#1f242d;color:#79c0ff;">n8n</span>
-                    <span class="tag" style="background:#1f242d;color:#79c0ff;">Docker</span>
-                    <span class="tag" style="background:#1f242d;color:#79c0ff;">CI/CD</span>
-                    <span class="tag" style="background:#1f242d;color:#79c0ff;">Automation</span>
+                  <div class="profile-skill-category">
+                    <div class="profile-skill-category-title">Automation &amp; DevOps:</div>
+                    <div class="profile-skill-tags">
+                      <span class="profile-skill-badge">n8n</span>
+                      <span class="profile-skill-badge">Docker</span>
+                      <span class="profile-skill-badge">CI/CD</span>
+                      <span class="profile-skill-badge">Automation</span>
+                    </div>
                   </div>
-                  <div style="width:100%;margin-top:6px;margin-bottom:3px;"><strong
-                      style="font-size:12px;color:var(--accent-blue);">Data &amp; BI:</strong></div>
-                  <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;">
-                    <span class="tag" style="background:#1f242d;color:#79c0ff;">SQL</span>
-                    <span class="tag" style="background:#1f242d;color:#79c0ff;">Power BI</span>
-                    <span class="tag" style="background:#1f242d;color:#79c0ff;">Pandas</span>
-                    <span class="tag" style="background:#1f242d;color:#79c0ff;">NumPy</span>
-                    <span class="tag" style="background:#1f242d;color:#79c0ff;">Scikit-learn</span>
+                  <div class="profile-skill-category">
+                    <div class="profile-skill-category-title">Data &amp; BI:</div>
+                    <div class="profile-skill-tags">
+                      <span class="profile-skill-badge">SQL</span>
+                      <span class="profile-skill-badge">Power BI</span>
+                      <span class="profile-skill-badge">Pandas</span>
+                      <span class="profile-skill-badge">NumPy</span>
+                      <span class="profile-skill-badge">Scikit-learn</span>
+                    </div>
                   </div>
                 </div>
               </div>
 
               <div class="p-group">
                 <div class="p-title">Target Locations</div>
-                <div class="job-tags">
-                  <span class="tag" style="background:#1f242d;color:#58a6ff;font-weight:600;">Mumbai Metropolitan
-                    Region</span>
-                  <span class="tag" style="background:#238636;color:#fff;font-weight:bold;">Remote</span>
+                <div class="profile-tags-wrap">
+                  <span class="tag" style="background:var(--bg-surface-subtle);color:var(--accent-blue);font-weight:600;border:1px solid var(--border-subtle);">Mumbai Metropolitan Region</span>
+                  <span class="tag" style="background:var(--accent-emerald, #059669);color:#fff;font-weight:bold;border:none;">Remote</span>
                 </div>
               </div>
 
@@ -5612,6 +5769,254 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
     </div>
   </div>
 
+  <!-- Modal 6: Settings & Candidate Profile (Mobile & Tablet) -->
+  <div class="modal-backdrop" id="modal-profile-settings" onclick="if(event.target===this)closeProfileModal()">
+    <div class="modal-card" style="max-width:760px;" role="dialog" aria-modal="true" aria-labelledby="modal-profile-title">
+      <div class="modal-header">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            <span class="tag tag-family" style="font-size:11px;">SETTINGS &amp; PROFILE</span>
+          </div>
+          <h2 id="modal-profile-title" style="font-size:18px;font-weight:800;color:var(--text-main);">Settings &amp; Candidate Profile</h2>
+        </div>
+        <button class="modal-close-btn" onclick="closeProfileModal()" aria-label="Close modal">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
+
+      <div style="max-height:75vh;overflow-y:auto;padding-right:4px;">
+        <div class="profile-header">
+          <div class="avatar avatar-edit-trigger user-avatar" role="button" tabindex="0"
+            onclick="openAvatarPicker()"
+            onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openAvatarPicker();}"
+            title="Change profile avatar" aria-label="Change profile avatar">
+            <span class="avatar-initials">SK</span>
+            <span class="avatar-edit-glyph" aria-hidden="true">
+              <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 20h9" />
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+              </svg>
+            </span>
+          </div>
+          <div>
+            <h2 class="profile-name-val" style="font-size:18px;">Shubham Sunil Kadam</h2>
+            <p style="color:var(--text-muted);font-size:13px;" id="modal-profile-title-val">AI &amp; Software Engineer</p>
+            <p style="color:var(--accent-blue);font-size:12px;margin-top:2px;" id="modal-profile-email">
+              ssk080204@gmail.com · +918169832448</p>
+            <button class="avatar-change-btn" type="button" onclick="openAvatarPicker()" title="Choose from 133 avatars">
+              <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 20h9" />
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+              </svg>
+              Change avatar
+            </button>
+          </div>
+        </div>
+
+        <!-- Application & Device Settings Controls -->
+        <div class="p-group">
+          <div class="p-title">Application &amp; Device Controls</div>
+          <div class="profile-settings-grid">
+            <div class="profile-setting-card">
+              <div>
+                <div class="profile-setting-card-title">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"/>
+                    <line x1="12" y1="1" x2="12" y2="3"/>
+                    <line x1="12" y1="21" x2="12" y2="23"/>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                    <line x1="1" y1="12" x2="3" y2="12"/>
+                    <line x1="21" y1="12" x2="23" y2="12"/>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                  </svg>
+                  <span>Theme Appearance</span>
+                </div>
+                <div class="profile-setting-card-desc">Switch between Alabaster Daylight (Light) and High-Contrast Dark mode.</div>
+              </div>
+              <button class="btn-applied-export" onclick="toggleTheme(event)" style="width:100%;justify-content:center;font-weight:700;">
+                <span class="profile-theme-label">Toggle Theme</span>
+              </button>
+            </div>
+
+            <div class="profile-setting-card">
+              <div>
+                <div class="profile-setting-card-title">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
+                  </svg>
+                  <span>Cloud Firestore Sync</span>
+                </div>
+                <div class="profile-setting-card-desc">Real-time bi-directional synchronization across phone and laptop.</div>
+              </div>
+              <button class="btn-applied-export" onclick="pullCloudSync(false)" style="width:100%;justify-content:center;background:var(--accent-emerald, #059669);color:#fff;border-color:transparent;font-weight:700;">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="23 4 23 10 17 10"/>
+                  <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                </svg>
+                <span>Sync Now</span>
+              </button>
+            </div>
+
+            <div class="profile-setting-card">
+              <div>
+                <div class="profile-setting-card-title">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                  </svg>
+                  <span>Early Morning Job Scan</span>
+                </div>
+                <div class="profile-setting-card-desc">Trigger fresh scrape across 87+ sources before the 09:00 IST schedule.</div>
+              </div>
+              <button class="btn-applied-export" onclick="triggerPipelineScan()" style="width:100%;justify-content:center;background:var(--accent-indigo, #4F46E5);color:#fff;border-color:transparent;font-weight:700;">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+                <span>Trigger Scan</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-group">
+          <div class="p-title">Target Career Tracks</div>
+          <div class="profile-tags-wrap" id="modal-profile-target-roles">
+            <span class="tag tag-family">AI Engineer</span>
+            <span class="tag tag-family">GenAI &amp; LLM Engineer / Developer (GenAI, LLMs, NLP, LangChain)</span>
+            <span class="tag tag-family">API Development / Backend Engineer (FastAPI, Flask, REST APIs)</span>
+            <span class="tag tag-family">Full-Stack Developer / Engineer (React, Node.js)</span>
+            <span class="tag tag-family">Mobile Developer (Flutter)</span>
+            <span class="tag tag-family">Automation Engineer (n8n, Docker, CI/CD, Workflow Automation)</span>
+            <span class="tag tag-family">Machine Learning &amp; Python Developer</span>
+          </div>
+        </div>
+
+        <div class="p-group">
+          <div class="p-title">Core Technical Stack &amp; Skills</div>
+          <div id="modal-profile-skills" class="profile-skills-grid">
+            <div class="profile-skill-category">
+              <div class="profile-skill-category-title">AI &amp; ML:</div>
+              <div class="profile-skill-tags">
+                <span class="profile-skill-badge">Machine Learning</span>
+                <span class="profile-skill-badge">GenAI</span>
+                <span class="profile-skill-badge">LLMs</span>
+                <span class="profile-skill-badge">NLP</span>
+                <span class="profile-skill-badge">LangChain</span>
+                <span class="profile-skill-badge">Python</span>
+              </div>
+            </div>
+            <div class="profile-skill-category">
+              <div class="profile-skill-category-title">API &amp; Backend:</div>
+              <div class="profile-skill-tags">
+                <span class="profile-skill-badge">FastAPI</span>
+                <span class="profile-skill-badge">Flask</span>
+                <span class="profile-skill-badge">REST APIs</span>
+                <span class="profile-skill-badge">Node.js</span>
+                <span class="profile-skill-badge">Python</span>
+              </div>
+            </div>
+            <div class="profile-skill-category">
+              <div class="profile-skill-category-title">Full-Stack &amp; Frontend:</div>
+              <div class="profile-skill-tags">
+                <span class="profile-skill-badge">React</span>
+                <span class="profile-skill-badge">Node.js</span>
+              </div>
+            </div>
+            <div class="profile-skill-category">
+              <div class="profile-skill-category-title">Mobile:</div>
+              <div class="profile-skill-tags">
+                <span class="profile-skill-badge">Flutter</span>
+              </div>
+            </div>
+            <div class="profile-skill-category">
+              <div class="profile-skill-category-title">Automation &amp; DevOps:</div>
+              <div class="profile-skill-tags">
+                <span class="profile-skill-badge">n8n</span>
+                <span class="profile-skill-badge">Docker</span>
+                <span class="profile-skill-badge">CI/CD</span>
+                <span class="profile-skill-badge">Automation</span>
+              </div>
+            </div>
+            <div class="profile-skill-category">
+              <div class="profile-skill-category-title">Data &amp; BI:</div>
+              <div class="profile-skill-tags">
+                <span class="profile-skill-badge">SQL</span>
+                <span class="profile-skill-badge">Power BI</span>
+                <span class="profile-skill-badge">Pandas</span>
+                <span class="profile-skill-badge">NumPy</span>
+                <span class="profile-skill-badge">Scikit-learn</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-group">
+          <div class="p-title">Target Locations</div>
+          <div class="profile-tags-wrap">
+            <span class="tag" style="background:var(--bg-surface-subtle);color:var(--accent-blue);font-weight:600;border:1px solid var(--border-subtle);">Mumbai Metropolitan Region</span>
+            <span class="tag" style="background:var(--accent-emerald, #059669);color:#fff;font-weight:bold;border:none;">Remote</span>
+          </div>
+        </div>
+
+        <div class="p-group">
+          <div class="p-title">Pipeline Automation Schedules</div>
+          <div style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+              <span><strong>Daily Digest:</strong> 09:00 IST (Daily)</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="20" height="16" x="2" y="4" rx="2" />
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+              </svg>
+              <span><strong>Notification Dispatch:</strong> Every 4 Hours (02:17, 06:17, 10:17, 14:17, 18:17, 22:17 IST)</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
+                <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
+                <line x1="6" y1="6" x2="6.01" y2="6" />
+                <line x1="6" y1="18" x2="6.01" y2="18" />
+              </svg>
+              <span><strong>Infrastructure:</strong> GitHub Actions (Free Tier)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-group">
+          <div class="p-title">Phone Alerts &amp; Notification Gateways (Free Tier)</div>
+          <div style="font-size:12.5px;color:var(--text-secondary);line-height:1.8;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#58a6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <polygon points="10 8 16 12 10 16 10 8" />
+              </svg>
+              <span><strong>Telegram Bot:</strong> @ShubhamJobHunt_Bot (<span style="color:#2ea043;font-weight:700;">Active &amp; Connected</span>)</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+              </svg>
+              <span><strong>WhatsApp Gateway:</strong> CallMeBot / Twilio (Ready)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;padding-top:12px;border-top:1px solid var(--border-subtle);margin-top:12px;">
+        <button class="btn-action-primary" onclick="closeProfileModal()">Done</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Avatar Picker Modal -->
   <div class="modal-backdrop" id="avatar-picker-modal" aria-hidden="true"
     onclick="if(event.target===this)closeAvatarPicker()">
@@ -6169,6 +6574,11 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
       );
       if (activeBtn) activeBtn.classList.add('active');
 
+      const actionShelf = document.querySelector('.action-shelf');
+      if (actionShelf) {
+        actionShelf.style.display = (tab === 'tracker') ? 'flex' : 'none';
+      }
+
       const deckScrollable = document.getElementById('deck-scrollable');
       const deckTabs = document.getElementById('deck-tab-container');
 
@@ -6222,7 +6632,35 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
     }
 
     function openProfileSettings() {
-      switchNav('profile');
+      if (window.innerWidth <= 1023 && !document.body.classList.contains('force-desktop')) {
+        openProfileModal();
+      } else {
+        switchNav('profile');
+      }
+    }
+
+    function openProfileModal() {
+      const modal = document.getElementById('modal-profile-settings');
+      if (!modal) return;
+      modal.classList.add('open');
+      modal.style.display = 'flex';
+      renderProfile();
+      updateProfileSettingsState();
+    }
+
+    function closeProfileModal() {
+      const modal = document.getElementById('modal-profile-settings');
+      if (!modal) return;
+      modal.classList.remove('open');
+      modal.style.display = 'none';
+    }
+
+    function updateProfileSettingsState() {
+      const currentTheme = getTheme();
+      const labels = document.querySelectorAll('.profile-theme-label');
+      labels.forEach(l => {
+        l.textContent = currentTheme === 'light' ? 'Switch to Dark Mode' : 'Switch to Daylight Light Mode';
+      });
     }
 
     // Keyboard Shortcuts Listener
@@ -7385,6 +7823,7 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
     let cloudSyncInProgress = false;
 
     async function pullCloudSync(quiet = true) {
+      if (window.location.protocol === 'file:') return;
       if (cloudSyncInProgress) return;
       cloudSyncInProgress = true;
       try {
@@ -7420,26 +7859,6 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
               platform: (jf.platform && jf.platform.stringValue) || ''
             };
           });
-        }
-
-        if (fields.avatar && fields.avatar.stringValue) {
-          const cloudAvatar = fields.avatar.stringValue;
-          let currentAvatar = '';
-          try {
-            currentAvatar = localStorage.getItem('jobhunt_avatar') || (typeof avatarState !== 'undefined' ? avatarState.current : '') || '';
-          } catch (e) { }
-          if (!currentAvatar) {
-            currentAvatar = (typeof preferredAvatar === 'function' ? preferredAvatar() : '') || 'initials';
-          }
-          if (cloudAvatar && cloudAvatar !== currentAvatar) {
-            if (cloudAvatar === 'initials') {
-              try { localStorage.setItem('jobhunt_avatar', 'initials'); } catch (e) { }
-              if (typeof applyAvatar === 'function') applyAvatar('');
-            } else if (typeof isValidAvatar === 'function' ? isValidAvatar(cloudAvatar) : /^([a-z0-9]+)_(\d+)$/.test(cloudAvatar)) {
-              try { localStorage.setItem('jobhunt_avatar', cloudAvatar); } catch (e) { }
-              if (typeof applyAvatar === 'function') applyAvatar(cloudAvatar);
-            }
-          }
         }
 
         const storedMeta = JSON.parse(localStorage.getItem('jobhunt_applied_jobs') || '{}');
@@ -7495,6 +7914,7 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
     }
 
     async function pushCloudSync(quiet = false) {
+      if (window.location.protocol === 'file:') return;
       try {
         updateSyncIndicator('syncing');
         const storedMeta = JSON.parse(localStorage.getItem('jobhunt_applied_jobs') || '{}');
@@ -7544,14 +7964,6 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
           }
         };
 
-        let curAvatar = '';
-        try {
-          curAvatar = localStorage.getItem('jobhunt_avatar') || (typeof avatarState !== 'undefined' ? avatarState.current : '') || '';
-        } catch (e) { }
-        if (!curAvatar) {
-          curAvatar = (typeof preferredAvatar === 'function' ? preferredAvatar() : '') || 'vibrent_1';
-        }
-
         const payload = {
           fields: {
             applied_jobs: {
@@ -7560,7 +7972,6 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
               }
             },
             applied_ids: firestoreAppliedIds,
-            avatar: { stringValue: String(curAvatar) },
             updated_at: { stringValue: new Date().toISOString() },
             version: { integerValue: "1" }
           }
@@ -8645,36 +9056,60 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
 
     function renderProfile() {
       const p = appData.profile || {};
-      if (p.name) document.getElementById('profile-name').innerText = p.name;
-      if (p.current_title) document.getElementById('profile-title').innerText = p.current_title;
-      if (document.getElementById('profile-email')) {
-        const emailStr = p.email || 'ssk080204@gmail.com';
-        const phoneStr = p.phone || '+918169832448';
-        document.getElementById('profile-email').innerText = `${emailStr} · ${phoneStr}`;
+      const nameEls = document.querySelectorAll('.profile-name-val');
+      nameEls.forEach(el => { if (p.name) el.innerText = p.name; });
+      if (p.name) {
+        const el = document.getElementById('profile-name');
+        if (el) el.innerText = p.name;
       }
+      if (p.current_title) {
+        const el = document.getElementById('profile-title');
+        if (el) el.innerText = p.current_title;
+        const mel = document.getElementById('modal-profile-title-val');
+        if (mel) mel.innerText = p.current_title;
+      }
+      const emailStr = p.email || 'ssk080204@gmail.com';
+      const phoneStr = p.phone || '+918169832448';
+      const emailEl = document.getElementById('profile-email');
+      if (emailEl) emailEl.innerText = `${emailStr} · ${phoneStr}`;
+      const mEmailEl = document.getElementById('modal-profile-email');
+      if (mEmailEl) mEmailEl.innerText = `${emailStr} · ${phoneStr}`;
 
-      const skillsContainer = document.getElementById('profile-skills');
-      if (skillsContainer) {
+      const skillsContainers = [
+        document.getElementById('profile-skills'),
+        document.getElementById('modal-profile-skills')
+      ].filter(Boolean);
+
+      skillsContainers.forEach(skillsContainer => {
         if (p.skills && typeof p.skills === 'object' && !Array.isArray(p.skills)) {
           let html = '';
           for (const [category, skillList] of Object.entries(p.skills)) {
-            html += `<div style="width:100%;margin-top:6px;margin-bottom:3px;"><strong style="font-size:12px;color:var(--accent-blue);">${escapeHtml(category)}:</strong></div>`;
-            html += `<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;">` + skillList.map(s => `<span class="tag" style="background:#1f242d;color:#79c0ff;">${escapeHtml(s)}</span>`).join('') + `</div>`;
+            html += `<div class="profile-skill-category">`;
+            html += `<div class="profile-skill-category-title">${escapeHtml(category)}:</div>`;
+            html += `<div class="profile-skill-tags">` + skillList.map(s => `<span class="profile-skill-badge">${escapeHtml(s)}</span>`).join('') + `</div>`;
+            html += `</div>`;
           }
           skillsContainer.innerHTML = html;
         } else if (p.core_skills) {
-          skillsContainer.innerHTML = p.core_skills.map(s => `<span class="tag" style="background:#1f242d;color:#79c0ff;">${escapeHtml(s)}</span>`).join('');
+          skillsContainer.innerHTML = `<div class="profile-skill-category"><div class="profile-skill-tags">` + p.core_skills.map(s => `<span class="profile-skill-badge">${escapeHtml(s)}</span>`).join('') + `</div></div>`;
         }
-      }
+      });
 
-      const rolesContainer = document.getElementById('profile-target-roles');
+      const rolesContainers = [
+        document.getElementById('profile-target-roles'),
+        document.getElementById('modal-profile-target-roles')
+      ].filter(Boolean);
+
       const targetTracks = p.target_roles || p.target_titles || [];
-      if (rolesContainer && targetTracks.length) {
-        rolesContainer.innerHTML = targetTracks.map(t => `<span class="tag tag-family">${escapeHtml(t)}</span>`).join('');
+      if (targetTracks.length) {
+        rolesContainers.forEach(rolesContainer => {
+          rolesContainer.innerHTML = targetTracks.map(t => `<span class="tag tag-family">${escapeHtml(t)}</span>`).join('');
+        });
       }
 
       // Avatar: localStorage choice wins, otherwise profile.json's default.
       applyAvatar(preferredAvatar());
+      updateProfileSettingsState();
     }
 
     function renderDigest() {
@@ -9013,15 +9448,15 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
     function preferredAvatar() {
       const stored = storedAvatar();
       if (stored !== null) return stored;
-      const profileAvatar = (appData && appData.profile) ? appData.profile.avatar : '';
+      const profileAvatar = (appData && appData.profile) ? appData.profile.avatar : ((window.INITIAL_DATA && window.INITIAL_DATA.profile) ? window.INITIAL_DATA.profile.avatar : '');
       return isValidAvatar(profileAvatar) ? profileAvatar : '';
     }
     function updateAvatarNote() {
       const note = document.getElementById('avatar-picker-note');
       if (!note) return;
       note.textContent = avatarState.current
-        ? `Selected: ${avatarState.current.replace('_', ' #')} · synced across devices.`
-        : 'Using initials · synced across devices.';
+        ? `Selected: ${avatarState.current.replace('_', ' #')} · saved on this device.`
+        : 'Using initials · saved on this device.';
     }
     function updateAvatarSelection() {
       document.querySelectorAll('.avatar-option').forEach(btn => {
