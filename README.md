@@ -6,7 +6,6 @@
 *Continuous Multi-Source Job Discovery · Gemini AI Candidate-Role Matcher · Automated Gmail Digests · Real-Time Mobile Web Dashboard*
 
 [![CI & Pipeline Status](https://github.com/shubhaammm08/Job-Hunt/actions/workflows/jobhunter.yml/badge.svg)](https://github.com/shubhaammm08/Job-Hunt/actions/workflows/jobhunter.yml)
-[![Inbox Assistant](https://github.com/shubhaammm08/Job-Hunt/actions/workflows/inbox_assistant.yml/badge.svg)](https://github.com/shubhaammm08/Job-Hunt/actions/workflows/inbox_assistant.yml)
 [![GitHub Pages](https://img.shields.io/badge/Live%20Dashboard-GitHub%20Pages-2ea043?style=flat&logo=github)](https://shubhaammm08.github.io/Job-Hunt/)
 [![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.12-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/)
 [![LLM](https://img.shields.io/badge/AI%20Engine-Google%20Gemini-4285F4?style=flat&logo=google)](https://ai.google.dev/)
@@ -49,13 +48,13 @@ Google Gemini AI Compatibility Scoring (0 – 10.0 Match)
 
 ## 🚀 Key Highlights & Features
 
-### 1. 🤖 Two Autonomous Cloud Engines (GitHub Actions)
+### 1. 🤖 Autonomous Cloud Pipeline & Telegram AI Command Center
 - **Daily JobHunter Autonomous Pipeline** (`jobhunter.yml`):
   - **Schedule:** Runs every morning at **9:00 AM IST** (`Asia/Kolkata`).
-  - **Action:** Fetches fresh job openings across 87 sources, filters for junior / graduate roles in Mumbai, Pune, Bangalore, Hyderabad, Delhi NCR, and Global Remote, runs Gemini AI scoring, delivers an HTML digest to Gmail, and commits deduplicated state.
-- **Inbox Assistant 4-Hour Briefing** (`inbox_assistant.yml`):
-  - **Schedule:** Runs every 4 hours (**02:17, 06:17, 10:17, 14:17, 18:17, 22:17 IST**).
-  - **Action:** Securely connects via Gmail IMAP SSL, filters out marketing spam, isolates recruiter outreach, high-fit alerts, and application status updates, generates AI action items, and emails an executive summary.
+  - **Action:** Fetches fresh job openings across 87 sources, filters for junior / graduate roles in Mumbai, Pune, Bangalore, Hyderabad, Delhi NCR, and Global Remote, runs Gemini AI scoring, delivers high-match alerts directly to the Telegram Command Center (`@ShubhamJobHunt_Bot`), and commits deduplicated state.
+- **Telegram AI Career Assistant** (`telegram_assistant.yml` & interactive daemon):
+  - **Schedule:** Real-time 2-way interactive chat listener and automated 3-hour cloud sync.
+  - **Action:** Instant `/top`, `/scan`, `/stats`, `/qa`, `/applied` commands, tailored recruiter pitch notes, and on-demand JD match scoring.
 
 ### 2. 📱 Executive Web & Mobile Dashboard
 - **Hosted 24/7 on GitHub Pages:** [https://shubhaammm08.github.io/Job-Hunt/](https://shubhaammm08.github.io/Job-Hunt/)
@@ -132,10 +131,10 @@ Every component operates within 100% free-tier cloud quotas:
 
 | Service | Purpose | Free Tier Allowance | Our Daily Utilization |
 |---|---|---|---|
-| **GitHub Actions** | Cron runner for JobHunter & Inbox Assistant | 2,000 min/month (Linux) | ~450 min/month (22%) |
+| **GitHub Actions** | Cron runner for JobHunter & Telegram Assistant | 2,000 min/month (Linux) | ~180 min/month (9%) |
 | **GitHub Pages** | Static hosting for Executive Web GUI | Unlimited public sites | 100% Free |
 | **Google Gemini API** | AI resume-to-job screening & drafting | Generous Free Tier | ~15 requests/day |
-| **Gmail SMTP / IMAP** | Digest email delivery & inbox parsing | Standard personal Gmail | ~7 emails/day |
+| **Telegram Cloud API** | Real-time 2-way bot commands & instant alerts | Unlimited free bot API | 100% Free |
 | **GitHub Git Storage** | State persistence (`state/*` branches) | 1 GB storage limit | < 1 MB total |
 
 ---
@@ -218,7 +217,7 @@ Job-Hunt/
 ├── .github/
 │   └── workflows/
 │       ├── jobhunter.yml           # Daily 9:00 AM IST JobHunter pipeline
-│       ├── inbox_assistant.yml     # 4-hour autonomous inbox briefing
+│       ├── telegram_assistant.yml  # Telegram AI bot batch runner
 │       └── deploy_dashboard.yml   # Automatic GitHub Pages dashboard builder
 ├── gui/
 │   ├── index.html                  # Mobile-responsive Executive Dashboard
@@ -231,13 +230,14 @@ Job-Hunt/
 │   ├── llm.py                      # Gemini AI scoring & application kit prompt
 │   ├── providers.py                # Multi-provider LLM interface
 │   ├── digest.py                   # Responsive HTML email digest template
-│   ├── mailer.py                   # Secure SMTP email delivery
+│   ├── telegram.py                 # Instant Telegram alert dispatch & cards
+│   ├── telegram_bot.py             # 2-way interactive Telegram bot engine
 │   ├── store.py                    # State storage & CSV tracker exporter
 │   └── cli.py                      # Command-line interface
-├── tests/                          # 136 automated regression tests
-├── mail_summarizer.py              # Gmail IMAP inbox parser & AI summarizer
+├── tests/                          # Automated regression tests
 ├── build_mobile_gui.py             # Static asset bundler for GitHub Pages
 ├── run_gui.bat                     # 1-click Windows desktop launcher
+├── run_bot.bat                     # 1-click Telegram bot listener launcher
 ├── config.yaml                     # Application settings & thresholds
 ├── companies.yaml                  # Curated list of verified ATS career boards
 ├── index.html                      # Root bundle for GitHub Pages
