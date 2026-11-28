@@ -499,14 +499,16 @@ def test_fresh_first_applied_filter_and_circular_theme_reveal():
         assert 'id="chip-fresh"' in content, f"Fresh quick chip missing in {html_path}"
         assert "tag-fresh" in content, f"Fresh badge style missing in {html_path}"
 
-        # Applied filtering controls and persistence
-        assert "toggleHideApplied" in content, f"toggleHideApplied missing in {html_path}"
-        assert "jobhunt_hide_applied" in content, f"Hide Applied preference key missing in {html_path}"
-        assert "hideAppliedJobs && statusFilter !== 'applied'" in content, (
-            f"Applied filter bypass missing in {html_path}"
+        # Applied pool separation controls (applied jobs move out of Tracked Jobs into Applied/Hub)
+        assert "statusFilter !== 'applied' && j.applied" in content, (
+            f"Applied pool exclusion missing in {html_path}"
         )
-        assert 'id="chip-hide-applied"' in content, f"Hide Applied chip missing in {html_path}"
-        assert 'id="chip-count-hidden"' in content, f"Hidden applied count missing in {html_path}"
+        assert 'id="chip-hide-applied"' not in content, f"Legacy Hide Applied chip still present in {html_path}"
+        assert 'id="mobile-capsule-hide-applied"' not in content, (
+            f"Legacy mobile Hide Applied capsule still present in {html_path}"
+        )
+        assert 'id="chip-applied"' in content, f"Applied chip missing in {html_path}"
+        assert 'id="chip-count-applied"' in content, f"Applied count missing in {html_path}"
 
         # Circular View Transitions reveal with reduced-motion fallback
         assert "document.startViewTransition" in content, f"View Transitions API missing in {html_path}"

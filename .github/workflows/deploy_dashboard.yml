@@ -89,13 +89,19 @@ jobs:
 
           jobs_list = [{'job_id': k, **v} for k, v in seen.items() if isinstance(v, dict)]
           jobs_list.sort(key=lambda j: (j.get('score') or 0.0, j.get('first_seen') or ''), reverse=True)
+          applied_count = sum(1 for j in jobs_list if j.get('applied'))
+          unapplied_count = len(jobs_list) - applied_count
+          recommended_unapplied = sum(1 for j in jobs_list if not j.get('applied') and (j.get('score') or 0.0) >= 6.0)
           payload = {
               'jobs': jobs_list,
               'stats': {
                   'total': len(jobs_list),
-                  'applied': sum(1 for j in jobs_list if j.get('applied')),
+                  'unapplied': unapplied_count,
+                  'tracked': unapplied_count,
+                  'applied': applied_count,
                   'emailed': sum(1 for j in jobs_list if j.get('emailed')),
                   'recommended': sum(1 for j in jobs_list if (j.get('score') or 0.0) >= 6.0),
+                  'recommended_unapplied': recommended_unapplied,
                   'sources_count': len(health) or 87
               },
               'profile': profile,

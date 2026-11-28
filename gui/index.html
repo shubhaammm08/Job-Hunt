@@ -3996,12 +3996,9 @@
         id="capsule-count-all">78</span>)</button>
     <button class="filter-capsule" id="mobile-capsule-fresh" onclick="setQuickChip('fresh')">Fresh (<span
         id="capsule-count-fresh">0</span>)</button>
-    <button class="filter-capsule active" id="mobile-capsule-hide-applied" onclick="toggleHideApplied()"
-      aria-pressed="true">
-      <span id="mobile-hide-applied-label">Hide Applied</span>
-    </button>
     <button class="filter-capsule" id="mobile-capsule-high" onclick="setQuickChip('high')">High Fit (8+)</button>
-    <button class="filter-capsule" id="mobile-capsule-rec" onclick="setQuickChip('rec')">Recommended (10)</button>
+    <button class="filter-capsule" id="mobile-capsule-rec" onclick="setQuickChip('rec')">Recommended (<span
+        id="capsule-count-rec">10</span>)</button>
     <button class="filter-capsule" id="mobile-capsule-applied" onclick="setQuickChip('applied')">Applied (<span
         id="capsule-count-applied">1</span>)</button>
   </div>
@@ -4252,10 +4249,6 @@
           <button class="filter-chip active" id="chip-all" onclick="setQuickChip('all')">All Jobs</button>
           <button class="filter-chip" id="chip-fresh" onclick="setQuickChip('fresh')">Fresh (<span
               id="chip-count-fresh">0</span>)</button>
-          <button class="filter-chip active" id="chip-hide-applied" onclick="toggleHideApplied()" aria-pressed="true"
-            title="Hide applied jobs from the feed">
-            <span id="hide-applied-label">Hide Applied</span> (<span id="chip-count-hidden">0</span>)
-          </button>
           <button class="filter-chip" id="chip-applied" onclick="setQuickChip('applied')">
             <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
@@ -4652,7 +4645,7 @@
             <div
               style="text-align:center;padding:30px;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:12px;">
               <h3 style="font-size:16px;margin-bottom:8px;">Pipeline Conversion Analytics</h3>
-              <p style="color:var(--text-secondary);font-size:13px;max-width:500px;margin:0 auto 16px auto;">
+              <p id="analysis-summary-text" style="color:var(--text-secondary);font-size:13px;max-width:500px;margin:0 auto 16px auto;">
                 78 opportunities tracked across 87 sources. 10 high-priority recommended roles.
               </p>
               <button class="btn-action-primary" onclick="openAppliedTrackerModal()">Open Applied Tracker Hub</button>
@@ -6460,9 +6453,6 @@
         showToast('Application link not available for this role.');
         return;
       }
-      if (!job.applied) {
-        toggleApplied(job.job_id, null);
-      }
       const platformLabel = getPlatformLabel(inferPlatformSource(job));
 
       openBinLoaderModal(
@@ -6481,11 +6471,6 @@
 
       window.open(targetUrl, '_blank', 'noopener,noreferrer');
       showToast(`Opening application on ${platformLabel}...`);
-      if (window.parent && window.parent !== window) {
-        try {
-          window.parent.postMessage({ type: 'JOB_APPLIED', jobId: job.job_id }, '*');
-        } catch (e) { }
-      }
     }
 
     function selectNextJob() {
@@ -6597,16 +6582,27 @@
           } else if (tab === 'sources') {
             renderSources();
           } else if (tab === 'analysis') {
+            const allJobs = appData.jobs || [];
+            const appliedCount = allJobs.filter(j => j.applied).length;
+            const trackedCount = allJobs.filter(j => !j.applied).length;
+            const totalPool = trackedCount + appliedCount;
+            const recsCount = allJobs.filter(j => !j.applied && (parseFloat(j.score) || 0) >= 6.0).length;
+            const srcCount = (appData.stats && appData.stats.sources_count) || 87;
+
             const tEl = document.getElementById('analysis-metric-total');
-            if (tEl) tEl.innerText = (appData.jobs || []).length || 78;
+            if (tEl) tEl.innerText = trackedCount;
             const recEl = document.getElementById('analysis-metric-recommended');
-            if (recEl) recEl.innerText = (appData.jobs || []).filter(j => (parseFloat(j.score) || 0) >= 6.0).length || 10;
+            if (recEl) recEl.innerText = recsCount;
             const appEl = document.getElementById('analysis-metric-applied');
-            const appliedCount = (appData.jobs || []).filter(j => j.applied).length;
             if (appEl) appEl.innerText = appliedCount;
             const appRate = document.getElementById('analysis-metric-applied-rate');
-            const totalJobs = (appData.jobs || []).length || 78;
-            if (appRate) appRate.innerText = `${totalJobs ? Math.round((appliedCount / totalJobs) * 100) : 0}% applied`;
+            if (appRate) appRate.innerText = `${totalPool ? Math.round((appliedCount / totalPool) * 100) : 0}% applied`;
+            const srcEl = document.getElementById('analysis-metric-sources');
+            if (srcEl) srcEl.innerText = srcCount;
+            const summaryEl = document.getElementById('analysis-summary-text');
+            if (summaryEl) {
+              summaryEl.innerText = `${trackedCount} unapplied opportunities tracked across ${srcCount} sources. ${recsCount} high-priority recommended roles.`;
+            }
           }
         }
       }
@@ -6716,11 +6712,6 @@
     };
 
     let activeChip = 'all';
-    let hideAppliedJobs = true;
-    try {
-      const storedHideApplied = localStorage.getItem('jobhunt_hide_applied');
-      if (storedHideApplied !== null) hideAppliedJobs = storedHideApplied !== 'false';
-    } catch (e) { }
 
     const FRESH_WINDOW_MS = 24 * 60 * 60 * 1000;
 
@@ -6738,36 +6729,6 @@
       if (!Number.isFinite(seen)) return false;
       const newest = getNewestFirstSeenMs();
       return newest > 0 && (newest - seen) <= FRESH_WINDOW_MS;
-    }
-
-    function updateHideAppliedUI() {
-      const appliedCount = (appData.jobs || []).filter(j => j.applied).length;
-      const chip = document.getElementById('chip-hide-applied');
-      if (chip) {
-        chip.classList.toggle('active', hideAppliedJobs);
-        chip.setAttribute('aria-pressed', hideAppliedJobs ? 'true' : 'false');
-        chip.title = hideAppliedJobs
-          ? 'Applied jobs are hidden from the feed'
-          : 'Applied jobs are visible in the feed';
-      }
-      const mobileChip = document.getElementById('mobile-capsule-hide-applied');
-      if (mobileChip) {
-        mobileChip.classList.toggle('active', hideAppliedJobs);
-        mobileChip.setAttribute('aria-pressed', hideAppliedJobs ? 'true' : 'false');
-      }
-      const hiddenCount = document.getElementById('chip-count-hidden');
-      if (hiddenCount) hiddenCount.innerText = appliedCount;
-    }
-
-    function toggleHideApplied() {
-      hideAppliedJobs = !hideAppliedJobs;
-      try {
-        localStorage.setItem('jobhunt_hide_applied', hideAppliedJobs ? 'true' : 'false');
-      } catch (e) { }
-      updateHideAppliedUI();
-      renderStats();
-      renderJobs();
-      showToast(hideAppliedJobs ? 'Applied jobs hidden from feed' : 'Applied jobs shown in feed');
     }
 
     const SOURCES_CATALOG = [{ "source": "Greenhouse", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596414+00:00" }, { "source": "Ashby", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596439+00:00" }, { "source": "Lever", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596445+00:00" }, { "source": "SmartRecruiters", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596450+00:00" }, { "source": "Workable", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596456+00:00" }, { "source": "Recruitee", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596459+00:00" }, { "source": "Personio", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596463+00:00" }, { "source": "Breezy HR", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596467+00:00" }, { "source": "BambooHR", "category": "direct_ats", "tier": 1, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596470+00:00" }, { "source": "Workday", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.workday.feed_url"], "last_scan": "2026-11-17T05:39:45.596475+00:00" }, { "source": "Teamtailor", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.teamtailor.feed_url"], "last_scan": "2026-11-17T05:39:45.596482+00:00" }, { "source": "Rippling", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.rippling.feed_url"], "last_scan": "2026-11-17T05:39:45.596487+00:00" }, { "source": "Gem", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.gem.feed_url"], "last_scan": "2026-11-17T05:39:45.596491+00:00" }, { "source": "Paylocity", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.paylocity.feed_url"], "last_scan": "2026-11-17T05:39:45.596494+00:00" }, { "source": "JazzHR", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.jazzhr.feed_url"], "last_scan": "2026-11-17T05:39:45.596497+00:00" }, { "source": "Manatal", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.manatal.feed_url"], "last_scan": "2026-11-17T05:39:45.596500+00:00" }, { "source": "Jobvite", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.jobvite.feed_url"], "last_scan": "2026-11-17T05:39:45.596503+00:00" }, { "source": "Phenom", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.phenom.feed_url"], "last_scan": "2026-11-17T05:39:45.596509+00:00" }, { "source": "Homerun", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.homerun.feed_url"], "last_scan": "2026-11-17T05:39:45.596512+00:00" }, { "source": "HireHive", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.hirehive.feed_url"], "last_scan": "2026-11-17T05:39:45.596515+00:00" }, { "source": "JobScore", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.jobscore.feed_url"], "last_scan": "2026-11-17T05:39:45.596518+00:00" }, { "source": "Flatchr", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.flatchr.feed_url"], "last_scan": "2026-11-17T05:39:45.596521+00:00" }, { "source": "Talentadore", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.talentadore.feed_url"], "last_scan": "2026-11-17T05:39:45.596524+00:00" }, { "source": "Jobsoid", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.jobsoid.feed_url"], "last_scan": "2026-11-17T05:39:45.596527+00:00" }, { "source": "PyjamaHR", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.pyjamahr.feed_url"], "last_scan": "2026-11-17T05:39:45.596531+00:00" }, { "source": "Gupy", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.gupy.feed_url"], "last_scan": "2026-11-17T05:39:45.596534+00:00" }, { "source": "Oracle Recruiting", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.oracle_recruiting.feed_url"], "last_scan": "2026-11-17T05:39:45.596537+00:00" }, { "source": "SAP SuccessFactors", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.sap_successfactors.feed_url"], "last_scan": "2026-11-17T05:39:45.596540+00:00" }, { "source": "iCIMS", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.icims.feed_url"], "last_scan": "2026-11-17T05:39:45.596544+00:00" }, { "source": "Pinpoint", "category": "direct_ats", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Enterprise ATS: Add company feed URL in config.yaml under sources.pinpoint.feed_url"], "last_scan": "2026-11-17T05:39:45.596546+00:00" }, { "source": "Remotive", "category": "remote", "tier": 3, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596550+00:00" }, { "source": "Remote OK", "category": "remote", "tier": 3, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596554+00:00" }, { "source": "Himalayas", "category": "remote", "tier": 3, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596564+00:00" }, { "source": "Jobicy", "category": "remote", "tier": 3, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596568+00:00" }, { "source": "Working Nomads", "category": "remote", "tier": 3, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596571+00:00" }, { "source": "NoDesk", "category": "remote", "tier": 3, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596575+00:00" }, { "source": "Remote.co", "category": "remote", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure REMOTECO_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596585+00:00" }, { "source": "Jobspresso", "category": "remote", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure JOBSPRESSO_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596590+00:00" }, { "source": "Dynamite Jobs", "category": "remote", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure DYNAMITEJOBS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596594+00:00" }, { "source": "JustRemote", "category": "remote", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure JUSTREMOTE_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596598+00:00" }, { "source": "Hacker News Who Is Hiring", "category": "startup", "tier": 3, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": "2026-11-17T05:39:45.596602+00:00" }, { "source": "Wellfound", "category": "startup", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure WELLFOUND_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596606+00:00" }, { "source": "Y Combinator Jobs", "category": "startup", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure YC_JOBS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596610+00:00" }, { "source": "Y Combinator Work at a Startup", "category": "startup", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure YC_WORKATASTARTUP_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596615+00:00" }, { "source": "Cutshort", "category": "startup", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure CUTSHORT_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596619+00:00" }, { "source": "Instahyre", "category": "startup", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure INSTAHYRE_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596622+00:00" }, { "source": "Product Hunt Jobs", "category": "startup", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure PRODUCTHUNT_JOBS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596625+00:00" }, { "source": "LinkedIn", "category": "professional_network", "tier": 2, "status": "HEALTHY", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": [], "last_scan": null }, { "source": "LinkedIn Jobs India", "category": "india_job_board", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Free activation: Add RAPIDAPI_KEY to GitHub Secrets for 500 free queries/mo across commercial boards."], "last_scan": "2026-11-17T05:39:45.596629+00:00" }, { "source": "Indeed India", "category": "india_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Free activation: Add RAPIDAPI_KEY to GitHub Secrets for 500 free queries/mo across commercial boards."], "last_scan": "2026-11-17T05:39:45.596634+00:00" }, { "source": "Naukri", "category": "india_job_board", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Free activation: Add RAPIDAPI_KEY to GitHub Secrets for 500 free queries/mo across commercial boards."], "last_scan": "2026-11-17T05:39:45.596638+00:00" }, { "source": "Naukri Campus", "category": "india_job_board", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure NAUKRI_CAMPUS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596642+00:00" }, { "source": "Foundit", "category": "india_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure FOUNDIT_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596646+00:00" }, { "source": "Hirist", "category": "india_job_board", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure HIRIST_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596651+00:00" }, { "source": "Shine", "category": "india_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure SHINE_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596654+00:00" }, { "source": "TimesJobs", "category": "india_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure TIMESJOBS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596657+00:00" }, { "source": "Apna", "category": "india_job_board", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure APNA_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596661+00:00" }, { "source": "Internshala", "category": "india_job_board", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure INTERNSHALA_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596665+00:00" }, { "source": "Unstop", "category": "india_job_board", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure UNSTOP_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596669+00:00" }, { "source": "iimjobs", "category": "india_job_board", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure IIMJOBS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596672+00:00" }, { "source": "Indeed", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Free activation: Add RAPIDAPI_KEY to GitHub Secrets for 500 free queries/mo across commercial boards."], "last_scan": "2026-11-17T05:39:45.596676+00:00" }, { "source": "LinkedIn Jobs", "category": "global_job_board", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Free activation: Add RAPIDAPI_KEY to GitHub Secrets for 500 free queries/mo across commercial boards."], "last_scan": "2026-11-17T05:39:45.596679+00:00" }, { "source": "Glassdoor", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Free activation: Add RAPIDAPI_KEY to GitHub Secrets for 500 free queries/mo across commercial boards."], "last_scan": "2026-11-17T05:39:45.596682+00:00" }, { "source": "ZipRecruiter", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Free activation: Add RAPIDAPI_KEY to GitHub Secrets for 500 free queries/mo across commercial boards."], "last_scan": "2026-11-17T05:39:45.596685+00:00" }, { "source": "Monster", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure MONSTER_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596689+00:00" }, { "source": "CareerBuilder", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure CAREERBUILDER_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596692+00:00" }, { "source": "Dice", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure DICE_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596697+00:00" }, { "source": "SimplyHired", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure SIMPLYHIRED_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596700+00:00" }, { "source": "Jooble", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure JOOBLE_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596704+00:00" }, { "source": "Adzuna", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure ADZUNA_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596707+00:00" }, { "source": "Jobrapido", "category": "global_job_board", "tier": 4, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure JOBRAPIDO_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596710+00:00" }, { "source": "Freshersworld", "category": "fresher", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure FRESHERSWORLD_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596714+00:00" }, { "source": "Superset", "category": "fresher", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure SUPERSET_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596717+00:00" }, { "source": "FirstNaukri", "category": "fresher", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure FIRSTNAUKRI_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596720+00:00" }, { "source": "Prosple", "category": "fresher", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure PROSPLE_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596724+00:00" }, { "source": "Handshake", "category": "fresher", "tier": 3, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure HANDSHAKE_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596727+00:00" }, { "source": "AI Jobs", "category": "ai_specific", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure AI_JOBS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596731+00:00" }, { "source": "TopAIJobs", "category": "ai_specific", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure TOP_AI_JOBS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596735+00:00" }, { "source": "AI-Jobs.net", "category": "ai_specific", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure AI_JOBS_NET_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596738+00:00" }, { "source": "Hugging Face Jobs", "category": "ai_specific", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure HUGGINGFACE_JOBS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596741+00:00" }, { "source": "MLOps.community Jobs", "category": "ai_specific", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure MLOPS_COMMUNITY_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596745+00:00" }, { "source": "Data Science Jobs", "category": "ai_specific", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure DATA_SCIENCE_JOBS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596749+00:00" }, { "source": "Kaggle Jobs", "category": "ai_specific", "tier": 2, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure KAGGLE_JOBS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596753+00:00" }, { "source": "NVIDIA Careers", "category": "ai_specific", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure NVIDIA_CAREERS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596756+00:00" }, { "source": "OpenAI Careers", "category": "ai_specific", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure OPENAI_CAREERS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596761+00:00" }, { "source": "Anthropic Careers", "category": "ai_specific", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure ANTHROPIC_CAREERS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596765+00:00" }, { "source": "Google DeepMind Careers", "category": "ai_specific", "tier": 1, "status": "CONFIG_REQUIRED", "jobs_found": 0, "jobs_after_filtering": 0, "new_jobs": 0, "duplicates_removed": 0, "errors": ["Requires partner API key: configure DEEPMIND_CAREERS_API_KEY in GitHub Secrets."], "last_scan": "2026-11-17T05:39:45.596768+00:00" }];
@@ -7101,30 +7062,28 @@
       }
 
       document.querySelectorAll('.filter-chip').forEach(c => {
-        if (c.id !== 'chip-hide-applied') c.classList.remove('active');
+        c.classList.remove('active');
       });
       const activeEl = document.getElementById('chip-' + chipType);
       if (activeEl) activeEl.classList.add('active');
 
       document.querySelectorAll('.filter-capsule').forEach(c => {
-        if (c.id !== 'mobile-capsule-hide-applied') c.classList.remove('active');
+        c.classList.remove('active');
       });
       const mobileActiveEl = document.getElementById('mobile-capsule-' + chipType);
       if (mobileActiveEl) mobileActiveEl.classList.add('active');
 
-      updateHideAppliedUI();
       renderJobs();
     }
 
     function syncChipAndRender() {
       document.querySelectorAll('.filter-chip').forEach(c => {
-        if (c.id !== 'chip-hide-applied') c.classList.remove('active');
+        c.classList.remove('active');
       });
       document.querySelectorAll('.filter-capsule').forEach(c => {
-        if (c.id !== 'mobile-capsule-hide-applied') c.classList.remove('active');
+        c.classList.remove('active');
       });
       activeChip = 'custom';
-      updateHideAppliedUI();
       renderJobs();
     }
 
@@ -7132,10 +7091,12 @@
       switchNav(tabId);
     }
 
-    function syncAppliedStateWithStorage() {
+    function syncAppliedStateWithStorage(options = {}) {
+      const persistInitialApplied = options.persistInitialApplied !== false;
       try {
         const storedMeta = JSON.parse(localStorage.getItem('jobhunt_applied_jobs') || '{}');
         const legacyList = JSON.parse(localStorage.getItem('jobhunt_applied') || '[]');
+        const unmarkedMeta = JSON.parse(localStorage.getItem('jobhunt_unmarked_jobs') || '{}');
 
         legacyList.forEach(id => {
           if (!storedMeta[id]) {
@@ -7145,7 +7106,7 @@
 
         if (appData && Array.isArray(appData.jobs)) {
           appData.jobs.forEach(j => {
-            if (storedMeta[j.job_id] || legacyList.includes(j.job_id) || j.applied) {
+            if (storedMeta[j.job_id] || legacyList.includes(j.job_id)) {
               j.applied = true;
               if (!storedMeta[j.job_id]) {
                 storedMeta[j.job_id] = {
@@ -7161,6 +7122,26 @@
               }
               if (!legacyList.includes(j.job_id)) {
                 legacyList.push(j.job_id);
+              }
+            } else if (j.applied) {
+              if (unmarkedMeta[j.job_id]) {
+                j.applied = false;
+              } else if (persistInitialApplied) {
+                if (!storedMeta[j.job_id]) {
+                  storedMeta[j.job_id] = {
+                    job_id: j.job_id,
+                    applied_at: new Date().toISOString(),
+                    title: j.title || '',
+                    company: j.company || '',
+                    location: j.location || '',
+                    url: isLinkedInJob(j) ? (getLinkedInPostUrl(j) || j.url || '') : (j.url || ''),
+                    score: j.score || 0.0,
+                    platform: inferPlatformSource(j)
+                  };
+                }
+                if (!legacyList.includes(j.job_id)) {
+                  legacyList.push(j.job_id);
+                }
               }
             }
           });
@@ -7178,30 +7159,38 @@
     }
 
     async function loadData() {
-      // 1. Initial pre-bundled payload if available
-      if (window.INITIAL_DATA && window.INITIAL_DATA.jobs && window.INITIAL_DATA.jobs.length) {
-        appData = window.INITIAL_DATA;
-        syncAppliedStateWithStorage();
-        renderAll();
-      }
-      // 2. Query local server API if running locally or over LAN
-      try {
-        if (isLocalHostOrLan()) {
-          const res = await fetch('/api/data');
+      let loadedFromServer = false;
+      // 1. On localhost/LAN, fetch live /api/data BEFORE syncing localStorage
+      //    so stale window.INITIAL_DATA cannot resurrect unmarked jobs.
+      if (isLocalHostOrLan()) {
+        try {
+          const res = await fetch('/api/data', { cache: 'no-store' });
           if (res.ok) {
             appData = await res.json();
+            appData._isStaleInitialFallback = false;
             syncAppliedStateWithStorage();
             renderAll();
+            loadedFromServer = true;
           }
+        } catch (err) {
+          // Fall back to bundled INITIAL_DATA or static fallback below
         }
-      } catch (err) {
-        // Static mode or offline fallback
-        if (!window.INITIAL_DATA) {
+      }
+
+      // 2. Fallback / static hosting payload
+      if (!loadedFromServer) {
+        if (window.INITIAL_DATA && window.INITIAL_DATA.jobs && window.INITIAL_DATA.jobs.length) {
+          appData = window.INITIAL_DATA;
+          appData._isStaleInitialFallback = isLocalHostOrLan();
+          syncAppliedStateWithStorage({ persistInitialApplied: !isLocalHostOrLan() });
+          renderAll();
+        } else {
           loadStaticFallback();
         }
       }
+
       fetchLinkedInStatus();
-      try { pullCloudSync(true); } catch (e) { }
+      try { await pullCloudSync(true); } catch (e) { }
     }
 
     function syncPlatformFilterOptions() {
@@ -7243,15 +7232,24 @@
 
     function renderStats() {
       const stats = appData.stats || {};
-      const appliedCount = (appData.jobs || []).filter(j => j.applied).length;
-      stats.applied = appliedCount;
+      const allJobs = appData.jobs || [];
+      const appliedCount = allJobs.filter(j => j.applied).length;
+      const trackedCount = allJobs.length
+        ? allJobs.filter(j => !j.applied).length
+        : Math.max(0, (stats.unapplied ?? stats.tracked ?? ((stats.total || 0) - (stats.applied || 0))));
+      const totalPool = trackedCount + appliedCount;
+      const totalRecs = allJobs.length
+        ? allJobs.filter(j => !j.applied && (parseFloat(j.score) || 0) >= 6.0).length
+        : (stats.recommended_unapplied ?? stats.recommended ?? 0);
+      const rate = totalPool ? Math.round((appliedCount / totalPool) * 100) : 0;
 
-      const totalJobs = (appData.jobs && appData.jobs.length) ? appData.jobs.length : (stats.total || 0);
-      const totalRecs = stats.recommended || (appData.jobs || []).filter(j => (parseFloat(j.score) || 0) >= 6.0).length || 0;
-      const rate = totalJobs ? Math.round((appliedCount / totalJobs) * 100) : 0;
+      stats.applied = appliedCount;
+      stats.tracked = trackedCount;
+      stats.unapplied = trackedCount;
+      stats.recommended_unapplied = totalRecs;
 
       const mTot = document.getElementById('metric-total');
-      if (mTot) mTot.innerText = totalJobs;
+      if (mTot) mTot.innerText = trackedCount;
       const mRec = document.getElementById('metric-recommended');
       if (mRec) mRec.innerText = totalRecs;
       const mApp = document.getElementById('metric-applied');
@@ -7262,30 +7260,32 @@
       if (mRate) mRate.innerText = `${rate}% applied`;
 
       const ribTracked = document.getElementById('ribbon-tracked');
-      if (ribTracked) ribTracked.innerText = `${totalJobs} Tracked`;
+      if (ribTracked) ribTracked.innerText = `${trackedCount} Tracked`;
       const ribRecs = document.getElementById('ribbon-recs');
       if (ribRecs) ribRecs.innerText = `${totalRecs} Recs`;
       const ribApplied = document.getElementById('ribbon-applied');
       if (ribApplied) ribApplied.innerText = `${rate}% Applied`;
 
       const tabCount = document.getElementById('tab-count-jobs');
-      if (tabCount) tabCount.innerText = totalJobs;
+      if (tabCount) tabCount.innerText = trackedCount;
+      const railOpps = document.getElementById('rail-btn-opps');
+      if (railOpps) railOpps.title = `Opportunities (${trackedCount})`;
 
       const chipCount = document.getElementById('chip-count-applied');
       if (chipCount) chipCount.innerText = appliedCount;
       const modalCount = document.getElementById('applied-tracker-count');
       if (modalCount) modalCount.innerText = `${appliedCount} application${appliedCount === 1 ? '' : 's'}`;
 
-      const freshCount = (appData.jobs || []).filter(j => isFreshJob(j) && (!hideAppliedJobs || !j.applied)).length;
+      const freshCount = allJobs.filter(j => !j.applied && isFreshJob(j)).length;
       const setCount = (id, value) => {
         const el = document.getElementById(id);
         if (el) el.innerText = value;
       };
       setCount('chip-count-fresh', freshCount);
       setCount('capsule-count-fresh', freshCount);
-      setCount('capsule-count-all', totalJobs);
+      setCount('capsule-count-all', trackedCount);
+      setCount('capsule-count-rec', totalRecs);
       setCount('capsule-count-applied', appliedCount);
-      updateHideAppliedUI();
     }
 
     function renderJobs() {
@@ -7297,7 +7297,8 @@
       const platformFilter = document.getElementById('filter-platform').value;
 
       const listContainer = document.getElementById('job-list');
-      const filtered = (appData.jobs || []).filter(j => {
+      const allJobs = appData.jobs || [];
+      const filtered = allJobs.filter(j => {
         if (query) {
           const hay = `${j.title || ''} ${j.company || ''} ${j.location || ''} ${(j.role_families || []).join(' ')} ${(j.matched_skills || []).join(' ')}`.toLowerCase();
           if (!hay.includes(query)) return false;
@@ -7310,7 +7311,7 @@
         if (statusFilter === 'fresh' && !isFreshJob(j)) return false;
         if (statusFilter === 'applied' && !j.applied) return false;
         if (statusFilter === 'unapplied' && j.applied) return false;
-        if (hideAppliedJobs && statusFilter !== 'applied' && j.applied) return false;
+        if (statusFilter !== 'applied' && j.applied) return false;
 
         if (familyFilter !== 'all') {
           const families = j.role_families || [];
@@ -7338,23 +7339,21 @@
         return String(a.title || '').localeCompare(String(b.title || ''));
       });
 
-      const totalJobs = (appData.jobs || []).length;
+      const poolTotal = (statusFilter === 'applied')
+        ? allJobs.filter(j => j.applied).length
+        : allJobs.filter(j => !j.applied).length;
       const freshVisible = filtered.filter(j => isFreshJob(j)).length;
-      const appliedHidden = (hideAppliedJobs && statusFilter !== 'applied')
-        ? (appData.jobs || []).filter(j => j.applied).length
-        : 0;
       const statusSuffix = (statusFilter === 'applied')
         ? ' (Applied Jobs)'
         : ((statusFilter === 'unapplied') ? ' (Unapplied Jobs)' : ((statusFilter === 'fresh') ? ' (Fresh Jobs)' : ''));
       document.getElementById('results-count').innerText =
-        `Showing ${filtered.length} of ${totalJobs} opportunities${statusSuffix}` +
-        (freshVisible ? ` · ${freshVisible} fresh` : '') +
-        (appliedHidden ? ` · ${appliedHidden} applied hidden` : '');
+        `Showing ${filtered.length} of ${poolTotal} opportunities${statusSuffix}` +
+        (freshVisible ? ` · ${freshVisible} fresh` : '');
 
       // Select active job from the visible feed, never a hidden applied job
       const fallbackPool = filtered.length
         ? filtered
-        : (appData.jobs || []).filter(j => !j.applied);
+        : allJobs.filter(j => !j.applied);
       const activeJob = filtered.find(j => j.job_id === state.activeJobId) || fallbackPool[0];
       if (activeJob) {
         renderDeck(activeJob);
@@ -7366,7 +7365,7 @@
           ? 'No applied jobs recorded yet'
           : 'No matching opportunities found';
         const emptySub = isAppliedFilter
-          ? 'Click "Apply" or "Mark Applied" on any opportunity card to track your applications here.'
+          ? 'Click "Mark Applied" on any opportunity card to track your applications here.'
           : 'Try adjusting your filters or search keywords.';
         listContainer.innerHTML = `
           <div style="text-align:center;padding:50px 20px;color:var(--text-muted);background:var(--card-bg);border:1px dashed var(--card-border);border-radius:12px;">
@@ -7524,8 +7523,10 @@
       try {
         const storedMeta = JSON.parse(localStorage.getItem('jobhunt_applied_jobs') || '{}');
         const legacyList = JSON.parse(localStorage.getItem('jobhunt_applied') || '[]');
+        const unmarkedMeta = JSON.parse(localStorage.getItem('jobhunt_unmarked_jobs') || '{}');
 
         if (job.applied) {
+          delete unmarkedMeta[jobId];
           storedMeta[jobId] = {
             job_id: jobId,
             applied_at: new Date().toISOString(),
@@ -7542,10 +7543,12 @@
           delete storedMeta[jobId];
           const idx = legacyList.indexOf(jobId);
           if (idx > -1) legacyList.splice(idx, 1);
+          unmarkedMeta[jobId] = new Date().toISOString();
           showToast(`Unmarked "${job.title || 'Role'}" from Applied.`);
         }
         localStorage.setItem('jobhunt_applied_jobs', JSON.stringify(storedMeta));
         localStorage.setItem('jobhunt_applied', JSON.stringify(legacyList));
+        localStorage.setItem('jobhunt_unmarked_jobs', JSON.stringify(unmarkedMeta));
       } catch (e) {
         console.warn('Could not save applied state to localStorage', e);
       }
@@ -7561,21 +7564,28 @@
         renderAppliedTrackerList();
       }
 
-      // If running with local python server on localhost or LAN, notify API silently
+      // Notify local python server and Firebase Cloud Sync cleanly with keepalive
+      const syncTasks = [];
       try {
         if (isLocalHostOrLan()) {
-          fetch('/api/toggle-applied', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ job_id: jobId })
-          }).catch(() => { });
+          syncTasks.push(
+            fetch('/api/toggle-applied', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              keepalive: true,
+              body: JSON.stringify({ job_id: jobId, applied: Boolean(job.applied) })
+            }).catch(() => { })
+          );
         }
       } catch (err) { }
 
-      // Real-time Cloud Push to Firebase Firestore
       try {
-        pushCloudSync(true);
+        syncTasks.push(Promise.resolve(pushCloudSync(true)).catch(() => { }));
       } catch (err) { }
+
+      if (syncTasks.length) {
+        await Promise.allSettled(syncTasks);
+      }
     }
 
     function openAppliedTrackerModal() {
@@ -7602,7 +7612,7 @@
           <div style="text-align:center;padding:40px 16px;color:var(--text-muted);border:1px dashed var(--card-border);border-radius:10px;">
             <div style="display:flex;justify-content:center;margin-bottom:8px;">${ICONS.searchEmpty}</div>
             <div style="font-weight:600;color:var(--text-main);font-size:14px;">No Applied Jobs Recorded Yet</div>
-            <div style="font-size:12px;margin-top:4px;">When you click "Apply" or "Mark Applied" on any job card, it will appear here permanently.</div>
+            <div style="font-size:12px;margin-top:4px;">When you click "Mark Applied" on any job card, it will appear here permanently.</div>
           </div>
         `;
         return;
@@ -7754,8 +7764,10 @@
 
         const storedMeta = JSON.parse(localStorage.getItem('jobhunt_applied_jobs') || '{}');
         const legacyList = JSON.parse(localStorage.getItem('jobhunt_applied') || '[]');
+        const unmarkedMeta = JSON.parse(localStorage.getItem('jobhunt_unmarked_jobs') || '{}');
 
         incomingIds.forEach(id => {
+          delete unmarkedMeta[id];
           if (!storedMeta[id]) {
             storedMeta[id] = incomingMeta[id] || { job_id: id, applied_at: new Date().toISOString() };
           }
@@ -7764,6 +7776,7 @@
 
         localStorage.setItem('jobhunt_applied_jobs', JSON.stringify(storedMeta));
         localStorage.setItem('jobhunt_applied', JSON.stringify(legacyList));
+        localStorage.setItem('jobhunt_unmarked_jobs', JSON.stringify(unmarkedMeta));
 
         if (appData && Array.isArray(appData.jobs)) {
           appData.jobs.forEach(j => {
@@ -7773,7 +7786,8 @@
                 fetch('/api/toggle-applied', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ job_id: j.job_id })
+                  keepalive: true,
+                  body: JSON.stringify({ job_id: j.job_id, applied: true })
                 }).catch(() => { });
               }
             }
@@ -7802,20 +7816,21 @@
     };
 
     let cloudSyncInProgress = false;
+    let cloudPushInProgress = false;
 
     async function pullCloudSync(quiet = true) {
       if (window.location.protocol === 'file:') return;
-      if (cloudSyncInProgress) return;
+      if (cloudSyncInProgress || cloudPushInProgress) return;
       cloudSyncInProgress = true;
       try {
-        const res = await fetch(FIREBASE_SYNC_CONFIG.docUrl);
+        const res = await fetch(FIREBASE_SYNC_CONFIG.docUrl, { cache: 'no-store' });
         if (!res.ok) {
           if (res.status === 404) {
             await pushCloudSync(true);
           }
-          cloudSyncInProgress = false;
           return;
         }
+        if (cloudPushInProgress) return;
         const data = await res.json();
         const fields = data.fields || {};
 
@@ -7831,7 +7846,7 @@
             const jf = (mFields[jid].mapValue && mFields[jid].mapValue.fields) || {};
             cloudJobs[jid] = {
               job_id: (jf.job_id && jf.job_id.stringValue) || jid,
-              applied_at: (jf.applied_at && jf.applied_at.stringValue) || new Date().toISOString(),
+              applied_at: (jf.applied_at && jf.applied_at.stringValue) || '',
               title: (jf.title && jf.title.stringValue) || '',
               company: (jf.company && jf.company.stringValue) || '',
               location: (jf.location && jf.location.stringValue) || '',
@@ -7844,11 +7859,28 @@
 
         const storedMeta = JSON.parse(localStorage.getItem('jobhunt_applied_jobs') || '{}');
         const legacyList = JSON.parse(localStorage.getItem('jobhunt_applied') || '[]');
+        const unmarkedMeta = JSON.parse(localStorage.getItem('jobhunt_unmarked_jobs') || '{}');
 
         let changed = false;
+        let needsCloudCleanup = false;
+
+        // Merge cloud applied_ids unless locally unmarked more recently than cloud applied_at
         cloudIds.forEach(id => {
+          const unmarkMs = Date.parse(unmarkedMeta[id] || '') || 0;
+          const cloudApplyStr = (cloudJobs[id] && cloudJobs[id].applied_at) || '';
+          const cloudApplyMs = cloudApplyStr ? (Date.parse(cloudApplyStr) || 0) : 0;
+          if (unmarkMs && unmarkMs >= cloudApplyMs) {
+            needsCloudCleanup = true;
+            return;
+          }
+          if (unmarkMs && cloudApplyMs > unmarkMs) {
+            delete unmarkedMeta[id];
+          }
           if (!storedMeta[id]) {
-            storedMeta[id] = cloudJobs[id] || { job_id: id, applied_at: new Date().toISOString() };
+            const cloudJob = cloudJobs[id];
+            storedMeta[id] = cloudJob
+              ? { ...cloudJob, applied_at: cloudJob.applied_at || new Date().toISOString() }
+              : { job_id: id, applied_at: new Date().toISOString() };
             changed = true;
           }
           if (!legacyList.includes(id)) {
@@ -7863,12 +7895,12 @@
         if (changed) {
           localStorage.setItem('jobhunt_applied_jobs', JSON.stringify(storedMeta));
           localStorage.setItem('jobhunt_applied', JSON.stringify(legacyList));
+          localStorage.setItem('jobhunt_unmarked_jobs', JSON.stringify(unmarkedMeta));
 
           if (appData && Array.isArray(appData.jobs)) {
             appData.jobs.forEach(j => {
-              if (storedMeta[j.job_id] || legacyList.includes(j.job_id)) {
-                j.applied = true;
-              }
+              const isApplied = Boolean(storedMeta[j.job_id] || legacyList.includes(j.job_id));
+              j.applied = isApplied;
             });
             if (appData.stats) {
               appData.stats.applied = appData.jobs.filter(j => j.applied).length;
@@ -7880,10 +7912,11 @@
           updateSyncIndicator('synced');
           if (!quiet) showToast(`Cloud Synced: ${legacyList.length} applied jobs up-to-date!`);
         } else {
+          localStorage.setItem('jobhunt_unmarked_jobs', JSON.stringify(unmarkedMeta));
           updateSyncIndicator('synced');
         }
 
-        if (hasUnsyncedLocal) {
+        if (hasUnsyncedLocal || needsCloudCleanup) {
           await pushCloudSync(true);
         }
       } catch (err) {
@@ -7896,14 +7929,16 @@
 
     async function pushCloudSync(quiet = false) {
       if (window.location.protocol === 'file:') return;
+      cloudPushInProgress = true;
       try {
         updateSyncIndicator('syncing');
         const storedMeta = JSON.parse(localStorage.getItem('jobhunt_applied_jobs') || '{}');
         const legacyList = JSON.parse(localStorage.getItem('jobhunt_applied') || '[]');
+        const unmarkedMeta = JSON.parse(localStorage.getItem('jobhunt_unmarked_jobs') || '{}');
 
-        if (appData && Array.isArray(appData.jobs)) {
+        if (appData && Array.isArray(appData.jobs) && !appData._isStaleInitialFallback) {
           appData.jobs.forEach(j => {
-            if (j.applied && !storedMeta[j.job_id]) {
+            if (j.applied && !storedMeta[j.job_id] && !unmarkedMeta[j.job_id]) {
               storedMeta[j.job_id] = {
                 job_id: j.job_id,
                 applied_at: new Date().toISOString(),
@@ -7958,11 +7993,16 @@
           }
         };
 
-        const res = await fetch(FIREBASE_SYNC_CONFIG.docUrl, {
+        const bodyStr = JSON.stringify(payload);
+        const fetchOpts = {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
+          body: bodyStr
+        };
+        if (bodyStr.length < 60000) {
+          fetchOpts.keepalive = true;
+        }
+        const res = await fetch(FIREBASE_SYNC_CONFIG.docUrl, fetchOpts);
 
         if (res.ok) {
           updateSyncIndicator('synced');
@@ -7973,6 +8013,8 @@
       } catch (err) {
         console.warn('Cloud sync push failed:', err);
         updateSyncIndicator('offline');
+      } finally {
+        cloudPushInProgress = false;
       }
     }
 
@@ -7992,15 +8034,12 @@
     function handleApplyClick(jobId, url, event) {
       const job = (appData.jobs || []).find(j => j.job_id === jobId);
       if (job) {
-        if (!job.applied) {
-          toggleApplied(jobId);
-        }
         const note = generateCoverNote(job);
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(note).then(() => {
-            showToast(`Applied! Tailored Cover Note for ${job.company || 'Role'} copied to clipboard.`);
+            showToast(`Opening application page... Tailored Cover Note for ${job.company || 'Role'} copied to clipboard.`);
           }).catch(() => {
-            showToast(`Applied! Opening application page...`);
+            showToast('Opening application page...');
           });
         }
       }
@@ -9583,7 +9622,6 @@
       });
       loadData();
       try {
-        pullCloudSync(true);
         window.addEventListener('visibilitychange', () => {
           if (document.visibilityState === 'visible') {
             pullCloudSync(true);

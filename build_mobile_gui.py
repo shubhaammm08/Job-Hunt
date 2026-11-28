@@ -2465,18 +2465,28 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 
     function renderStats() {
       const stats = appData.stats || {};
-      const appliedCount = (appData.jobs || []).filter(j => j.applied).length;
+      const allJobs = appData.jobs || [];
+      const appliedCount = allJobs.filter(j => j.applied).length;
+      const trackedCount = allJobs.length
+        ? allJobs.filter(j => !j.applied).length
+        : Math.max(0, (stats.unapplied ?? stats.tracked ?? ((stats.total || 0) - (stats.applied || 0))));
+      const totalPool = trackedCount + appliedCount;
+      const totalRecs = allJobs.length
+        ? allJobs.filter(j => !j.applied && (parseFloat(j.score) || 0) >= 6.0).length
+        : (stats.recommended_unapplied ?? stats.recommended ?? 0);
       stats.applied = appliedCount;
+      stats.tracked = trackedCount;
+      stats.unapplied = trackedCount;
+      stats.recommended_unapplied = totalRecs;
       
-      document.getElementById('metric-total').innerText = stats.total || (appData.jobs || []).length || 0;
-      document.getElementById('metric-recommended').innerText = stats.recommended || (appData.jobs || []).filter(j => (parseFloat(j.score) || 0) >= 6.0).length || 0;
+      document.getElementById('metric-total').innerText = trackedCount;
+      document.getElementById('metric-recommended').innerText = totalRecs;
       document.getElementById('metric-applied').innerText = appliedCount;
       document.getElementById('metric-sources').innerText = stats.sources_count || 87;
       
-      const totalJobs = (appData.jobs && appData.jobs.length) ? appData.jobs.length : (stats.total || 0);
-      const rate = totalJobs ? Math.round((appliedCount / totalJobs) * 100) : 0;
+      const rate = totalPool ? Math.round((appliedCount / totalPool) * 100) : 0;
       document.getElementById('metric-applied-rate').innerText = `${rate}% applied`;
-      document.getElementById('tab-count-jobs').innerText = totalJobs;
+      document.getElementById('tab-count-jobs').innerText = trackedCount;
 
       const chipCount = document.getElementById('chip-count-applied');
       if (chipCount) chipCount.innerText = appliedCount;
@@ -2493,7 +2503,8 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       const platformFilter = document.getElementById('filter-platform').value;
 
       const listContainer = document.getElementById('job-list');
-      const filtered = (appData.jobs || []).filter(j => {
+      const allJobs = appData.jobs || [];
+      const filtered = allJobs.filter(j => {
         if (query) {
           const hay = `${j.title || ''} ${j.company || ''} ${j.location || ''} ${(j.role_families || []).join(' ')} ${(j.matched_skills || []).join(' ')}`.toLowerCase();
           if (!hay.includes(query)) return false;
@@ -2505,6 +2516,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 
         if (statusFilter === 'applied' && !j.applied) return false;
         if (statusFilter === 'unapplied' && j.applied) return false;
+        if (statusFilter !== 'applied' && j.applied) return false;
 
         if (familyFilter !== 'all') {
           const families = j.role_families || [];
@@ -2524,8 +2536,11 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
         return true;
       });
 
+      const poolTotal = (statusFilter === 'applied')
+        ? allJobs.filter(j => j.applied).length
+        : allJobs.filter(j => !j.applied).length;
       const statusSuffix = (statusFilter === 'applied') ? ' (Applied Jobs)' : ((statusFilter === 'unapplied') ? ' (Unapplied Jobs)' : '');
-      document.getElementById('results-count').innerText = `Showing ${filtered.length} of ${(appData.jobs || []).length} opportunities${statusSuffix}`;
+      document.getElementById('results-count').innerText = `Showing ${filtered.length} of ${poolTotal} opportunities${statusSuffix}`;
 
       if (!filtered.length) {
         const isAppliedFilter = statusFilter === 'applied';
@@ -2533,7 +2548,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
           ? 'No applied jobs recorded yet'
           : 'No matching opportunities found';
         const emptySub = isAppliedFilter
-          ? 'Click "Apply" or "Mark Applied" on any opportunity card to track your applications here.'
+          ? 'Click "Mark Applied" on any opportunity card to track your applications here.'
           : 'Try adjusting your filters or search keywords.';
         listContainer.innerHTML = `
           <div style="text-align:center;padding:50px 20px;color:var(--text-muted);background:var(--card-bg);border:1px dashed var(--card-border);border-radius:12px;">
@@ -2727,7 +2742,8 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
           fetch('/api/toggle-applied', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ job_id: jobId })
+            keepalive: true,
+            body: JSON.stringify({ job_id: jobId, applied: Boolean(job.applied) })
           }).catch(() => {});
         }
       } catch (err) {}
@@ -2861,15 +2877,12 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     function handleApplyClick(jobId, url, event) {
       const job = (appData.jobs || []).find(j => j.job_id === jobId);
       if (job) {
-        if (!job.applied) {
-          toggleApplied(jobId);
-        }
         const note = generateCoverNote(job);
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(note).then(() => {
-            showToast(`Applied! Tailored Cover Note for ${job.company || 'Role'} copied to clipboard.`);
+            showToast(`Opening application page... Tailored Cover Note for ${job.company || 'Role'} copied to clipboard.`);
           }).catch(() => {
-            showToast(`Applied! Opening application page...`);
+            showToast(`Opening application page...`);
           });
         }
       }
@@ -3698,13 +3711,22 @@ def main():
             jobs_list.append(entry)
     jobs_list.sort(key=lambda j: (j.get("score") or 0.0, j.get("first_seen") or ""), reverse=True)
 
+    applied_count = sum(1 for j in jobs_list if j.get("applied"))
+    unapplied_count = len(jobs_list) - applied_count
+    recommended_unapplied = sum(
+        1 for j in jobs_list
+        if not j.get("applied") and (j.get("score") or 0.0) >= 6.0
+    )
     payload = {
         "jobs": jobs_list,
         "stats": {
             "total": len(jobs_list),
-            "applied": sum(1 for j in jobs_list if j.get("applied")),
+            "unapplied": unapplied_count,
+            "tracked": unapplied_count,
+            "applied": applied_count,
             "emailed": sum(1 for j in jobs_list if j.get("emailed")),
             "recommended": sum(1 for j in jobs_list if (j.get("score") or 0.0) >= 6.0),
+            "recommended_unapplied": recommended_unapplied,
             "sources_count": len(health_data) or 86
         },
         "profile": profile_data,

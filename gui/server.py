@@ -167,6 +167,7 @@ class JobHuntHandler(SimpleHTTPRequestHandler):
         if path == "/api/data":
             self.send_response(200)
             self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Cache-Control", "no-store")
             self.end_headers()
 
             seen_data = load_json_safe(ROOT / "seen.json")
@@ -203,13 +204,21 @@ class JobHuntHandler(SimpleHTTPRequestHandler):
             jobs_list.sort(key=lambda j: (j.get("score") or 0.0, j.get("first_seen") or ""), reverse=True)
 
             applied_count = sum(1 for j in jobs_list if j.get("applied"))
+            unapplied_count = len(jobs_list) - applied_count
+            recommended_unapplied = sum(
+                1 for j in jobs_list
+                if not j.get("applied") and (j.get("score") or 0.0) >= 6.0
+            )
             payload = {
                 "jobs": jobs_list,
                 "stats": {
                     "total": len(jobs_list),
+                    "unapplied": unapplied_count,
+                    "tracked": unapplied_count,
                     "applied": applied_count,
                     "emailed": sum(1 for j in jobs_list if j.get("emailed")),
                     "recommended": sum(1 for j in jobs_list if (j.get("score") or 0.0) >= 6.0),
+                    "recommended_unapplied": recommended_unapplied,
                     "sources_count": len(health_data),
                 },
                 "profile": profile_data,
@@ -286,35 +295,64 @@ class JobHuntHandler(SimpleHTTPRequestHandler):
 
         content_len = int(self.headers.get("Content-Length", 0))
         body = self.rfile.read(content_len).decode("utf-8", errors="replace")
+        json_error = False
         try:
             req_data = json.loads(body) if body else {}
         except Exception:
             req_data = {}
+            json_error = True
 
         if path == "/api/toggle-applied":
+            if json_error or not body.strip() or not isinstance(req_data, dict):
+                self.send_response(400)
+                self.send_header("Content-Type", "application/json")
+                self.end_headers()
+                self.wfile.write(json.dumps({"success": False, "error": "Invalid JSON body"}).encode("utf-8"))
+                return
+
             job_id = req_data.get("job_id")
+            if not job_id or not isinstance(job_id, str):
+                self.send_response(400)
+                self.send_header("Content-Type", "application/json")
+                self.end_headers()
+                self.wfile.write(json.dumps({"success": False, "error": "Missing job_id"}).encode("utf-8"))
+                return
+
             seen_file = ROOT / "seen.json"
-            seen_data = load_json_safe(seen_file)
-            if isinstance(seen_data, dict) and job_id in seen_data:
-                curr = seen_data[job_id].get("applied", False)
-                seen_data[job_id]["applied"] = not curr
-                seen_file.write_text(json.dumps(seen_data, indent=2, ensure_ascii=False), encoding="utf-8")
+            from jobhunt.store import Store
+            store = Store(seen_file)
+            if job_id in store.data and isinstance(store.data[job_id], dict):
+                curr = bool(store.data[job_id].get("applied", False))
+                if "applied" in req_data and isinstance(req_data["applied"], bool):
+                    target = req_data["applied"]
+                else:
+                    target = not curr
+
+                store.data[job_id]["applied"] = target
+                if target:
+                    if not curr or not store.data[job_id].get("applied_on"):
+                        store.data[job_id]["applied_on"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+                else:
+                    store.data[job_id]["applied_on"] = None
+
+                store.save()
 
                 # Also update tracker.csv
                 try:
-                    from jobhunt.store import Store
-                    Store(seen_file).export_csv(ROOT / "out" / "tracker.csv")
+                    store.export_csv(ROOT / "out" / "tracker.csv")
                 except Exception:
                     pass
 
                 self.send_response(200)
                 self.send_header("Content-Type", "application/json")
                 self.end_headers()
-                self.wfile.write(json.dumps({"success": True, "applied": not curr}).encode("utf-8"))
+                self.wfile.write(json.dumps({"success": True, "job_id": job_id, "applied": target}).encode("utf-8"))
                 return
 
             self.send_response(404)
+            self.send_header("Content-Type", "application/json")
             self.end_headers()
+            self.wfile.write(json.dumps({"success": False, "error": "Job not found"}).encode("utf-8"))
             return
 
         if path == "/api/run-pipeline":

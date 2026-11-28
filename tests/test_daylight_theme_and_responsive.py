@@ -299,13 +299,14 @@ class TestTier1FeatureCoverage:
         placeholder = search_input.get_attribute("placeholder") or ""
         assert "Search" in placeholder, f"Search input should have a helpful placeholder, got {placeholder}"
 
-        # Status ribbon check. The tracked count follows the bundled data,
-        # which changes whenever a source imports new jobs.
-        tracked = desktop_page.evaluate("() => (window.INITIAL_DATA?.jobs || []).length")
+        # Status ribbon check. The tracked count follows unapplied bundled data.
+        tracked = desktop_page.evaluate("() => (window.INITIAL_DATA?.jobs || []).filter(j => !j.applied).length")
         content = desktop_page.content()
         assert "Tracked Jobs" in content or f"{tracked} Tracked" in content or f"{tracked} opportunities" in content, (
             "Status ribbon must report tracked jobs"
         )
+        assert desktop_page.inner_text("#ribbon-tracked").strip() == f"{tracked} Tracked"
+        assert desktop_page.inner_text("#metric-total").strip() == str(tracked)
 
     def test_f3_resizer_default_drag_persistence_and_reset(self, desktop_page: Page):
         """F3.2b: Divider opens 50/50, resizes live, persists, and resets on double-click."""
@@ -565,14 +566,21 @@ class TestTier1FeatureCoverage:
 class TestFeedFreshnessAndThemeReveal:
     """Regression coverage for fresh-first ordering, applied filtering, and the theme reveal."""
 
-    def test_feed_hides_applied_jobs_by_default(self, desktop_page: Page):
-        """Applied jobs are removed from the default feed but remain tracked."""
+    def test_feed_excludes_applied_jobs_from_tracked_pool(self, desktop_page: Page):
+        """Applied jobs are excluded from Tracked Jobs and only unapplied jobs are counted."""
         assert desktop_page.query_selector_all(".job-card.is-applied") == []
         feed_text = desktop_page.inner_text("#job-list")
-        assert "Capgemini" not in feed_text, "Applied Capgemini job must not appear in the default feed"
+        assert "Capgemini" not in feed_text, "Applied Capgemini job must not appear in Tracked Jobs"
+        unapplied_count = desktop_page.evaluate("() => (window.INITIAL_DATA?.jobs || []).filter(j => !j.applied).length")
+        applied_count = desktop_page.evaluate("() => (window.INITIAL_DATA?.jobs || []).filter(j => j.applied).length")
+        assert desktop_page.inner_text("#metric-total").strip() == str(unapplied_count)
+        assert desktop_page.inner_text("#metric-applied").strip() == str(applied_count)
         results = desktop_page.inner_text("#results-count")
-        assert "applied hidden" in results, f"Results line should report hidden applied jobs, got: {results}"
-        assert int(desktop_page.inner_text("#chip-count-hidden")) >= 1
+        assert f"Showing {unapplied_count} of {unapplied_count} opportunities" in results, (
+            f"Results line should count only unapplied jobs in Tracked view, got: {results}"
+        )
+        assert "applied hidden" not in results, f"Legacy applied hidden text must not appear: {results}"
+        assert desktop_page.query_selector("#chip-hide-applied") is None
 
     def test_feed_orders_fresh_batch_before_older_jobs(self, desktop_page: Page):
         """Every fresh (NEW) card appears before the first older card."""
@@ -595,36 +603,65 @@ class TestFeedFreshnessAndThemeReveal:
         fresh_count = int(desktop_page.inner_text("#chip-count-fresh"))
         assert len(cards) == fresh_count, f"Fresh chip count {fresh_count} did not match {len(cards)} cards"
 
-    def test_hide_applied_toggle_persists_and_applied_filter_reveals(self, desktop_page: Page):
-        """The Hide Applied toggle reveals applied jobs, persists, and the Applied filter still works."""
-        desktop_page.click("#chip-hide-applied")
-        desktop_page.wait_for_timeout(250)
-        assert desktop_page.query_selector_all("#job-list .job-card.is-applied"), (
-            "Disabling Hide Applied should reveal the applied job"
-        )
-        assert desktop_page.evaluate("localStorage.getItem('jobhunt_hide_applied')") == "false"
+    def test_mark_applied_moves_job_out_of_tracked_and_unmark_restores(self, desktop_page: Page):
+        """External Apply leaves Tracked unchanged; Mark Applied moves job to Applied; unmarking restores it."""
+        initial_tracked = int(desktop_page.inner_text("#metric-total"))
+        initial_applied = int(desktop_page.inner_text("#metric-applied"))
 
+        first_card = desktop_page.query_selector("#job-list .job-card:first-child")
+        assert first_card is not None
+        first_card_id = first_card.get_attribute("id")
+
+        # 1. External Apply link must NOT mark the job as applied
+        apply_link = first_card.query_selector(".btn-apply-link")
+        assert apply_link is not None
+        with desktop_page.context.expect_page() as popup_info:
+            apply_link.click()
+        popup = popup_info.value
+        popup.close()
+        desktop_page.wait_for_timeout(150)
+
+        assert int(desktop_page.inner_text("#metric-total")) == initial_tracked
+        assert int(desktop_page.inner_text("#metric-applied")) == initial_applied
+        assert desktop_page.query_selector(f"[id='{first_card_id}']") is not None
+
+        # 2. Explicit Mark Applied removes from Tracked, updates counts, and places in Applied
+        mark_btn = desktop_page.query_selector(f"[id='{first_card_id}'] .btn-applied")
+        assert mark_btn is not None
+        mark_btn.click()
+        desktop_page.wait_for_timeout(200)
+
+        assert int(desktop_page.inner_text("#metric-total")) == initial_tracked - 1
+        assert int(desktop_page.inner_text("#metric-applied")) == initial_applied + 1
+        assert desktop_page.query_selector(f"[id='{first_card_id}']") is None
+        results = desktop_page.inner_text("#results-count")
+        assert f"Showing {initial_tracked - 1} of {initial_tracked - 1} opportunities" in results
+
+        # 3. Reload persists the updated counts and exclusion from Tracked
         desktop_page.reload(wait_until="domcontentloaded")
         desktop_page.wait_for_selector(".job-card", timeout=5000)
-        assert desktop_page.query_selector_all("#job-list .job-card.is-applied"), (
-            "Applied visibility preference must persist across reloads"
-        )
+        assert int(desktop_page.inner_text("#metric-total")) == initial_tracked - 1
+        assert int(desktop_page.inner_text("#metric-applied")) == initial_applied + 1
+        assert desktop_page.query_selector(f"[id='{first_card_id}']") is None
 
+        # 4. Applied view shows the job and unmarking moves it back to Tracked Jobs
         desktop_page.click("#chip-applied")
-        desktop_page.wait_for_timeout(250)
-        applied_cards = desktop_page.query_selector_all("#job-list .job-card")
-        assert applied_cards and all("is-applied" in (card.get_attribute("class") or "") for card in applied_cards)
+        desktop_page.wait_for_timeout(200)
+        applied_card = desktop_page.query_selector(f"[id='{first_card_id}']")
+        assert applied_card is not None, "Marked job must appear in Applied view"
+        applied_results = desktop_page.inner_text("#results-count")
+        assert f"Showing {initial_applied + 1} of {initial_applied + 1} opportunities (Applied Jobs)" in applied_results
 
-        desktop_page.click("#chip-hide-applied")
-        desktop_page.wait_for_timeout(250)
-        assert desktop_page.eval_on_selector("#filter-status", "el => el.value") == "applied"
-        assert desktop_page.query_selector_all("#job-list .job-card.is-applied"), (
-            "Applied filter must reveal tracked jobs even when Hide Applied is on"
-        )
+        applied_card.query_selector(".btn-applied").click()
+        desktop_page.wait_for_timeout(200)
+        assert int(desktop_page.inner_text("#metric-total")) == initial_tracked
+        assert int(desktop_page.inner_text("#metric-applied")) == initial_applied
 
         desktop_page.click("#chip-all")
-        desktop_page.wait_for_timeout(250)
-        assert desktop_page.query_selector_all("#job-list .job-card.is-applied") == []
+        desktop_page.wait_for_timeout(200)
+        assert desktop_page.query_selector(f"[id='{first_card_id}']") is not None, (
+            "Unmarked job must return to Tracked Jobs"
+        )
 
     def test_theme_toggle_uses_circular_view_transition(self, desktop_page: Page):
         """The theme toggle reveals the new theme with a circular clip-path animation."""
