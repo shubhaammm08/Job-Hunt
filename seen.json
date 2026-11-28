@@ -4842,5 +4842,202 @@
     "emailed": true,
     "applied": false,
     "applied_on": null
+  },
+  "himalayas:rss:ux-kernel-live-patching-engineer": {
+    "first_seen": "2026-11-28T12:12:57+00:00",
+    "company": "Remote Employer",
+    "title": "Linux Kernel Live Patching Engineer",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/sardina-systems/jobs/linux-kernel-live-patching-engineer",
+    "score": 1.0,
+    "reason": "Linux kernel live patching requires deep systems programming experience which the candidate lacks.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [],
+    "matched_roles": [],
+    "fit_score": 1.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:nieslimblejobsai-ml-engineer-iii": {
+    "first_seen": "2026-11-28T12:12:57+00:00",
+    "company": "Remote Employer",
+    "title": "AI/ML Engineer III",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/limble/jobs/ai-ml-engineer-iii",
+    "score": 3.0,
+    "reason": "Level III indicates a senior role requiring more years of experience than the junior candidate has.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "AI/ML Engineer",
+      "ML Engineer"
+    ],
+    "fit_score": 3.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:igence-machine-learning-engineer": {
+    "first_seen": "2026-11-28T12:12:57+00:00",
+    "company": "Remote Employer",
+    "title": "Expert Artificial Intelligence/Machine Learning Engineer",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/description-ciklum/jobs/expert-artificial-intelligence-machine-learning-engineer",
+    "score": 2.0,
+    "reason": "Expert level AI engineer role is far too senior for a junior candidate.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "AI Engineer",
+      "Machine Learning Engineer"
+    ],
+    "fit_score": 2.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:fullstack-kotlin-react-iii-gplan": {
+    "first_seen": "2026-11-28T12:12:57+00:00",
+    "company": "Remote Employer",
+    "title": "Pessoa Desenvolvedora Fullstack Kotlin/React III - (GPlan)",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/grupo-boticario/jobs/pessoa-desenvolvedora-fullstack-kotlin-react-iii-gplan",
+    "score": 3.0,
+    "reason": "Level III seniority mismatch and requires Kotlin experience which the candidate does not list.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [],
+    "matched_roles": [],
+    "fit_score": 3.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:jobssoftware-engineer-7292178543": {
+    "first_seen": "2026-11-28T12:12:57+00:00",
+    "company": "Remote Employer",
+    "title": "Software Engineer",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/akamai-technologies/jobs/software-engineer-7292178543",
+    "score": 4.0,
+    "reason": "Vague software engineer posting with unclear seniority requirements and stack details.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "SOFTWARE"
+    ],
+    "matched_roles": [
+      "Software Engineer"
+    ],
+    "fit_score": 4.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:ce-engineer-iii-immediate-joiner": {
+    "first_seen": "2026-11-28T12:12:57+00:00",
+    "company": "Remote Employer",
+    "title": "GCP Cloud Practice Engineer III - Immediate joiner",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/rackspace-us-inc/jobs/gcp-cloud-practice-engineer-iii-immediate-joiner",
+    "score": 2.0,
+    "reason": "Level III GCP cloud practice engineer requires senior cloud infrastructure expertise.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [],
+    "matched_roles": [],
+    "fit_score": 2.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:ompanieshbx-groupjobsai-engineer": {
+    "first_seen": "2026-11-28T12:12:57+00:00",
+    "company": "Remote Employer",
+    "title": "AI Engineer",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/hbx-group/jobs/ai-engineer",
+    "score": 5.0,
+    "reason": "AI Engineer title matches, but seniority expectations are unspecified and likely too high.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "AI_CORE"
+    ],
+    "matched_roles": [
+      "AI Engineer"
+    ],
+    "fit_score": 5.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "himalayas:rss:pavagojobsfinancial-data-analyst": {
+    "first_seen": "2026-11-28T12:12:57+00:00",
+    "company": "Remote Employer",
+    "title": "Financial & Data Analyst",
+    "location": "Remote",
+    "url": "https://himalayas.app/companies/pavago/jobs/financial-data-analyst",
+    "score": 2.0,
+    "reason": "Financial and data analyst role focusing on finance domain, which is outside core engineering targets.",
+    "canonical_source": "himalayas",
+    "sources": [
+      "himalayas"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 2.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
+  },
+  "linkedin:4495358785": {
+    "first_seen": "2026-11-28T12:12:57+00:00",
+    "company": "Scoutit",
+    "title": "Data Analyst",
+    "location": "Bengaluru, Karnataka, India",
+    "url": "https://www.linkedin.com/jobs/view/4495358785",
+    "score": 3.0,
+    "reason": "Role requires data analysis focus in Bengaluru, which mismatches candidate's target location and primary engineering skills.",
+    "canonical_source": "linkedin",
+    "sources": [
+      "linkedin"
+    ],
+    "role_families": [
+      "DATA"
+    ],
+    "matched_roles": [
+      "Data Analyst"
+    ],
+    "fit_score": 3.0,
+    "emailed": true,
+    "applied": false,
+    "applied_on": null
   }
 }
