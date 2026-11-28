@@ -2947,7 +2947,18 @@
       }
 
       .feed-header .feed-search-box {
-        height: 34px;
+        height: 44px;
+        min-width: 0;
+      }
+
+      /* Keep iOS Safari from auto-zooming when the search field is focused. */
+      .feed-header .feed-search-box input {
+        font-size: 16px;
+      }
+
+      /* The keyboard shortcut badge is noise on a touch device. */
+      .feed-header .hotkey-badge {
+        display: none;
       }
 
       /* Mobile Sticky Top Bar */
@@ -2972,9 +2983,9 @@
       }
 
       .brand-glyph-sm {
-        width: 32px;
-        height: 32px;
-        flex: 0 0 32px;
+        width: 44px;
+        height: 44px;
+        flex: 0 0 44px;
         border-radius: 50%;
         cursor: pointer;
         background: var(--accent-indigo, #4F46E5);
@@ -3015,6 +3026,18 @@
         align-items: center;
         gap: 8px;
         flex-shrink: 0;
+      }
+
+      .mobile-top-actions>.btn-actions {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        padding: 0;
+        justify-content: center;
+      }
+
+      .btn-scan-pipeline {
+        min-height: 44px;
       }
 
       /* Compact overflow menu: only exposed on narrow phones where the
@@ -3340,6 +3363,37 @@
         color: #C7D2FE;
         font-family: var(--font-mono);
       }
+
+      /* Compact horizontal filters and 44px touch targets for every mobile
+         and tablet width, including landscape phones wider than 600px. */
+      .feed-header .filter-selects {
+        display: flex;
+        overflow-x: auto;
+        gap: 6px;
+        margin-top: 6px;
+        scrollbar-width: none;
+      }
+
+      .feed-header .filter-selects::-webkit-scrollbar {
+        display: none;
+      }
+
+      .feed-header .select-filter {
+        flex: 0 0 auto;
+        width: auto;
+        min-width: 132px;
+        min-height: 44px;
+        font-size: 13px;
+      }
+
+      .btn-applied,
+      .btn-apply-link,
+      .btn-kit {
+        min-height: 44px;
+        padding: 10px 12px;
+        font-size: 13px;
+        white-space: nowrap;
+      }
     }
 
     /* Strict Mobile Touch Targets Compliance (max-width: 600px) */
@@ -3370,9 +3424,9 @@
       }
 
       .mobile-top-actions>.btn-actions {
-        width: 40px;
-        height: 40px;
-        min-width: 40px;
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
         padding: 0;
         justify-content: center;
       }
@@ -3403,7 +3457,17 @@
         flex: 0 0 auto;
         width: auto;
         min-width: 132px;
+        min-height: 44px;
         font-size: 13px;
+      }
+
+      .btn-applied,
+      .btn-apply-link,
+      .btn-kit {
+        min-height: 44px;
+        padding: 10px 12px;
+        font-size: 13px;
+        white-space: nowrap;
       }
 
       /* All three document chips stay visible in one compact grid row;
@@ -3465,6 +3529,15 @@
         min-height: 44px;
         display: inline-flex;
         align-items: center;
+        white-space: nowrap;
+      }
+
+      .btn-kit {
+        justify-content: center;
+        padding: 10px 12px;
+        font-size: 13px;
+        min-height: 44px;
+        white-space: nowrap;
       }
 
       .btn-dock-icon,
@@ -3597,6 +3670,36 @@
 
     body.force-mobile .mobile-bottom-dock {
       display: flex !important;
+    }
+
+    /* Landscape phones have very little vertical room. Drop the stacked hero,
+       accordion and document chips so the first job card is above the fold. */
+    @media (max-width: 1023px) and (max-height: 500px) and (orientation: landscape) {
+      .mobile-top-bar {
+        padding-top: max(4px, env(safe-area-inset-top, 4px));
+        padding-bottom: 4px;
+      }
+
+      .mobile-filter-capsules {
+        padding-top: 6px;
+        padding-bottom: 6px;
+      }
+
+      .mobile-active-card,
+      .mobile-accordion,
+      .mobile-docs-row {
+        display: none !important;
+      }
+
+      .mobile-bottom-dock {
+        padding-top: 6px;
+        padding-bottom: max(6px, env(safe-area-inset-bottom, 6px));
+      }
+
+      .btn-dock-icon,
+      .btn-dock-apply {
+        height: 44px;
+      }
     }
 
     /* ==========================================================================
@@ -6495,7 +6598,8 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
     let state = {
       activeJobId: 'linkedin:4480510917', // Default to Capgemini Python Gen AI Engineer
       savedPipeline: {},
-      currentNav: 'tracker'
+      currentNav: 'tracker',
+      visibleJobs: []
     };
 
     // Load saved pipeline from localStorage
@@ -6645,14 +6749,20 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
       if (job) {
         renderDeck(job);
       }
-      document.querySelectorAll('.job-card').forEach(el => {
-        if (el.id === 'card-' + jobId) {
-          el.classList.add('active');
-          el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-        } else {
-          el.classList.remove('active');
-        }
-      });
+      if (isMobileHeroLayout()) {
+        // Move the selected job into the hero and out of the feed.
+        renderJobs();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        document.querySelectorAll('.job-card').forEach(el => {
+          if (el.id === 'card-' + jobId) {
+            el.classList.add('active');
+            el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+          } else {
+            el.classList.remove('active');
+          }
+        });
+      }
       if (notify && window.parent && window.parent !== window) {
         try {
           window.parent.postMessage({ type: 'JOB_SELECTED', jobId: jobId }, '*');
@@ -6660,14 +6770,19 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
       }
     }
 
+    function visibleJobIds() {
+      if (state.visibleJobs && state.visibleJobs.length) {
+        return state.visibleJobs.map(j => j.job_id);
+      }
+      return Array.from(document.querySelectorAll('.job-card')).map(el => el.id.replace('card-', ''));
+    }
+
     function skipCurrentJob() {
-      const visibleCards = Array.from(document.querySelectorAll('.job-card'));
-      if (!visibleCards.length) return;
-      const currentIdx = visibleCards.findIndex(el => el.id === 'card-' + state.activeJobId);
-      const nextIdx = (currentIdx + 1) % visibleCards.length;
-      const nextCard = visibleCards[nextIdx];
-      const nextId = nextCard.id.replace('card-', '');
-      selectJob(nextId, true);
+      const ids = visibleJobIds();
+      if (!ids.length) return;
+      const currentIdx = ids.indexOf(state.activeJobId);
+      const nextIdx = (currentIdx + 1) % ids.length;
+      selectJob(ids[nextIdx], true);
       showToast('Skipped to next opportunity');
     }
 
@@ -6717,13 +6832,11 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
     }
 
     function selectPreviousJob() {
-      const visibleCards = Array.from(document.querySelectorAll('.job-card'));
-      if (!visibleCards.length) return;
-      const currentIdx = visibleCards.findIndex(el => el.id === 'card-' + state.activeJobId);
-      const prevIdx = (currentIdx - 1 + visibleCards.length) % visibleCards.length;
-      const prevCard = visibleCards[prevIdx];
-      const prevId = prevCard.id.replace('card-', '');
-      selectJob(prevId, true);
+      const ids = visibleJobIds();
+      if (!ids.length) return;
+      const currentIdx = ids.indexOf(state.activeJobId);
+      const prevIdx = (currentIdx - 1 + ids.length) % ids.length;
+      selectJob(ids[prevIdx], true);
     }
 
     function previewResume() {
@@ -7527,6 +7640,18 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
       setCount('capsule-count-applied', appliedCount);
     }
 
+    function isMobileLandscapeLayout() {
+      return window.matchMedia('(max-width: 1023px) and (max-height: 500px) and (orientation: landscape)').matches;
+    }
+
+    // On portrait mobile the active job is promoted into the hero card, so it
+    // must not be rendered a second time at the top of the feed.
+    function isMobileHeroLayout() {
+      return window.matchMedia('(max-width: 1023px)').matches
+        && !document.body.classList.contains('force-desktop')
+        && !isMobileLandscapeLayout();
+    }
+
     function renderJobs() {
       const query = (document.getElementById('search-input').value || '').toLowerCase().trim();
       const scoreFilter = document.getElementById('filter-score').value;
@@ -7578,6 +7703,7 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
         return String(a.title || '').localeCompare(String(b.title || ''));
       });
 
+      state.visibleJobs = filtered;
       const poolTotal = (statusFilter === 'applied')
         ? allJobs.filter(j => j.applied).length
         : allJobs.filter(j => !j.applied).length;
@@ -7598,6 +7724,10 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
         renderDeck(activeJob);
       }
 
+      const feedJobs = (activeJob && isMobileHeroLayout())
+        ? filtered.filter(j => j.job_id !== activeJob.job_id)
+        : filtered;
+
       if (!filtered.length) {
         const isAppliedFilter = statusFilter === 'applied';
         const emptyMsg = isAppliedFilter
@@ -7617,7 +7747,17 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
         return;
       }
 
-      listContainer.innerHTML = filtered.map(j => {
+      if (!feedJobs.length) {
+        listContainer.innerHTML = `
+          <div style="text-align:center;padding:34px 20px;color:var(--text-muted);background:var(--card-bg);border:1px dashed var(--card-border);border-radius:12px;">
+            <div style="font-weight:600;color:var(--text-main);">This opportunity is shown in the active card above</div>
+            <div style="font-size:12px;margin-top:4px;">Adjust your filters to see more roles in the feed.</div>
+          </div>
+        `;
+        return;
+      }
+
+      listContainer.innerHTML = feedJobs.map(j => {
         const score = parseFloat(j.score) || 0.0;
         const scoreClass = score >= 8.0 ? 'score-high' : (score >= 6.0 ? 'score-mid' : 'score-low');
         const appliedClass = j.applied ? 'is-applied' : '';
@@ -9859,6 +9999,18 @@ font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;&quot;
           closeBinLoaderModal();
         }
       });
+      // Keep the feed in sync when a phone rotates between portrait and landscape.
+      let mobileHeroLayout = isMobileHeroLayout();
+      const syncMobileHeroLayout = () => {
+        const next = isMobileHeroLayout();
+        if (next !== mobileHeroLayout) {
+          mobileHeroLayout = next;
+          renderJobs();
+        }
+      };
+      window.addEventListener('resize', syncMobileHeroLayout);
+      window.addEventListener('orientationchange', () => setTimeout(syncMobileHeroLayout, 120));
+
       loadData();
       try {
         window.addEventListener('visibilitychange', () => {

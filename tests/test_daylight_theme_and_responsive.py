@@ -417,17 +417,22 @@ class TestTier1FeatureCoverage:
         assert "Applied" in caps_text, "Capsules must include 'Applied (1)'"
 
     def test_f4_mobile_active_card_display(self, mobile_page: Page):
-        """F4.3: Validates full-width mobile active card mirrors the fresh top feed card."""
-        first_card = mobile_page.query_selector("#job-list .job-card:first-child")
-        assert first_card is not None, "At least one feed card must be present on mobile"
-        expected_company = first_card.query_selector(".job-company").inner_text().strip()
-        expected_score = first_card.query_selector(".score-badge").inner_text().split()[0]
-
+        """F4.3: Validates the full-width mobile active card mirrors the promoted active job."""
         active_card = mobile_page.query_selector(".mobile-active-card")
         assert active_card is not None, "Mobile active card must be present"
-        text = active_card.inner_text()
-        assert expected_company in text, f"Mobile active card should display {expected_company}, got {text}"
-        assert expected_score in text, f"Mobile active card should display {expected_score} match badge, got {text}"
+        assert active_card.is_visible(), "Mobile active card must be visible in portrait"
+
+        hero_title = mobile_page.query_selector("#mob-title").inner_text().strip()
+        assert hero_title and hero_title in active_card.inner_text()
+
+        # The active job is promoted into the hero, so the feed must not repeat it.
+        active_job_id = mobile_page.evaluate("() => state.activeJobId")
+        feed_ids = mobile_page.eval_on_selector_all(
+            "#job-list .job-card",
+            "els => els.map(el => el.id.replace('card-', ''))",
+        )
+        assert feed_ids, "Feed must still render the remaining jobs"
+        assert active_job_id not in feed_ids, "Active job must not be duplicated in the mobile feed"
 
     def test_f4_mobile_accordion_structure(self, mobile_page: Page):
         """F4.4: Validates mobile AI match breakdown accordion toggle behavior."""
@@ -498,6 +503,26 @@ class TestTier1FeatureCoverage:
         assert positions["dockTop"] - positions["listTop"] > 150, (
             f"Feed list starts too low on mobile: {positions}"
         )
+
+    def test_f4_mobile_landscape_prioritises_feed(self, mobile_page: Page):
+        """F4.9: Landscape phones collapse the hero and keep jobs above the fold."""
+        mobile_page.set_viewport_size({"width": 844, "height": 390})
+        mobile_page.wait_for_timeout(300)
+        hero = mobile_page.query_selector(".mobile-active-card")
+        assert hero is not None
+        assert not hero.is_visible(), "Hero card must collapse in landscape"
+
+        first_card = mobile_page.query_selector("#job-list .job-card")
+        assert first_card is not None, "Feed must render at least one job in landscape"
+        top = first_card.evaluate("el => el.getBoundingClientRect().top")
+        assert top < 390, f"First job card must be above the fold, got top={top}px"
+
+        active_job_id = mobile_page.evaluate("() => state.activeJobId")
+        feed_ids = mobile_page.eval_on_selector_all(
+            "#job-list .job-card",
+            "els => els.map(el => el.id.replace('card-', ''))",
+        )
+        assert active_job_id in feed_ids, "Active job must stay in the feed when the hero is hidden"
 
     def test_f3_kit_grid_contains_outreach_chip(self, desktop_page: Page):
         """F3.10: Document Hub chips stay inside the details pane at all desktop widths."""
